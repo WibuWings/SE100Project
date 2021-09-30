@@ -1,0 +1,146 @@
+.Login{
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.form-login{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.auth-form {
+    background-color: white;
+    min-width: 700px;
+    border-radius: 20px;
+}
+
+.auth-form__header{
+    display: flex;
+    font-size: 1.4rem;
+    color: var(--black-color);
+    margin: 30px 20px;
+    font-weight: 500;
+    justify-content: space-between;
+}
+
+.auth-form__switch-btn{
+    color: var(--primary-color);
+}
+
+
+.auth-form__body{
+    margin: 0 20px;
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.form-label,
+.form-message{
+    text-align:left;
+}
+.form-label{
+    font-weight: 500;
+    padding-bottom: 6px;
+    line-height: 1.8rem;
+    font-size: 1.2rem;
+}
+
+.form-control{
+    height: 40px;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #b3b3b3;
+    border-radius: 3px;
+    outline: none;
+    font-size: 1.2rem;
+}
+
+.form-control:hover {
+    border-color: #1bdfaf;
+}
+
+.form-group.invalid .form-control {
+    border-color: #f33a58;
+}
+.form-group.invalid .form-message {
+    color: #f33a58;
+}
+
+.form-message{
+    font-size: 1rem;
+    line-height: 1.6rem;
+    padding: 4px 0 0;
+}
+
+.auth-form__btn{
+    justify-content: right;
+    display: flex;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.auth-form__btn-back{
+    min-width: 140px;
+    text-align: center;
+    background-color: #efefef;
+    color: var(--black-color);
+    padding: 10px 20px;
+    border-radius: 4px;
+}
+.auth-form__btn-log-in{
+    background-color: var(--primary-color);
+    text-align: center;
+    color: var(--white-color);
+    padding: 10px 20px;
+    min-width: 140px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+.auth-form__btn-back:hover {
+    opacity: .5;
+}
+
+.auth-form__btn-log-in:hover {
+    opacity: .8;
+}
+
+.auth-form__support{
+    display: flex;
+    justify-content: right;
+    margin-bottom: 40px;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.auth-form__support-forget:hover{
+    opacity: 0.6;
+}
+.auth-form__support-need-support:hover{
+    opacity: 0.6;
+}
+.auth-form__support-need-support{
+    color: #939393;
+    font-weight: 400;
+}
+.auth-form__help-separate{
+    display: block;
+    border-left: 1px solid #939393;
+    height: 18px;
+    margin: 0 16px;
+    transform: translateY(40%);
+}
+
+.auth-form__switch-btn{
+    cursor: pointer;
+    text-decoration: none;
+}
