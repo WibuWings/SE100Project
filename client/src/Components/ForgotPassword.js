@@ -24,7 +24,7 @@ class ForgotPassword extends Component {
                                     <label htmlFor="email" className="form-label">Email</label>
                                     <div className="input-custom">
                                         <span><BsFillEnvelopeFill className="input-custom-icon" /></span>
-                                        <input className="form-control" onblur="" name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
+                                        <input className="form-control" onblur="" name="email" rules="required|email" id="email" placeholder="Ex: abc@gmail.com" type="text" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -32,7 +32,7 @@ class ForgotPassword extends Component {
                                     <label htmlFor="code" className="form-label">Code</label>
                                     <div className="input-custom">
                                         <span><BsCodeSlash className="input-custom-icon" /></span>
-                                        <input className="form-control" onblur="" name="code" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
+                                        <input className="form-control" onblur="" name="code" rules="required|email" id="email" placeholder="Ex: ABC321" type="text" />
                                         <button type="button" class="btn btn-primary send-code">Send code</button>
                                     </div>
                                     <span className="form-message" />
