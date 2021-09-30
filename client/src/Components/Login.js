@@ -46,7 +46,6 @@ class Login extends Component {
                                     <span className="auth-form__support-need-support">Cận trợ giúp?</span>
                                 </div>
                                 <div className="auth-form__btn">
-                                    <div onclick="backForm()" className="auth-form__btn-back">Trở lại</div>
                                     <div onClick={() => this.props.changeLoginStatus()} className="auth-form__btn-log-in">Đăng nhập</div>
                                 </div>
                             </form>

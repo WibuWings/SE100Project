@@ -14,6 +14,7 @@ class DashboardURL extends Component {
         return (
             <div>      
                     <Route exact path="/" component={Home}></Route>
+                    <Route  path="/:slug" component={Home}></Route>
                     <Route exact path="/home" component={Home}></Route>
                     <Route exact path="/test1" component={Setting}></Route>
                     <Route exact path="/test2" component={Setting1}></Route>
