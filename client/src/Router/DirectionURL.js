@@ -8,6 +8,7 @@ import Body from '../Components/Body';
 import Login from '../Components/Login';
 import Register from '../Components/Register';
 import { connect } from 'react-redux';
+import ForgotPassword from '../Components/ForgotPassword';
 
 
 class DirectionURL extends Component {
@@ -15,17 +16,13 @@ class DirectionURL extends Component {
 
     notLogin = () => {
         return (
-            <Switch>
-                <Route path="/login">
-                    <Login />
-                </Route>
-                <Route path="/register">
-                    <Register />
-                </Route>
-                <Route path="/">
-                    <Login />
-                </Route>
-            </Switch>
+            <div>
+                <Route path="/login" component={Login}></Route>
+                <Route path="/forgot" component={ForgotPassword}></Route>
+                <Route path="/register" component={Register}></Route>
+                {/* <Route path="/" component={Login}></Route> */}
+                <Route path="/" component={Body}></Route>
+            </div>
         )
     }
 
@@ -42,7 +39,11 @@ class DirectionURL extends Component {
     render() {
         return (
             <div>
-                {this.props.isLogin ? this.Login() : this.notLogin()}
+                <Route path="/login" component={Login}></Route>
+                <Route path="/forgot" component={ForgotPassword}></Route>
+                <Route path="/register" component={Register}></Route>
+                {/* <Route path="/" component={Login}></Route> */}
+                <Route path="/" component={Body}></Route>
             </div>
         );
     }

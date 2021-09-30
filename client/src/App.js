@@ -9,9 +9,7 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div>
           <DirectionURL></DirectionURL>
-        </div>
       </Router>
     );
   }

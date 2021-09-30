@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../CSS/Login.css';
-
+import { BsFillEnvelopeFill, BsLockFill } from "react-icons/bs";
 
 class Login extends Component {
     hash = () => {
@@ -24,29 +24,39 @@ class Login extends Component {
                     <div className="auth-form">
                         <div className="auth-form__container">
                             <div className="auth-form__header">
-                                <div className="auth-form__heading">Đăng nhập</div>
-                                <NavLink onclick="" to="/register" className="auth-form__switch-btn">Đăng ký</NavLink>
+                                <div className="auth-form__heading">Login</div>
+                                <NavLink onclick="" to="/register" className="auth-form__switch-btn">Register</NavLink>
                             </div>
                         </div>
                         <div className="auth-form__body">
-                            <form action method="post" id="login-form">
+                            <form action="/home" method="get" id="login-form">
                                 <div className="form-group">
                                     <label htmlFor="email" className="form-label">Email</label>
-                                    <input className="form-control" onblur="" name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
+                                    <div className="input-custom">
+                                        <span><BsFillEnvelopeFill className="input-custom-icon" /></span>
+                                        <input className="form-control" onblur="" name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
+                                    </div>
                                     <span className="form-message" />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="password" className="form-label">Mật khẩu</label>
-                                    <input className="form-control" onblur="" name="password" rules="required|min:6" id="password" placeholder="Nhập mật khẩu" type="password" />
+                                    <label htmlFor="password" className="form-label">Password</label>
+                                    <div className="input-custom">
+                                        <span>
+                                            <BsLockFill className="input-custom-icon" ></BsLockFill>
+                                        </span>
+                                        <input className="form-control" onblur="" name="password" rules="required|min:6" id="password" placeholder="Emter password" type="password" />
+                                    </div>
                                     <span className="form-message" />
                                 </div>
                                 <div className="auth-form__support">
-                                    <span className="auth-form__support-forget">Quên mật khẩu</span>
+                                    <span className="auth-form__support-forget">
+                                        <NavLink onclick="" to="/forgot" className="auth-form__switch-btn">Forgot password</NavLink>
+                                    </span>
                                     <span className="auth-form__help-separate" />
-                                    <span className="auth-form__support-need-support">Cận trợ giúp?</span>
+                                    <span className="auth-form__support-need-support">Need help?</span>
                                 </div>
                                 <div className="auth-form__btn">
-                                    <div onClick={() => this.props.changeLoginStatus()} className="auth-form__btn-log-in">Đăng nhập</div>
+                                    <NavLink to="/home" onClick={() => this.props.changeLoginStatus()} className="auth-form__btn-log-in auth-form__switch-btn">Sign In</NavLink>
                                 </div>
                             </form>
                         </div>
