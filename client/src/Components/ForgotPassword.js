@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Avatar from '@mui/material/Avatar'
+import { IconContext } from "react-icons";
+import { FiSend } from "react-icons/fi";
 import { BsFillEnvelopeFill, BsLockFill, BsBoxArrowInLeft, BsCodeSlash } from "react-icons/bs";
 import emailjs from 'emailjs-com';
 import {
@@ -62,8 +65,9 @@ class ForgotPassword extends Component {
     //Check tìm lại mật khẩu
     findPassword = (e) => {
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword()) {
+
             e.stopPropagation();
-        } 
+        }
         else {
             e.preventDefault();
         }
@@ -176,8 +180,13 @@ class ForgotPassword extends Component {
     render() {
         return (
             <div className="Login">
-                <div className="form-login">
+                <div className="form-findpass">
                     <div className="auth-form">
+                        <Avatar className="auth-form__avatar">
+                            <IconContext.Provider value={{ color: "blue", size: "3em", className: "global-class-name" }}>
+                                <FiSend></FiSend>
+                            </IconContext.Provider>
+                        </Avatar>
                         <div className="auth-form__container">
                             <div className="auth-form__header">
                                 <div className="auth-form__heading">Find password</div>

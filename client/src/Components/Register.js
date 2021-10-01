@@ -4,12 +4,14 @@ import {
     NavLink
 } from "react-router-dom";
 import { connect } from 'react-redux';
+import Avatar from '@mui/material/Avatar'
+import { IconContext } from "react-icons";
+import { FiChevronLeft } from "react-icons/fi";
 import { BsFillEnvelopeFill, BsLockFill, BsCodeSlash } from "react-icons/bs";
+import { FiUserPlus } from "react-icons/fi";
 import { FaPhoneSquare } from "react-icons/fa";
-import Button from '@mui/material/Button';
 import emailjs from 'emailjs-com';
 var bcrypt = require('bcryptjs');
-
 
 
 class Register extends Component {
@@ -45,6 +47,10 @@ class Register extends Component {
     SignUp = (e) => {
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword() && this.blurTel()) {
             this.props.changeLoginStatus();
+            console.log("Tài khoản: " + this.state.email);
+            console.log("Mật khẩu: " + this.state.password);
+            console.log("Code: " + this.state.code);
+            console.log("Tel: " + this.state.tel);
             e.stopPropagation();
         } else {
             e.preventDefault();
@@ -205,12 +211,17 @@ class Register extends Component {
     render() {
         return (
             <div className="Login">
-                <div className="form-login">
+                <div className="form-register">
                     <div className="auth-form">
+                        <Avatar className="auth-form__avatar">
+                            <IconContext.Provider value={{ color: "blue", size: "3em", className: "global-class-name" }}>
+                                <FiUserPlus></FiUserPlus>
+                            </IconContext.Provider>
+                        </Avatar>
                         <div className="auth-form__container">
                             <div className="auth-form__header">
                                 <div className="auth-form__heading">Register</div>
-                                <NavLink to="/login" className="auth-form__switch-btn">Login</NavLink>
+                                <NavLink to="/login" className="auth-form__switch-btn"> <FiChevronLeft className="auth-form__arrow-return"></FiChevronLeft>Login</NavLink>
                             </div>
                         </div>
                         <div className="auth-form__body">

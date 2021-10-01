@@ -7,6 +7,11 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../CSS/Login.css';
 import { BsFillEnvelopeFill, BsLockFill } from "react-icons/bs";
+import { FiChevronRight } from "react-icons/fi";
+import { BiUser } from "react-icons/bi";
+import Avatar from '@mui/material/Avatar'
+import { IconContext } from "react-icons";
+
 
 class Login extends Component {
     constructor(props) {
@@ -30,6 +35,7 @@ class Login extends Component {
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = (e) => {
         if (this.blurEmail() && this.blurPassword()) {
+
             this.props.changeLoginStatus();
         }
     }
@@ -115,10 +121,15 @@ class Login extends Component {
             <div className="Login">
                 <div className="form-login">
                     <div className="auth-form">
+                        <Avatar className="auth-form__avatar">
+                            <IconContext.Provider value={{ color: "blue", size:"3em" ,className: "global-class-name" }}>
+                                <BiUser></BiUser>
+                            </IconContext.Provider>
+                        </Avatar>
                         <div className="auth-form__container">
                             <div className="auth-form__header">
                                 <div className="auth-form__heading">Login</div>
-                                <NavLink to="/register" className="auth-form__switch-btn">Register</NavLink>
+                                <NavLink to="/register" className="auth-form__switch-btn">Register <FiChevronRight className="auth-form__arrow-return"></FiChevronRight></NavLink>
                             </div>
                         </div>
                         <div className="auth-form__body">
