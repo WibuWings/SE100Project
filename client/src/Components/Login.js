@@ -12,69 +12,99 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email : "",
-            pass: "",
-            statusEmail: false,
-            statusPass: false,
+            email: "",
+            password: "",
         }
     }
-    
 
-    hash = () => {
+    // Hash password
+    hash = (pass) => {
         var bcrypt = require('bcryptjs');
-        var pass = "lngthinphc"
         var hash = bcrypt.hashSync(pass, 12)
+        // verified so sánh 
         var verified = bcrypt.compareSync("lngthinphc", hash);
-        return hash + verified;
+        return hash;
     }
 
+
+    // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = (e) => {
-        
-        if (this.state.statusEmail && this.state.statusPass)
-        {
-            this.props.changeLoginStatus();  
+        if (this.blurEmail() && this.blurPassword()) {
+            this.props.changeLoginStatus();
         }
     }
 
-    blurEmail = (event) => {
+
+    // Handle user : blur , change in input
+    blurEmail = () => {
         var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        const elementValue = event.target.value;
-        const formGroup = event.target.parentElement.parentElement;
+        const event = document.querySelector('#email');
+        const elementValue = event.value;
+        const formGroup = event.parentElement.parentElement;
+        this.setState({
+            email: elementValue,
+        })
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field";
+            return false;
         } else if (!regex.test(elementValue)) {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Email is not in the correct format";
+            return false;
         } else {
             formGroup.classList.remove('invalid');
             formGroup.querySelector('.form-message').innerText = "";
-            this.setState({
-                statusEmail: true,
-            })
+            return true;
         }
     }
 
-    blurPassword = (e) => {
-        const elementValue = e.target.value;
-        const formGroup = e.target.parentElement.parentElement;
-        if (elementValue === "") {
+    blurCode = () => {
+        const e = document.getElementById('code');
+        const elementValue = e.value;
+        const formGroup = e.parentElement.parentElement;
+        if (this.state.code === "") {
             formGroup.className = 'invalid form-group'
-            formGroup.querySelector('.form-message').innerText = "Please enter this field"
-        } else if (e.target.value.length < 6) {
+            formGroup.querySelector('.form-message').innerText = "Please press Send Code"
+            return false
+        } else if (elementValue === "") {
             formGroup.className = 'invalid form-group'
-            formGroup.querySelector('.form-message').innerText = "Enter at least 6 characters";
+            formGroup.querySelector('.form-message').innerText = "Enter code here"
+            return false
+        } else if (elementValue !== this.state.code) {
+            formGroup.className = 'invalid form-group'
+            formGroup.querySelector('.form-message').innerText = "Code is incorrect"
+            return false
         } else {
             formGroup.classList.remove('invalid');
             formGroup.querySelector('.form-message').innerText = "";
-            this.setState({
-                statusPass: true,
-            })
+            return true;
+        }
+    }
+
+    blurPassword = () => {
+        const e = document.getElementById('password');
+        const elementValue = e.value;
+        const formGroup = e.parentElement.parentElement;
+        this.setState({
+            password: this.hash(elementValue),
+        })
+        if (elementValue === "") {
+            formGroup.className = 'invalid form-group'
+            formGroup.querySelector('.form-message').innerText = "Please enter this field"
+            return false;
+        } else if (e.value.length < 6) {
+            formGroup.className = 'invalid form-group'
+            formGroup.querySelector('.form-message').innerText = "Enter at least 6 characters";
+            return false;
+        } else {
+            formGroup.classList.remove('invalid');
+            formGroup.querySelector('.form-message').innerText = "";
+            return true;
         }
     }
 
     changeInput = (e) => {
-        const elementValue = e.target.value;
         const formGroup = e.target.parentElement.parentElement;
         formGroup.classList.remove('invalid');
         formGroup.querySelector('.form-message').innerText = "";
@@ -88,7 +118,7 @@ class Login extends Component {
                         <div className="auth-form__container">
                             <div className="auth-form__header">
                                 <div className="auth-form__heading">Login</div>
-                                <NavLink onclick="" to="/register" className="auth-form__switch-btn">Register</NavLink>
+                                <NavLink to="/register" className="auth-form__switch-btn">Register</NavLink>
                             </div>
                         </div>
                         <div className="auth-form__body">
@@ -97,7 +127,7 @@ class Login extends Component {
                                     <label htmlFor="email" className="form-label">Email</label>
                                     <div className="input-custom">
                                         <span><BsFillEnvelopeFill className="input-custom-icon" /></span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(event) => this.blurEmail(event)} name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
+                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
