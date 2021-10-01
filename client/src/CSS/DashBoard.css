@@ -1,0 +1,19 @@
+/* Sidebar section  */
+.navbar {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #333;
+}
+
+.sidebar {
+    width: 224px;
+}
+
+.nav-item {
+    text-decoration: none;
+    display: flex;
+}
+
+.nav-item span{
+    display: block;
+}
