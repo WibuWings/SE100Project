@@ -13,9 +13,11 @@ class Body extends Component {
     render() {
         return (
             <div>
+{/*                 
                 <Link to="/home">Home</Link>
+                <Link to="/dashboard">DashBoard</Link>
                 <Link to="/test1">test1</Link>
-                <Link to="/test2">test2</Link>
+                <Link to="/test2">test2</Link> */}
                 <DashboardURL></DashboardURL>
                 <NavLink to="/login" onClick={() => this.props.changeLoginStatus()}>Đăng xuất</NavLink>
             </div>
