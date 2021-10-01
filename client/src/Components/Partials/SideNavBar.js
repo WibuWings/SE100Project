@@ -17,24 +17,24 @@ class SideNavBar extends Component {
         return (
             <div>
                 <div class="navbar sidebar">
-                    <a href="#" class="nav-item">
-                        <AiOutlineDashboard/>   
+                    <a href="#" class="nav-item activate">
+                        <AiOutlineDashboard class="nav-item-icon"/>   
                         <span>Dashboard</span>
                     </a>
                     <a href="#" class="nav-item">
-                        <ImProfile/>
+                        <ImProfile class="nav-item-icon"/>
                         <span>Profile</span>
                     </a>
                     <a href="#" class="nav-item">
-                        <IoPeopleOutline />
+                        <IoPeopleOutline class="nav-item-icon"/>
                         <span>Employee Manager</span>
                     </a>
                     <a href="#" class="nav-item">
-                        <AiOutlineContainer/>
+                        <AiOutlineContainer class="nav-item-icon"/>
                         <span>Goods Manager</span>
                     </a>
                     <a href="#" class="nav-item">
-                        <IoReceiptOutline/>
+                        <IoReceiptOutline class="nav-item-icon"/>
                         <span>Receipt Manager</span>
                     </a>
                 </div>
