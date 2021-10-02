@@ -26,6 +26,7 @@
 
 .form-login{
     height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -35,7 +36,6 @@
 }
 
 .form-register{
-    
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -81,7 +81,7 @@
 
 .auth-form {
     background-color: white;
-    min-width: 700px;
+    max-width: 100%;
     border-radius: 20px;
     padding-left: 40px;
     position: relative;
@@ -101,7 +101,7 @@
 
 .auth-form__header{
     display: flex;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     color: var(--black-color);
     margin: 30px 20px;
     font-weight: 700;
@@ -120,8 +120,9 @@
 
 .form-group{
     display: flex;
+    width: 100%;
     flex-direction: column;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .form-label,
@@ -177,7 +178,7 @@
 .auth-form__btn{
     justify-content: center;
     display: flex;
-    /* width: 80%; */
+    width: 500px;
     font-size: 1.2rem;
     margin-bottom: 20px;
     font-weight: 500;
@@ -188,7 +189,7 @@
     background-color: var(--primary-color);
     text-align: center;
     color: var(--white-color);
-    padding: 10px 20px;
+    padding: 8px 20px;
     min-width: 140px;
     color: white;
     width: 80%;
@@ -241,7 +242,7 @@
 }
 
 .send-code{
-    width: 25%;
+    width: 100px;
     margin-left: 10px;
 }
 

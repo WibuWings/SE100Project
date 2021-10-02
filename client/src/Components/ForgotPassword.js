@@ -208,7 +208,7 @@ class ForgotPassword extends Component {
                                     <div className="input-custom">
                                         <span><BsCodeSlash className="input-custom-icon" /></span>
                                         <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurCode()} name="code" rules="required|email" id="code" placeholder="Ex: ABC321" type="text" />
-                                        <button type="button" disabled={this.state.statusSendCode} onClick={() => this.sendCode()} class="btn btn-primary disabel send-code">Send code</button>
+                                        <button type="button" disabled={this.state.statusSendCode} onClick={() => this.sendCode()} class="btn btn-primary disabel send-code">SEND</button>
                                     </div>
                                     <span className="form-message" />
                                 </div>

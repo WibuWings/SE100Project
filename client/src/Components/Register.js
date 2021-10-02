@@ -227,7 +227,7 @@ class Register extends Component {
                         <div className="auth-form__body">
                             <form action="/home" method="post" id="login-form">
                                 <div className="form-group">
-                                    <label htmlFor="email" className="form-label">Email</label>
+                                    {/* <label htmlFor="email" className="form-label">Email</label> */}
                                     <div className="input-custom">
                                         <span><BsFillEnvelopeFill className="input-custom-icon" /></span>
                                         <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
@@ -235,16 +235,16 @@ class Register extends Component {
                                     <span className="form-message" />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="code" className="form-label">Code</label>
+                                    {/* <label htmlFor="code" className="form-label">Code</label> */}
                                     <div className="input-custom">
                                         <span><BsCodeSlash className="input-custom-icon" /></span>
                                         <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurCode()} name="code" rules="required|email" id="code" placeholder="Ex: ABC321" type="text" />
-                                        <button type="button" disabled={this.state.statusSendCode} onClick={() => this.sendCode()} class="btn btn-primary disabel send-code">Send code</button>
+                                        <button type="button" disabled={this.state.statusSendCode} onClick={() => this.sendCode()} class="btn btn-primary disabel send-code">SEND</button>
                                     </div>
                                     <span className="form-message" />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="password" className="form-label">Password</label>
+                                    {/* <label htmlFor="password" className="form-label">Password</label> */}
                                     <div className="input-custom">
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
@@ -254,7 +254,7 @@ class Register extends Component {
                                     <span className="form-message" />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="re-password" className="form-label">Password</label>
+                                    {/* <label htmlFor="re-password" className="form-label">Password</label> */}
                                     <div className="input-custom">
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
@@ -264,7 +264,7 @@ class Register extends Component {
                                     <span className="form-message" />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="password" className="form-label">Tel</label>
+                                    {/* <label htmlFor="password" className="form-label">Tel</label> */}
                                     <div className="input-custom">
                                         <span>
                                             <FaPhoneSquare className="input-custom-icon" ></FaPhoneSquare>
