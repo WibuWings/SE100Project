@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import '../../CSS/DashBoard.css'
+
+import {connect} from 'react-redux';
 import { 
     AiOutlineDashboard,
     AiFillDashboard,
@@ -15,10 +16,13 @@ import {
     IoReceiptSharp
 } from "react-icons/io5";
 import { RiProfileFill, RiProfileLine } from "react-icons/ri";
-
 import { FaSignOutAlt } from "react-icons/fa";
 
 import Kurisu from '../../img/kurisu.jpg';
+import { NavLink } from 'react-router-dom';
+
+import '../../CSS/DashBoard.css'
+
 
 class SideNavBar extends Component {
     render() {
@@ -30,39 +34,39 @@ class SideNavBar extends Component {
                         <span class="user-name" style ={{marginLeft: 10, color: '#fff'}}>Makise Kurisu</span>
                     </div>
                     <div class="nav-container">
-                        <a href="#" class="nav-item">
+                        <NavLink className="nav-item" to="/dashboard">
                             <AiOutlineDashboard class="nav-item-icon"/>
                             <AiFillDashboard class="nav-item-icon icon-activate"/>   
                             <span>Dashboard</span>
-                        </a>
-                        <a href="#" class="nav-item">
+                        </NavLink>
+                        <NavLink to='/profile' className="nav-item" href='#'>
                             <RiProfileLine class="nav-item-icon"/>
                             <RiProfileFill class="nav-item-icon icon-activate"/>
                             <span>Profile</span>
-                        </a>
-                        <a href="#" class="nav-item">
+                        </NavLink>
+                        <NavLink to='/employeemanager' className="nav-item" href='#'>
                             <IoPeopleOutline class="nav-item-icon"/>
                             <IoPeopleSharp class="nav-item-icon icon-activate"/>
                             <span>Employee Manager</span>
-                        </a>
-                        <a href="#" class="nav-item">
-                            <AiOutlineContainer class="nav-item-icon"/>
-                            <AiFillContainer class="nav-item-icon icon-activate"/>
+                        </NavLink>
+                        <NavLink to="/goodmanager" className="nav-item" href='#'>
+                            <AiOutlineContainer className="nav-item-icon"/>
+                            <AiFillContainer className="nav-item-icon icon-activate"/>
                             <span>Goods Manager</span>
-                        </a>
-                        <a href="#" class="nav-item">
+                        </NavLink>
+                        <NavLink to="/receiptmanager" className="nav-item" href='#'>
                             <IoReceiptOutline class="nav-item-icon"/>
                             <IoReceiptSharp class="nav-item-icon icon-activate"/>
                             <span>Receipt Manager</span>
-                        </a>
+                        </NavLink>
                     </div>
                     
                     <div class="nav-footer">
-                        <a href="#" class="nav-item" style={{flex: 5}}>
+                        <NavLink to="/login" onClick={() => this.props.changeLoginStatus()} className="nav-item" style={{flex: 5}}>
                             <FaSignOutAlt class="nav-item-icon"/>
                             <span>Sign out</span>
-                        </a>
-                        <a href="#" class="nav-item" style={{flex: 4}}>
+                        </NavLink>
+                        <a href="#" className="nav-item" style={{flex: 4}}>
                             <BsInfoCircleFill class="nav-item-icon"/>
                             <span>About</span>
                         </a>
@@ -70,7 +74,23 @@ class SideNavBar extends Component {
                 </div>
             </div>
         );
+    }   
+}
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        isLogin: state.loginStatus,
     }
 }
 
-export default SideNavBar;
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        changeLoginStatus: () => {
+            dispatch({
+                type: "CHANGE_LOGIN_STATUS",
+            })
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideNavBar);

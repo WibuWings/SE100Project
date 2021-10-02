@@ -24,6 +24,7 @@
 
 .nav-item:hover span{
     color: #fff;
+    font-weight: 500;
 }
 
 .nav-item:hover .nav-item-icon{
@@ -35,11 +36,6 @@
     color: #fff;
 }
 
-.nav-item.activate {
-    color: #fff;    
-    font-weight: 700;
-}
-
 .nav-item .nav-item-icon {
     font-size: 20px;
     margin-right: 8px;
@@ -49,12 +45,7 @@
     display: none;
 }
 
-.nav-item.activate .nav-item-icon{
-    display: none;
-}
-.nav-item.activate .icon-activate{
-    display: block;
-}
+
 
 .nav-item span{
     display: block;
@@ -91,4 +82,16 @@
 
 .nav-footer .nav-item:hover span {
     font-weight: 500;
+}
+
+.nav-item.active .nav-item-icon{
+    display: none;
+}
+.nav-item.active .icon-activate{
+    display: block;
+}
+
+.nav-item.active {
+    color: #fff;    
+    font-weight: 700;
 }

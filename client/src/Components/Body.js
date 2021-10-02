@@ -8,18 +8,24 @@ import {
 } from "react-router-dom";
 import DashboardURL from '../Router/DashboardURL';
 import {connect} from 'react-redux';
+import SideNavBar from './Partials/SideNavBar';
 
 class Body extends Component {
     render() {
         return (
-            <div>
+            <div style={{display: 'flex'}}>
                 {/*                 
                 <Link to="/home">Home</Link>
                 <Link to="/dashboard">DashBoard</Link>
                 <Link to="/test1">test1</Link>
                 <Link to="/test2">test2</Link> */}
-                <DashboardURL></DashboardURL>
-                <NavLink to="/login" onClick={() => this.props.changeLoginStatus()}>Đăng xuất</NavLink>
+                <SideNavBar/>
+                <div style={{ width: '100%', display: 'flex', border: '1px solid #333',  
+                justifyContent: 'center', alignItems: 'center'}}>
+                    <DashboardURL></DashboardURL>
+                </div>
+                
+                
             </div>
         );
     }

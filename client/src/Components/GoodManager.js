@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-class Setting extends Component {
+class GoodManager extends Component {
     render() {
         return (
             <div>
-                Setting
+                GoodManager
             </div>
         );
     }
 }
 
-export default Setting;
+export default GoodManager;
