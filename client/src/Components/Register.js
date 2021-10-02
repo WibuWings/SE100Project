@@ -274,6 +274,12 @@ class Register extends Component {
                                     </div>
                                     <span className="form-message" />
                                 </div>
+                                <div className="register-description">Bằng cách ấn vào nút
+                                    <span className="register-description__keyword">“ĐĂNG KÝ”</span>
+                                    , tôi đồng ý với
+                                    <span className="register-description__keyword">Điều Khoản Sử Dụng</span> và
+                                    <div className="register-description__keyword"> Chính Sách Bảo Mật</div>
+                                </div>
                                 <div className="auth-form__btn">
                                     <NavLink to="/home" onClick={(e) => this.SignUp(e)} className="auth-form__btn-log-in auth-form__switch-btn">Sign Up</NavLink>
                                 </div>
