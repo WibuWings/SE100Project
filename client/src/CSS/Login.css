@@ -263,3 +263,8 @@
 .register-description__keyword{
     color: var(--primary-color);
 }
+
+.auth-form__support-google{
+    width: 100%;
+    font-family: 'Times New Roman', Times, serif;
+}

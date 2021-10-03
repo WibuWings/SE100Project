@@ -46,14 +46,13 @@ class Register extends Component {
     // status SignUp 
     SignUp = (e) => {
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword() && this.blurTel()) {
+            const form = document.getElementById('register-form');
+            const password = document.getElementById('password');
+            const rePassword = document.getElementById('re-password');
+            rePassword.value = this.state.password;
+            password.value = this.state.password;
+            form.submit();
             this.props.changeLoginStatus();
-            console.log("Tài khoản: " + this.state.email);
-            console.log("Mật khẩu: " + this.state.password);
-            console.log("Code: " + this.state.code);
-            console.log("Tel: " + this.state.tel);
-            e.stopPropagation();
-        } else {
-            e.preventDefault();
         }
     }
 
@@ -209,6 +208,17 @@ class Register extends Component {
     }
 
     render() {
+        const enterPress = this.SignUp;
+        document.onkeydown = function(e){
+            switch (e.which) {
+                case 13:
+                    enterPress(e);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         return (
             <div className="Login">
                 <div className="form-register">
@@ -225,9 +235,8 @@ class Register extends Component {
                             </div>
                         </div>
                         <div className="auth-form__body">
-                            <form action="/home" method="post" id="login-form">
+                            <form action="/register-submit" method="post" id="register-form">
                                 <div className="form-group">
-                                    {/* <label htmlFor="email" className="form-label">Email</label> */}
                                     <div className="input-custom">
                                         <span><BsFillEnvelopeFill className="input-custom-icon" /></span>
                                         <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
@@ -235,7 +244,6 @@ class Register extends Component {
                                     <span className="form-message" />
                                 </div>
                                 <div className="form-group">
-                                    {/* <label htmlFor="code" className="form-label">Code</label> */}
                                     <div className="input-custom">
                                         <span><BsCodeSlash className="input-custom-icon" /></span>
                                         <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurCode()} name="code" rules="required|email" id="code" placeholder="Ex: ABC321" type="text" />
@@ -244,7 +252,6 @@ class Register extends Component {
                                     <span className="form-message" />
                                 </div>
                                 <div className="form-group">
-                                    {/* <label htmlFor="password" className="form-label">Password</label> */}
                                     <div className="input-custom">
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
@@ -254,7 +261,6 @@ class Register extends Component {
                                     <span className="form-message" />
                                 </div>
                                 <div className="form-group">
-                                    {/* <label htmlFor="re-password" className="form-label">Password</label> */}
                                     <div className="input-custom">
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
@@ -264,7 +270,6 @@ class Register extends Component {
                                     <span className="form-message" />
                                 </div>
                                 <div className="form-group">
-                                    {/* <label htmlFor="password" className="form-label">Tel</label> */}
                                     <div className="input-custom">
                                         <span>
                                             <FaPhoneSquare className="input-custom-icon" ></FaPhoneSquare>

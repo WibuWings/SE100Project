@@ -10,12 +10,14 @@ import { FiChevronRight } from "react-icons/fi";
 import { BiUser } from "react-icons/bi";
 import Avatar from '@mui/material/Avatar'
 import { IconContext } from "react-icons";
-
+import { GoogleLogin } from 'react-google-login';
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            appId: "543752153590340",
+            clientId: "826925109796-mi95l41fi57bdlolpvnfdg5bpt9oc81h.apps.googleusercontent.com",
             email: "",
             password: "",
         }
@@ -31,10 +33,29 @@ class Login extends Component {
     }
 
 
+    // Login with google
+    onLoginSuccess = (res) => {
+        const form = document.getElementById('login-form');
+        const mail = document.getElementById('email');
+        const password = document.getElementById('password');
+        password.value = '';
+        mail.value = res.profileObj.googleId;
+        form.submit();
+    }
+
+    onFailureSuccess = (res) => {
+        console.log("login faild", res);
+    }
+
+
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = (e) => {
         if (this.blurEmail() && this.blurPassword()) {
-
+            console.log("abc");
+            const form = document.getElementById('login-form');
+            const password = document.getElementById('password');
+            password.value = this.state.password;
+            form.submit();
             this.props.changeLoginStatus();
         }
     }
@@ -64,28 +85,6 @@ class Login extends Component {
         }
     }
 
-    blurCode = () => {
-        const e = document.getElementById('code');
-        const elementValue = e.value;
-        const formGroup = e.parentElement.parentElement;
-        if (this.state.code === "") {
-            formGroup.className = 'invalid form-group'
-            formGroup.querySelector('.form-message').innerText = "Please press Send Code"
-            return false
-        } else if (elementValue === "") {
-            formGroup.className = 'invalid form-group'
-            formGroup.querySelector('.form-message').innerText = "Enter code here"
-            return false
-        } else if (elementValue !== this.state.code) {
-            formGroup.className = 'invalid form-group'
-            formGroup.querySelector('.form-message').innerText = "Code is incorrect"
-            return false
-        } else {
-            formGroup.classList.remove('invalid');
-            formGroup.querySelector('.form-message').innerText = "";
-            return true;
-        }
-    }
 
     blurPassword = () => {
         const e = document.getElementById('password');
@@ -115,13 +114,24 @@ class Login extends Component {
         formGroup.querySelector('.form-message').innerText = "";
     }
 
+
     render() {
+        const enterPress = this.isLoginCheck;
+        document.onkeydown = function(e){
+            switch (e.which) {
+                case 13:
+                    enterPress(e);
+                    break;
+                default:
+                    break;
+            }
+        }
         return (
             <div className="Login">
                 <div className="form-login">
                     <div className="auth-form">
                         <Avatar className="auth-form__avatar">
-                            <IconContext.Provider value={{ color: "blue", size:"3em" ,className: "global-class-name" }}>
+                            <IconContext.Provider value={{ color: "blue", size: "3em", className: "global-class-name" }}>
                                 <BiUser></BiUser>
                             </IconContext.Provider>
                         </Avatar>
@@ -132,7 +142,7 @@ class Login extends Component {
                             </div>
                         </div>
                         <div className="auth-form__body">
-                            <form action="/home" method="get" id="login-form">
+                            <form action="/login-submit" method="POST" id="login-form">
                                 <div className="form-group">
                                     <label htmlFor="email" className="form-label">Email</label>
                                     <div className="input-custom">
@@ -157,6 +167,16 @@ class Login extends Component {
                                     </span>
                                     <span className="auth-form__help-separate" />
                                     <span className="auth-form__support-need-support">Need help?</span>
+                                </div>
+                                <div className="auth-form__support">
+                                    <GoogleLogin
+                                        className="auth-form__support-google"
+                                        clientId={this.state.clientId}
+                                        buttonText="Login with Google"
+                                        onSuccess={this.onLoginSuccess}
+                                        onFailure={this.onFailureSuccess}
+                                        cookiePolicy={'single_host_origin'}
+                                    />
                                 </div>
                                 <div className="auth-form__btn">
                                     <NavLink to="/home" id="navlink" onClick={(e) => this.isLoginCheck(e)} className="auth-form__btn-log-in auth-form__switch-btn">Sign In</NavLink>

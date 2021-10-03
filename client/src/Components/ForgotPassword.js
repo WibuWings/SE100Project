@@ -65,11 +65,12 @@ class ForgotPassword extends Component {
     //Check tìm lại mật khẩu
     findPassword = (e) => {
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword()) {
-
-            e.stopPropagation();
-        }
-        else {
-            e.preventDefault();
+            const form = document.getElementById('findpass-form');
+            const password = document.getElementById('password');
+            const rePassword = document.getElementById('re-password');
+            rePassword.value = this.state.password;
+            password.value = this.state.password;
+            form.submit();
         }
     }
 
@@ -178,6 +179,16 @@ class ForgotPassword extends Component {
     }
 
     render() {
+        const enterPress = this.findPassword;
+        document.onkeydown = function(e){
+            switch (e.which) {
+                case 13:
+                    enterPress(e);
+                    break;
+                default:
+                    break;
+            }
+        }
         return (
             <div className="Login">
                 <div className="form-findpass">
@@ -194,7 +205,7 @@ class ForgotPassword extends Component {
                             </div>
                         </div>
                         <div className="auth-form__body">
-                            <form action method="post" id="login-form">
+                            <form action="/findpass-submit?_method=PUT" method="POST" id="findpass-form">
                                 <div className="form-group">
                                     <label htmlFor="email" className="form-label">Email</label>
                                     <div className="input-custom">
