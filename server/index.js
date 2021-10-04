@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./configDB');
-
+// const ProductImage = require('./models/image/productImage');
+// const Product = require('./models/Product');
 const PORT = process.env.PORT || 5000;
 const app = express();
 
