@@ -12,16 +12,12 @@ class DashboardURL extends Component {
     render() {
         return (
             <div>      
-                {/* <Route  path="/:slug" component={Home}></Route> */}
-                {/* <Route  path="/home" component={Home}></Route> */}
                 <Route exact path="/" component={DashBoard}></Route>
-                {/* <Route exact path="/login" component={Login}></Route> */}
                 <Route exact path="/dashboard" component={DashBoard}></Route>
                 <Route exact path="/goodmanager" component={GoodManager}></Route>
                 <Route exact path="/employeemanager" component={EmployeeManager}></Route>
                 <Route exact path="/receiptmanager" component={ReceiptManager}></Route> 
                 <Route exact path="/profile" component={Profile}></Route>      
-                {/* <DashBoard /> */}
             </div>
         );
     }

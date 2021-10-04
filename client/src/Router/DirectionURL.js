@@ -4,9 +4,9 @@ import {
     Switch
 } from 'react-router-dom';
 import Body from '../Components/Body';
-import Login from '../Components/Login';
-import Register from '../Components/Register';
-import ForgotPassword from '../Components/ForgotPassword';
+import Login from '../Components/Login/Login';
+import Register from '../Components/Login/Register';
+import ForgotPassword from '../Components/Login/ForgotPassword';
 import { connect } from 'react-redux';
 
 
@@ -35,7 +35,6 @@ class DirectionURL extends Component {
     }
 
     render() {
-
         return (
             <div>
                 {!this.props.isLogin ? this.notLogin() : this.Login()}
@@ -50,15 +49,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        changeLoginStatus: () => {
-            dispatch({
-                type: "CHANGE_LOGIN_STATUS",
-            });
-        }
-    }
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(DirectionURL);
+export default connect(mapStateToProps)(DirectionURL);

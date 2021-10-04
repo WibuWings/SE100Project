@@ -4,7 +4,7 @@ import {
     NavLink
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../CSS/Login.css';
+import '../../CSS/Login.css'
 import { BsFillEnvelopeFill, BsLockFill } from "react-icons/bs";
 import { FiChevronRight, FiXSquare } from "react-icons/fi";
 import { BiUser } from "react-icons/bi";
@@ -43,12 +43,10 @@ class Login extends Component {
         this.OutAlert();
         axios.post(`http://localhost:3000/signin-withgoogle`, res.profileObj)
             .then(res => {
-                // console.log(res);
                 console.log("thành công");
                 this.setState({
                     statusSucces: true,
                 })
-                return res;
             })
             .catch(err => {
                 this.setState({
@@ -59,7 +57,10 @@ class Login extends Component {
     }
 
     onFailureSuccess = (res) => {
-        console.log("login faild", res);
+        this.setState({
+            statusFailed: true,
+            statusSucces: false,
+        })
     }
 
     // Out Alert
@@ -74,11 +75,6 @@ class Login extends Component {
     isLoginCheck = (e) => {
         this.OutAlert();
         if (this.blurEmail() && this.blurPassword()) {
-            // const form = document.getElementById('login-form');
-            // const password = document.getElementById('password');
-            // password.value = this.state.password;
-            // form.submit();
-            // this.props.changeLoginStatus();
             axios.post(`http://localhost:3000/signin-withgmail-password`, {
                 email: this.state.email,
                 password: this.state.password,
@@ -108,9 +104,11 @@ class Login extends Component {
         const event = document.querySelector('#email');
         const elementValue = event.value;
         const formGroup = event.parentElement.parentElement;
+        // Gán giá trị mail
         this.setState({
             email: elementValue,
         })
+        // check validate
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field";
