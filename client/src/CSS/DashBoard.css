@@ -1,0 +1,97 @@
+/* Sidebar section  */
+.navibar {
+    background-color: #4e73df;
+    background-image: linear-gradient(180deg,#4e73df 10%,#224abe 100%);
+    background-size: cover;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 224px;
+    min-height: 100vh;
+    justify-content: space-between;
+}
+
+.nav-item {
+    text-decoration: none;
+    display: flex;
+    justify-content: left;
+    width: 100%;
+    padding: 16px;
+    color: rgba(255,255,255,.8);   
+}
+
+.nav-item:hover span{
+    color: #fff;
+    font-weight: 500;
+}
+
+.nav-item:hover .nav-item-icon{
+    display: none;
+}
+
+.nav-item:hover .nav-item-icon.icon-activate {
+    display: block;
+    color: #fff;
+}
+
+.nav-item .nav-item-icon {
+    font-size: 20px;
+    margin-right: 8px;
+}
+
+.nav-item .icon-activate{
+    display: none;
+}
+
+
+
+.nav-item span{
+    display: block;
+    font-size: 14px;
+}
+
+.navibar .nav-heading {
+    padding: 16px;
+    flex: 1;
+}
+
+.navibar .nav-container {
+    flex: 3;
+}
+
+.navibar .nav-footer {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+}
+
+.navibar .nav-footer .nav-item {
+    height: 50px;
+}
+
+.nav-footer .nav-item .nav-item-icon {
+    display: block;
+    
+}
+
+.nav-footer .nav-item:hover .nav-item-icon {
+    color: #fff;
+}
+
+.nav-footer .nav-item:hover span {
+    font-weight: 500;
+}
+
+.nav-item.active .nav-item-icon{
+    display: none;
+}
+.nav-item.active .icon-activate{
+    display: block;
+}
+
+.nav-item.active {
+    color: #fff;    
+    font-weight: 700;
+}
