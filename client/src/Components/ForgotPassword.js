@@ -64,6 +64,7 @@ class ForgotPassword extends Component {
 
     //Check tìm lại mật khẩu
     findPassword = (e) => {
+        e.preventDefault();
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword()) {
             const form = document.getElementById('findpass-form');
             const password = document.getElementById('password');
@@ -71,6 +72,7 @@ class ForgotPassword extends Component {
             rePassword.value = this.state.password;
             password.value = this.state.password;
             form.submit();
+            e.stopPropagation();
         }
     }
 
@@ -254,6 +256,5 @@ class ForgotPassword extends Component {
         );
     }
 }
-
 
 export default ForgotPassword;

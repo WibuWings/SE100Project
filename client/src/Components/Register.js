@@ -6,9 +6,8 @@ import {
 import { connect } from 'react-redux';
 import Avatar from '@mui/material/Avatar'
 import { IconContext } from "react-icons";
-import { FiChevronLeft } from "react-icons/fi";
+import { FiChevronLeft ,FiUserPlus} from "react-icons/fi";
 import { BsFillEnvelopeFill, BsLockFill, BsCodeSlash } from "react-icons/bs";
-import { FiUserPlus } from "react-icons/fi";
 import { FaPhoneSquare } from "react-icons/fa";
 import emailjs from 'emailjs-com';
 var bcrypt = require('bcryptjs');
@@ -16,6 +15,7 @@ var bcrypt = require('bcryptjs');
 
 class Register extends Component {
     constructor(props) {
+        
         super(props);
         this.state = {
             email: "",
@@ -45,6 +45,7 @@ class Register extends Component {
 
     // status SignUp 
     SignUp = (e) => {
+        e.preventDefault();
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword() && this.blurTel()) {
             const form = document.getElementById('register-form');
             const password = document.getElementById('password');

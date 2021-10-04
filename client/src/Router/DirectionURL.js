@@ -35,6 +35,7 @@ class DirectionURL extends Component {
     }
 
     render() {
+
         return (
             <div>
                 {!this.props.isLogin ? this.notLogin() : this.Login()}

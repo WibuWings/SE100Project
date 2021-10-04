@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
     Route,
 } from "react-router-dom";
-import Home from '../Components/Home';
 import GoodManager from '../Components/GoodManager';
 import EmployeeManager from '../Components/EmployeeManager';
 import DashBoard from '../Components/DashBoard';
