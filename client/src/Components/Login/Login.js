@@ -43,7 +43,7 @@ class Login extends Component {
         this.OutAlert();
         axios.post(`http://localhost:3000/signin-withgoogle`, res.profileObj)
             .then(res => {
-                console.log("thành công");
+                console.log("thành công" + res);
                 this.setState({
                     statusSucces: true,
                 })
