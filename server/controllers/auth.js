@@ -91,7 +91,7 @@ class Authentication {
         var email = req.body.email;
         var password = req.body.password;
         var accInDB = await manager.findOne({ _id: email }).exec();
-
+    
         if (accInDB) {
             // respond TOKEN if password is correct
             if (bcrypt.compareSync(password, accInDB.password)) {
@@ -108,14 +108,14 @@ class Authentication {
                     message,
                     token,
                 };
-
+    
                 res.send(JSON.stringify(result));
             } else {
                 var result = {
                     status: 0,
                     message,
                 };
-
+    
                 res.send(JSON.stringify(result));
             }
         } else {
@@ -123,14 +123,40 @@ class Authentication {
                 status: -1,
                 message,
             };
-
+    
             res.send(JSON.stringify(result));
         }
     };
 
-    register = async (req, res) => {};
+    register = async (req, res) => {
+        const manager = new Manager({
+            _id: req.body.email,
+            password: req.body.password,
+            phoneNumber: req.body.tel,
+        });
 
-    forgetPassword = async (req, res) => {};
+        manager
+            .save()
+            .then((result) => {
+                res.send("Tao tai khoan thanh cong !!!");
+            })
+            .catch((err) => console.log(err));
+    };
+
+    forgetPassword = async (req, res) => {
+        Manager.findOneAndUpdate(
+            { _id: req.body.email },
+            { $set: { password: req.body.password } },
+            { new: true },
+            function (err, doc) {
+                if (err) {
+                    console.log("Something wrong when updating data!");
+                }
+
+                console.log(doc);
+            }
+        );
+    };
 }
 
 module.exports = new Authentication();
