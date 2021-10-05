@@ -10,12 +10,12 @@ import { connect } from 'react-redux'
 class App extends Component {
   render() {
     window.onload = () => {
-      if (localStorage.getItem('stoken')) {
-        if (localStorage.getItem('stoken') !== "") {
+      if (localStorage.getItem('token')) {
+        if (localStorage.getItem('token') !== "") {
           this.props.changeLoginStatus()
         }
       } else {
-        localStorage.setItem('stoken', '')
+        localStorage.setItem('token', '')
       }
     }
     return (

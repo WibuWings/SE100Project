@@ -15,25 +15,23 @@ import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import bcrypt from 'bcryptjs';
 
+
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
             appId: "543752153590340",
             clientId: "826925109796-mi95l41fi57bdlolpvnfdg5bpt9oc81h.apps.googleusercontent.com",
-            email: "",
-            password: "",
             statusFailed: false,
             statusSucces: false,
         }
     }
 
+    a = "Login success";
+
     // Hash password
     hash = (pass) => {
-        // var bcrypt = require('bcryptjs');
         var hash = bcrypt.hashSync(pass, 12)
-        // verified so sánh 
-        var verified = bcrypt.compareSync("lngthinphc", hash);
         return hash;
     }
 
@@ -44,14 +42,35 @@ class Login extends Component {
         axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
                 console.log("thành công");
-                this.setState({
-                    statusSucces: true,
-                })
-            })
+                switch(res.data.status){
+                    case 1:
+                        this.a = "Login success";
+                        this.setState({
+                            statusSucces: true,
+                        })
+                        localStorage.setItem('token', res.data.token);
+                        break;
+                    case 0:
+                        this.a = "Incorrect password";
+                        this.setState({
+                            statusFailed: true,
+                        })
+                        break;
+                    case -2:
+                        this.a = "This account has signin by Email the first";
+                        this.setState({
+                            statusFailed: true,
+                        })
+                        break;
+                    default:
+                        this.a = "Enter again";
+                        this.setState({
+                            statusFailed: true,
+                        })
+                        break;                          
+                }
+            })  
             .catch(err => {
-                this.setState({
-                    statusSucces: true,
-                })
                 console.log("lỗi");
             })
     }
@@ -74,25 +93,45 @@ class Login extends Component {
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = (e) => {
         this.OutAlert();
+        const form = document.getElementById('login-form');
         if (this.blurEmail() && this.blurPassword()) {
             axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
-                email: this.state.email,
-                password: this.state.password,
+                email: document.querySelector('#email').value,
+                password: document.getElementById('password').value,
             })
             .then(res => {
                 console.log(res)
                 console.log("thành công");
-                this.setState({
-                    statusSucces: true,
-                })
-                return res;
+                switch(res.data.status){
+                    case 1:
+                        this.a = "Login success";
+                        this.setState({
+                            statusSucces: true,
+                        })
+                        form.reset();
+                        localStorage.setItem('token', res.data.token);
+                        break;
+                    case 0:
+                        this.a = "Incorrect password";
+                        this.setState({
+                            statusFailed: true,
+                        })
+                        break;
+                    case -1:
+                        this.a = "This account has already existed";
+                        this.setState({
+                            statusFailed: true,
+                        })
+                        break;
+                    default:
+                        this.a = "Enter again";
+                        this.setState({
+                            statusFailed: true,
+                        })
+                        break;     
+                }  
             })
             .catch(err => {
-                this.setState({
-                    statusSucces: true,
-                })
-                const form = document.getElementById('login-form');
-                form.reset();
                 console.log("lỗi");
             })
         }
@@ -103,12 +142,8 @@ class Login extends Component {
     blurEmail = () => {
         var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         const event = document.querySelector('#email');
-        const elementValue = event.value;
+        let elementValue = event.value;
         const formGroup = event.parentElement.parentElement;
-        // Gán giá trị mail
-        this.setState({
-            email: elementValue,
-        })
         // check validate
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
@@ -128,11 +163,8 @@ class Login extends Component {
 
     blurPassword = () => {
         const e = document.getElementById('password');
-        const elementValue = e.value;
+        let elementValue = e.value;
         const formGroup = e.parentElement.parentElement;
-        this.setState({
-            password: elementValue,
-        })
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field"
@@ -226,8 +258,8 @@ class Login extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.statusSucces ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">This is a success alert — check it out! <FiXSquare></FiXSquare></Alert> : null}
-                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">Login failed — check it out! <FiXSquare></FiXSquare></Alert> : null }
+                {this.state.statusSucces ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">{this.a} — check it out! <FiXSquare></FiXSquare></Alert> : null}
+                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.a} — check it out! <FiXSquare></FiXSquare></Alert> : null }
             </div>
         );
     }
