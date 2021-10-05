@@ -75,7 +75,7 @@ class Login extends Component {
     isLoginCheck = (e) => {
         this.OutAlert();
         if (this.blurEmail() && this.blurPassword()) {
-            axios.post(`http://localhost:5000/signin-with-gmail-password`, {
+            axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
                 email: this.state.email,
                 password: this.state.password,
             })
