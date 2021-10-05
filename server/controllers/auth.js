@@ -31,6 +31,14 @@ class Authentication {
     }
 
   };
+
+  register = async (req, res) => {
+
+  };
+
+  forgetPassword = async (req, res) => {
+
+  };
 }
 
 // sub function
