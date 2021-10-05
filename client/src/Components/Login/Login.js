@@ -41,7 +41,7 @@ class Login extends Component {
     // Login with google
     onLoginSuccess = (res) => {
         this.OutAlert();
-        axios.post(`http://localhost:3000/signin-withgoogle`, res.profileObj)
+        axios.post(`http://localhost:5000/signin-withgoogle`, res.profileObj)
             .then(res => {
                 console.log("thành công");
                 this.setState({
@@ -75,11 +75,12 @@ class Login extends Component {
     isLoginCheck = (e) => {
         this.OutAlert();
         if (this.blurEmail() && this.blurPassword()) {
-            axios.post(`http://localhost:3000/signin-withgmail-password`, {
+            axios.post(`http://localhost:5000/receipt/create`, {
                 email: this.state.email,
                 password: this.state.password,
             })
             .then(res => {
+                console.log(res)
                 console.log("thành công");
                 this.setState({
                     statusSucces: true,
