@@ -4,13 +4,16 @@ import {
     NavLink
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../CSS/Login.css';
+import '../../CSS/Login.css'
 import { BsFillEnvelopeFill, BsLockFill } from "react-icons/bs";
-import { FiChevronRight } from "react-icons/fi";
+import { FiChevronRight, FiXSquare } from "react-icons/fi";
 import { BiUser } from "react-icons/bi";
 import Avatar from '@mui/material/Avatar'
 import { IconContext } from "react-icons";
 import { GoogleLogin } from 'react-google-login';
+import axios from 'axios';
+import Alert from '@mui/material/Alert';
+import bcrypt from 'bcryptjs';
 
 class Login extends Component {
     constructor(props) {
@@ -20,12 +23,14 @@ class Login extends Component {
             clientId: "826925109796-mi95l41fi57bdlolpvnfdg5bpt9oc81h.apps.googleusercontent.com",
             email: "",
             password: "",
+            statusFailed: false,
+            statusSucces: false,
         }
     }
 
     // Hash password
     hash = (pass) => {
-        var bcrypt = require('bcryptjs');
+        // var bcrypt = require('bcryptjs');
         var hash = bcrypt.hashSync(pass, 12)
         // verified so sánh 
         var verified = bcrypt.compareSync("lngthinphc", hash);
@@ -35,28 +40,60 @@ class Login extends Component {
 
     // Login with google
     onLoginSuccess = (res) => {
-        const form = document.getElementById('login-form');
-        const mail = document.getElementById('email');
-        const password = document.getElementById('password');
-        password.value = '';
-        mail.value = res.profileObj.googleId;
-        form.submit();
+        this.OutAlert();
+        axios.post(`http://localhost:3000/signin-withgoogle`, res.profileObj)
+            .then(res => {
+                console.log("thành công");
+                this.setState({
+                    statusSucces: true,
+                })
+            })
+            .catch(err => {
+                this.setState({
+                    statusSucces: true,
+                })
+                console.log("lỗi");
+            })
     }
 
     onFailureSuccess = (res) => {
-        console.log("login faild", res);
+        this.setState({
+            statusFailed: true,
+            statusSucces: false,
+        })
     }
 
+    // Out Alert
+    OutAlert = () => {
+        this.setState({
+            statusFailed: false,
+            statusSucces: false,
+        })
+    }
 
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = (e) => {
+        this.OutAlert();
         if (this.blurEmail() && this.blurPassword()) {
-            console.log("abc");
-            const form = document.getElementById('login-form');
-            const password = document.getElementById('password');
-            password.value = this.state.password;
-            form.submit();
-            this.props.changeLoginStatus();
+            axios.post(`http://localhost:3000/signin-withgmail-password`, {
+                email: this.state.email,
+                password: this.state.password,
+            })
+            .then(res => {
+                console.log("thành công");
+                this.setState({
+                    statusSucces: true,
+                })
+                return res;
+            })
+            .catch(err => {
+                this.setState({
+                    statusSucces: true,
+                })
+                const form = document.getElementById('login-form');
+                form.reset();
+                console.log("lỗi");
+            })
         }
     }
 
@@ -67,9 +104,11 @@ class Login extends Component {
         const event = document.querySelector('#email');
         const elementValue = event.value;
         const formGroup = event.parentElement.parentElement;
+        // Gán giá trị mail
         this.setState({
             email: elementValue,
         })
+        // check validate
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field";
@@ -126,6 +165,7 @@ class Login extends Component {
                     break;
             }
         }
+  
         return (
             <div className="Login">
                 <div className="form-login">
@@ -179,12 +219,14 @@ class Login extends Component {
                                     />
                                 </div>
                                 <div className="auth-form__btn">
-                                    <NavLink to="/home" id="navlink" onClick={(e) => this.isLoginCheck(e)} className="auth-form__btn-log-in auth-form__switch-btn">Sign In</NavLink>
+                                    <div to="/home" id="navlink" onClick={(e) => this.isLoginCheck(e)} className="auth-form__btn-log-in auth-form__switch-btn">Sign In</div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
+                {this.state.statusSucces ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">This is a success alert — check it out! <FiXSquare></FiXSquare></Alert> : null}
+                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">Login failed — check it out! <FiXSquare></FiXSquare></Alert> : null }
             </div>
         );
     }

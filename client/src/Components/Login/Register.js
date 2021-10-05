@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
-import '../CSS/Login.css'
+import '../../CSS/Login.css'
 import {
     NavLink
 } from "react-router-dom";
 import { connect } from 'react-redux';
 import Avatar from '@mui/material/Avatar'
 import { IconContext } from "react-icons";
-import { FiChevronLeft } from "react-icons/fi";
+import { FiChevronLeft, FiUserPlus, FiXSquare } from "react-icons/fi";
 import { BsFillEnvelopeFill, BsLockFill, BsCodeSlash } from "react-icons/bs";
-import { FiUserPlus } from "react-icons/fi";
 import { FaPhoneSquare } from "react-icons/fa";
+import axios from 'axios';
+import Alert from '@mui/material/Alert';
 import emailjs from 'emailjs-com';
 var bcrypt = require('bcryptjs');
 
 
 class Register extends Component {
     constructor(props) {
+
         super(props);
         this.state = {
             email: "",
@@ -23,6 +25,8 @@ class Register extends Component {
             tel: "",
             code: "",
             statusSendCode: true,
+            statusFailed: false,
+            statusSuccess: false,
         }
     }
 
@@ -45,15 +49,34 @@ class Register extends Component {
 
     // status SignUp 
     SignUp = (e) => {
+        this.OutAlert();
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword() && this.blurTel()) {
             const form = document.getElementById('register-form');
-            const password = document.getElementById('password');
-            const rePassword = document.getElementById('re-password');
-            rePassword.value = this.state.password;
-            password.value = this.state.password;
-            form.submit();
-            this.props.changeLoginStatus();
+            axios.post(`http://localhost:3000/register-with-email`, {
+                email: this.state.email,
+                password: this.state.password,
+                tel: this.state.tel,
+            })
+                .then(res => {
+                    console.log("thành công");
+                })
+                .catch(err => {
+                    form.reset();
+                    this.setState({
+                        statusSuccess: true,
+                    })
+                    console.log("Thất bại");
+                })
+
         }
+    }
+
+    // Out Alert
+    OutAlert = () => {
+        this.setState({
+            statusFailed: false,
+            statusSuccess: false,
+        })
     }
 
     // Tạo mã code cho người dùng xác nhận
@@ -209,7 +232,7 @@ class Register extends Component {
 
     render() {
         const enterPress = this.SignUp;
-        document.onkeydown = function(e){
+        document.onkeydown = function (e) {
             switch (e.which) {
                 case 13:
                     enterPress(e);
@@ -286,12 +309,14 @@ class Register extends Component {
                                     <div className="register-description__keyword"> Chính Sách Bảo Mật</div>
                                 </div>
                                 <div className="auth-form__btn">
-                                    <NavLink to="/home" onClick={(e) => this.SignUp(e)} className="auth-form__btn-log-in auth-form__switch-btn">Sign Up</NavLink>
+                                    <div onClick={(e) => this.SignUp(e)} className="auth-form__btn-log-in auth-form__switch-btn">Sign Up</div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div >
+                {this.state.statusSuccess ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">This is a success alert — check it out! <FiXSquare></FiXSquare></Alert> : null}
+                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">Login failed — check it out! <FiXSquare></FiXSquare></Alert> : null}
             </div >
         );
     }

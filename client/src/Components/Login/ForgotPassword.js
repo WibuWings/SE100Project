@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Avatar from '@mui/material/Avatar'
 import { IconContext } from "react-icons";
-import { FiSend } from "react-icons/fi";
+import { FiSend, FiXSquare } from "react-icons/fi";
 import { BsFillEnvelopeFill, BsLockFill, BsBoxArrowInLeft, BsCodeSlash } from "react-icons/bs";
 import emailjs from 'emailjs-com';
+import Alert from '@mui/material/Alert';
+import axios from 'axios';
 import {
     NavLink
 } from "react-router-dom";
@@ -18,6 +20,8 @@ class ForgotPassword extends Component {
             password: "",
             code: "",
             statusSendCode: true,
+            statusFailed: false,
+            statusSuccess: false,
         }
     }
 
@@ -61,16 +65,34 @@ class ForgotPassword extends Component {
         var verified = bcrypt.compareSync(rePass, this.state.password);
         return verified;
     }
+    // Out Alert
+    OutAlert = () => {
+        this.setState({
+            statusFailed: false,
+            statusSuccess: false,
+        })
+    }
+
 
     //Check tìm lại mật khẩu
     findPassword = (e) => {
+        this.OutAlert();
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword()) {
             const form = document.getElementById('findpass-form');
-            const password = document.getElementById('password');
-            const rePassword = document.getElementById('re-password');
-            rePassword.value = this.state.password;
-            password.value = this.state.password;
-            form.submit();
+            axios.post(`http://localhost:3000/findpasword`, {
+                email: this.state.email,
+                password: this.state.password,
+            })
+                .then(res => {
+                    console.log("thành công");
+                })
+                .catch(err => {
+                    this.setState({
+                        statusSuccess: true,
+                    })
+                    form.reset();
+                    console.log("thất bại");
+                })
         }
     }
 
@@ -180,7 +202,7 @@ class ForgotPassword extends Component {
 
     render() {
         const enterPress = this.findPassword;
-        document.onkeydown = function(e){
+        document.onkeydown = function (e) {
             switch (e.which) {
                 case 13:
                     enterPress(e);
@@ -244,16 +266,18 @@ class ForgotPassword extends Component {
                                     <span className="form-message" />
                                 </div>
                                 <div className="auth-form__btn">
-                                    <NavLink to="/login" onClick={(e) => this.findPassword(e)} className="auth-form__btn-log-in auth-form__switch-btn">Find Password</NavLink>
+                                    <div onClick={(e) => this.findPassword(e)} className="auth-form__btn-log-in auth-form__switch-btn">Find Password</div>
                                 </div>
+
                             </form>
                         </div>
                     </div>
                 </div>
+                {this.state.statusSuccess ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">This is a success alert — check it out! <FiXSquare></FiXSquare></Alert> : null}
+                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">Login failed — check it out! <FiXSquare></FiXSquare></Alert> : null}
             </div>
         );
     }
 }
-
 
 export default ForgotPassword;
