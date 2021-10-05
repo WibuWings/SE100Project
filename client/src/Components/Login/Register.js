@@ -52,7 +52,7 @@ class Register extends Component {
         this.OutAlert();
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword() && this.blurTel()) {
             const form = document.getElementById('register-form');
-            axios.post(`http://localhost:3000/register-with-email`, {
+            axios.post(`http://localhost:5000/register-with-email`, {
                 email: this.state.email,
                 password: this.state.password,
                 tel: this.state.tel,
