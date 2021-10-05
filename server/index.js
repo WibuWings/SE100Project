@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const connectDB = require('./configDB');
-const PORT = process.env.PORT || 5000;
+const connectDB = require('./configDB'); // connect MongoDB 
+const PORT = process.env.PORT || 5000; // port number
 const app = express();
+const route = require('./routers/index'); // router impl
 
 //some middleware
 app.use(bodyParser.json({ limit: 1000 }));
@@ -12,6 +13,8 @@ app.use(cors());
 
 //connect to MongoDB
 connectDB();
+// pass app into router
+route(app);
 
 //app listen
 app.listen(PORT, () => {
