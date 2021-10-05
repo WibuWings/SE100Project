@@ -47,7 +47,7 @@ class Authentication {
 };
 
   forgetPassword = async (req, res) => {
-    Manager.findOneAndUpdate({_id : req.body.email}, {$set:{password : req.body.password}}, {new: true},function(err, doc){
+    Manager.findOneAndUpdate({_id : req.body.email}, {$set:{password : req.body.password}}, {new: true  },function(err, doc){
       if(err){
           console.log("Something wrong when updating data!");
       }
