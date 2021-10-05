@@ -41,7 +41,7 @@ class Login extends Component {
     // Login with google
     onLoginSuccess = (res) => {
         this.OutAlert();
-        axios.post(`http://localhost:5000/signin-withgoogle`, res.profileObj)
+        axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
                 console.log("thành công");
                 this.setState({
@@ -75,7 +75,7 @@ class Login extends Component {
     isLoginCheck = (e) => {
         this.OutAlert();
         if (this.blurEmail() && this.blurPassword()) {
-            axios.post(`http://localhost:5000/receipt/create`, {
+            axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
                 email: this.state.email,
                 password: this.state.password,
             })
@@ -131,7 +131,7 @@ class Login extends Component {
         const elementValue = e.value;
         const formGroup = e.parentElement.parentElement;
         this.setState({
-            password: this.hash(elementValue),
+            password: elementValue,
         })
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
