@@ -172,9 +172,8 @@ class Authentication {
     forgetPassword = async (req, res) => {
 
         var oldAcc = manager.findOneAndUpdate(
-            { _id: req.body.email },
-            { $set: { password: req.body.password } },
-        );
+            { _id:req.body.email},
+            {$set:{password: req.body.password}},{new:true} ,function(err, doc){} );
         if(oldAcc) {
             // jwt authentication
             var token = jwt.sign(
