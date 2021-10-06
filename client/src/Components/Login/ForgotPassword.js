@@ -23,6 +23,8 @@ class ForgotPassword extends Component {
         }
     }
 
+    message = ""
+
     // Send code tới người dùng
     sendCode = (a = this.makeCode(6)) => {
         this.setState({
@@ -73,18 +75,39 @@ class ForgotPassword extends Component {
         this.OutAlert();
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword()) {
             const form = document.getElementById('findpass-form');
-            axios.post(`http://localhost:5000/find-pasword`, {
+            axios.post(`http://localhost:5000/find-password`, {
                 email: document.querySelector('#email').value,
                 password: this.hash(document.getElementById('password').value),
             })
                 .then(res => {
                     form.reset();
                     console.log("thành công");
-                    this.setState({
-                        statusSuccess: true,
-                    })
+                    console.log(res);
+                    switch (res.data.status) {
+                        case 1:
+                            this.message = "Signup success";
+                            this.setState({
+                                statusSuccess: true,
+                            })
+                        case -4:
+                            this.message = "Email already exists";
+                            this.setState({
+                                statusFailed: true,
+                            })
+                            break;
+                        default:
+                            this.message = "Enter again";
+                            this.setState({
+                                statusFailed: true,
+                            })
+                            break;
+                    }
                 })
                 .catch(err => {
+                    this.message = "Error system";
+                    this.setState({
+                        statusFailed: true,
+                    })
                     console.log("thất bại");
                 })
         }
@@ -261,8 +284,8 @@ class ForgotPassword extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.statusSuccess ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">This is a success alert — check it out! <FiXSquare></FiXSquare></Alert> : null}
-                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">Login failed — check it out! <FiXSquare></FiXSquare></Alert> : null}
+                {this.state.statusSuccess ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
+                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
             </div>
         );
     }

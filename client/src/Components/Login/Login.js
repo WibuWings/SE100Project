@@ -27,7 +27,7 @@ class Login extends Component {
         }
     }
 
-    a = "Login success";
+    message = "Login success";
 
     // Hash password
     hash = (pass) => {
@@ -42,35 +42,39 @@ class Login extends Component {
         axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
                 console.log("thành công");
-                switch(res.data.status){
+                switch (res.data.status) {
                     case 1:
-                        this.a = "Login success";
+                        this.message = "Login success";
                         this.setState({
                             statusSucces: true,
                         })
                         localStorage.setItem('token', res.data.token);
                         break;
                     case 0:
-                        this.a = "Incorrect password";
+                        this.message = "Incorrect password";
                         this.setState({
                             statusFailed: true,
                         })
                         break;
                     case -2:
-                        this.a = "This account has signin by Email the first";
+                        this.message = "This account has signin by Email the first";
                         this.setState({
                             statusFailed: true,
                         })
                         break;
                     default:
-                        this.a = "Enter again";
+                        this.message = "Enter again";
                         this.setState({
                             statusFailed: true,
                         })
-                        break;                          
+                        break;
                 }
-            })  
+            })
             .catch(err => {
+                this.message = "Error, server don't active";
+                this.setState({
+                    statusFailed: true,
+                })
                 console.log("lỗi");
             })
     }
@@ -99,41 +103,46 @@ class Login extends Component {
                 email: document.querySelector('#email').value,
                 password: document.getElementById('password').value,
             })
-            .then(res => {
-                console.log(res)
-                console.log("thành công");
-                switch(res.data.status){
-                    case 1:
-                        this.a = "Login success";
-                        this.setState({
-                            statusSucces: true,
-                        })
-                        form.reset();
-                        localStorage.setItem('token', res.data.token);
-                        break;
-                    case 0:
-                        this.a = "Incorrect password";
-                        this.setState({
-                            statusFailed: true,
-                        })
-                        break;
-                    case -1:
-                        this.a = "This account has already existed";
-                        this.setState({
-                            statusFailed: true,
-                        })
-                        break;
-                    default:
-                        this.a = "Enter again";
-                        this.setState({
-                            statusFailed: true,
-                        })
-                        break;     
-                }  
-            })
-            .catch(err => {
-                console.log("lỗi");
-            })
+                .then(res => {
+                    console.log(res)
+                    console.log("thành công");
+                    switch (res.data.status) {
+                        case 1:
+                            this.message = "Login success";
+                            this.setState({
+                                statusSucces: true,
+                            })
+                            form.reset();
+                            localStorage.setItem('token', res.data.token);
+                            this.props.changeLoginStatus();
+                            break;
+                        case 0:
+                            this.message = "Incorrect password";
+                            this.setState({
+                                statusFailed: true,
+                            })
+                            break;
+                        case -1:
+                            this.message = "This account has already existed";
+                            this.setState({
+                                statusFailed: true,
+                            })
+                            break;
+                        default:
+                            this.message = "Enter again";
+                            this.setState({
+                                statusFailed: true,
+                            })
+                            break;
+                    }
+                })
+                .catch(err => {
+                    this.message = "Enter again";
+                    this.setState({
+                        statusFailed: true,
+                    })
+                    console.log("lỗi");
+                })
         }
     }
 
@@ -189,7 +198,7 @@ class Login extends Component {
 
     render() {
         const enterPress = this.isLoginCheck;
-        document.onkeydown = function(e){
+        document.onkeydown = function (e) {
             switch (e.which) {
                 case 13:
                     enterPress(e);
@@ -198,7 +207,7 @@ class Login extends Component {
                     break;
             }
         }
-  
+
         return (
             <div className="Login">
                 <div className="form-login">
@@ -258,8 +267,8 @@ class Login extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.statusSucces ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">{this.a} — check it out! <FiXSquare></FiXSquare></Alert> : null}
-                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.a} — check it out! <FiXSquare></FiXSquare></Alert> : null }
+                {this.state.statusSucces ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
+                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
             </div>
         );
     }
