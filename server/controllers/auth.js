@@ -14,18 +14,6 @@ const message = {
     otherErrors: "status code is -10",
 };
 
-<<<<<<< HEAD
-  forgetPassword = async (req, res) => {
-    Manager.findOneAndUpdate({_id : req.body.email}, {$set:{password : req.body.password}}, {new: true  },function(err, doc){
-      if(err){
-          console.log("Something wrong when updating data!");
-      }
-  
-      console.log(doc);
-  });
-  };
-};
-=======
 class Authentication {
     authSignInWithGG = async (req, res) => {
         var email = req.body.email;
@@ -147,8 +135,6 @@ class Authentication {
             password: req.body.password,
             phoneNumber: req.body.tel,
         });
->>>>>>> ed46bd5e9b0d5317ee26c9f35bd18147920c0644
-
         var accRegularInDb = await manager.findOne({_id: req.body.email}).exec();
         var accGGInDb = await manager.findOne({_id: req.body.email + "_Google"}).exec();
 
@@ -192,7 +178,7 @@ class Authentication {
         if(oldAcc) {
             // jwt authentication
             var token = jwt.sign(
-                { email: old.email, password: old.password},
+                { email: oldAcc.email, password: oldAcc.password},
                 PRIVATE_KEY,
                 { algorithm: "HS256" },
                 { expiresIn: "1h" }
