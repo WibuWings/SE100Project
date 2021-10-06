@@ -4,9 +4,9 @@ const router = express.Router();
 
 const authController = require('../controllers/auth');
 
-router.post("/signin-withgmail-password", authController.authSignInRegular);
-router.post("/signin-withgoogle", authController.authSignInWithGG);
-router.post("/findpasword", authController.forgetPassword);
+router.post("/sign-in-with-gmail-password", authController.authSignInRegular);
+router.post("/sign-in-with-google", authController.authSignInWithGG);
+router.post("/find-pasword", authController.forgetPassword);
 router.post("/register-with-email", authController.register);
 
 module.exports = router;
