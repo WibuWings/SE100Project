@@ -10,6 +10,7 @@ const message = {
     accDoesntExist: "status code is -1",
     accGGAlreadytExist: "status code is -2",
     firstTimeSignInWithGG: "status code is -3",
+    accRegularAlreadyExist: "status code is -4",
     otherErrors: "status code is -10",
 };
 
@@ -129,33 +130,77 @@ class Authentication {
     };
 
     register = async (req, res) => {
-        const manager = new Manager({
+        const Manager = new manager({
             _id: req.body.email,
             password: req.body.password,
             phoneNumber: req.body.tel,
         });
 
-        manager
-            .save()
-            .then((result) => {
-                res.send("Tao tai khoan thanh cong !!!");
-            })
-            .catch((err) => console.log(err));
+        var accRegularInDb = await manager.findOne({_id: req.body.email}).exec();
+        var accGGInDb = await manager.findOne({_id: req.body.email + "_Google"}).exec();
+
+        if(accRegularInDb || accGGInDb) {
+            var result = {
+                status: -4,
+                message,
+            }
+
+            res.send(JSON.stringify(result));
+        } else {
+            // jwt authentication
+            var token = jwt.sign(
+                { email: req.body.email, password: req.body.password},
+                PRIVATE_KEY,
+                { algorithm: "HS256" },
+                { expiresIn: "1h" }
+            );
+            // jwt authentication
+            var result = {
+                status: 1,
+                message,
+                token,
+            };
+            Manager
+                .save()
+                .then((resDB) => {
+                    res.send(JSON.stringify(result)) 
+                })
+                .catch((err) => console.log(err));
+        }
+
     };
 
     forgetPassword = async (req, res) => {
-        Manager.findOneAndUpdate(
+
+        var oldAcc = manager.findOneAndUpdate(
             { _id: req.body.email },
             { $set: { password: req.body.password } },
-            { new: true },
-            function (err, doc) {
-                if (err) {
-                    console.log("Something wrong when updating data!");
-                }
-
-                console.log(doc);
-            }
         );
+        if(oldAcc) {
+            // jwt authentication
+            var token = jwt.sign(
+                { email: old.email, password: old.password},
+                PRIVATE_KEY,
+                { algorithm: "HS256" },
+                { expiresIn: "1h" }
+            );
+            // jwt authentication
+            var result = {
+                status: 1,
+                message,
+                token,
+            };
+
+            res.send(JSON.stringify(result));
+        } else {
+            var result = {
+                status: -1,
+                message,
+                token,
+            };
+
+            res.send(JSON.stringify(result));
+        }
     };
 }
 
