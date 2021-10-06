@@ -69,7 +69,6 @@ class ForgotPassword extends Component {
         })
     }
 
-
     //Check tìm lại mật khẩu
     findPassword = (e) => {
         this.OutAlert();
@@ -83,14 +82,16 @@ class ForgotPassword extends Component {
                     form.reset();
                     console.log("thành công");
                     console.log(res);
+                    console.log(res.data.status);
                     switch (res.data.status) {
                         case 1:
-                            this.message = "Signup success";
+                            this.message = "Find password success";
                             this.setState({
                                 statusSuccess: true,
                             })
+                            break;
                         case -4:
-                            this.message = "Email already exists";
+                            this.message = "Email already not exists";
                             this.setState({
                                 statusFailed: true,
                             })

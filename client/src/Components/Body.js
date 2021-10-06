@@ -17,7 +17,7 @@ class Body extends Component {
                 <Link to="/test2">test2</Link> */}
                 <SideNavBar/>
                 <div style={{ width: '100%', display: 'flex', border: '1px solid #333',  
-                justifyContent: 'center', alignItems: 'center'}}>
+                justifyContent: 'center', alignItems: 'center', backgroundColor: '#acadab'}}>
                     <DashboardURL></DashboardURL>
                 </div>
                 

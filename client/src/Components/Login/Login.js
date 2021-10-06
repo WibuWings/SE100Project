@@ -112,7 +112,6 @@ class Login extends Component {
                             this.setState({
                                 statusSucces: true,
                             })
-                            form.reset();
                             localStorage.setItem('token', res.data.token);
                             this.props.changeLoginStatus();
                             break;
