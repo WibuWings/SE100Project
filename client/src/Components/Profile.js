@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import ProfileHeader from './Profile/ProfileHeader';
+import '../CSS/Profile.css';
+
 
 class Profile extends Component {
     render() {
         return (
-            <div style={{backgroundColor: 'transparent'}}>
-                Profile
+            <div className="profile" >
+                <ProfileHeader></ProfileHeader>
             </div>
         );
     }

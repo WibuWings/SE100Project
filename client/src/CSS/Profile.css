@@ -1,0 +1,68 @@
+.dashboard{
+    position: relative;
+}
+
+.profile{
+    position: absolute;
+    /* tyle={{ backgroundColor: 'transparent', display: 'flex', flexDirection: 'column', width: '100%' }} */
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.profile-header{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0, 0, 0, 0.4)),url(../img/profile-header.jpg);
+    background-repeat: no-repeat;
+    background-position:center center;
+    background-size:cover;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+}
+
+.profile-header__name{
+    color: white;
+    font-size: 2rem;
+    margin-top: 10px;
+    font-weight: bold;
+}
+.profile-header-des{
+    color: white;
+    display: flex;
+    font-size: 1rem;
+    line-height: 1.2rem;
+}
+
+.profile-header__icon{
+    margin-left: 8px;
+    font-size: 1.2rem;
+}
+
+.profile-header__icon:hover{
+    opacity: .6;
+    cursor: pointer;
+}
+.profile-header__avt{
+    transition: all ease-in-out 0.4s;
+    margin-bottom: 10px;
+}
+
+
+.profile-header__avt:hover{
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.profile-header__divider{
+    margin-top: 20px !important;
+    background-color: white;
+    width: 80%;
+}
+
+hr:not([size]).profile-header__divider {
+    height: 2px !important;
+}
