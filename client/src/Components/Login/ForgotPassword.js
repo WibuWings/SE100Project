@@ -80,27 +80,21 @@ class ForgotPassword extends Component {
             })
                 .then(res => {
                     form.reset();
-                    console.log("thành công");
-                    console.log(res);
                     console.log(res.data.status);
                     switch (res.data.status) {
                         case 1:
-                            this.message = "Find password success";
+                            this.message = res.data.message;
                             this.setState({
                                 statusSuccess: true,
                             })
                             break;
-                        case -4:
-                            this.message = "Email already not exists";
+                        case -1:
+                            this.message = res.data.message;
                             this.setState({
                                 statusFailed: true,
                             })
                             break;
                         default:
-                            this.message = "Enter again";
-                            this.setState({
-                                statusFailed: true,
-                            })
                             break;
                     }
                 })
@@ -109,7 +103,6 @@ class ForgotPassword extends Component {
                     this.setState({
                         statusFailed: true,
                     })
-                    console.log("thất bại");
                 })
         }
     }
@@ -291,5 +284,8 @@ class ForgotPassword extends Component {
         );
     }
 }
+
+
+
 
 export default ForgotPassword;
