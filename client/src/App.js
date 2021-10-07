@@ -5,19 +5,26 @@ import {
 import DirectionURL from './Router/DirectionURL';
 import './CSS/App.css'
 import { connect } from 'react-redux'
+import axios from 'axios';
 
 
 class App extends Component {
-  render() {
-    window.onload = () => {
-      if (localStorage.getItem('stoken')) {
-        if (localStorage.getItem('stoken') !== "") {
-          this.props.changeLoginStatus()
-        }
-      } else {
-        localStorage.setItem('stoken', '')
+  constructor(props) {
+    super(props);
+
+  }
+
+  componentWillMount() {
+    if (localStorage.getItem('token')) {
+      if (localStorage.getItem('token') !== "") {
+        this.props.changeLoginStatus()
       }
+    } else {
+      localStorage.setItem('token', '')
     }
+  }
+
+  render() {
     return (
       <Router>
         <DirectionURL></DirectionURL>

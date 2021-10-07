@@ -12,7 +12,7 @@ class Body extends Component {
             <div>
                 <SideNavBar/>
                 <div style={{width: 'calc(100% - 224px)',/* textAlign: 'center',*/ 
-                position: 'fixed', top: 0, right: 0
+                position: 'fixed', top: 0, right: 0, backgroundColor: 'rgb(221,235,255)', borderLeft: '2px solid #99999975',
                 }}>
                     <DashboardURL></DashboardURL>
                 </div>
@@ -36,4 +36,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
     }
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(Body);
