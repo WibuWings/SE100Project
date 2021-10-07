@@ -10,14 +10,9 @@ class Body extends Component {
     render() {
         return (
             <div style={{display: 'flex'}}>
-                {/*                 
-                <Link to="/home">Home</Link>
-                <Link to="/dashboard">DashBoard</Link>
-                <Link to="/test1">test1</Link>
-                <Link to="/test2">test2</Link> */}
                 <SideNavBar/>
-                <div style={{ width: '100%', display: 'flex', border: '1px solid #333',  
-                justifyContent: 'center', alignItems: 'center'}}>
+                <div style={{ width: '100%', display: 'flex', borderLeft: '2px solid rgb(167, 189, 242)',  
+                justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgb (221,235,255)'}}>
                     <DashboardURL></DashboardURL>
                 </div>
                 

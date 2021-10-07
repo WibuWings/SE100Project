@@ -27,7 +27,7 @@ import '../../CSS/DashBoard.css'
 class SideNavBar extends Component {
     render() {
         return (
-            <div>
+            <div class="navbar-container">
                 <div class="navibar sidebar">
                     <div class="nav-heading">
                         <img src={Kurisu} style ={{width: 50, height: 50, borderRadius: '100%'}}></img>
