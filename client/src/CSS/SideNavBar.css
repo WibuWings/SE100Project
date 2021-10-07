@@ -24,7 +24,7 @@
     width: 224px;
     min-height: 100vh;
     justify-content: space-between;
-    border-right: 1px solid #ccc;
+    border-right: 1px solid rgb(167, 189, 242);
 }
 
 /* Nav heading */
