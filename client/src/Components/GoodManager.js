@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class GoodManager extends Component {
     render() {
         return (
-            <div class="card shadow mb-4">
+            <div class="card shadow mb-4" style={{overflow: 'scroll', height: '100vh'}}>
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
                         </div>

@@ -18,10 +18,10 @@ import {
 import { RiProfileFill, RiProfileLine } from "react-icons/ri";
 import { FaSignOutAlt } from "react-icons/fa";
 
-import Kurisu from '../../img/kurisu.jpg';
+import Avatar from '../../img/avatar_default.jpg';
 import { NavLink } from 'react-router-dom';
 
-import '../../CSS/DashBoard.css'
+import '../../CSS/SideNavBar.css'
 
 
 class SideNavBar extends Component {
@@ -30,8 +30,10 @@ class SideNavBar extends Component {
             <div class="navbar-container">
                 <div class="navibar sidebar">
                     <div class="nav-heading">
-                        <img src={Kurisu} style ={{width: 50, height: 50, borderRadius: '100%'}}></img>
-                        <span class="user-name" style ={{marginLeft: 10, color: '#fff'}}>Makise Kurisu</span>
+                        <div class="navbar-heading-container">
+                            <img src={Avatar} style ={{width: 40, height: 40, borderRadius: '100%'}}></img>
+                            <span class="user-name">Đào Xuân Trường</span>
+                        </div>
                     </div>
                     <div class="nav-container">
                         <NavLink className="nav-item" to="/dashboard">

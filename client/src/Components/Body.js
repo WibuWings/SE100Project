@@ -9,14 +9,13 @@ import SideNavBar from './Partials/SideNavBar';
 class Body extends Component {
     render() {
         return (
-            <div style={{display: 'flex'}}>
+            <div>
                 <SideNavBar/>
-                <div style={{ width: '100%', display: 'flex', borderLeft: '2px solid rgb(167, 189, 242)',  
-                justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgb (221,235,255)'}}>
+                <div style={{width: 'calc(100% - 224px)',/* textAlign: 'center',*/ 
+                position: 'fixed', top: 0, right: 0
+                }}>
                     <DashboardURL></DashboardURL>
                 </div>
-                
-                
             </div>
         );
     }
