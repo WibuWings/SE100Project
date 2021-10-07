@@ -73,7 +73,7 @@ class ForgotPassword extends Component {
         this.OutAlert();
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword()) {
             const form = document.getElementById('findpass-form');
-            axios.post(`http://localhost:5000/find-pasword`, {
+            axios.post(`http://localhost:5000/find-password`, {
                 email: document.querySelector('#email').value,
                 password: this.hash(document.getElementById('password').value),
             })
