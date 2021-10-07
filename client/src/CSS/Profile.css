@@ -22,15 +22,16 @@
     justify-content: center;
     justify-items: center;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .profile-header__name{
     color: white;
     font-size: 2rem;
-    margin-top: 10px;
     font-weight: bold;
 }
 .profile-header-des{
+    margin-top: 10px;
     color: white;
     display: flex;
     font-size: 1rem;
@@ -38,6 +39,7 @@
 }
 
 .profile-header__icon{
+    transform: translateY(25%);
     margin-left: 8px;
     font-size: 1.2rem;
 }
@@ -65,4 +67,26 @@
 
 hr:not([size]).profile-header__divider {
     height: 2px !important;
+}
+
+.profile-header__icon-tel{
+    margin-right: 8px;
+    transform: translateY(25%);
+}
+
+/* Profile Details */
+
+.profile-detail{
+    background-color: white;
+    border-radius: 8px;
+}
+
+.profile-detail__header-name .css-1qvr50w-MuiTypography-root{
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #335acb;
+}
+
+.profile-detail__header-name.css-185gdzj-MuiCardHeader-root{
+    padding: 5px 10px !important;
 }
