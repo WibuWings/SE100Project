@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import avatarImg from '../../img/kurisu.jpg'
+import avatarImg from '../../img/avatar_default.jpg'
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import { BiEditAlt } from "react-icons/bi";
