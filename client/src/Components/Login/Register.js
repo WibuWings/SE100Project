@@ -20,9 +20,6 @@ class Register extends Component {
 
         super(props);
         this.state = {
-            email: "",
-            password: "",
-            tel: "",
             code: "",
             statusSendCode: true,
             statusFailed: false,
@@ -37,7 +34,7 @@ class Register extends Component {
         })
         emailjs.init("user_K1g5N5hUDI0rjsa1uRoI4");
         emailjs.send("gmail_main", "template_plasdgf", {
-            To_mail: `${this.state.email}`,
+            To_mail: `${document.getElementById('email').value}`,
             code: `${a}`,
         })
             .then((response) => {
@@ -53,11 +50,12 @@ class Register extends Component {
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword() && this.blurTel()) {
             const form = document.getElementById('register-form');
             axios.post(`http://localhost:5000/register-with-email`, {
-                email: this.state.email,
-                password: this.state.password,
-                tel: this.state.tel,
+                email: document.getElementById('email').value,
+                password: this.hash(document.getElementById('password').value),
+                tel: document.getElementById('tel').value,
             })
                 .then(res => {
+                    console.log(res);
                     console.log("thành công");
                 })
                 .catch(err => {
@@ -97,11 +95,6 @@ class Register extends Component {
         return hash;
     }
 
-    // Hashpass -> pass : trả về true, false
-    hashReturn = (rePass) => {
-        var verified = bcrypt.compareSync(rePass, this.state.password);
-        return verified;
-    }
 
     // Handle user : blur, change in input
     blurEmail = () => {
@@ -109,9 +102,6 @@ class Register extends Component {
         const e = document.getElementById('email');
         const elementValue = e.value;
         const formGroup = e.parentElement.parentElement;
-        this.setState({
-            email: elementValue,
-        })
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field";
@@ -163,9 +153,6 @@ class Register extends Component {
         const e = document.getElementById('password');
         const elementValue = e.value;
         const formGroup = e.parentElement.parentElement;
-        this.setState({
-            password: this.hash(elementValue),
-        })
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field"
@@ -189,7 +176,7 @@ class Register extends Component {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field";
             return false;
-        } else if (!this.hashReturn(elementValue)) {
+        } else if (document.getElementById('password').value !== elementValue) {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Re-password not correct";
             return false;
@@ -205,9 +192,6 @@ class Register extends Component {
         const elementValue = e.value;
         const formGroup = e.parentElement.parentElement;
         const regex = /^\d+$/;
-        this.setState({
-            tel: elementValue,
-        })
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field";

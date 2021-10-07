@@ -16,8 +16,6 @@ class ForgotPassword extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: "",
-            password: "",
             code: "",
             statusSendCode: true,
             statusFailed: false,
@@ -32,7 +30,7 @@ class ForgotPassword extends Component {
         })
         emailjs.init("user_K1g5N5hUDI0rjsa1uRoI4");
         emailjs.send("gmail_main", "template_plasdgf", {
-            To_mail: `${this.state.email}`,
+            To_mail: `${document.querySelector('#email').value}`,
             code: `${a}`,
         })
             .then((response) => {
@@ -60,11 +58,7 @@ class ForgotPassword extends Component {
         return hash;
     }
 
-    // Hashpass -> pass : trả về true, false
-    hashReturn = (rePass) => {
-        var verified = bcrypt.compareSync(rePass, this.state.password);
-        return verified;
-    }
+
     // Out Alert
     OutAlert = () => {
         this.setState({
@@ -80,17 +74,17 @@ class ForgotPassword extends Component {
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword()) {
             const form = document.getElementById('findpass-form');
             axios.post(`http://localhost:5000/find-pasword`, {
-                email: this.state.email,
-                password: this.state.password,
+                email: document.querySelector('#email').value,
+                password: this.hash(document.getElementById('password').value),
             })
                 .then(res => {
+                    form.reset();
                     console.log("thành công");
-                })
-                .catch(err => {
                     this.setState({
                         statusSuccess: true,
                     })
-                    form.reset();
+                })
+                .catch(err => {
                     console.log("thất bại");
                 })
         }
@@ -103,9 +97,6 @@ class ForgotPassword extends Component {
         const event = document.querySelector('#email');
         const elementValue = event.value;
         const formGroup = event.parentElement.parentElement;
-        this.setState({
-            email: elementValue,
-        })
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field";
@@ -134,9 +125,6 @@ class ForgotPassword extends Component {
         const e = document.getElementById('password');
         const elementValue = e.value;
         const formGroup = e.parentElement.parentElement;
-        this.setState({
-            password: this.hash(elementValue),
-        })
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field"
@@ -183,7 +171,7 @@ class ForgotPassword extends Component {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field";
             return false;
-        } else if (!this.hashReturn(elementValue)) {
+        } else if (document.getElementById('password').value !== elementValue) {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Re-password not correct";
             return false;
