@@ -36,7 +36,7 @@ class ProfileDetail extends Component {
         return (
             <form style={{boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader subheader="The information can be edited" title="Profile" />
+                    <CardHeader style={{color: 'blue' , backgroundColor: '#efeeef'}} title="Profile" />
                     <Divider />
                     <CardContent>
                         <Grid container spacing={3}>
@@ -70,6 +70,45 @@ class ProfileDetail extends Component {
                             </Grid>
                             <Grid item md={6} xs={12}>
                                 <TextField
+                                    fullWidth
+                                    label="Old"
+                                    name="old"
+                                    required
+                                    variant="outlined"
+                                />
+                            </Grid>
+                            <Grid item md={6} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Gender"
+                                    name="gender"
+                                    required
+                                    variant="outlined"
+                                    select
+                                    SelectProps={{ native: true }}
+                                >
+                                    <option value="0">
+                                        --Select gender--
+                                    </option>
+                                    <option value="male">
+                                        Male
+                                    </option>
+                                    <option value="female">
+                                        Female
+                                    </option>
+                                </TextField>
+                            </Grid>
+                            <Grid item md={6} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Store Name"
+                                    name="storeName"
+                                    required
+                                    variant="outlined"
+                                />
+                            </Grid>
+                            <Grid item md={6} xs={12}>
+                                <TextField
                                     required
                                     fullWidth
                                     label="Phone Number"
@@ -77,7 +116,15 @@ class ProfileDetail extends Component {
                                     variant="outlined"
                                 />
                             </Grid>
-
+                            <Grid item md={6} xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    label="Salary/1h"
+                                    name="salary"
+                                    variant="outlined"
+                                />
+                            </Grid>
                             <Grid item md={6} xs={12}>
                                 <TextField
                                     fullWidth

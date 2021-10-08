@@ -89,3 +89,10 @@ hr:not([size]).profile-header__divider {
 .profile-detail__header-name.css-185gdzj-MuiCardHeader-root{
     padding: 5px 10px !important;
 }
+
+.add-shift{
+    position: absolute;
+    top: 0;
+    right: 0;
+    justify-content: space-evenly;
+}

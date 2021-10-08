@@ -5,7 +5,7 @@ import {
 import GoodManager from '../Components/GoodManager';
 import EmployeeManager from '../Components/EmployeeManager';
 import DashBoard from '../Components/DashBoard';
-import Profile from '../Components/Profile';
+import Profile from '../Components/Profile/Profile';
 import ReceiptManager from '../Components/ReiceiptManager';
 
 class DashboardURL extends Component {
