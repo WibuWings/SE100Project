@@ -11,11 +11,16 @@ class Body extends Component {
         return (
             <div>
                 <SideNavBar/>
-                <div style={{width: 'calc(100% - 224px)',/* textAlign: 'center',*/ 
+                <div style={{width: 'calc(100% - 224px)',
                 position: 'fixed', top: 0, right: 0, backgroundColor: 'rgb(221,235,255)', borderLeft: '2px solid #99999975',
                 }}>
                     <DashboardURL></DashboardURL>
                 </div>
+                {/* <div style={{marginLeft: '224px', width: '500px', backgroundColor: 'rgb(221,235,255)',
+                 borderLeft: '2px solid #99999975',
+                }}>
+                    <DashboardURL></DashboardURL>
+                </div> */}
             </div>
         );
     }

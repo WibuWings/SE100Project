@@ -14,7 +14,7 @@ class App extends Component {
 
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     if (localStorage.getItem('token')) {
       if (localStorage.getItem('token') !== "") {
         this.props.changeLoginStatus()
@@ -22,6 +22,15 @@ class App extends Component {
     } else {
       localStorage.setItem('token', '')
     }
+
+    axios.get(`https://provinces.open-api.vn/api/?depth=2`)
+      .then(res => {
+        console.log(res.data);
+        this.props.updateProvince(res.data);
+      })
+      .catch(err => {
+        console.log("fail");
+      })
   }
 
   render() {
@@ -45,6 +54,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "CHANGE_LOGIN_STATUS",
       });
+    },
+    updateProvince: (data) => {
+      dispatch({
+        type: "UPDATE_DATA",
+        data: data,
+      })
     }
   }
 }

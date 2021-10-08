@@ -1,32 +1,40 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, Divider, Grid, TextField, Box, Button, CardContent } from '@mui/material';
-import axios from 'axios';
+import { connect } from 'react-redux'
 
 
 class ProfileDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            list: "",
+            disabledHuyen: true,
+            disabledXa: true,
+            listDistrict: "",
         }
     }
+    
+    changeCountry = (e) => {
+        console.log(e.target);
+        if(e.target.value === '0') {
+            this.setState({
+                disabledHuyen: true,
+            })
+        } else {
+            console.log(this.props.country[0].filter(word => word.name === e.target.value));
+            const listDistrict = this.props.country[0].filter(word => word.name === e.target.value);
+            this.setState({
+                listDistrict: listDistrict[0].districts,
+                disabledHuyen: false,
+            })
+        }
+    }
+    
 
     render() {
-        var listCountry;
-
-        axios.get(`https://provinces.open-api.vn/api/?depth=2`)
-            .then(res => {
-                this.setState({
-                    list: res.data,
-                })
-                console.log(res.data);
-            })
-            .catch(err => {
-                console.log("fail");
-            })
-
+            
+        console.log(this.state.listDistrict);
         return (
-            <form autoComplete="off" noValidate>
+            <form style={{boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader subheader="The information can be edited" title="Profile" />
                     <Divider />
@@ -74,53 +82,48 @@ class ProfileDetail extends Component {
                                 <TextField
                                     fullWidth
                                     label="Select province"
-                                    name="state"
+                                    name="province"
                                     required
+                                    onChange={(e) => this.changeCountry(e)}
                                     select
                                     SelectProps={{ native: true }}
                                     variant="outlined"
                                 >
-                                    <option
-                                    >
-                                        An giang
-                                    </option>
+                                    <option value="0">--Select province--</option>
+                                    {(this.props.country.length !== 0) ? this.props.country[0].map(item => {
+                                        return (
+                                            <option
+                                            >
+                                                {item.name}
+                                            </option>
+                                        )
+                                    }): null}
+                                   
                                 </TextField>
                             </Grid>
                             <Grid item md={6} xs={12}>
                                 <TextField
                                     fullWidth
-                                    label="Select province"
-                                    name="state"
+                                    label="Select district"
+                                    name="district"
                                     required
-                                    disabled
+                                    disabled={this.state.disabledHuyen}
                                     select
                                     SelectProps={{ native: true }}
                                     variant="outlined"
                                 >
-                                    <option
-                                    >
-                                        An giang
-                                    </option>
+                                    <option value="0">--Select district--</option>
+                                    {(this.state.listDistrict !== "") ? this.state.listDistrict.map(item => {
+                                        return (
+                                            <option
+                                            >
+                                                {item.name}
+                                            </option>
+                                        )
+                                    }): null}
                                 </TextField>
                             </Grid>
-                            <Grid item md={6} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Select province"
-                                    name="state"
-                                    required
-                                    disabled
-                                    select
-                                    SelectProps={{ native: true }}
-                                    variant="outlined"
-                                >
-                                    <option
-                                    >
-                                        An giang
-                                    </option>
-                                </TextField>
-                            </Grid>
-                            <Grid item md={6} xs={12}>
+                            <Grid item md={12} xs={12}>
                                 <TextField
                                     fullWidth
                                     label="Adress details"
@@ -132,19 +135,8 @@ class ProfileDetail extends Component {
                         </Grid>
                     </CardContent>
                     <Divider />
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                            p: 2
-                        }}
-                    >
-                        <Button
-                            color="primary"
-                            variant="contained"
-                        >
-                            Save details
-                        </Button>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end',  p: 2}}>
+                        <Button color="primary" variant="contained">Save details</Button>
                     </Box>
                 </Card>
             </form>
@@ -152,4 +144,10 @@ class ProfileDetail extends Component {
     }
 }
 
-export default ProfileDetail;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        country: state.country,
+    }
+}
+
+export default connect(mapStateToProps)(ProfileDetail);

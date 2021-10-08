@@ -1,11 +1,9 @@
-.dashboard{
-    position: relative;
-}
 
 .profile{
-    position: absolute;
-    /* tyle={{ backgroundColor: 'transparent', display: 'flex', flexDirection: 'column', width: '100%' }} */
+    position: relative;
     background-color: transparent;
+    background-color: rgb(223, 232, 245);
+    background-clip: border-box;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -51,6 +49,7 @@
 .profile-header__avt{
     transition: all ease-in-out 0.4s;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 

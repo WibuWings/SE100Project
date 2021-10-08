@@ -7,7 +7,7 @@ import { FaTelegramPlane } from "react-icons/fa";
 class ProfileHeader extends Component {
     render() {
         return (
-            <div className="profile-header" style={{ width: '100%', height: '300px' }}>
+            <div className="profile-header" style={{ width: '100%', height: '350px' }}>
                 <Avatar
                     className="profile-header__avt"
                     src={avatarImg}

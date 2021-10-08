@@ -7,8 +7,7 @@ import {
     AiOutlineContainer,
     AiFillContainer
 } from "react-icons/ai";
-import { ImProfile } from "react-icons/im";
-import { BsFillPeopleFill,BsInfoCircleFill} from "react-icons/bs";
+import { BsInfoCircleFill} from "react-icons/bs";
 import { 
     IoPeopleOutline,
     IoPeopleSharp,

@@ -12,7 +12,6 @@ import { FaPhoneSquare } from "react-icons/fa";
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import emailjs from 'emailjs-com';
-import { touchRippleClasses } from '@mui/material';
 var bcrypt = require('bcryptjs');
 
 
@@ -226,7 +225,7 @@ class Register extends Component {
     }
 
     changeInput = (e) => {
-        const elementValue = e.target.value;
+        
         const formGroup = e.target.parentElement.parentElement;
         formGroup.classList.remove('invalid');
         formGroup.querySelector('.form-message').innerText = "";

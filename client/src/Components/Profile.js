@@ -9,11 +9,11 @@ import ProfileAvt from './Profile/ProfileAvt';
 class Profile extends Component {
     render() {
         return (
-            <div className="profile" >
+            <div className="profile" style={{overflow:'scroll', overflowX: 'hidden', height:'100vh'}}>
                 <ProfileHeader></ProfileHeader>
-                <Container maxWidth="xl">
+                <Container style={{marginBottom: '20px'}} maxWidth="xl">
                     <Grid className="profile-body" container  spacing={2}>
-                        <Grid item xs={8} >
+                        <Grid  item xs={8} >
                             <ProfileDetail></ProfileDetail>
                         </Grid>
                         <Grid item xs={4} >
@@ -21,7 +21,6 @@ class Profile extends Component {
                         </Grid>
                     </Grid>
                 </Container>
-
             </div>
         );
     }
