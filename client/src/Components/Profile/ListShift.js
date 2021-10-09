@@ -5,7 +5,7 @@ import { IconButton } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import { FiEdit ,FiTrash2} from 'react-icons/fi'
 import { tableCellClasses } from '@mui/material/TableCell';
-
+import {connect} from 'react-redux'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -33,6 +33,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 class ListShift extends Component {
 
+    handleEdit = ()=>{
+        console.log("click");
+        this.props.changeAddStatus();
+    }
+
+
     render() {
         return (
             <Card style={{ position: "relative", marginTop: '15px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
@@ -56,12 +62,12 @@ class ListShift extends Component {
                                     <StyledTableCell align="center">10:00 AM</StyledTableCell>
                                     <StyledTableCell align="center">12:00 PM</StyledTableCell>
                                     <StyledTableCell align="center">
-                                        <IconButton color="secondary" aria-label="fingerprint">
+                                        <IconButton onClick={() => this.handleEdit()} color="secondary" aria-label="fingerprint">
                                             <FiEdit />
                                         </IconButton>
                                     </StyledTableCell>
                                     <StyledTableCell align="center">
-                                        <IconButton style={{color:'red'}} aria-label="fingerprint">
+                                        <IconButton onClick={() => this.handleEdit()} style={{color:'red'}} aria-label="fingerprint">
                                             <FiTrash2 />
                                         </IconButton>
                                     </StyledTableCell>
@@ -73,12 +79,12 @@ class ListShift extends Component {
                                     <StyledTableCell align="center">10:00 AM</StyledTableCell>
                                     <StyledTableCell align="center">12:00 PM</StyledTableCell>
                                     <StyledTableCell align="center">
-                                        <IconButton color="secondary" aria-label="fingerprint">
+                                        <IconButton onClick={() => this.handleEdit()} color="secondary" aria-label="fingerprint">
                                             <FiEdit />
                                         </IconButton>
                                     </StyledTableCell>
                                     <StyledTableCell align="center">
-                                        <IconButton style={{color:'red'}} aria-label="fingerprint">
+                                        <IconButton  onClick={() => this.handleEdit()} style={{color:'red'}} aria-label="fingerprint">
                                             <FiTrash2 />
                                         </IconButton>
                                     </StyledTableCell>
@@ -89,7 +95,7 @@ class ListShift extends Component {
                 </CardContent>
                 <Divider />
                 <Box className="add-shift" sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
-                    <Button style={{ backgroundColor: 'yellowgreen' }} variant="contained" startIcon={<BiPlusMedical />}>
+                    <Button style={{ backgroundColor: 'yellowgreen' }} onClick={()=> this.handleEdit()} variant="contained" startIcon={<BiPlusMedical />}>
                         add
                     </Button>
                 </Box>
@@ -98,4 +104,19 @@ class ListShift extends Component {
     }
 }
 
-export default ListShift;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        addStatus: state.addStatus,
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        changeAddStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_STATUS",
+            });
+        }
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(ListShift);
