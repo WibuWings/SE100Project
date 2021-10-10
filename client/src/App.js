@@ -19,7 +19,6 @@ class App extends Component {
         this.props.changeLoginStatus()
       }
     }
-    this.props.updateDataUser('Đây là mẫu test',"tinh_vinh_long");
   }
 
   render() {
@@ -48,13 +47,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "UPDATE_DATA",
         data: data,
-      })
-    },
-    updateDataUser: (test, tinh) => {
-      dispatch({
-        type: "UPDATA_DATA_USER",
-        test: test,
-        province: tinh
       })
     }
   }

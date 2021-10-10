@@ -32,7 +32,6 @@ class Profile extends Component {
                     <div onClick={() => this.props.changeAddStatus()} className="modal-overlay"></div>
                     <ModalAdd></ModalAdd>
                 </div>): null}
-                
             </div>
         );
     }

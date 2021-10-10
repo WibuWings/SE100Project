@@ -15,13 +15,12 @@ class ProfileDetail extends Component {
             isSave: false,
             listDistrict: "",
             reLoad: true,
-
         }
     }
 
     SaveDetails = () => {
         if (this.state.isTel && this.state.isOld) {
-            axios.post(`http://localhost:5000/api/update-profile`, {
+            const data = {
                 email: document.querySelector('input[name="email"]').value,
                 firstName: document.querySelector('input[name="firstName"]').value,
                 lastName: document.querySelector('input[name="lastName"]').value,
@@ -33,13 +32,17 @@ class ProfileDetail extends Component {
                 province: document.querySelector('select[name="province"]').value,
                 district: document.querySelector('select[name="district"]').value,
                 address: document.querySelector('input[name="address"]').value,
-            })
+            }
+
+            axios.post(`http://localhost:5000/api/update-profile`, data)
                 .then(res => {
                     console.log("Save success");
                 })
                 .catch(err => {
                     console.log("Save faile");
                 })
+
+            this.props.updateProfile(data);
         }
     }
 
@@ -71,11 +74,15 @@ class ProfileDetail extends Component {
     blurTel = (e) => {
         const regex = /^\d+$/;
         document.querySelector('select[name="province"]').defaultValue = this.props.infoUser.province;
-        if (e.target.value === '') {
+        if (e.target.value === '' || regex.test(e.target.value)) {
             this.setState({
                 isTel: true,
-                isSave: true,
             })
+            if(this.state.isOld){
+                this.setState({
+                    isSave: true,
+                })
+            }
             return true;
         } else if (!regex.test(e.target.value)) {
             this.setState({
@@ -94,11 +101,15 @@ class ProfileDetail extends Component {
 
     blurOld = (e) => {
         const regex = /^\d+$/;
-        if (e.target.value === '') {
+        if (e.target.value === '' || regex.test(e.target.value)) {
             this.setState({
                 isOld: true,
-                isSave: true,
             })
+            if ( this.state.isTel){
+                this.setState({
+                    isSave: true,
+                })
+            }
             return true;
         } else if (!regex.test(e.target.value)) {
             this.setState({
@@ -116,9 +127,12 @@ class ProfileDetail extends Component {
 
     blurAll = (e) => {
         if (e.target.value !== "0" && e.target.value !== "") {
-            this.setState({
-                isSave: true,
-            })
+            if(this.state.isOld && this.state.isTel)
+            {
+                this.setState({
+                    isSave: true,
+                })
+            }
         }
     }
 
@@ -141,11 +155,12 @@ class ProfileDetail extends Component {
         console.log("compoenetWillLoad");
     }
 
+
     render() {
         return (
             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title={this.props.infoUser.test} />
+                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Profile" />
                     <Divider />
                     <CardContent>
                         <Grid container spacing={3}>
@@ -341,6 +356,21 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "UPDATE_DATA",
                 data: data,
+            })
+        },
+        updateProfile: (data) => {
+            dispatch({
+                type: "UPDATA_DATA_USER",
+                firstName: data.firstName,
+                lastName: data.lastName,
+                old: data.old,
+                gender: data.gender,
+                storeName: data.storeName,
+                tel: data.tel,
+                salary: data.salary,
+                province: data.province,
+                district: data.district,
+                address: data.address,
             })
         }
     }

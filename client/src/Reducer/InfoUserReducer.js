@@ -9,16 +9,28 @@ const infoUserInitialState = {
     salary: "20000",
     province: "tinh_an_giang",
     district: "huyen_chau_phu",
-    address:"43 QL 91, TT Cái Dầu"
+    address: "43 QL 91, TT Cái Dầu"
 },
 
-infoUserReducer = (state = infoUserInitialState, action) => {
-    switch(action.type) {
-        case "UPDATA_DATA_USER":
-            return  {...state,test: action.test, province: action.province}
-        default:
-            return state
+    infoUserReducer = (state = infoUserInitialState, action) => {
+        switch (action.type) {
+            case "UPDATA_DATA_USER":
+                return {
+                    ...state, 
+                    firstName: action.firstName, 
+                    lastName: action.lastName,
+                    old: action.old, 
+                    gender: action.gender,
+                    storeName: action.storeName, 
+                    tel: action.tel,
+                    salary: action.salary, 
+                    province: action.province,
+                    district: action.district, 
+                    address: action.address,    
+                }
+            default:
+                return state
+        }
     }
-}
 
 export default infoUserReducer;
