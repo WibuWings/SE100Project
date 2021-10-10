@@ -61,32 +61,27 @@ class Register extends Component {
                     console.log("thành công");
                     switch (res.data.status) {
                         case 1:
-                            this.message = "Signup success";
+                            this.message = res.data.message;
                             this.setState({
                                 statusSuccess: true,
                             })
                             localStorage.setItem('token', res.data.token);
                             break;
-                        case -4:
-                            this.message = "Email already exists";
+                        case -1:
+                            this.message = res.data.message;;
                             this.setState({
                                 statusFailed: true,
                             })
                             break;
                         default:
-                            this.message = "Enter again";
-                            this.setState({
-                                statusFailed: true,
-                            })
                             break;
                     }
                 })
                 .catch(err => {
-                    this.message="Error system"
+                    this.message = "Error system";
                     this.setState({
                         statusFailed: true,
                     })
-                    console.log("Thất bại");
                 })
 
         }

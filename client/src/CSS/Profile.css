@@ -1,0 +1,92 @@
+.dashboard{
+    position: relative;
+}
+
+.profile{
+    position: absolute;
+    /* tyle={{ backgroundColor: 'transparent', display: 'flex', flexDirection: 'column', width: '100%' }} */
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.profile-header{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0, 0, 0, 0.4)),url(../img/profile-header.jpg);
+    background-repeat: no-repeat;
+    background-position:center center;
+    background-size:cover;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-header__name{
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+}
+.profile-header-des{
+    margin-top: 10px;
+    color: white;
+    display: flex;
+    font-size: 1rem;
+    line-height: 1.2rem;
+}
+
+.profile-header__icon{
+    transform: translateY(25%);
+    margin-left: 8px;
+    font-size: 1.2rem;
+}
+
+.profile-header__icon:hover{
+    opacity: .6;
+    cursor: pointer;
+}
+.profile-header__avt{
+    transition: all ease-in-out 0.4s;
+    margin-bottom: 10px;
+}
+
+
+.profile-header__avt:hover{
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.profile-header__divider{
+    margin-top: 20px !important;
+    background-color: white;
+    width: 80%;
+}
+
+hr:not([size]).profile-header__divider {
+    height: 2px !important;
+}
+
+.profile-header__icon-tel{
+    margin-right: 8px;
+    transform: translateY(25%);
+}
+
+/* Profile Details */
+
+.profile-detail{
+    background-color: white;
+    border-radius: 8px;
+}
+
+.profile-detail__header-name .css-1qvr50w-MuiTypography-root{
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #335acb;
+}
+
+.profile-detail__header-name.css-185gdzj-MuiCardHeader-root{
+    padding: 5px 10px !important;
+}

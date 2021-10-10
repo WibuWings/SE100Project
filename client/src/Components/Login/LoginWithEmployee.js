@@ -6,78 +6,23 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../CSS/Login.css'
 import { BsFillEnvelopeFill, BsLockFill } from "react-icons/bs";
-import { FiChevronRight, FiXSquare } from "react-icons/fi";
-import { BiUser } from "react-icons/bi";
-import { Avatar, Button } from '@mui/material'
+import {  FiXSquare,FiChevronLeft } from "react-icons/fi";
+import {FaUserTie} from 'react-icons/fa'
+import { Avatar } from '@mui/material'
 import { IconContext } from "react-icons";
-import { GoogleLogin } from 'react-google-login';
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
-import bcrypt from 'bcryptjs';
 
-
-class Login extends Component {
+class LoginWithEmployee extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            appId: "543752153590340",
-            clientId: "826925109796-mi95l41fi57bdlolpvnfdg5bpt9oc81h.apps.googleusercontent.com",
             statusFailed: false,
             statusSucces: false,
         }
     }
 
     message = "Login success";
-
-    // Login with google
-    onLoginSuccess = (res) => {
-        this.OutAlert();
-        axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
-            .then(res => {
-                console.log("thành công");
-                switch (res.data.status) {
-                    case 1:
-                        this.message = "Login success";
-                        this.setState({
-                            statusSucces: true,
-                        })
-                        localStorage.setItem('token', res.data.token);
-                        break;
-                    case 0:
-                        this.message = "Incorrect password";
-                        this.setState({
-                            statusFailed: true,
-                        })
-                        break;
-                    case -2:
-                        this.message = "This account has signin by Email the first";
-                        this.setState({
-                            statusFailed: true,
-                        })
-                        break;
-                    default:
-                        this.message = "Enter again";
-                        this.setState({
-                            statusFailed: true,
-                        })
-                        break;
-                }
-            })
-            .catch(err => {
-                this.message = "Error, server don't active";
-                this.setState({
-                    statusFailed: true,
-                })
-                console.log("lỗi");
-            })
-    }
-
-    onFailureSuccess = (res) => {
-        this.setState({
-            statusFailed: true,
-            statusSucces: false,
-        })
-    }
 
     // Out Alert
     OutAlert = () => {
@@ -92,8 +37,8 @@ class Login extends Component {
         this.OutAlert();
         const form = document.getElementById('login-form');
         if (this.blurEmail() && this.blurPassword()) {
-            axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
-                email: document.querySelector('#email').value,
+            axios.post(`http://localhost:5000/sign-in-employee`, {
+                username: document.querySelector('#username').value,
                 password: document.getElementById('password').value,
             })
                 .then(res => {
@@ -128,18 +73,13 @@ class Login extends Component {
 
     // Handle user : blur , change in input
     blurEmail = () => {
-        var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        const event = document.querySelector('#email');
+        const event = document.querySelector('#username');
         let elementValue = event.value;
         const formGroup = event.parentElement.parentElement;
         // check validate
         if (elementValue === "") {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Please enter this field";
-            return false;
-        } else if (!regex.test(elementValue)) {
-            formGroup.className = 'invalid form-group'
-            formGroup.querySelector('.form-message').innerText = "Email is not in the correct format";
             return false;
         } else {
             formGroup.classList.remove('invalid');
@@ -193,22 +133,22 @@ class Login extends Component {
                     <div className="auth-form">
                         <Avatar className="auth-form__avatar">
                             <IconContext.Provider value={{ color: "blue", size: "3em", className: "global-class-name" }}>
-                                <BiUser></BiUser>
+                                <FaUserTie></FaUserTie>
                             </IconContext.Provider>
                         </Avatar>
                         <div className="auth-form__container">
                             <div className="auth-form__header">
-                                <div className="auth-form__heading">Login</div>
-                                <NavLink to="/register" className="auth-form__switch-btn">Register <FiChevronRight className="auth-form__arrow-return"></FiChevronRight></NavLink>
+                                <div className="auth-form__heading">Employee</div>
+                                <NavLink to="/login" className="auth-form__switch-btn"> <FiChevronLeft className="auth-form__arrow-return"></FiChevronLeft>Login</NavLink>
                             </div>
                         </div>
                         <div className="auth-form__body">
                             <form action="/login-submit" method="POST" id="login-form">
                                 <div className="form-group">
-                                    <label htmlFor="email" className="form-label">Email</label>
+                                    <label htmlFor="email" className="form-label">Username</label>
                                     <div className="input-custom">
                                         <span><BsFillEnvelopeFill className="input-custom-icon" /></span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
+                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="username"  id="username" placeholder="VD: phuoc123" type="text" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -218,35 +158,12 @@ class Login extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password" rules="required|min:6" id="password" placeholder="Emter password" type="password" />
+                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password"  id="password" placeholder="Emter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
-                                <div className="auth-form__support">
-                                    <span className="auth-form__support-forget">
-                                        <NavLink onclick="" to="/forgot" className="auth-form__switch-btn">Forgot password</NavLink>
-                                    </span>
-                                    <span className="auth-form__help-separate" />
-                                    <span className="auth-form__support-need-support">Need help?</span>
-                                </div>
-                                <div className="auth-form__support">
-                                    <GoogleLogin
-                                        className="auth-form__support-google"
-                                        clientId={this.state.clientId}
-                                        buttonText="Login with Google"
-                                        onSuccess={this.onLoginSuccess}
-                                        onFailure={this.onFailureSuccess}
-                                        cookiePolicy={'single_host_origin'}
-                                    />
-                                </div>
                                 <div className="auth-form__btn">
-                                    <div to="/home" id="navlink" onClick={(e) => this.isLoginCheck(e)} className="auth-form__btn-log-in auth-form__switch-btn">Sign In</div>
-                                </div>
-                                <div className="auth-form__btn">
-                                    <NavLink to="/employee" id="navlink" className="auth-form__btn-log-in auth-form__switch-btn auth-form-employee">
-                                        Employee
-                                        <FiChevronRight className="auth-form__arrow-return"></FiChevronRight>
-                                    </NavLink>
+                                    <div to="/thungan" id="navlink" onClick={(e) => this.isLoginCheck(e)} className="auth-form__btn-log-in auth-form__switch-btn">Sign In</div>
                                 </div>
                             </form>
                         </div>
@@ -276,4 +193,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps , mapDispatchToProps)(LoginWithEmployee);
