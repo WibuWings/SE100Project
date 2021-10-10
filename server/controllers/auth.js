@@ -37,7 +37,7 @@ class Authentication {
                 status: STATUS.SUCCESS,
                 message: MESSAGES.SIGN_IN_SUCCESS,
                 token: JWTAuthToken(data),
-                data,
+                email: req.body.email,
             }));
         })
         .catch((err) => {
@@ -61,7 +61,7 @@ class Authentication {
                             status: STATUS.SUCCESS,
                             message: MESSAGES.SIGN_IN_SUCCESS,
                             token: JWTAuthToken(data),
-                            user: data,
+                            email: req.body.email,
                         })
                     );
                 } else {
@@ -108,7 +108,7 @@ class Authentication {
                                 status: STATUS.SUCCESS,
                                 message: MESSAGES.REGISTER_SUCCESS,
                                 token: JWTAuthToken(data),
-                                data,
+                                email: req.body.email,
                             })
                         );
                     }))
@@ -149,7 +149,7 @@ class Authentication {
                     status: STATUS.SUCCESS,
                     message: MESSAGES.RESET_PASSWORD_SUCCESS,
                     token: JWTAuthToken(data),
-                    data,
+                    email: req.body.email,
                 }));
             } else {
                 res.send(JSON.stringify({
