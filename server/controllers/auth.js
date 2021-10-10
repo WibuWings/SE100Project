@@ -22,7 +22,6 @@ const STATUS = {
 };
 
 class Authentication {
-
     authSignInWithGG = async (req, res) => {
         var newManager = new Manager({
             _id: req.body.email + "_Google",
@@ -31,21 +30,40 @@ class Authentication {
             lastName: req.body.familyName,
         });
 
-        newManager.save()
-        .then((data) => {
-            res.send(JSON.stringify({
-                status: STATUS.SUCCESS,
-                message: MESSAGES.SIGN_IN_SUCCESS,
-                token: JWTAuthToken(data),
-                data,
-            }));
-        })
-        .catch((err) => {
-            res.send(JSON.stringify({
-                status: STATUS.FAILURE,
-                message: MESSAGES.EMAIL_HAS_BEEN_USED,
-            }));
-        });
+        Manager.findById({ _id: req.body.email })
+            .then((data) => {
+                if (data) throw new Error();
+                else {
+                    newManager.save()
+                    .then((data) => {
+                        res.send(
+                            JSON.stringify({
+                                status: STATUS.SUCCESS,
+                                message: MESSAGES.SIGN_IN_SUCCESS,
+                                token: JWTAuthToken(data),
+                                email: req.body.email,
+                            })
+                        );
+                    }, (err) => {
+                        res.send(
+                            JSON.stringify({
+                                status: STATUS.SUCCESS,
+                                message: MESSAGES.SIGN_IN_SUCCESS,
+                                token: JWTAuthToken(newManager),
+                                email: req.body.email,
+                            })
+                        );
+                    })
+                }
+            })
+            .catch((err) => {
+                res.send(
+                    JSON.stringify({
+                        status: STATUS.FAILURE,
+                        message: MESSAGES.EMAIL_HAS_BEEN_USED,
+                    })
+                );
+            });
     };
 
     authSignInRegular = async (req, res) => {
@@ -61,7 +79,7 @@ class Authentication {
                             status: STATUS.SUCCESS,
                             message: MESSAGES.SIGN_IN_SUCCESS,
                             token: JWTAuthToken(data),
-                            user: data,
+                            email: req.body.email,
                         })
                     );
                 } else {
@@ -101,25 +119,26 @@ class Authentication {
                         phoneNumber: req.body.tel,
                     });
 
-                    newManager.save()
-                    .then((data => {
-                        res.send(
-                            JSON.stringify({
-                                status: STATUS.SUCCESS,
-                                message: MESSAGES.REGISTER_SUCCESS,
-                                token: JWTAuthToken(data),
-                                data,
-                            })
-                        );
-                    }))
-                    .catch((err) => {
-                        res.send(
-                            JSON.stringify({
-                                status: STATUS.FAILURE,
-                                message: err.message,
-                            })
-                        );
-                    })
+                    newManager
+                        .save()
+                        .then((data) => {
+                            res.send(
+                                JSON.stringify({
+                                    status: STATUS.SUCCESS,
+                                    message: MESSAGES.REGISTER_SUCCESS,
+                                    token: JWTAuthToken(data),
+                                    email: req.body.email,
+                                })
+                            );
+                        })
+                        .catch((err) => {
+                            res.send(
+                                JSON.stringify({
+                                    status: STATUS.FAILURE,
+                                    message: err.message,
+                                })
+                            );
+                        });
                 }
             })
             .catch((err) => {
@@ -136,37 +155,46 @@ class Authentication {
         const email = req.body.email;
         const newPassword = req.body.password;
 
-        Manager.findByIdAndUpdate({
-          _id: email  
-        },{
-            password: newPassword,
-        }, {
-            returnOriginal: false,
-        })
-        .then(data => {
-            if (data) {
-                res.send(JSON.stringify({
-                    status: STATUS.SUCCESS,
-                    message: MESSAGES.RESET_PASSWORD_SUCCESS,
-                    token: JWTAuthToken(data),
-                    data,
-                }));
-            } else {
-                res.send(JSON.stringify({
-                    status: STATUS.FAILURE,
-                    message: MESSAGES.EMAIL_ERROR,
-                }));
+        Manager.findByIdAndUpdate(
+            {
+                _id: email,
+            },
+            {
+                password: newPassword,
+            },
+            {
+                returnOriginal: false,
             }
-        })
-        .catch((err) => {
-            res.send(JSON.stringify({
-                status: STATUS.FAILURE,
-                message: err.message,
-            }));
-        });
+        )
+            .then((data) => {
+                if (data) {
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.SUCCESS,
+                            message: MESSAGES.RESET_PASSWORD_SUCCESS,
+                            token: JWTAuthToken(data),
+                            email: req.body.email,
+                        })
+                    );
+                } else {
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.EMAIL_ERROR,
+                        })
+                    );
+                }
+            })
+            .catch((err) => {
+                res.send(
+                    JSON.stringify({
+                        status: STATUS.FAILURE,
+                        message: err.message,
+                    })
+                );
+            });
     };
 }
-
 
 // this function return a token representing a data of use and using for authenticating and authorizating
 function JWTAuthToken(data) {
