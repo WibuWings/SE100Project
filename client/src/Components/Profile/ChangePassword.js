@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, Divider, Grid, TextField, Box, Button, CardContent } from '@mui/material';
-
+import  Test from './test';
 
 class ChangePassword extends Component {
     render() {
@@ -44,6 +44,9 @@ class ChangePassword extends Component {
                     <Divider />
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end',  p: 2}}>
                         <Button color="primary"  variant="contained">Change</Button>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end',  p: 2}}>
+                        <Test></Test>
                     </Box>
                 </Card>
             </form>

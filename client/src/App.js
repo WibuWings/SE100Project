@@ -5,7 +5,6 @@ import {
 import DirectionURL from './Router/DirectionURL';
 import './CSS/App.css'
 import { connect } from 'react-redux'
-import axios from 'axios';
 
 
 class App extends Component {
@@ -19,18 +18,8 @@ class App extends Component {
       if (localStorage.getItem('token') !== "") {
         this.props.changeLoginStatus()
       }
-    } else {
-      localStorage.setItem('token', '')
     }
-
-    axios.get(`https://provinces.open-api.vn/api/?depth=2`)
-      .then(res => {
-        console.log(res.data);
-        this.props.updateProvince(res.data);
-      })
-      .catch(err => {
-        console.log("fail");
-      })
+    this.props.updateDataUser('Đây là mẫu test',"tinh_vinh_long");
   }
 
   render() {
@@ -59,6 +48,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "UPDATE_DATA",
         data: data,
+      })
+    },
+    updateDataUser: (test, tinh) => {
+      dispatch({
+        type: "UPDATA_DATA_USER",
+        test: test,
+        province: tinh
       })
     }
   }
