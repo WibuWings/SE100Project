@@ -287,3 +287,7 @@
         transform: translateX(-10%);
     }
 }
+
+.auth-form-employee{
+    background-color: #939393;
+}

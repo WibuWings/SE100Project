@@ -23,6 +23,8 @@ class ForgotPassword extends Component {
         }
     }
 
+    message = ""
+
     // Send code tới người dùng
     sendCode = (a = this.makeCode(6)) => {
         this.setState({
@@ -67,7 +69,6 @@ class ForgotPassword extends Component {
         })
     }
 
-
     //Check tìm lại mật khẩu
     findPassword = (e) => {
         this.OutAlert();
@@ -79,13 +80,29 @@ class ForgotPassword extends Component {
             })
                 .then(res => {
                     form.reset();
-                    console.log("thành công");
-                    this.setState({
-                        statusSuccess: true,
-                    })
+                    console.log(res.data.status);
+                    switch (res.data.status) {
+                        case 1:
+                            this.message = res.data.message;
+                            this.setState({
+                                statusSuccess: true,
+                            })
+                            break;
+                        case -1:
+                            this.message = res.data.message;
+                            this.setState({
+                                statusFailed: true,
+                            })
+                            break;
+                        default:
+                            break;
+                    }
                 })
                 .catch(err => {
-                    console.log("thất bại");
+                    this.message = "Error system";
+                    this.setState({
+                        statusFailed: true,
+                    })
                 })
         }
     }
@@ -261,11 +278,14 @@ class ForgotPassword extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.statusSuccess ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">This is a success alert — check it out! <FiXSquare></FiXSquare></Alert> : null}
-                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">Login failed — check it out! <FiXSquare></FiXSquare></Alert> : null}
+                {this.state.statusSuccess ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
+                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
             </div>
         );
     }
 }
+
+
+
 
 export default ForgotPassword;

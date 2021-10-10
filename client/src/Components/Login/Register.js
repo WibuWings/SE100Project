@@ -12,6 +12,7 @@ import { FaPhoneSquare } from "react-icons/fa";
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import emailjs from 'emailjs-com';
+import { touchRippleClasses } from '@mui/material';
 var bcrypt = require('bcryptjs');
 
 
@@ -26,6 +27,8 @@ class Register extends Component {
             statusSuccess: false,
         }
     }
+
+    message = "";
 
     // Send code tới người dùng
     sendCode = (a = this.makeCode(6)) => {
@@ -48,7 +51,6 @@ class Register extends Component {
     SignUp = (e) => {
         this.OutAlert();
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword() && this.blurTel()) {
-            const form = document.getElementById('register-form');
             axios.post(`http://localhost:5000/register-with-email`, {
                 email: document.getElementById('email').value,
                 password: this.hash(document.getElementById('password').value),
@@ -57,13 +59,29 @@ class Register extends Component {
                 .then(res => {
                     console.log(res);
                     console.log("thành công");
+                    switch (res.data.status) {
+                        case 1:
+                            this.message = res.data.message;
+                            this.setState({
+                                statusSuccess: true,
+                            })
+                            localStorage.setItem('token', res.data.token);
+                            break;
+                        case -1:
+                            this.message = res.data.message;;
+                            this.setState({
+                                statusFailed: true,
+                            })
+                            break;
+                        default:
+                            break;
+                    }
                 })
                 .catch(err => {
-                    form.reset();
+                    this.message = "Error system";
                     this.setState({
-                        statusSuccess: true,
+                        statusFailed: true,
                     })
-                    console.log("Thất bại");
                 })
 
         }
@@ -299,8 +317,8 @@ class Register extends Component {
                         </div>
                     </div>
                 </div >
-                {this.state.statusSuccess ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">This is a success alert — check it out! <FiXSquare></FiXSquare></Alert> : null}
-                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">Login failed — check it out! <FiXSquare></FiXSquare></Alert> : null}
+                {this.state.statusSuccess ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
+                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
             </div >
         );
     }
