@@ -16,11 +16,7 @@ class Body extends Component {
                 }}>
                     <DashboardURL></DashboardURL>
                 </div>
-                {/* <div style={{marginLeft: '224px', width: '500px', backgroundColor: 'rgb(221,235,255)',
-                 borderLeft: '2px solid #99999975',
-                }}>
-                    <DashboardURL></DashboardURL>
-                </div> */}
+
             </div>
         );
     }
