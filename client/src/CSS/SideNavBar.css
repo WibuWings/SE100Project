@@ -1,0 +1,137 @@
+/* Sidebar section  */
+:root {
+    --primary-color: #4e73df;
+}
+
+.navbar-container {
+    display: fixed;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 224px;
+    
+}
+
+.navibar {
+    background-color: #fff;
+    /* background-image: linear-gradient(180deg,#4e73df 10%,#224abe 100%); */
+    background-size: cover;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 224px;
+    min-height: 100vh;
+    justify-content: space-between;
+    border-right: 1px solid rgb(167, 189, 242);
+}
+
+/* Nav heading */
+.navibar .nav-heading {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.navibar .navbar-heading-container {
+    background-color: #f4f6f8;
+    padding: 8px;
+    border-radius: 8px;
+    height: 56px;
+}
+
+.navibar .navbar-heading-container .user-name{
+    margin-left: 10px;
+    color: #5c7999;
+    min-width: 200px;
+}
+
+
+.nav-item {
+    text-decoration: none;
+    display: flex;
+    justify-content: left;
+    width: 100%;
+    padding: 16px;
+    color: #72808d;   
+}
+
+.nav-item:hover{
+    background-color: rgba(145, 158, 171, 0.08);
+}
+
+.nav-item:hover span{
+    color: var(--primary-color);
+}
+
+.nav-item:hover .nav-item-icon{
+    display: none;
+}
+
+.nav-item:hover .nav-item-icon.icon-activate {
+    display: block;
+    color: var(--primary-color);
+}
+
+.nav-item .nav-item-icon {
+    font-size: 20px;
+    margin-right: 8px;
+}
+
+.nav-item .icon-activate{
+    display: none;
+}
+
+.nav-item span{
+    display: block;
+    font-size: 14px;
+}
+
+.navibar .nav-container {
+    flex: 3;
+}
+
+.navibar .nav-footer {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+}
+
+.navibar .nav-footer .nav-item {
+    height: 50px;
+}
+
+.nav-footer .nav-item .nav-item-icon {
+    display: block;
+    
+}
+
+.nav-footer .nav-item:hover .nav-item-icon {
+    color: var(--primary-color);
+}
+
+.nav-item.active .nav-item-icon{
+    display: none;
+}
+.nav-item.active .icon-activate{
+    display: block;
+}
+
+.nav-item.active {
+    color: var(--primary-color);    
+}
+
+.nav-item.active:hover span {
+    color: var(--primary-color);    
+}
+
+.nav-item.active:hover i{
+    color: var(--primary-color);    
+}
+
+.nav-item.active {
+    border-right: 4px solid var(--primary-color);
+    background-color: #ebf0f8;
+}

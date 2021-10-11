@@ -4,7 +4,7 @@ class EmployeeManager extends Component {
     render() {
         return (
             <div>
-                EmployeeManager
+                Employee Manager
             </div>
         );
     }
