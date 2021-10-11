@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 
 class GoodImport extends Component {
     render() {
-        return <div>Good Import</div>;
+        return(
+            <div>
+                Good Import
+                
+            </div>
+        );        
     }
 }
 
