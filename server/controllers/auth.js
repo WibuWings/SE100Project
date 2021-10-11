@@ -2,7 +2,16 @@ const jwt = require("jsonwebtoken"); // authentication & authorization
 const PRIVATE_KEY = require("../privateKey"); // temp private key
 const bcrypt = require("bcryptjs");
 
+const mongoose = require("mongoose");
 const Manager = require("../models/manager"); // db model
+const Store = require("../models/store"); //
+const ShiftType = require("../models/shiftType");
+const ShiftAssign = require("../models/shiftAssign");
+const ReturnProduct = require("../models/returnProduct");
+const Receipt = require("../models/receipt");
+const Product = require("../models/product");
+const Employee = require("../models/employee");
+const Coupon = require("../models/coupon");
 
 const MESSAGES = {
     SIGN_IN_SUCCESS: "Sign-in successfully.",
@@ -30,29 +39,30 @@ class Authentication {
             lastName: req.body.familyName,
         });
 
-        Manager.findById({ _id: req.body.email })
-            .then((data) => {
-                if (data) throw new Error();
-                else {
+        Manager.findOne({ _id: newManager._id})
+            .then(data => {
+                if (data) {
+                    // if manager is exist then return all data
+                    getAllData(data._id)
+                    .then(result => {
+                        res.send(JSON.stringify({
+                            status: STATUS.SUCCESS,
+                            message: MESSAGES.SIGN_IN_SUCCESS,
+                            token: JWTAuthToken(req.body),
+                            email: req.body.email,
+                            data: result,
+                        }))
+                    })
+                } else {
                     newManager.save()
-                    .then((data) => {
-                        res.send(
-                            JSON.stringify({
-                                status: STATUS.SUCCESS,
-                                message: MESSAGES.SIGN_IN_SUCCESS,
-                                token: JWTAuthToken(data),
-                                email: req.body.email,
-                            })
-                        );
-                    }, (err) => {
-                        res.send(
-                            JSON.stringify({
-                                status: STATUS.SUCCESS,
-                                message: MESSAGES.SIGN_IN_SUCCESS,
-                                token: JWTAuthToken(newManager),
-                                email: req.body.email,
-                            })
-                        );
+                    .then(result => {
+                        res.send(JSON.stringify({
+                            status: STATUS.SUCCESS,
+                            message: MESSAGES.SIGN_IN_SUCCESS,
+                            token: JWTAuthToken(req.body),
+                            email: req.body.email,
+                            data: result,
+                        }))
                     })
                 }
             })
@@ -60,7 +70,7 @@ class Authentication {
                 res.send(
                     JSON.stringify({
                         status: STATUS.FAILURE,
-                        message: MESSAGES.EMAIL_HAS_BEEN_USED,
+                        message: MESSAGES.MONGODB_ERROR,
                     })
                 );
             });
@@ -73,15 +83,18 @@ class Authentication {
         Manager.findOne({ _id: email })
             .exec()
             .then((data) => {
+                //check password, if password is correct then get all data and respond for client
                 if (bcrypt.compareSync(password, data.password)) {
-                    res.send(
-                        JSON.stringify({
+                    getAllData(email)
+                    .then(data => {
+                        res.send(JSON.stringify({
                             status: STATUS.SUCCESS,
                             message: MESSAGES.SIGN_IN_SUCCESS,
-                            token: JWTAuthToken(data),
+                            token: JWTAuthToken(req.body),
                             email: req.body.email,
-                        })
-                    );
+                            data,
+                        }))
+                    });
                 } else {
                     throw new Error();
                 }
@@ -204,5 +217,44 @@ function JWTAuthToken(data) {
         { algorithm: "HS256" },
         { expiresIn: 600 }
     ));
+}
+
+async function getAllData(managerID) {
+    const manager = await Manager.findOne({ _id: managerID });
+    const store = await Store.findOne({ _id: manager.storeID });
+
+    if(store == null) {
+        return manager;
+    }
+
+    const [
+        coupons,
+        employees,
+        products,
+        receipts,
+        returnProducts,
+        shiftAssigns,
+        shiftTypes,
+    ] = await Promise.all([
+        Coupon.find({ storeID: store._id }).exec(),
+        Employee.find({ managerID: store._id }).exec(),
+        Product.find({ storeID: store._id }).exec(),
+        Receipt.find({ storeID: store._id }).exec(),
+        ReturnProduct.find({ storeID: store._id }).exec(),
+        ShiftAssign.find({ storeID: store._id }).exec(),
+        ShiftType.find({ storeID: store._id }).exec(),
+    ]);
+
+    return {
+        manager,
+        store,
+        employees,
+        coupons,
+        products,
+        receipts,
+        returnProducts,
+        shiftAssigns,
+        shiftTypes,
+    };
 }
 module.exports = new Authentication();
