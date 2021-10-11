@@ -218,7 +218,11 @@ class Authentication {
                     })
                 );
             });
+
     };
+    
+
+    
 }
 
 // this function return a token representing a data of use and using for authenticating and authorizating
@@ -230,6 +234,7 @@ function JWTAuthToken(data) {
         { expiresIn: 600 }
     ));
 }
+
 
 async function getAllData(managerID) {
     const manager = await Manager.findOne({ _id: managerID });
