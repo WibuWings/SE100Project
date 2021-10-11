@@ -1,4 +1,5 @@
 const infoUserInitialState = {
+    avatar: null,
     firstName: "Phước",
     lastName: "Lương",
     email: "lngthinphc@gmail.com",
@@ -27,6 +28,11 @@ const infoUserInitialState = {
                     province: action.province,
                     district: action.district, 
                     address: action.address,    
+                }
+            case "UPDATE_AVATAR":
+                return{
+                    ...state,
+                    avatar: action.avatar
                 }
             default:
                 return state

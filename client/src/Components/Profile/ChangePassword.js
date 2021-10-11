@@ -22,6 +22,7 @@ class ChangePassword extends Component {
     newPass = ""
     rePass = ""
 
+    // Gọi api change password
     changePassword = () => {
         const data = {
             email: this.props.infoUser.email,
@@ -37,11 +38,13 @@ class ChangePassword extends Component {
         })
     }
 
+    // hash
     hash = (pass) => {
         var hash = bcrypt.hashSync(pass, 12)
         return hash;
     }
 
+    // Handele : blur, change
     blurCurPassword = (e) => {
         this.curPass= e.target.value;
         if (e.target.value === "") {

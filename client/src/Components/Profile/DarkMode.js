@@ -1,5 +1,5 @@
 import * as React from 'react';
-import clsx from 'clsx';
+import { useState } from 'react';
 import { styled } from '@mui/system';
 import { useSwitch } from '@mui/core/SwitchUnstyled';
 
@@ -73,19 +73,29 @@ const SwitchTrack = styled('span')(
 
 function MUISwitch(props) {
   const { getInputProps, checked, disabled, focusVisible } = useSwitch(props);
+  const [statusDarkmode, setStatusDarkMode] = useState(localStorage.getItem('darkmode'));
 
-  const stateClasses = {
-    checked,
-    disabled,
-    focusVisible,
-  };
 
+  const abc = () => {
+    setStatusDarkMode(!statusDarkmode);
+    localStorage.setItem('darkmode', statusDarkmode);
+    if (statusDarkmode) {
+      document.querySelector('.css-1aeq5wu').classList.add('checked')
+      document.querySelector('.css-jt4wv9').classList.add('checked')
+    } else {
+      document.querySelector('.css-1aeq5wu').classList.remove('checked')
+      document.querySelector('.css-jt4wv9').classList.remove('checked')
+    }
+  }
+
+ 
   return (
-    <SwitchRoot className={clsx(stateClasses)}>
+    
+    <SwitchRoot className>
       <SwitchTrack>
-        <SwitchThumb className={clsx(stateClasses)} />
+        <SwitchThumb name className/>
       </SwitchTrack>
-      <SwitchInput {...getInputProps()} aria-label="Demo switch" />
+      <SwitchInput name="darkmode" onClick={abc}  {...getInputProps()} aria-label="Demo switch" />
     </SwitchRoot>
   );
 }

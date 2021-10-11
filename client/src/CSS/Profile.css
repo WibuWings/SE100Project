@@ -46,10 +46,9 @@
     opacity: .6;
     cursor: pointer;
 }
+
 .profile-header__avt{
-    transition: all ease-in-out 0.4s;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    transition: all ease-in-out 0.2s;
 }
 
 
