@@ -33,7 +33,6 @@ const listShiftInitialState = [
         switch (action.type) {
             case "DELETE_SHIFT":
                 return state.filter((value, key) => (value.id.toString() !== action.idShift));
-                break;
             case "ADD_SHIFT":
                 return [...state, action.newShift]
             default:

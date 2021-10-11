@@ -56,8 +56,7 @@ class Register extends Component {
                 tel: document.getElementById('tel').value,
             })
                 .then(res => {
-                    console.log(res);
-                    console.log("thành công");
+                    console.log(res.data);
                     switch (res.data.status) {
                         case 1:
                             this.message = res.data.message;
@@ -65,6 +64,21 @@ class Register extends Component {
                                 statusSuccess: true,
                             })
                             localStorage.setItem('token', res.data.token);
+                            const data = {
+                                email: res.data.email,
+                                firstName: "",
+                                lastName:  "",
+                                old:  "",
+                                gender: "0",
+                                storeName: "",
+                                tel: document.getElementById('tel').value,
+                                salary:  "",
+                                province: "0",
+                                district:  "0",
+                                address:  "",
+                            }
+                            this.props.updateProfile(data);
+                            this.props.changeLoginStatus();
                             break;
                         case -1:
                             this.message = res.data.message;;
@@ -225,7 +239,6 @@ class Register extends Component {
     }
 
     changeInput = (e) => {
-        
         const formGroup = e.target.parentElement.parentElement;
         formGroup.classList.remove('invalid');
         formGroup.querySelector('.form-message').innerText = "";
@@ -335,6 +348,22 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_LOGIN_STATUS",
             });
+        },
+        updateProfile: (data) => {
+            dispatch({
+                type: "UPDATA_DATA_USER",
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                old: data.old,
+                gender: data.gender,
+                storeName: data.storeName,
+                tel: data.tel,
+                salary: data.salary,
+                province: data.province,
+                district: data.district,
+                address: data.address,
+            })
         }
     }
 }

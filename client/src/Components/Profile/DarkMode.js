@@ -72,7 +72,7 @@ const SwitchTrack = styled('span')(
 );
 
 function MUISwitch(props) {
-  const { getInputProps, checked, disabled, focusVisible } = useSwitch(props);
+  const { getInputProps } = useSwitch(props);
   const [statusDarkmode, setStatusDarkMode] = useState(localStorage.getItem('darkmode'));
 
 

@@ -4,6 +4,8 @@ import Divider from '@mui/material/Divider';
 import { FaTelegramPlane } from "react-icons/fa";
 import { connect } from 'react-redux'
 import AvatarEditor  from 'react-avatar-editor'
+import axios from 'axios'
+
 
 class ProfileHeader extends Component {
     constructor(props) {
@@ -22,31 +24,31 @@ class ProfileHeader extends Component {
         if (!(type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg') || type.endsWith('gif'))) {
         } else {
             this.props.updateAvatar(fileChangeEvent.target.files[0]);
+            
         }
 
         if (this.editor) {
             const canvas = this.editor.getImage().toDataURL();
+            axios.post(`http://localhost:5000/api/update-avatar`, {
+                email: this.props.infoUser.email,
+                fileImg: canvas,
+            })
             // this.props.updateAvatar(canvas);
-            fetch(canvas)
-                .then(res => res.blob())
-                .then(blob => {
-                    console.log( window.URL.createObjectURL(blob));
-                    this.setState({
-                        imageURL: window.URL.createObjectURL(blob),
-                    })
-                });
+            // fetch(canvas)
+            //     .then(res => res.blob())
+            //     .then(blob => {
+            //         console.log( window.URL.createObjectURL(blob));
+            //         this.setState({
+            //             imageURL: window.URL.createObjectURL(blob),
+            //         })
+            //     });
+
         }
     }
 
     render() {
         return (
             <div className="profile-header" style={{ width: '100%', height: '350px' }}>
-                {/* <label for="profile-header-update-avatar">
-                    <img
-                        src={this.state.imageURL ? this.state.imageURL : avatarImg}
-                        style={{ height: '150px', width: '150px' }}
-                    />
-                </label> */}
                 <label for="profile-header-update-avatar" style={{ borderRadius: '100%', overflow: 'hidden', marginTop: '15px ' }}>
                     <AvatarEditor
                         className="profile-header__avt"

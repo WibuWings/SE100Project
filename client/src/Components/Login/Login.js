@@ -34,31 +34,38 @@ class Login extends Component {
         axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
                 console.log("thành công");
+                console.log(res.data);
+                console.log(res.data.email);
                 switch (res.data.status) {
                     case 1:
-                        this.message = "Login success";
+                        this.message = res.data.message;
                         this.setState({
                             statusSucces: true,
                         })
                         localStorage.setItem('token', res.data.token);
+                        const data = {
+                            email: res.data.email,
+                            firstName: res.data.data.firstName ? res.data.data.firstName : "",
+                            lastName: res.data.data.lastName ? res.data.data.lastName : "",
+                            old: res.data.data.old ? res.data.data.old : "",
+                            gender: res.data.data.gender ? res.data.data.gender : "0",
+                            storeName: res.data.data.storeName ? res.data.data.storeName : "",
+                            tel: res.data.data.phoneNumber ? res.data.data.phoneNumber : "",
+                            salary: res.data.data.salary ? res.data.data.salary : "",
+                            province: res.data.data.province ? res.data.data.province : "0",
+                            district: res.data.data.district ? res.data.data.district : "0",
+                            address: res.data.data.address ? res.data.data.address : "",
+                        }
+                        this.props.updateProfile(data);
+                        this.props.changeLoginStatus();
                         break;
-                    case 0:
-                        this.message = "Incorrect password";
-                        this.setState({
-                            statusFailed: true,
-                        })
-                        break;
-                    case -2:
-                        this.message = "This account has signin by Email the first";
+                    case -1:
+                        this.message = res.data.message;
                         this.setState({
                             statusFailed: true,
                         })
                         break;
                     default:
-                        this.message = "Enter again";
-                        this.setState({
-                            statusFailed: true,
-                        })
                         break;
                 }
             })
@@ -67,7 +74,6 @@ class Login extends Component {
                 this.setState({
                     statusFailed: true,
                 })
-                console.log("lỗi");
             })
     }
 
@@ -89,13 +95,14 @@ class Login extends Component {
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = (e) => {
         this.OutAlert();
-        const form = document.getElementById('login-form');
         if (this.blurEmail() && this.blurPassword()) {
             axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
                 email: document.querySelector('#email').value,
                 password: document.getElementById('password').value,
             })
                 .then(res => {
+                    console.log(res.data);
+                    console.log(res.data.email);
                     switch (res.data.status) {
                         case 1:
                             this.message = res.data.message;
@@ -103,6 +110,20 @@ class Login extends Component {
                                 statusSucces: true,
                             })
                             localStorage.setItem('token', res.data.token);
+                            const data = {
+                                email: res.data.email? res.data.email : res.data.data._id,
+                                firstName: res.data.data.firstName ? res.data.data.firstName : "cc",
+                                lastName: res.data.data.lastName ? res.data.data.lastName : "abc",
+                                old: res.data.data.old ? res.data.data.old : "",
+                                gender: res.data.data.gender ? res.data.data.gender : "0",
+                                storeName: res.data.data.storeName ? res.data.data.storeName : "",
+                                tel: res.data.data.phoneNumber ? res.data.data.phoneNumber : "",
+                                salary: res.data.data.salary ? res.data.data.salary : "",
+                                province: res.data.data.province ? res.data.data.province : "0",
+                                district: res.data.data.district ? res.data.data.district : "0",
+                                address: res.data.data.address ? res.data.data.address : "",
+                            }
+                            this.props.updateProfile(data);
                             this.props.changeLoginStatus();
                             break;
                         case -1:
@@ -270,6 +291,22 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_LOGIN_STATUS",
             });
+        },
+        updateProfile: (data) => {
+            dispatch({
+                type: "UPDATA_DATA_USER",
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                old: data.old,
+                gender: data.gender,
+                storeName: data.storeName,
+                tel: data.tel,
+                salary: data.salary,
+                province: data.province,
+                district: data.district,
+                address: data.address,
+            })
         }
     }
 }

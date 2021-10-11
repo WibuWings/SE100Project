@@ -2,7 +2,7 @@ const infoUserInitialState = {
     avatar: null,
     firstName: "Phước",
     lastName: "Lương",
-    email: "lngthinphc@gmail.com",
+    email: "aaaa",
     old: "21",
     gender: "male",
     storeName: "Phước Coffee",
@@ -18,6 +18,7 @@ const infoUserInitialState = {
             case "UPDATA_DATA_USER":
                 return {
                     ...state, 
+                    email: action.email,
                     firstName: action.firstName, 
                     lastName: action.lastName,
                     old: action.old, 

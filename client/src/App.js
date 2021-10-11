@@ -16,7 +16,7 @@ class App extends Component {
   async componentWillMount() {
     if (localStorage.getItem('token')) {
       if (localStorage.getItem('token') !== "") {
-        this.props.changeLoginStatus()
+       
       }
     }
 
