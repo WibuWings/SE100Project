@@ -12,6 +12,9 @@ const Product = new Schema({
     },
     name: String, 
     image: {type: Schema.Types.ObjectId, ref: "ProductImage"},
+    productType: [
+        {type: Schema.Types.ObjectId, ref: "ProductType"},
+    ],
     quantity: Number, 
     remain: Number, 
     importPrice: Number, 
