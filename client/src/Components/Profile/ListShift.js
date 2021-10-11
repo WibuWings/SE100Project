@@ -3,9 +3,10 @@ import { Card, CardHeader, Divider, TableHead, TableRow, Paper, Box, Button, Car
 import { BiPlusMedical } from 'react-icons/bi';
 import { IconButton } from '@mui/material'
 import { styled } from '@mui/material/styles';
-import { FiEdit ,FiTrash2} from 'react-icons/fi'
+import { FiEdit, FiTrash2 } from 'react-icons/fi'
 import { tableCellClasses } from '@mui/material/TableCell';
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
+import axios from 'axios';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -33,11 +34,33 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 class ListShift extends Component {
 
-    handleEdit = ()=>{
+    handleEdit = () => {
         console.log("click");
         this.props.changeAddStatus();
     }
 
+    handleDelete = (e) => {
+        var elementShift = e.target.parentElement;
+        var idShift = elementShift.name;
+        if (!idShift) {
+            idShift = elementShift.parentElement.name;
+        } 
+
+        if(idShift) {
+            this.props.deleteShift(idShift);
+            axios.post(`http://localhost:5000/api/delete-shift`,{
+                email: this.props.infoUser.email,
+                idShift: idShift
+            })
+            .then(res => {
+                console.log("Thành công");
+            })
+            .catch(err => {
+                console.log("thất bại");
+            })
+        } 
+    
+    }
 
     render() {
         return (
@@ -56,46 +79,33 @@ class ListShift extends Component {
                                     <StyledTableCell align="center">Delete</StyledTableCell>
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
-                                <StyledTableRow key="abc">
-                                    <StyledTableCell component="th" scope="row">Ca 1</StyledTableCell>
-                                    <StyledTableCell align="center">10:00 AM</StyledTableCell>
-                                    <StyledTableCell align="center">12:00 PM</StyledTableCell>
-                                    <StyledTableCell align="center">
-                                        <IconButton onClick={() => this.handleEdit()} color="secondary" aria-label="fingerprint">
-                                            <FiEdit />
-                                        </IconButton>
-                                    </StyledTableCell>
-                                    <StyledTableCell align="center">
-                                        <IconButton onClick={() => this.handleEdit()} style={{color:'red'}} aria-label="fingerprint">
-                                            <FiTrash2 />
-                                        </IconButton>
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                            </TableBody>
-                            <TableBody>
-                                <StyledTableRow key="abc">
-                                    <StyledTableCell component="th" scope="row">Ca 1</StyledTableCell>
-                                    <StyledTableCell align="center">10:00 AM</StyledTableCell>
-                                    <StyledTableCell align="center">12:00 PM</StyledTableCell>
-                                    <StyledTableCell align="center">
-                                        <IconButton onClick={() => this.handleEdit()} color="secondary" aria-label="fingerprint">
-                                            <FiEdit />
-                                        </IconButton>
-                                    </StyledTableCell>
-                                    <StyledTableCell align="center">
-                                        <IconButton  onClick={() => this.handleEdit()} style={{color:'red'}} aria-label="fingerprint">
-                                            <FiTrash2 />
-                                        </IconButton>
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                            </TableBody>
+                            {this.props.listShift.map(item => {
+                                return (
+                                    <TableBody>
+                                        <StyledTableRow key="abc">
+                                            <StyledTableCell component="th" scope="row">{item.description}</StyledTableCell>
+                                            <StyledTableCell align="center">{item.from}</StyledTableCell>
+                                            <StyledTableCell align="center">{item.to}</StyledTableCell>
+                                            <StyledTableCell align="center">
+                                                <IconButton name={item.id} onClick={() => this.handleEdit()} color="secondary" aria-label="fingerprint">
+                                                    <FiEdit />
+                                                </IconButton>
+                                            </StyledTableCell>
+                                            <StyledTableCell align="center">
+                                                <IconButton name={item.id} onClick={(e) => this.handleDelete(e)} style={{ color: 'red' }} aria-label="fingerprint">
+                                                    <FiTrash2 />
+                                                </IconButton>
+                                            </StyledTableCell>
+                                        </StyledTableRow>
+                                    </TableBody>
+                                )
+                            })}
                         </Table>
                     </TableContainer>
                 </CardContent>
                 <Divider />
                 <Box className="add-shift" sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
-                    <Button style={{ backgroundColor: 'yellowgreen' }} onClick={()=> this.handleEdit()} variant="contained" startIcon={<BiPlusMedical />}>
+                    <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleEdit()} variant="contained" startIcon={<BiPlusMedical />}>
                         add
                     </Button>
                 </Box>
@@ -107,6 +117,8 @@ class ListShift extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         addStatus: state.addStatus,
+        listShift: state.listShift,
+        infoUser: state.infoUser,
     }
 }
 
@@ -116,7 +128,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_ADD_STATUS",
             });
+        },
+        deleteShift: (idShift) => {
+            dispatch({
+                type: "DELETE_SHIFT",
+                idShift: idShift,
+            })
         }
     }
 }
-export default connect(mapStateToProps,mapDispatchToProps)(ListShift);
+export default connect(mapStateToProps, mapDispatchToProps)(ListShift);

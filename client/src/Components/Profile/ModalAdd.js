@@ -6,24 +6,99 @@ import Stack from '@mui/material/Stack';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import TimePicker from '@mui/lab/TimePicker';
-import {GiCancel} from 'react-icons/gi'
+import { GiCancel } from 'react-icons/gi'
+import axios from 'axios';
 
 class ModalAdd extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: Date.now(),
+            timeFrom: Date.now(),
+            timeTo: Date.now(),
         }
     }
-    
+
+    descriptionShift = ""
+    timeFrom = "00:00 AM"
+    timeTo = "00:00 PM"
+
+    // Handle user
     hanhleCancel = (e) => {
         this.props.changeAddStatus();
     }
 
-    changeTime = (e) => {
+    changeTimeFrom = (e) => {
+        var hourse = e.getHours()
+        const minutes = e.getMinutes()
+        if (hourse >= 12) {
+            hourse = hourse - 12;
+            this.timeFrom = hourse.toString() + ":" + minutes.toString() + " PM"
+        } else {
+            this.timeFrom = hourse.toString() + ":" + minutes.toString() + " AM"
+        }
+        console.log(this.timeFrom);
         this.setState({
-            value: e,
+            timeFrom: e,
         })
+    }
+
+    changeTimeTo = (e) => {
+        var hourse = e.getHours()
+        const minutes = e.getMinutes()
+        if (hourse >= 12) {
+            hourse = hourse - 12;
+            this.timeTo = hourse.toString() + ":" + minutes.toString() + " PM"
+        } else {
+            this.timeTo = hourse.toString() + ":" + minutes.toString() + " AM"
+        }
+        console.log(this.timeTo);
+        this.setState({
+            timeTo: e,
+        })
+    }
+
+    blurDiscription = (e) => {
+        this.descriptionShift = e.target.value;
+    }
+
+
+    // Tạo code để xác nhận
+    makeCode = (length) => {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() *
+                charactersLength));
+        }
+        return result;
+    }
+    
+    // Call API
+    addShift = () => {
+        var value = this.state.timeTo - this.state.timeFrom;
+        value = (value / 60 / 60 / 1000);
+        var data = {
+            id: this.makeCode(6),
+            value: value,
+            description: this.descriptionShift,
+            from: this.timeFrom,
+            to: this.timeTo,
+        }
+        if (data) {
+            this.props.addShift(data);
+            axios.post(`http://localhost:5000/api/add-shift`, {
+                email: this.props.infoUser.email,
+                data: data,
+            })
+                .then(res => {
+                    console.log('Thành Công');
+                })
+                .catch(err => {
+                    console.log('thất bại');
+                })
+            this.props.changeAddStatus();
+        }
     }
 
     render() {
@@ -39,6 +114,7 @@ class ModalAdd extends Component {
                                     id="outlined-basic"
                                     variant="outlined"
                                     fullWidth
+                                    onBlur={(e) => this.blurDiscription(e)}
                                     label="Shift description"
                                     required
                                     type="text"
@@ -49,14 +125,15 @@ class ModalAdd extends Component {
                                     <Stack spacing={3}>
                                         <TimePicker
                                             label="Time"
-                                            value={this.state.value}
-                                            onChange={(newValue) => this.changeTime(newValue)}
+                                            value="Mon Oct 11 2021 07:00:00 GMT+0700 (Giờ Đông Dương)"
+                                            value={this.state.timeFrom}
+                                            onChange={(newValue) => this.changeTimeFrom(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
                                         />
                                         <TimePicker
                                             label="Time"
-                                            value={this.state.value}
-                                            onChange
+                                            value={this.state.timeTo}
+                                            onChange={(newValue) => this.changeTimeTo(newValue)}
                                             renderInput={(params) => <TextField onChange={(e) => this.changeTime(e)} {...params} />}
                                         />
                                     </Stack>
@@ -66,7 +143,7 @@ class ModalAdd extends Component {
                     </CardContent>
                     <Divider />
                     <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2 }}>
-                        <Button style={{ backgroundColor: 'yellowgreen' }} variant="contained" startIcon={<BiPlusMedical />}>
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.addShift()} variant="contained" startIcon={<BiPlusMedical />}>
                             Xác nhận
                         </Button>
                         <Button style={{ backgroundColor: 'red' }} onClick={(e) => this.hanhleCancel(e)} variant="contained" startIcon={<GiCancel />}>
@@ -82,6 +159,7 @@ class ModalAdd extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         addStatus: state.addStatus,
+        infoUser: state.infoUser,
     }
 }
 
@@ -91,6 +169,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_ADD_STATUS",
             });
+        },
+        addShift: (data) => {
+            dispatch({
+                type: "ADD_SHIFT",
+                newShift: data,
+            })
         }
     }
 }

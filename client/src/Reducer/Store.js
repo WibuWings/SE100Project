@@ -3,7 +3,7 @@ import typeUserReducer from './TypeStatusReducer';
 import countryReducer from './ProvinceReducer';
 import statusAddShiftReducer from './Status/StatusAddShiftReducer';
 import infoUserReducer from './InfoUserReducer';
-
+import listShiftReducer from './ListShiftReducer';
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -12,6 +12,7 @@ const allReducers = redux.combineReducers({
     country: countryReducer,
     addStatus: statusAddShiftReducer,
     infoUser: infoUserReducer,
+    listShift: listShiftReducer,
 })
 
 
