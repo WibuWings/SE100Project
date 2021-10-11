@@ -29,15 +29,16 @@ class meProfile {
     }
     verifySignIn = async (req, res) => {
         const data = req.body
-        accessToken = jwt.sign(data, PRIVATE_KEY)
+        accessToken = jwt.sign(...data, PRIVATE_KEY, {expiresIn: 900})
         res.json(accessToken)
     }
      
     Profile = async (req, res) => {
-        res.send(
+        const manager = Manager.find({_id : req.body.email})
+        const store = Store.find({_id :req.body._id})
+        res.status(200).send(
             JSON.stringify({
-                status: 200,
-                data : {Manager,Store}
+                data:{manager,store}
             })
         )
     }
