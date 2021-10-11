@@ -8,12 +8,11 @@ import '../../CSS/Login.css'
 import { BsFillEnvelopeFill, BsLockFill } from "react-icons/bs";
 import { FiChevronRight, FiXSquare } from "react-icons/fi";
 import { BiUser } from "react-icons/bi";
-import { Avatar, Button } from '@mui/material'
+import { Avatar } from '@mui/material'
 import { IconContext } from "react-icons";
 import { GoogleLogin } from 'react-google-login';
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
-import bcrypt from 'bcryptjs';
 
 
 class Login extends Component {

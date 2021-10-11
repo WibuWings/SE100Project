@@ -5,7 +5,6 @@ import {
 import DirectionURL from './Router/DirectionURL';
 import './CSS/App.css'
 import { connect } from 'react-redux'
-import axios from 'axios';
 
 
 class App extends Component {
@@ -14,13 +13,15 @@ class App extends Component {
 
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     if (localStorage.getItem('token')) {
       if (localStorage.getItem('token') !== "") {
         this.props.changeLoginStatus()
       }
-    } else {
-      localStorage.setItem('token', '')
+    }
+
+    if(!localStorage.getItem('darkmode')) {
+      localStorage.setItem('darkmode', false);
     }
   }
 
@@ -45,6 +46,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "CHANGE_LOGIN_STATUS",
       });
+    },
+    updateProvince: (data) => {
+      dispatch({
+        type: "UPDATE_DATA",
+        data: data,
+      })
     }
   }
 }
