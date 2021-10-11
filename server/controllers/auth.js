@@ -39,31 +39,42 @@ class Authentication {
             lastName: req.body.familyName,
         });
 
-        Manager.findOne({ _id: newManager._id})
-            .then(data => {
-                if (data) {
-                    // if manager is exist then return all data
-                    getAllData(data._id)
-                    .then(result => {
-                        res.send(JSON.stringify({
-                            status: STATUS.SUCCESS,
-                            message: MESSAGES.SIGN_IN_SUCCESS,
-                            token: JWTAuthToken(req.body),
-                            email: req.body.email,
-                            data: result,
-                        }))
-                    })
+        // check whether gmail is registered by regular method
+        Manager.findOne({ _id: req.body.email })
+            .then((result1) => {
+                if (result1) {
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.EMAIL_HAS_BEEN_USED,
+                        })
+                    );
                 } else {
-                    newManager.save()
-                    .then(result => {
-                        res.send(JSON.stringify({
-                            status: STATUS.SUCCESS,
-                            message: MESSAGES.SIGN_IN_SUCCESS,
-                            token: JWTAuthToken(req.body),
-                            email: req.body.email,
-                            data: result,
-                        }))
-                    })
+                    Manager.findOne({ _id: newManager._id }).then((result) => {
+                        if (result) {
+                            getAllData(result._id).then((data) => {
+                                res.send(
+                                    JSON.stringify({
+                                        status: STATUS.SUCCESS,
+                                        message: MESSAGES.SIGN_IN_SUCCESS,
+                                        token: JWTAuthToken(result),
+                                        email: result.email,
+                                        data,
+                                    })
+                                );
+                            });
+                        } else {
+                            res.send(
+                                JSON.stringify({
+                                    status: STATUS.SUCCESS,
+                                    message: MESSAGES.SIGN_IN_SUCCESS,
+                                    token: JWTAuthToken(newManager),
+                                    email: newManager.email,
+                                    data: {},
+                                })
+                            );
+                        }
+                    });
                 }
             })
             .catch((err) => {
@@ -85,15 +96,16 @@ class Authentication {
             .then((data) => {
                 //check password, if password is correct then get all data and respond for client
                 if (bcrypt.compareSync(password, data.password)) {
-                    getAllData(email)
-                    .then(data => {
-                        res.send(JSON.stringify({
-                            status: STATUS.SUCCESS,
-                            message: MESSAGES.SIGN_IN_SUCCESS,
-                            token: JWTAuthToken(req.body),
-                            email: req.body.email,
-                            data,
-                        }))
+                    getAllData(email).then((data) => {
+                        res.send(
+                            JSON.stringify({
+                                status: STATUS.SUCCESS,
+                                message: MESSAGES.SIGN_IN_SUCCESS,
+                                token: JWTAuthToken(req.body),
+                                email: req.body.email,
+                                data,
+                            })
+                        );
                     });
                 } else {
                     throw new Error();
@@ -223,7 +235,7 @@ async function getAllData(managerID) {
     const manager = await Manager.findOne({ _id: managerID });
     const store = await Store.findOne({ _id: manager.storeID });
 
-    if(store == null) {
+    if (store == null) {
         return manager;
     }
 
