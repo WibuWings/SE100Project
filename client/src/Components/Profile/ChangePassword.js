@@ -25,6 +25,7 @@ class ChangePassword extends Component {
     // Gọi api change password
     changePassword = () => {
         const data = {
+            token: localStorage.getItem('token'),
             email: this.props.infoUser.email,
             curPass: this.curPass,
             newPass: this.hash(this.newPass),

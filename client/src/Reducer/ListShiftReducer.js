@@ -6,28 +6,28 @@ const listShiftInitialState = [
         from: "0:36 PM",
         id: "V8GOL1",
         to: "3:36 PM",
-        value: 1,
+        salary: 20000,
     },
     {
         description: "Ca 2",
         from: "0:36 PM",
         id: "V8GOc1",
         to: "3:36 PM",
-        value: 1,
+        salary: 20000,
     },
     {
         description: "Ca 3",
         from: "0:36 PM",
         id: "V8sOL1",
         to: "3:36 PM",
-        value: 10,
+        salary: 20000,
     },
     {
         description: "Ca 4",
         from: "0:36 PM",
         id: "V8cOL1",
         to: "3:36 PM",
-        value: 1,
+        salary: 20000,
     }
 ],
 
@@ -41,7 +41,7 @@ const listShiftInitialState = [
                 state.forEach(item => {
                     if(item.id === action.data.id) {
                         item.description = action.data.description;
-                        item.value = action.data.value;
+                        item.salary = action.data.salary;
                         item.from = action.data.from;
                         item.to = action.data.to;
                     }

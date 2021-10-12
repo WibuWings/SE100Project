@@ -7,7 +7,6 @@ const infoUserInitialState = {
     gender: "male",
     storeName: "Phước Coffee",
     tel: "0387527010",
-    salary: "20000",
     province: "tinh_an_giang",
     district: "huyen_chau_phu",
     address: "43 QL 91, TT Cái Dầu"
@@ -25,7 +24,6 @@ const infoUserInitialState = {
                     gender: action.gender,
                     storeName: action.storeName, 
                     tel: action.tel,
-                    salary: action.salary, 
                     province: action.province,
                     district: action.district, 
                     address: action.address,    
