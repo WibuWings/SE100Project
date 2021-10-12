@@ -29,7 +29,7 @@ class Profile extends Component {
                     </Grid>
                 </Container>
                 {this.props.addStatus ? (<div className="modal-add">
-                    <div onClick={() => this.props.changeAddStatus()} className="modal-overlay"></div>
+                    <div onClick={() => {this.props.changeAddStatus();if (this.props.editShiftStatus) {this.props.changeEditShiftStatus()}}} className="modal-overlay"></div>
                     <ModalAdd></ModalAdd>
                 </div>): null}
             </div>
@@ -40,6 +40,7 @@ class Profile extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         addStatus: state.addStatus,
+        editShiftStatus: state.editShiftStatus,
     }
 }
 
@@ -49,6 +50,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_ADD_STATUS",
             });
+        },
+        changeEditShiftStatus: () => {
+            dispatch({
+                type: "CHANGE_EDIT_SHIFT_STATUS",
+            })
         }
     }
 }

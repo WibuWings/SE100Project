@@ -147,16 +147,19 @@ class ProfileDetail extends Component {
                     console.log("fail");
                 })
         } else {
-            this.setState({
-                listDistrict: this.props.country[0].filter(word => word.codename === this.props.infoUser.province)[0].districts,
-                disabledHuyen: false,
-            })
+            if(this.props.infoUser.province !== '0'){
+                this.setState({
+                    listDistrict: this.props.country[0].filter(word => word.codename === this.props.infoUser.province)[0].districts,
+                    disabledHuyen: false,
+                })
+            }
         }
         console.log("compoenetWillLoad");
     }
 
 
     render() {
+        console.log(this.props.infoUser);
         return (
             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
                 <Card>
@@ -194,9 +197,7 @@ class ProfileDetail extends Component {
                                     disabled
                                     label="Email Address"
                                     defaultValue={this.props.infoUser.email}
-                                    onBlur={(e) => this.blurAll(e)}
                                     name="email"
-                                    value="lngthinphc@gmail.com"
                                     variant="outlined"
                                 />
                             </Grid>

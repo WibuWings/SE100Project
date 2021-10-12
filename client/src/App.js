@@ -14,15 +14,12 @@ class App extends Component {
   }
 
   async componentWillMount() {
+    this.props.changeLoginStatus()
     if (localStorage.getItem('token')) {
       if (localStorage.getItem('token') !== "") {
-        this.props.changeLoginStatus()
       }
     }
-
-    if(!localStorage.getItem('darkmode')) {
-      localStorage.setItem('darkmode', false);
-    }
+    
   }
 
   render() {

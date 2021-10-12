@@ -2,7 +2,7 @@
 .profile{
     position: relative;
     background-color: transparent;
-    background-color: rgb(223, 232, 245);
+    /* background-color: rgb(223, 232, 245); */
     background-clip: border-box;
     display: flex;
     flex-direction: column;

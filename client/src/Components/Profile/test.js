@@ -4,16 +4,19 @@ import {useSelector, useDispatch } from 'react-redux'
 
 function Test(props) {
     const statusLogin = useSelector(state => state.addStatus)
+    const darkmode = useSelector(state => state.statusDarkmode)
     const Abc = useDispatch();
+    
     const handle = () => {
+        console.log(darkmode);
         Abc({
-            type: "CHANGE_ADD_STATUS",
+            type: "CHANGE_DARKMODE",
         })
     }
 
     return (
         <div>
-            <div onClick={() => handle()}>{statusLogin? "true":"false"}</div>
+            <div onClick={() => handle()}>{darkmode? "true":"false"}</div>
         </div>
     );
 }
