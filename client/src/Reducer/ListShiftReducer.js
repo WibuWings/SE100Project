@@ -1,3 +1,5 @@
+import { act } from "react-dom/test-utils";
+
 const listShiftInitialState = [
     {
         description: "Ca 1",
@@ -35,6 +37,16 @@ const listShiftInitialState = [
                 return state.filter((value, key) => (value.id.toString() !== action.idShift));
             case "ADD_SHIFT":
                 return [...state, action.newShift]
+            case "OBJECT_UPDATE_SHIFT":
+                state.forEach(item => {
+                    if(item.id === action.data.id) {
+                        item.description = action.data.description;
+                        item.value = action.data.value;
+                        item.from = action.data.from;
+                        item.to = action.data.to;
+                    }
+                })
+                return state
             default:
                 return state
         }

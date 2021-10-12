@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button } from '@mui/material';
 import { connect } from 'react-redux'
-import { BiPlusMedical } from 'react-icons/bi';
+import { BiPlusMedical, BiEdit } from 'react-icons/bi';
 import Stack from '@mui/material/Stack';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -13,8 +13,8 @@ class ModalAdd extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            timeFrom: Date.now(),
-            timeTo: Date.now(),
+            timeFrom: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.from} GMT+0700 (Giờ Đông Dương)` : Date.now(),
+            timeTo: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.to} GMT+0700 (Giờ Đông Dương)` : Date.now(),
         }
     }
 
@@ -25,6 +25,9 @@ class ModalAdd extends Component {
     // Handle user
     hanhleCancel = (e) => {
         this.props.changeAddStatus();
+        if (this.props.editShiftStatus) {
+            this.props.changeEditShiftStatus();
+        }
     }
 
     changeTimeFrom = (e) => {
@@ -73,7 +76,29 @@ class ModalAdd extends Component {
         }
         return result;
     }
-    
+
+    editShift = () => {
+        var value = this.state.timeTo - this.state.timeFrom;
+        value = (value / 60 / 60 / 1000);
+        var data = {
+            id: this.props.objectEditShift.id,
+            value: value,
+            description: this.descriptionShift,
+            from: this.timeFrom,
+            to: this.timeTo,
+        }
+        this.props.updateShift(data);
+        this.props.changeEditShiftStatus();
+        this.props.changeAddStatus();
+        axios.post(`http://localhost:5000/api/update-shift`, data)
+        .then(res => {
+            console.log('thành công');
+        })
+        .catch(err => {
+            console.log("lỗi");
+        })
+    }
+
     // Call API
     addShift = () => {
         var value = this.state.timeTo - this.state.timeFrom;
@@ -102,6 +127,7 @@ class ModalAdd extends Component {
     }
 
     render() {
+        console.log(this.props.objectEditShift);
         return (
             <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
@@ -114,6 +140,7 @@ class ModalAdd extends Component {
                                     id="outlined-basic"
                                     variant="outlined"
                                     fullWidth
+                                    defaultValue={(this.props.editShiftStatus ? this.props.objectEditShift.description : "")}
                                     onBlur={(e) => this.blurDiscription(e)}
                                     label="Shift description"
                                     required
@@ -125,7 +152,6 @@ class ModalAdd extends Component {
                                     <Stack spacing={3}>
                                         <TimePicker
                                             label="Time"
-                                            value="Mon Oct 11 2021 07:00:00 GMT+0700 (Giờ Đông Dương)"
                                             value={this.state.timeFrom}
                                             onChange={(newValue) => this.changeTimeFrom(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
@@ -143,9 +169,14 @@ class ModalAdd extends Component {
                     </CardContent>
                     <Divider />
                     <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2 }}>
-                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.addShift()} variant="contained" startIcon={<BiPlusMedical />}>
-                            Xác nhận
-                        </Button>
+                        {this.props.editShiftStatus ? (
+                            <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.editShift()} variant="contained" startIcon={<BiEdit />}>
+                                Edit
+                            </Button>) : (
+                            <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.addShift()} variant="contained" startIcon={<BiPlusMedical />}>
+                                Xác nhận
+                            </Button>
+                        )}
                         <Button style={{ backgroundColor: 'red' }} onClick={(e) => this.hanhleCancel(e)} variant="contained" startIcon={<GiCancel />}>
                             Hủy
                         </Button>
@@ -160,6 +191,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         addStatus: state.addStatus,
         infoUser: state.infoUser,
+        editShiftStatus: state.editShiftStatus,
+        objectEditShift: state.objectEditShift,
     }
 }
 
@@ -174,6 +207,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "ADD_SHIFT",
                 newShift: data,
+            })
+        },
+        changeEditShiftStatus: () => {
+            dispatch({
+                type: "CHANGE_EDIT_SHIFT_STATUS",
+            })
+        },
+        updateShift: (data) => {
+            dispatch({
+                type: "OBJECT_UPDATE_SHIFT",
+                data: data,
             })
         }
     }

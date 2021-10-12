@@ -34,8 +34,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 class ListShift extends Component {
 
-    handleEdit = () => {
-        console.log("click");
+    handleEdit = (e, id, description, from, to , value) => {
+        const data = {
+            description: description,
+            from: from,
+            id: id,
+            to: to,
+            value: value,
+        }
+        console.log(data);
+        if (id) {
+            this.props.objectEditShift(data)
+            this.props.changeEditShiftStatus();
+            this.props.changeAddStatus();
+        }
+    }
+
+    handleAdd = () => {
         this.props.changeAddStatus();
     }
 
@@ -44,22 +59,22 @@ class ListShift extends Component {
         var idShift = elementShift.name;
         if (!idShift) {
             idShift = elementShift.parentElement.name;
-        } 
+        }
 
-        if(idShift) {
+        if (idShift) {
             this.props.deleteShift(idShift);
-            axios.post(`http://localhost:5000/api/delete-shift`,{
+            axios.post(`http://localhost:5000/api/delete-shift`, {
                 email: this.props.infoUser.email,
                 idShift: idShift
             })
-            .then(res => {
-                console.log("Thành công");
-            })
-            .catch(err => {
-                console.log("thất bại");
-            })
-        } 
-    
+                .then(res => {
+                    console.log("Thành công");
+                })
+                .catch(err => {
+                    console.log("thất bại");
+                })
+        }
+
     }
 
     render() {
@@ -87,7 +102,7 @@ class ListShift extends Component {
                                             <StyledTableCell align="center">{item.from}</StyledTableCell>
                                             <StyledTableCell align="center">{item.to}</StyledTableCell>
                                             <StyledTableCell align="center">
-                                                <IconButton name={item.id} onClick={() => this.handleEdit()} color="secondary" aria-label="fingerprint">
+                                                <IconButton name={item.id} onClick={(e) => this.handleEdit(e, item.id, item.description, item.from, item.to, item.value)} color="secondary" aria-label="fingerprint">
                                                     <FiEdit />
                                                 </IconButton>
                                             </StyledTableCell>
@@ -105,7 +120,7 @@ class ListShift extends Component {
                 </CardContent>
                 <Divider />
                 <Box className="add-shift" sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
-                    <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleEdit()} variant="contained" startIcon={<BiPlusMedical />}>
+                    <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleAdd()} variant="contained" startIcon={<BiPlusMedical />}>
                         add
                     </Button>
                 </Box>
@@ -133,6 +148,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "DELETE_SHIFT",
                 idShift: idShift,
+            })
+        },
+        changeEditShiftStatus: () => {
+            dispatch({
+                type: "CHANGE_EDIT_SHIFT_STATUS",
+            })
+        },
+        objectEditShift: (data) => {
+            dispatch({
+                type: "OBJECT_EDIT_SHIFT",
+                data: data
             })
         }
     }
