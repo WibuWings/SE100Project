@@ -69,14 +69,11 @@ class meProfile {
             {
                 returnOriginal: false,
             },
-            (err, doc) => {
-                if (err) {
-                    console.log("Something wrong when updating data!");
-                }
-            
-                console.log(doc);
-            });
+        );
           
+    }
+    addShift = async (req, res) => {
+        
     }
     
 }
