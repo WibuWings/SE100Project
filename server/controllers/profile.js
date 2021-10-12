@@ -78,6 +78,6 @@ class meProfile {
             });
           
     }
-        
+    
 }
 module.exports = new meProfile();
