@@ -6,6 +6,7 @@ import infoUserReducer from './InfoUserReducer';
 import listShiftReducer from './ListShiftReducer';
 import statusEditShiftReducer from  './Status/StatusEditShiftReducer';
 import objectEditShiftReducer from './ObjectEditShiftReducer';
+import statusDarkmodeReducer from './Status/StatusDarkModeReducer';
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -17,6 +18,7 @@ const allReducers = redux.combineReducers({
     listShift: listShiftReducer,
     editShiftStatus: statusEditShiftReducer,
     objectEditShift: objectEditShiftReducer,
+    statusDarkmode: statusDarkmodeReducer,
 })
 
 

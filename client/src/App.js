@@ -17,13 +17,9 @@ class App extends Component {
     this.props.changeLoginStatus()
     if (localStorage.getItem('token')) {
       if (localStorage.getItem('token') !== "") {
-       
       }
     }
-
-    if(!localStorage.getItem('darkmode')) {
-      localStorage.setItem('darkmode', false);
-    }
+    
   }
 
   render() {
