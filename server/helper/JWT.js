@@ -30,6 +30,7 @@ async function AuthMiddleware(req, res, next) {
     if (result.status !== 200) {
         res.status(401).send(JSON.stringify(result.err));
     } else {
+        res.locals.decoded = result.decoded;
         next();
     }
 }
