@@ -13,7 +13,7 @@ const Product = require("../models/product");
 const Employee = require("../models/employee");
 const Coupon = require("../models/coupon");
 
-const {JWTAuthToken,AuthMiddleware} = require("../helper/JWT");
+const {JWTAuthToken} = require("../helper/JWT");
 
 const MESSAGES = {
     SIGN_IN_SUCCESS: "Sign-in successfully.",
