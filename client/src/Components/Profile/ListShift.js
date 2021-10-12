@@ -34,13 +34,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 class ListShift extends Component {
 
-    handleEdit = (e, id, description, from, to , value) => {
+    handleEdit = (e, id, description, from, to , salary) => {
         const data = {
             description: description,
             from: from,
             id: id,
             to: to,
-            value: value,
+            salary: salary,
         }
         console.log(data);
         if (id) {
@@ -64,6 +64,7 @@ class ListShift extends Component {
         if (idShift) {
             this.props.deleteShift(idShift);
             axios.post(`http://localhost:5000/api/delete-shift`, {
+                token: localStorage.getItem('token'),
                 email: this.props.infoUser.email,
                 idShift: idShift
             })
@@ -88,6 +89,7 @@ class ListShift extends Component {
                             <TableHead>
                                 <TableRow>
                                     <StyledTableCell>Description</StyledTableCell>
+                                    <StyledTableCell align="center">Salary</StyledTableCell>
                                     <StyledTableCell align="center">From</StyledTableCell>
                                     <StyledTableCell align="center">To</StyledTableCell>
                                     <StyledTableCell align="center">Edit</StyledTableCell>
@@ -99,10 +101,11 @@ class ListShift extends Component {
                                     <TableBody>
                                         <StyledTableRow key="abc">
                                             <StyledTableCell component="th" scope="row">{item.description}</StyledTableCell>
+                                            <StyledTableCell align="center">{item.salary}</StyledTableCell>
                                             <StyledTableCell align="center">{item.from}</StyledTableCell>
                                             <StyledTableCell align="center">{item.to}</StyledTableCell>
                                             <StyledTableCell align="center">
-                                                <IconButton name={item.id} onClick={(e) => this.handleEdit(e, item.id, item.description, item.from, item.to, item.value)} color="secondary" aria-label="fingerprint">
+                                                <IconButton name={item.id} onClick={(e) => this.handleEdit(e, item.id, item.description, item.from, item.to, item.salary)} color="secondary" aria-label="fingerprint">
                                                     <FiEdit />
                                                 </IconButton>
                                             </StyledTableCell>
