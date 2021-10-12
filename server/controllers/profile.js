@@ -32,7 +32,7 @@ class meProfile {
         accessToken = jwt.sign(...data, PRIVATE_KEY, {expiresIn: 900})
         res.json(accessToken)
     }
-     
+        
     Profile = async (req, res) => {
         const manager = Manager.find({_id : req.body.email})
         const store = Store.find({_id :req.body._id})
@@ -42,5 +42,42 @@ class meProfile {
             })
         )
     }
+    updateProfileData = async (req, res) =>{
+        const idcheck = req.body._id
+        const email = req.body.email;   
+        const newfirstName = req.body.firstName;
+        const newlastName = req.body.lastName;
+        const newphoneNumber = req.body.phoneNumber;
+        const newAddress = req.body.address;
+        const newProvince = req.body.province;
+        const newDistrict = req.body.district;
+        const newSalary = req.body.salary;
+        Manager.findOneAndUpdate(
+            {
+                _id: "lngthinphc@gmail.com_Google",
+            },
+            {$set:{
+                lastName:newlastName,
+                firstName:newfirstName,
+                phoneNumber:newphoneNumber,
+                address:newAddress,
+                province:newProvince,
+                district:newDistrict,
+                salary:newSalary,
+                storeID: email,
+            }},
+            {
+                returnOriginal: false,
+            },
+            (err, doc) => {
+                if (err) {
+                    console.log("Something wrong when updating data!");
+                }
+            
+                console.log(doc);
+            });
+          
+    }
+        
 }
 module.exports = new meProfile();

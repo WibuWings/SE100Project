@@ -9,7 +9,12 @@ const Manager = new Schema({
     firstName: String,
     lastName: String,
     phoneNumber: String,
+    old : String,
+    gender: String,
+    province: String,   
+    district: String,
     address: String,
+    salary : String,
     storeID: String,
 });
 
