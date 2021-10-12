@@ -22,7 +22,7 @@ import GoodImage from './goodExample.jpg';
 
 
 
-function createData(index, id, name, quantity, originalPrice, sellPrice, importTime) {
+function createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType) {
     return {
         index,
         id,
@@ -35,6 +35,7 @@ function createData(index, id, name, quantity, originalPrice, sellPrice, importT
                 date: '2020-01-05',
                 remaining: 100,
                 originalPrice: originalPrice,
+                productType: productType,
             }
         ],
     };
@@ -82,6 +83,7 @@ function Row(props) {
                                             <TableCell className={classes.goodTable_Cell}>Expired Day</TableCell>
                                             <TableCell className={classes.goodTable_Cell}>Original Price</TableCell>
                                             <TableCell className={classes.goodTable_Cell}>Good Remain</TableCell>
+                                            <TableCell className={classes.goodTable_Cell}>Product Type</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -92,6 +94,7 @@ function Row(props) {
                                                 </TableCell>
                                                 <TableCell className={classes.goodTable_Cell}>{hiddenRow.originalPrice}</TableCell>
                                                 <TableCell className={classes.goodTable_Cell}>{hiddenRow.remaining}</TableCell>
+                                                <TableCell className={classes.goodTable_Cell}>{hiddenRow.productType}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -113,21 +116,21 @@ function Row(props) {
 
 
 const rows = [
-    createData(1,10001,'Frozen yoghurt', 159, 20, 24, '1/1/2021', 3.99),
-    createData(2,10002,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 4.99),
-    createData(3,10003,'Eclair', 262, 16, 24, '3/3/2021', 3.79),
-    createData(4,10004,'Cupcake', 305, 47, 67, '4/4/2021', 2.5),
-    createData(5,10005,'Gingerbread', 356, 26, 49, '31/1/2021', 1.5),
-    createData(1,10001,'Frozen yoghurt', 159, 20, 24, '1/1/2021', 3.99),
-    createData(2,10002,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 4.99),
-    createData(3,10003,'Eclair', 262, 16, 24, '3/3/2021', 3.79),
-    createData(4,10004,'Cupcake', 305, 47, 67, '4/4/2021', 2.5),
-    createData(5,10005,'Gingerbread', 356, 26, 49, '31/1/2021', 1.5),
-    createData(1,10001,'Frozen yoghurt', 159, 20, 24, '1/1/2021', 3.99),
-    createData(2,10002,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 4.99),
-    createData(3,10003,'Eclair', 262, 16, 24, '3/3/2021', 3.79),
-    createData(4,10004,'Cupcake', 305, 47, 67, '4/4/2021', 2.5),
-    createData(5,10005,'Gingerbread', 356, 26, 49, '31/1/2021', 1.5),
+    createData(1,10001,'Frozen yoghurt', 159, 20, 24, '1/1/2021','food'),
+    createData(2,10002,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
+    createData(3,10003,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
+    createData(4,10004,'Cupcake', 305, 47, 67, '4/4/2021', 'cuisine'),
+    createData(5,10005,'Gingerbread', 356, 26, 49, '31/1/2021', 'cuisine'),
+    createData(1,10001,'Frozen yoghurt', 159, 20, 24, '1/1/2021','cuisine'),
+    createData(2,10002,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
+    createData(3,10003,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
+    createData(4,10004,'Cupcake', 305, 47, 67, '4/4/2021', 'detergent'),
+    createData(5,10005,'Gingerbread', 356, 26, 49, '31/1/2021', 'detergent'),
+    createData(1,10001,'Frozen yoghurt', 159, 20, 24, '1/1/2021','detergent'),
+    createData(2,10002,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
+    createData(3,10003,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
+    createData(4,10004,'Cupcake', 305, 47, 67, '4/4/2021', 'food'),
+    createData(5,10005,'Gingerbread', 356, 26, 49, '31/1/2021', 'food'),
 ];
 const styles = theme =>  ({
     goodTable: {                                     
