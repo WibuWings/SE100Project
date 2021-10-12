@@ -4,6 +4,7 @@ import GoodTable from './GoodPartials/GoodTable';
 import { NavLink } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import SearchBar from './GoodPartials/SearchBar';
+import {connect} from 'react-redux'
 
 class GoodManager extends Component {
     render() {
@@ -25,4 +26,25 @@ class GoodManager extends Component {
     }
 }
 
-export default GoodManager;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        addStatus: state.addStatus,
+        editShiftStatus: state.editShiftStatus,
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        changeAddStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_STATUS",
+            });
+        },
+        changeEditShiftStatus: () => {
+            dispatch({
+                type: "CHANGE_EDIT_SHIFT_STATUS",
+            })
+        }
+    }
+}
+export default connect(mapStateToProps , mapDispatchToProps)(GoodManager);
