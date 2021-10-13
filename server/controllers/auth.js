@@ -1,17 +1,22 @@
 const jwt = require("jsonwebtoken"); // authentication & authorization
 const PRIVATE_KEY = require("../privateKey"); // temp private key
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");// decode
 
 const mongoose = require("mongoose");
 const Manager = require("../models/manager"); // db model
 const Store = require("../models/store"); //
 const ShiftType = require("../models/shiftType");
 const ShiftAssign = require("../models/shiftAssign");
+const Revenue = require("../models/revenue");
+const ProductType = require("../models/productType");
+const ProductJoinType = require("../models/productJoinType");
 const ReturnProduct = require("../models/returnProduct");
 const Receipt = require("../models/receipt");
 const Product = require("../models/product");
 const Employee = require("../models/employee");
 const Coupon = require("../models/coupon");
+
+const {JWTAuthToken} = require("../helper/JWT");
 
 const MESSAGES = {
     SIGN_IN_SUCCESS: "Sign-in successfully.",
@@ -22,7 +27,7 @@ const MESSAGES = {
     EMAIL_ERROR: "The email IS NOT registered.",
     EMAIL_HAS_BEEN_USED:
         "The email address has been used for regular or Google account.",
-
+    EMAIL_USED_GG: "The email has to sign in WITH GOOGLE.",
     MONGODB_ERROR: "Some errors with database.",
 };
 const STATUS = {
@@ -37,6 +42,7 @@ class Authentication {
             email: req.body.email,
             firstName: req.body.givenName,
             lastName: req.body.familyName,
+            storeID: req.body.email + "_Google",
         });
 
         // check whether gmail is registered by regular method
@@ -52,27 +58,30 @@ class Authentication {
                 } else {
                     Manager.findOne({ _id: newManager._id }).then((result) => {
                         if (result) {
-                            getAllData(result._id).then((data) => {
+                            getAllData(result.email).then((data) => {
                                 res.send(
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
                                         message: MESSAGES.SIGN_IN_SUCCESS,
-                                        token: JWTAuthToken(result),
+                                        token: JWTAuthToken({email:result.email}),
                                         email: result.email,
                                         data,
                                     })
                                 );
                             });
                         } else {
-                            res.send(
-                                JSON.stringify({
-                                    status: STATUS.SUCCESS,
-                                    message: MESSAGES.SIGN_IN_SUCCESS,
-                                    token: JWTAuthToken(newManager),
-                                    email: newManager.email,
-                                    data: {},
-                                })
-                            );
+                            newManager.save()
+                            .then(result => {
+                                res.send(
+                                    JSON.stringify({
+                                        status: STATUS.SUCCESS,
+                                        message: MESSAGES.SIGN_IN_SUCCESS,
+                                        token: JWTAuthToken({email:result.email}),
+                                        email: result.email,
+                                        data: {},
+                                    })
+                                );
+                            })
                         }
                     });
                 }
@@ -132,7 +141,6 @@ class Authentication {
                 } else {
                     return Manager.findOne({ _id: email + "_Google" }).exec();
                 }
-                console.log(data);
             })
             .then((data) => {
                 if (data) {
@@ -141,7 +149,9 @@ class Authentication {
                     const newManager = new Manager({
                         _id: email,
                         password: req.body.password,
+                        email: email,
                         phoneNumber: req.body.tel,
+                        storeID: email,
                     });
 
                     newManager
@@ -197,17 +207,27 @@ class Authentication {
                         JSON.stringify({
                             status: STATUS.SUCCESS,
                             message: MESSAGES.RESET_PASSWORD_SUCCESS,
-                            token: JWTAuthToken(data),
-                            email: req.body.email,
                         })
                     );
                 } else {
-                    res.send(
-                        JSON.stringify({
-                            status: STATUS.FAILURE,
-                            message: MESSAGES.EMAIL_ERROR,
-                        })
-                    );
+
+                    Manager.findOne({ email: email }).then((data) => {
+                        if (data) {
+                            res.send(
+                                JSON.stringify({
+                                    status: STATUS.FAILURE,
+                                    message: MESSAGES.EMAIL_USED_GG,
+                                })
+                            );
+                        } else {
+                            res.send(
+                                JSON.stringify({
+                                    status: STATUS.FAILURE,
+                                    message: MESSAGES.EMAIL_ERROR,
+                                })
+                            );
+                        }
+                    })
                 }
             })
             .catch((err) => {
@@ -218,23 +238,40 @@ class Authentication {
                     })
                 );
             });
+
     };
+    
+    refreshUI = async (req, res) => {
+        var decoded = res.locals.decoded;
+
+        getAllData(decoded.email).then((data) => {
+
+            var {iat, exp, ...userInfo} = decoded;
+            res.status(200).send(
+                JSON.stringify({
+                    message: MESSAGES.SIGN_IN_SUCCESS,
+                    token: JWTAuthToken(userInfo),
+                    email: decoded.email,
+                    data,
+                })
+            );
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(404).send(
+                JSON.stringify({
+                    err,
+                })
+            )
+        })
+    }
+    
 }
 
-// this function return a token representing a data of use and using for authenticating and authorizating
-function JWTAuthToken(data) {
-    return (token = jwt.sign(
-        { ...data },
-        PRIVATE_KEY,
-        { algorithm: "HS256" },
-        { expiresIn: 600 }
-    ));
-}
+async function getAllData(email) {
+    const manager = await Manager.findOne({ email: email});
 
-async function getAllData(managerID) {
-    const manager = await Manager.findOne({ _id: managerID });
     const store = await Store.findOne({ _id: manager.storeID });
-
     if (store == null) {
         return manager;
     }
@@ -243,6 +280,9 @@ async function getAllData(managerID) {
         coupons,
         employees,
         products,
+        productTypes,
+        productJoinTypes,
+        revenues,
         receipts,
         returnProducts,
         shiftAssigns,
@@ -263,10 +303,13 @@ async function getAllData(managerID) {
         employees,
         coupons,
         products,
+        productTypes,
+        productJoinTypes,
         receipts,
         returnProducts,
         shiftAssigns,
         shiftTypes,
+        revenues,
     };
 }
 module.exports = new Authentication();
