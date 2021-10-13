@@ -34,8 +34,6 @@ class Login extends Component {
         axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
                 console.log("thành công");
-                console.log(res.data);
-                console.log(res.data.email);
                 switch (res.data.status) {
                     case 1:
                         this.message = res.data.message;
@@ -44,14 +42,13 @@ class Login extends Component {
                         })
                         localStorage.setItem('token', res.data.token);
                         const data = {
-                            email: res.data.email,
+                            email: res.data.data._id,
                             firstName: res.data.data.firstName ? res.data.data.firstName : "",
                             lastName: res.data.data.lastName ? res.data.data.lastName : "",
                             old: res.data.data.old ? res.data.data.old : "",
                             gender: res.data.data.gender ? res.data.data.gender : "0",
                             storeName: res.data.data.storeName ? res.data.data.storeName : "",
                             tel: res.data.data.phoneNumber ? res.data.data.phoneNumber : "",
-                            salary: res.data.data.salary ? res.data.data.salary : "",
                             province: res.data.data.province ? res.data.data.province : "0",
                             district: res.data.data.district ? res.data.data.district : "0",
                             address: res.data.data.address ? res.data.data.address : "",
@@ -302,7 +299,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 gender: data.gender,
                 storeName: data.storeName,
                 tel: data.tel,
-                salary: data.salary,
                 province: data.province,
                 district: data.district,
                 address: data.address,

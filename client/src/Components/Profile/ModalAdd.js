@@ -21,6 +21,7 @@ class ModalAdd extends Component {
     descriptionShift = ""
     timeFrom = "00:00 AM"
     timeTo = "00:00 PM"
+    salary = 10000
 
     // Handle user
     hanhleCancel = (e) => {
@@ -78,11 +79,12 @@ class ModalAdd extends Component {
     }
 
     editShift = () => {
-        var value = this.state.timeTo - this.state.timeFrom;
-        value = (value / 60 / 60 / 1000);
+        
         var data = {
+            token: localStorage.getItem('token'),
+            idUser: this.props.infoUser.email,
             id: this.props.objectEditShift.id,
-            value: value,
+            salary: this.salary,
             description: this.descriptionShift,
             from: this.timeFrom,
             to: this.timeTo,
@@ -99,13 +101,17 @@ class ModalAdd extends Component {
         })
     }
 
+    blurSalary = (e) => {
+        this.salary = e.target.value;
+    }
+
     // Call API
     addShift = () => {
-        var value = this.state.timeTo - this.state.timeFrom;
-        value = (value / 60 / 60 / 1000);
         var data = {
+            token: localStorage.getItem('token'),
+            idUser: this.props.infoUser.email,
             id: this.makeCode(6),
-            value: value,
+            salary: this.salary,
             description: this.descriptionShift,
             from: this.timeFrom,
             to: this.timeTo,
@@ -145,6 +151,19 @@ class ModalAdd extends Component {
                                     label="Shift description"
                                     required
                                     type="text"
+                                />
+                            </Grid>
+                            <Grid item md={12} xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    onBlur={(e) => this.blurSalary(e)}
+                                    label="Salary/1h"
+                                    defaultValue={this.props.editShiftStatus ? this.props.objectEditShift.salary : this.salary}
+                                    type="number"
+                                    id="outlined-error-helper-text"
+                                    name="salary"
+                                    variant="outlined"
                                 />
                             </Grid>
                             <Grid item md={12} xs={12}>

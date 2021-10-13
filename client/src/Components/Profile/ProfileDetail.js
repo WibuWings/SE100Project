@@ -21,6 +21,7 @@ class ProfileDetail extends Component {
     SaveDetails = () => {
         if (this.state.isTel && this.state.isOld) {
             const data = {
+                token: localStorage.getItem('token'),
                 email: document.querySelector('input[name="email"]').value,
                 firstName: document.querySelector('input[name="firstName"]').value,
                 lastName: document.querySelector('input[name="lastName"]').value,
@@ -28,7 +29,6 @@ class ProfileDetail extends Component {
                 gender: document.querySelector('select[name="gender"],select').value,
                 storeName: document.querySelector('input[name="storeName"]').value,
                 tel: document.querySelector('input[name="tel"]').value,
-                salary: document.querySelector('input[name="salary"]').value,
                 province: document.querySelector('select[name="province"]').value,
                 district: document.querySelector('select[name="district"]').value,
                 address: document.querySelector('input[name="address"]').value,
@@ -259,19 +259,7 @@ class ProfileDetail extends Component {
                                     onBlur={(e) => this.blurTel(e)}
                                 />
                             </Grid>
-                            <Grid item md={6} xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    onBlur={(e) => this.blurAll(e)}
-                                    label="Salary/1h"
-                                    defaultValue={this.props.infoUser.salary}
-                                    type="number"
-                                    id="outlined-error-helper-text"
-                                    name="salary"
-                                    variant="outlined"
-                                />
-                            </Grid>
+                            
                             <Grid item md={6} xs={12}>
                                 <TextField
                                     fullWidth
@@ -321,7 +309,7 @@ class ProfileDetail extends Component {
                                     }) : null}
                                 </TextField>
                             </Grid>
-                            <Grid item md={12} xs={12}>
+                            <Grid item md={6} xs={12}>
                                 <TextField
                                     fullWidth
                                     label="Adress details"
@@ -368,7 +356,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 gender: data.gender,
                 storeName: data.storeName,
                 tel: data.tel,
-                salary: data.salary,
                 province: data.province,
                 district: data.district,
                 address: data.address,
