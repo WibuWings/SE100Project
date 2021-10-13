@@ -147,6 +147,7 @@ class Authentication {
                         password: req.body.password,
                         email: email,
                         phoneNumber: req.body.tel,
+                        storeID: _id,
                     });
 
                     newManager
