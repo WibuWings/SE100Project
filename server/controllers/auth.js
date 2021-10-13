@@ -24,7 +24,7 @@ const MESSAGES = {
     EMAIL_ERROR: "The email IS NOT registered.",
     EMAIL_HAS_BEEN_USED:
         "The email address has been used for regular or Google account.",
-
+    EMAIL_USED_GG: "The email has to sign in WITH GOOGLE.",
     MONGODB_ERROR: "Some errors with database.",
 };
 const STATUS = {
@@ -54,7 +54,7 @@ class Authentication {
                 } else {
                     Manager.findOne({ _id: newManager._id }).then((result) => {
                         if (result) {
-                            getAllData(result.email).then((data) => {
+                            getAllData(result._id).then((data) => {
                                 res.send(
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
@@ -137,7 +137,6 @@ class Authentication {
                 } else {
                     return Manager.findOne({ _id: email + "_Google" }).exec();
                 }
-                console.log(data);
             })
             .then((data) => {
                 if (data) {
@@ -146,6 +145,7 @@ class Authentication {
                     const newManager = new Manager({
                         _id: email,
                         password: req.body.password,
+                        email: email,
                         phoneNumber: req.body.tel,
                     });
 
@@ -207,12 +207,24 @@ class Authentication {
                         })
                     );
                 } else {
-                    res.send(
-                        JSON.stringify({
-                            status: STATUS.FAILURE,
-                            message: MESSAGES.EMAIL_ERROR,
-                        })
-                    );
+
+                    Manager.findOne({ email: email }).then((data) => {
+                        if (data) {
+                            res.send(
+                                JSON.stringify({
+                                    status: STATUS.FAILURE,
+                                    message: MESSAGES.EMAIL_USED_GG,
+                                })
+                            );
+                        } else {
+                            res.send(
+                                JSON.stringify({
+                                    status: STATUS.FAILURE,
+                                    message: MESSAGES.EMAIL_ERROR,
+                                })
+                            );
+                        }
+                    })
                 }
             })
             .catch((err) => {
@@ -228,19 +240,22 @@ class Authentication {
     
     refreshUI = async (req, res) => {
         var decoded = res.locals.decoded;
-        console.log(decoded)
+
         getAllData(decoded.email).then((data) => {
+
+            var {iat, exp, ...userInfo} = decoded;
             res.status(200).send(
                 JSON.stringify({
                     message: MESSAGES.SIGN_IN_SUCCESS,
-                    token: JWTAuthToken(decoded),
+                    token: JWTAuthToken(userInfo),
                     email: decoded.email,
                     data,
                 })
             );
         })
         .catch((err) => {
-            res.status(502).send(
+            console.error(err);
+            res.status(404).send(
                 JSON.stringify({
                     err,
                 })
@@ -250,14 +265,10 @@ class Authentication {
     
 }
 
-async function getManager(email) {
-    const manager = await Manager.findOne({ email: email});
-    return manager;
-}
-async function getAllData(email) {
-    const manager = getManager(email);
-    const store = await Store.findOne({ _id: manager.storeID });
+async function getAllData(managerID) {
+    const manager = await Manager.findOne({ email: managerID});
 
+    const store = await Store.findOne({ _id: manager.storeID });
     if (store == null) {
         return manager;
     }
