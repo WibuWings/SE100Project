@@ -26,7 +26,7 @@ class Login extends Component {
         }
     }
 
-    message = "Login success";
+    message = "";
 
     // Login with google
     onLoginSuccess = (res) => {
@@ -34,6 +34,7 @@ class Login extends Component {
         axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
                 console.log("thành công");
+                console.log(res.data);
                 switch (res.data.status) {
                     case 1:
                         this.message = res.data.message;
