@@ -3,7 +3,6 @@ import avatarImg from '../../img/avatar_default.jpg'
 import Divider from '@mui/material/Divider';
 import { FaTelegramPlane } from "react-icons/fa";
 import { connect } from 'react-redux'
-import AvatarEditor from 'react-avatar-editor'
 import axios from 'axios'
 import { Image } from 'cloudinary-react'
 
