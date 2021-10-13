@@ -55,7 +55,7 @@ class Authentication {
                 } else {
                     Manager.findOne({ _id: newManager._id }).then((result) => {
                         if (result) {
-                            getAllData(result._id).then((data) => {
+                            getAllData(result.email).then((data) => {
                                 res.send(
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
@@ -267,8 +267,8 @@ class Authentication {
     
 }
 
-async function getAllData(managerID) {
-    const manager = await Manager.findOne({ email: managerID});
+async function getAllData(email) {
+    const manager = await Manager.findOne({ email: email});
 
     const store = await Store.findOne({ _id: manager.storeID });
     if (store == null) {
