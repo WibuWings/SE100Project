@@ -12,7 +12,6 @@ import { FaPhoneSquare } from "react-icons/fa";
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import emailjs from 'emailjs-com';
-import { touchRippleClasses } from '@mui/material';
 var bcrypt = require('bcryptjs');
 
 
@@ -33,18 +32,21 @@ class Register extends Component {
     // Send code tới người dùng
     sendCode = (a = this.makeCode(6)) => {
         this.setState({
-            code: a,
+            code: "123456"
         })
-        emailjs.init("user_K1g5N5hUDI0rjsa1uRoI4");
-        emailjs.send("gmail_main", "template_plasdgf", {
-            To_mail: `${document.getElementById('email').value}`,
-            code: `${a}`,
-        })
-            .then((response) => {
-                console.log('SUCCESS!', response.status, response.text);
-            }, (err) => {
-                console.log('FAILED...', err);
-            });
+        // this.setState({
+        //     code: a,
+        // })
+        // emailjs.init("user_K1g5N5hUDI0rjsa1uRoI4");
+        // emailjs.send("gmail_main", "template_plasdgf", {
+        //     To_mail: `${document.getElementById('email').value}`,
+        //     code: `${a}`,
+        // })
+        //     .then((response) => {
+        //         console.log('SUCCESS!', response.status, response.text);
+        //     }, (err) => {
+        //         console.log('FAILED...', err);
+        //     });
     }
 
     // status SignUp 
@@ -57,8 +59,7 @@ class Register extends Component {
                 tel: document.getElementById('tel').value,
             })
                 .then(res => {
-                    console.log(res);
-                    console.log("thành công");
+                    console.log(res.data);
                     switch (res.data.status) {
                         case 1:
                             this.message = res.data.message;
@@ -66,6 +67,20 @@ class Register extends Component {
                                 statusSuccess: true,
                             })
                             localStorage.setItem('token', res.data.token);
+                            const data = {
+                                email: res.data.email,
+                                firstName: "",
+                                lastName:  "",
+                                old:  "",
+                                gender: "0",
+                                storeName: "",
+                                tel: document.getElementById('tel').value,
+                                province: "0",
+                                district:  "0",
+                                address:  "",
+                            }
+                            this.props.updateProfile(data);
+                            this.props.changeLoginStatus();
                             break;
                         case -1:
                             this.message = res.data.message;;
@@ -226,7 +241,6 @@ class Register extends Component {
     }
 
     changeInput = (e) => {
-        const elementValue = e.target.value;
         const formGroup = e.target.parentElement.parentElement;
         formGroup.classList.remove('invalid');
         formGroup.querySelector('.form-message').innerText = "";
@@ -336,6 +350,21 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_LOGIN_STATUS",
             });
+        },
+        updateProfile: (data) => {
+            dispatch({
+                type: "UPDATA_DATA_USER",
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                old: data.old,
+                gender: data.gender,
+                storeName: data.storeName,
+                tel: data.tel,
+                province: data.province,
+                district: data.district,
+                address: data.address,
+            })
         }
     }
 }
