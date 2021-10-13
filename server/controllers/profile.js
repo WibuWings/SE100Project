@@ -51,7 +51,7 @@ class meProfile {
         const newAddress = req.body.address;
         const newProvince = req.body.province;
         const newDistrict = req.body.district;
-        const newSalary = req.body.salary;
+        const newstoreName = req.body.storeName;
         Manager.findOneAndUpdate(
             {
                 email: email,
@@ -90,15 +90,12 @@ class meProfile {
                 if (data) {
                     throw new Error();
                 } else {
-                    const newManager = new Manager({
-                        _id: email,
-                        password: req.body.password,
-                        email: email,
-                        phoneNumber: req.body.tel,
-                        storeID: email,
+                    const newStore = new Store({
+                        _id: idcheck,
+                        name: newstoreName,
                     });
 
-                    newManager
+                    newStore
                         .save()
                 }
             }   
@@ -106,7 +103,58 @@ class meProfile {
           
             )}
     addShift = async (req, res) => {
-        
+        const idUser = req.body.idUser
+        const idShift = req.body.id
+        const newSalary = req.body.salary
+        const name = req.body.description
+        const from = req.body.from
+        const to = req.body.to
+        ShiftType.find({ _id: {StoreID: idUser,
+                               ShiftID: idShift,} })
+            .exec()
+            .then((data) => {
+                if (data) {
+                    throw new Error();
+                } else {
+                    const newShift = new ShiftType({
+                        _id: {StoreID: idUser,
+                             ShiftID: idShift},
+                        name: name,
+                        timeFrom : from,
+                        timeTo : to,
+                        salary: newSalary,
+                    });
+
+                    newShift
+                        .save()
+                }
+            }
+            )}
+    updateShift = async (req, res) => {
+        const idUser = req.body.idUser
+        const idShift = req.body.id
+        const newSalary = req.body.salary
+        const name = req.body.description
+        const from = req.body.from
+        const to = req.body.to
+        ShiftType.findByIdAndUpdate(
+            {_id: {StoreID: idUser,
+                ShiftID: idShift},},
+            {$set:{
+                name: name,
+                timeFrom : from,
+                timeTo : to,
+                salary: newSalary,
+            }},{
+                returnOriginal: false,
+            },
+            function(err, doc){
+                if(err){
+                    console.log("Something wrong when updating data!");
+                }
+            
+                console.log(doc);
+            });
     }
     
 }
