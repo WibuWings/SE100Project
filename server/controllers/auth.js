@@ -63,7 +63,7 @@ class Authentication {
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
                                         message: MESSAGES.SIGN_IN_SUCCESS,
-                                        token: JWTAuthToken(result.email),
+                                        token: JWTAuthToken({email:result.email}),
                                         email: result.email,
                                         data,
                                     })
@@ -76,7 +76,7 @@ class Authentication {
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
                                         message: MESSAGES.SIGN_IN_SUCCESS,
-                                        token: JWTAuthToken(result.email),
+                                        token: JWTAuthToken({email:result.email}),
                                         email: result.email,
                                         data: {},
                                     })
@@ -247,6 +247,7 @@ class Authentication {
         getAllData(decoded.email).then((data) => {
 
             var {iat, exp, ...userInfo} = decoded;
+            
             res.status(200).send(
                 JSON.stringify({
                     message: MESSAGES.SIGN_IN_SUCCESS,
