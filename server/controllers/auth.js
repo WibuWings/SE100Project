@@ -1,12 +1,12 @@
-const jwt = require("jsonwebtoken"); // authentication & authorization
-const PRIVATE_KEY = require("../privateKey"); // temp private key
 const bcrypt = require("bcryptjs");// decode
 
-const mongoose = require("mongoose");
 const Manager = require("../models/manager"); // db model
 const Store = require("../models/store"); //
 const ShiftType = require("../models/shiftType");
 const ShiftAssign = require("../models/shiftAssign");
+const Revenue = require("../models/revenue");
+const ProductType = require("../models/productType");
+const ProductJoinType = require("../models/productJoinType");
 const ReturnProduct = require("../models/returnProduct");
 const Receipt = require("../models/receipt");
 const Product = require("../models/product");
@@ -60,7 +60,7 @@ class Authentication {
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
                                         message: MESSAGES.SIGN_IN_SUCCESS,
-                                        token: JWTAuthToken(result),
+                                        token: JWTAuthToken({email:result.email}),
                                         email: result.email,
                                         data,
                                     })
@@ -73,7 +73,7 @@ class Authentication {
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
                                         message: MESSAGES.SIGN_IN_SUCCESS,
-                                        token: JWTAuthToken(result),
+                                        token: JWTAuthToken({email:result.email}),
                                         email: result.email,
                                         data: {},
                                     })
@@ -204,8 +204,6 @@ class Authentication {
                         JSON.stringify({
                             status: STATUS.SUCCESS,
                             message: MESSAGES.RESET_PASSWORD_SUCCESS,
-                            token: JWTAuthToken(data),
-                            email: req.body.email,
                         })
                     );
                 } else {
@@ -246,6 +244,7 @@ class Authentication {
         getAllData(decoded.email).then((data) => {
 
             var {iat, exp, ...userInfo} = decoded;
+            
             res.status(200).send(
                 JSON.stringify({
                     message: MESSAGES.SIGN_IN_SUCCESS,
@@ -279,6 +278,9 @@ async function getAllData(email) {
         coupons,
         employees,
         products,
+        productTypes,
+        productJoinTypes,
+        revenues,
         receipts,
         returnProducts,
         shiftAssigns,
@@ -287,6 +289,9 @@ async function getAllData(email) {
         Coupon.find({ storeID: store._id }).exec(),
         Employee.find({ managerID: store._id }).exec(),
         Product.find({ storeID: store._id }).exec(),
+        ProductType.find({ storeID: store._id }).exec(),
+        ProductJoinType.find({ storeID: store._id }).exec(),
+        Revenue.find({ storeID: store._id }).exec(),
         Receipt.find({ storeID: store._id }).exec(),
         ReturnProduct.find({ storeID: store._id }).exec(),
         ShiftAssign.find({ storeID: store._id }).exec(),
@@ -299,10 +304,13 @@ async function getAllData(email) {
         employees,
         coupons,
         products,
+        productTypes,
+        productJoinTypes,
         receipts,
         returnProducts,
         shiftAssigns,
         shiftTypes,
+        revenues,
     };
 }
 module.exports = new Authentication();
