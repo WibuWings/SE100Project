@@ -10,7 +10,7 @@ import '../../CSS/GoodManager.css';
 import { connect } from 'react-redux';
 import GoodImage from './goodExample.jpg';
 
-const productTypes =[
+var productTypes =[
      'food', 'detergent', 'cuisine'
 ];
 
@@ -21,10 +21,11 @@ class GoodImport extends Component {
             imageSelect: "null",
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
-        };
-        
+        };     
     }
     imgUrl= 'Fuck';
+    typeSet = new Set();
+
     showModal = () => {
         this.setState({ show: true });
       };
@@ -196,7 +197,12 @@ class GoodImport extends Component {
                                 value={this.state.type}
                                 onChange={(event) => {
                                     this.setState({type: event.target.value});
-                                    alert(event.target.value)
+                                    // alert(event.target.value)
+                                    if(this.typeSet.has(event.target.value))
+                                    {
+                                        this.typeSet.delete(event.target.value);
+                                    }
+                                    else this.typeSet.add(event.target.value);
                                 }}
                             >
                                 {
@@ -207,14 +213,15 @@ class GoodImport extends Component {
                                 }   
                             </Select>
                         </FormControl>
+                        {/* <div>
+                            {
+                                this.typeSet.map((type) =>
+
+                                )
+                            }
+                        </div> */}
                         <Button onClick={this.showModal}>Add type</Button>
-                        {/* <Modal
-                            open={this.state.show}
-                            onClose={this.hideModal}
-                        >
-                            Nguyễn Công Phi
-                        </Modal> */}
-                        {/* Chỗ này lỗi mẹ rồi =))) */}
+                        
                     </div>
                     <Button variant="contained" onClick={() => this.SaveDetails()}>
                         Import
