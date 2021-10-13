@@ -5,8 +5,13 @@ import { NavLink } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import SearchBar from './GoodPartials/SearchBar';
 import {connect} from 'react-redux'
-
+import AddTypeModal from './GoodPartials/AddTypeModal';
+import '../CSS/GoodManager.css'
 class GoodManager extends Component {
+
+    handleAdd(){
+        this.props.changeAddStatus();
+    }
     render() {
         return (
             <div>
@@ -17,12 +22,25 @@ class GoodManager extends Component {
                             <NavLink style={{color: '#fff', textDecoration: 'none'}} to="/goodmanager/import">Import</NavLink>
                         </Button>
                         <SearchBar style={{height: '120px'}}/>
-                        <Button variant="text">
+                        <Button variant="text" onClick={() => this.handleAdd()}>
                             Add Type
                         </Button>  
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleAdd()} variant="contained">
+                            add
+                        </Button>
                     </div>
 
                     <GoodTable />
+                    {/* <div className="modal-add">
+                        <div onClick={() => {this.props.changeAddStatus();}} className="modal-overlay"></div>
+                        <AddTypeModal></AddTypeModal>
+                    </div> */}
+                    {this.props.addStatus ? (
+                        <div className="modal-add">
+                            <div onClick={() => {this.props.changeAddStatus();}} className="modal-overlay"></div>
+                            <AddTypeModal></AddTypeModal>
+                        </div>
+                    ): null}
                 </div>
             </div>
         );

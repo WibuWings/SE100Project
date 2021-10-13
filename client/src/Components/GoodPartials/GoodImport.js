@@ -25,7 +25,7 @@ class GoodImport extends Component {
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         };     
     }
-    imgUrl= 'Fuck';
+    imgUrl= 'none';
 
     showModal = () => {
         this.setState({ show: true });
@@ -67,7 +67,7 @@ class GoodImport extends Component {
         }
 
     }
-    SaveDetails = () => {
+    importGood = () => {
         const data = {
             token: localStorage.getItem('token'),
             _id: {
@@ -83,7 +83,7 @@ class GoodImport extends Component {
             imgUrl: this.imgUrl,
             unit: document.querySelector('input[name="unit"]').value,
         }
-        alert(data.imgUrl);
+        console.log(data.imgUrl);
     }
     
     render() {
@@ -232,7 +232,7 @@ class GoodImport extends Component {
                         <Button onClick={this.showModal}>Add type</Button>
                         
                     </div>
-                    <Button variant="contained" onClick={() => this.SaveDetails()}>
+                    <Button variant="contained" onClick={() => this.importGood()}>
                         Import
                     </Button>
                     {/* Chỗ này lỗi chetmẹ rồi =))) */}
