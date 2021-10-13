@@ -3,9 +3,13 @@ import { TextField } from '@mui/material';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import { InputLabel, Button, Modal, Grid } from '@mui/material';
+import { InputLabel, Button, Modal, Grid} from '@mui/material';
+import { Image } from 'cloudinary-react';
 import axios from 'axios';
 import '../../CSS/GoodManager.css';
+import { connect } from 'react-redux';
+import GoodImage from './goodExample.jpg';
+
 const productTypes =[
      'food', 'detergent', 'cuisine'
 ];
@@ -14,21 +18,13 @@ class GoodImport extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          good: {
-            id: '',
-            name: '',
-            quantity: '',
-            originPrice: 0,
-            sellPrice: 0,
-            importTime: '',
-            expiredDate: '',
-            type: 'none',
-          },
-          show: false,
+            imageSelect: "null",
+            type:'none',
+            url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         };
-        this.showModal = this.showModal.bind(this);
-        this.hideModal = this.hideModal.bind(this);
+        
     }
+    imgUrl= 'Fuck';
     showModal = () => {
         this.setState({ show: true });
       };
@@ -36,38 +32,68 @@ class GoodImport extends Component {
     hideModal = () => {
         this.setState({ show: false });
     };
-    SaveDetails = () => {
-        // if (this.state.isTel && this.state.isOld) {
-        //     const data = {
-        //         token: localStorage.getItem('token'),
-        //         email: document.querySelector('input[name="email"]').value,
-        //         firstName: document.querySelector('input[name="firstName"]').value,
-        //         lastName: document.querySelector('input[name="lastName"]').value,
-        //         old: document.querySelector('input[name="old"]').value,
-        //         gender: document.querySelector('select[name="gender"],select').value,
-        //         storeName: document.querySelector('input[name="storeName"]').value,
-        //         tel: document.querySelector('input[name="tel"]').value,
-        //         province: document.querySelector('select[name="province"]').value,
-        //         district: document.querySelector('select[name="district"]').value,
-        //         address: document.querySelector('input[name="address"]').value,
-        //     }
-        //     axios.post(`http://localhost:5000/api/update-profile`, data)
-        //         .then(res => {
-        //             console.log("Save success");
-        //         })
-        //         .catch(err => {
-        //             console.log("Save faile");
-        //         })
+    profileImageChange = (fileChangeEvent) => {
+        this.setState({
+            imageSelect: fileChangeEvent.target.files[0],
+        })
+        const file = fileChangeEvent.target.files[0];
+        const { type } = file;
+        if (!(type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg') || type.endsWith('gif'))) {
+        } else {
+            const formData = new FormData();
+            formData.append("file", fileChangeEvent.target.files[0])
+            formData.append("upload_preset", "qqqhcaa3");
+            axios.post(`https://api.cloudinary.com/v1_1/databaseimg/image/upload`, formData)
+                .then(res => {
+                    alert(res.data.url);
+                    // this.props.updateAvatar(res.data.url);
+                    this.imgUrl=res.data.url;
+                    // axios.post(`http://localhost:5000/api/update-avatar`,{
+                    //     _id: this.props.infoUser.email,
+                    //     avatar: res.data.url,
+                    //     token: localStorage.getItem('token'),
+                    // }).then(res => {
+                    //     console.log("Thành công");
+                    // }).catch(err => {
+                    //     console.log("Lỗi");
+                    // })
+                })
+                .catch(err => {
+                    console.log("Thất bại");
+                })
 
-        //     // this.props.updateProfile(data);
-        // }
-        alert(document.querySelector('input[name="goodID"]').value);
+        }
+
+    }
+    SaveDetails = () => {
+        const data = {
+            token: localStorage.getItem('token'),
+            _id: {
+                // productID: document.querySelector('input[name="goodID"]').value,
+                importDate:document.querySelector('input[name="importDate"]').value
+            },
+            name: document.querySelector('input[name="goodName"]').value,
+            quantity: document.querySelector('input[name="goodQuantity"]').value,
+            remain: document.querySelector('input[name="goodQuantity"]').value,
+            importPrice: document.querySelector('input[name="originalPrice"]').value,
+            sellPrice: document.querySelector('input[name="sellPrice"]').value,
+            expires: document.querySelector('input[name="expiredDate"]').value,
+            imgUrl: this.imgUrl,
+            unit: document.querySelector('input[name="unit"]').value,
+        }
+        alert(data.imgUrl);
     }
     
     render() {
         return(
-            <div>
+            <div style={{ height: 600, width: '100%', overflowY: 'scroll'}}>
                 <div>Good Import</div>
+                <label style={{ borderRadius: '100%', overflow: 'hidden', marginTop: '15px ' }}>
+                    <Image style={{ width: '100px', height: '100px' }} cloudName="databaseimg" 
+                        publicId={( GoodImage )}></Image>
+                </label>
+                {/* Ẩn đi */}
+                <input id="profile-header-update-avatar" type="file" accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input>
                 <Button
                     variant="contained"
                     component="label"
@@ -78,52 +104,87 @@ class GoodImport extends Component {
                         hidden
                     />
                 </Button>
-                <div class="info-container">
-                    <Grid 
-                        item md={6} xs={12} 
-                        container
-                        direction="row"
-                        justifyContent="center"
-                        alignItems="center"
-                        sx={{
-                            border: 1,
-                            height: 80,
-                        }}
-                    >
-                        <div class="input-label">ID</div>
-                        <TextField 
-                            type= "text" 
-                            class="input-val" 
-                            size="small" 
-                            name="goodID" 
-                            variant="outlined" 
-                            defaultValue='1212121' 
-                            inputProps={{ readOnly: true}}
-                        />
-                    </Grid>
-                    <div class="input-container">
-                        <div class="input-label">Name</div>
-                        <TextField type="text" class="input-val" size="small"  value={this.state.good.name} variant="outlined" />
-                    </div>
+                <div class="info-container"> 
+                    <div class="input-label">Name</div>
+                    <TextField 
+                        type="text" 
+                        class="input-val" 
+                        size="small"  
+                        name="goodName" 
+                        variant="outlined" 
+                    />
                     <div class="input-container">
                         <div class="input-label">Quantity:</div>
-                        <TextField type="number" class="input-val" size="small" value={this.state.good.quantity} variant="outlined" />
+                        <TextField 
+                            type="number" 
+                            class="input-val" 
+                            size="small" 
+                            name="goodQuantity" 
+                            variant="outlined" 
+                        />
                     </div>
                     <div class="input-container">
                         <div class="input-label">Original Price:</div>
-                        <TextField type="number" class="input-val" size="small" value={this.state.good.originPrice} variant="outlined" />
+                        <TextField 
+                            type="number" 
+                            lass="input-val" 
+                            size="small" 
+                            name="originalPrice" 
+                            variant="outlined" 
+                            defaultValue={0}
+                        />
                     </div>
                     <div class="input-container">
                         <div class="input-label">Sell Price:</div>
-                        <TextField type="number" class="input-val"size="small" value={this.state.good.sellPrice} variant="outlined" />
-                    </div>
-                    <div class="input-container">
-                        <div class="input-label">Import Time:</div>
-                        <TextField type="date" class="input-val" size="small" value={this.state.good.importTime} variant="outlined" defaultValue="2017-05-24" />
+                        <TextField 
+                            type="number" 
+                            lass="input-val" 
+                            size="small" 
+                            name="sellPrice" 
+                            variant="outlined" 
+                            defaultValue={0}
+                        />
                     </div>
                     <div class="input-container">
                         <div class="input-label">Expired Date:</div>
-                        <TextField type="date" class="input-val" size="small" value={this.state.good.expiredDate} variant="outlined" />
+                        <TextField 
+                            type="date" 
+                            class="input-val" 
+                            size="small" 
+                            name="expiredDate" 
+                            variant="outlined" 
+                        />
+                    </div>
+                    <div class="input-container">
+                        <div class="input-label">Unit:</div>
+                        <TextField 
+                            type="text" 
+                            class="input-val" 
+                            size="small" 
+                            name="unit" 
+                            variant="outlined" 
+                        />
+                    </div>
+                    <div class="input-container">
+                        <div class="input-label">Import Time:</div>
+                        <TextField 
+                            type="date" 
+                            class="input-val" 
+                            size="small" 
+                            name="importDate" 
+                            variant="outlined" 
+                            defaultValue={new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear()}
+                        />
+                    </div>
+                    <div class="input-container">
+                        <div class="input-label">Expired Date:</div>
+                        <TextField 
+                            type="date" 
+                            class="input-val" 
+                            size="small" 
+                            name="expiredDate" 
+                            variant="outlined" 
+                        />
                     </div>
                     <div class="input-container">
                         <div class="input-label">Product Type:</div>
@@ -132,7 +193,7 @@ class GoodImport extends Component {
                             <Select
                                 labelid="select-filled-label"
                                 id="select-filled"
-                                value={this.state.good.type}
+                                value={this.state.type}
                                 onChange={(event) => {
                                     this.setState({type: event.target.value});
                                     alert(event.target.value)
@@ -164,5 +225,21 @@ class GoodImport extends Component {
         );        
     }
 }
+const mapStateToProps = (state, ownProps) => {
+    return {
+        infoUser: state.infoUser,
+    }
+}
 
-export default GoodImport;
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        updateAvatar: (avatar) => {
+            dispatch({
+                type: "UPDATE_AVATAR",
+                avatar: avatar
+            })
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GoodImport);
