@@ -9,7 +9,7 @@ import axios from 'axios';
 import '../../CSS/GoodManager.css';
 import { connect } from 'react-redux';
 import GoodImage from './goodExample.jpg';
-
+import AddTypeModal from './AddTypeModal';
 var productTypes =[
      'food', 'detergent', 'cuisine'
 ];
@@ -23,17 +23,13 @@ class GoodImport extends Component {
             imageSelect: "null",
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
-        };     
+        }; 
+
+    }
+    handleAdd(){
+        this.props.changeAddStatus();
     }
     imgUrl= 'none';
-
-    showModal = () => {
-        this.setState({ show: true });
-      };
-    
-    hideModal = () => {
-        this.setState({ show: false });
-    };
     profileImageChange = (fileChangeEvent) => {
         this.setState({
             imageSelect: fileChangeEvent.target.files[0],
@@ -229,7 +225,7 @@ class GoodImport extends Component {
                                 )
                             }
                         </div>
-                        <Button onClick={this.showModal}>Add type</Button>
+                        <Button onClick={() => this.handleAdd()}>Add type</Button>
                         
                     </div>
                     <Button variant="contained" onClick={() => this.importGood()}>
@@ -237,18 +233,30 @@ class GoodImport extends Component {
                     </Button>
                     {/* Chỗ này lỗi chetmẹ rồi =))) */}
                 </div>
+                {this.props.addStatus ? (
+                    <div className="modal-add">
+                        <div onClick={() => {this.props.changeAddStatus();}} className="modal-overlay"></div>
+                        <AddTypeModal></AddTypeModal>
+                    </div>
+                ): null}
             </div>
         );        
     }
 }
 const mapStateToProps = (state, ownProps) => {
     return {
+        addStatus: state.addStatus,
         infoUser: state.infoUser,
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
+        changeAddStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_STATUS",
+            });
+        },
         updateAvatar: (avatar) => {
             dispatch({
                 type: "UPDATE_AVATAR",
