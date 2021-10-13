@@ -19,7 +19,6 @@ class App extends Component {
       if (localStorage.getItem('token') !== "") {
       }
     }
-    
   }
 
   render() {

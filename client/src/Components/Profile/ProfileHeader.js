@@ -3,64 +3,58 @@ import avatarImg from '../../img/avatar_default.jpg'
 import Divider from '@mui/material/Divider';
 import { FaTelegramPlane } from "react-icons/fa";
 import { connect } from 'react-redux'
-import AvatarEditor  from 'react-avatar-editor'
+import AvatarEditor from 'react-avatar-editor'
 import axios from 'axios'
-
+import { Image } from 'cloudinary-react'
 
 class ProfileHeader extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageURL: null,
+            imageSelect: "null",
         }
     }
-    
 
-    setEditorRef = (editor) => (this.editor = editor)
+
 
     profileImageChange = (fileChangeEvent) => {
+        this.setState({
+            imageSelect: fileChangeEvent.target.files[0],
+        })
         const file = fileChangeEvent.target.files[0];
         const { type } = file;
         if (!(type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg') || type.endsWith('gif'))) {
         } else {
-            this.props.updateAvatar(fileChangeEvent.target.files[0]);
-            
+            const formData = new FormData();
+            formData.append("file", fileChangeEvent.target.files[0])
+            formData.append("upload_preset", "qqqhcaa3");
+            axios.post(`https://api.cloudinary.com/v1_1/databaseimg/image/upload`, formData)
+                .then(res => {
+                    console.log(res.data.url);
+                    this.props.updateAvatar(res.data.url);
+                    axios.post(`http://localhost:5000/api/update-avatar`,{
+                        _id: this.props.infoUser.email,
+                        avatar: res.data.url,
+                        token: localStorage.getItem('token'),
+                    }).then(res => {
+                        console.log("Thành công");
+                    }).catch(err => {
+                        console.log("Lỗi");
+                    })
+                })
+                .catch(err => {
+                    console.log("Thất bại");
+                })
+
         }
 
-        if (this.editor) {
-            const canvas = this.editor.getImage().toDataURL();
-            axios.post(`http://localhost:5000/api/update-avatar`, {
-                email: this.props.infoUser.email,
-                fileImg: canvas,
-            })
-            // this.props.updateAvatar(canvas);
-            // fetch(canvas)
-            //     .then(res => res.blob())
-            //     .then(blob => {
-            //         console.log( window.URL.createObjectURL(blob));
-            //         this.setState({
-            //             imageURL: window.URL.createObjectURL(blob),
-            //         })
-            //     });
-
-        }
     }
 
     render() {
         return (
             <div className="profile-header" style={{ width: '100%', height: '350px' }}>
-                <label for="profile-header-update-avatar" style={{ borderRadius: '100%', overflow: 'hidden', marginTop: '15px ' }}>
-                    <AvatarEditor
-                        className="profile-header__avt"
-                        ref={this.setEditorRef}
-                        image={this.props.infoUser.avatar ? this.props.infoUser.avatar : avatarImg}
-                        width={100}
-                        height={100}
-                        border={5}
-                        color={[153, 153, 153, 0.9]}
-                        scale={1}
-                        borderRadius={60}
-                    />
+                <label className="profile-header__avatar" for="profile-header-update-avatar" style={{ borderRadius: '100%', overflow: 'hidden', marginTop: '15px ' }}>
+                    <Image style={{ width: '100px', height: '100px' }} cloudName="databaseimg" publicId={this.props.infoUser.avatar ? this.props.infoUser.avatar : avatarImg}></Image>
                 </label>
                 {/* Ẩn đi */}
                 <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input>

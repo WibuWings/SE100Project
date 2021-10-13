@@ -1,5 +1,5 @@
 const infoUserInitialState = {
-    avatar: null,
+    avatar: "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg",
     firstName: "Phước",
     lastName: "Lương",
     email: "aaaa",
