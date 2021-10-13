@@ -5,7 +5,7 @@ function JWTAuthToken(data) {
     return (token = jwt.sign(
         { ...data },
         PRIVATE_KEY,
-        { expiresIn: 20 }
+        { expiresIn: 600 }
     ));
 }
 

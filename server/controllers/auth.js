@@ -54,7 +54,7 @@ class Authentication {
                 } else {
                     Manager.findOne({ _id: newManager._id }).then((result) => {
                         if (result) {
-                            getAllData(result._id).then((data) => {
+                            getAllData(result.email).then((data) => {
                                 res.send(
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
@@ -227,13 +227,35 @@ class Authentication {
     };
     
     refreshUI = async (req, res) => {
-        res.send(res.locals.test);
+        var decoded = res.locals.decoded;
+        console.log(decoded)
+        getAllData(decoded.email).then((data) => {
+            res.status(200).send(
+                JSON.stringify({
+                    message: MESSAGES.SIGN_IN_SUCCESS,
+                    token: JWTAuthToken(decoded),
+                    email: decoded.email,
+                    data,
+                })
+            );
+        })
+        .catch((err) => {
+            res.status(502).send(
+                JSON.stringify({
+                    err,
+                })
+            )
+        })
     }
     
 }
 
-async function getAllData(managerID) {
-    const manager = await Manager.findOne({ _id: managerID });
+async function getManager(email) {
+    const manager = await Manager.findOne({ email: email});
+    return manager;
+}
+async function getAllData(email) {
+    const manager = getManager(email);
     const store = await Store.findOne({ _id: manager.storeID });
 
     if (store == null) {
