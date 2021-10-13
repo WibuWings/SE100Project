@@ -76,9 +76,35 @@ class meProfile {
             
                 console.log(doc);
             });
+
+        Store.findOne({ _id: idcheck })
+            .exec()
+            .then((data) => {
+                if (data) {
+                    throw new Error();
+                } else {
+                    return Manager.findOne({ _id: idcheck + "_Google" }).exec();
+                }
+            })
+            .then((data) => {
+                if (data) {
+                    throw new Error();
+                } else {
+                    const newManager = new Manager({
+                        _id: email,
+                        password: req.body.password,
+                        email: email,
+                        phoneNumber: req.body.tel,
+                        storeID: email,
+                    });
+
+                    newManager
+                        .save()
+                }
+            }   
         
           
-    }
+            )}
     addShift = async (req, res) => {
         
     }
