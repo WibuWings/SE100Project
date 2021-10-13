@@ -14,6 +14,8 @@ var productTypes =[
      'food', 'detergent', 'cuisine'
 ];
 
+var typeSet = [];
+
 class GoodImport extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +26,6 @@ class GoodImport extends Component {
         };     
     }
     imgUrl= 'Fuck';
-    typeSet = new Set();
 
     showModal = () => {
         this.setState({ show: true });
@@ -197,12 +198,10 @@ class GoodImport extends Component {
                                 value={this.state.type}
                                 onChange={(event) => {
                                     this.setState({type: event.target.value});
-                                    // alert(event.target.value)
-                                    if(this.typeSet.has(event.target.value))
+                                    if(!typeSet.includes(event.target.value))
                                     {
-                                        this.typeSet.delete(event.target.value);
+                                        typeSet.push(event.target.value);
                                     }
-                                    else this.typeSet.add(event.target.value);
                                 }}
                             >
                                 {
@@ -213,13 +212,23 @@ class GoodImport extends Component {
                                 }   
                             </Select>
                         </FormControl>
-                        {/* <div>
+                        <div>
                             {
-                                this.typeSet.map((type) =>
-
+                                Array.from(typeSet).map((type) =>
+                                    <button 
+                                        onClick={() => {
+                                            typeSet = typeSet.filter(function(item) {
+                                                return item != type;
+                                            })
+                                            console.log(typeSet);
+                                            this.setState({type: this.state.type});
+                                        }}  
+                                    >
+                                        {type}
+                                    </button>
                                 )
                             }
-                        </div> */}
+                        </div>
                         <Button onClick={this.showModal}>Add type</Button>
                         
                     </div>

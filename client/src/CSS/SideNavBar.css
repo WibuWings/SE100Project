@@ -101,13 +101,7 @@
     height: 50px;
 }
 
-.nav-footer .nav-item .nav-item-icon {
-    display: block;
-}
 
-.nav-footer .nav-item:hover .nav-item-icon {
-    color: var(--primary-color);
-}
 
 .nav-item.active .nav-item-icon {
     display: none;
@@ -131,4 +125,17 @@
 .nav-item.active {
     border-right: 2px solid var(--primary-color);
     background-color: #ebf0f8;
+}
+
+.nav-footer .nav-item .nav-item-icon {
+    display: block;
+}
+
+.nav-footer .nav-item:hover .nav-item-icon {
+    color: var(--primary-color);
+}
+.nav-footer .nav-item.active {
+    border-right: 0;
+    background-color: #fff;
+    color: #72808d;
 }

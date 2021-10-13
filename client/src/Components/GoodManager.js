@@ -16,7 +16,10 @@ class GoodManager extends Component {
                         <Button variant="contained">
                             <NavLink style={{color: '#fff', textDecoration: 'none'}} to="/goodmanager/import">Import</NavLink>
                         </Button>
-                        <SearchBar style={{height: '120px'}}/>    
+                        <SearchBar style={{height: '120px'}}/>
+                        <Button variant="text">
+                            Add Type
+                        </Button>  
                     </div>
 
                     <GoodTable />
