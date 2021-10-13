@@ -39,6 +39,7 @@ class Authentication {
             email: req.body.email,
             firstName: req.body.givenName,
             lastName: req.body.familyName,
+            storeID: req.body.email + "_Google",
         });
 
         // check whether gmail is registered by regular method
@@ -147,7 +148,7 @@ class Authentication {
                         password: req.body.password,
                         email: email,
                         phoneNumber: req.body.tel,
-                        storeID: _id,
+                        storeID: email,
                     });
 
                     newManager
