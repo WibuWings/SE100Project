@@ -1,8 +1,5 @@
-const jwt = require("jsonwebtoken"); // authentication & authorization
-const PRIVATE_KEY = require("../privateKey"); // temp private key
 const bcrypt = require("bcryptjs");// decode
 
-const mongoose = require("mongoose");
 const Manager = require("../models/manager"); // db model
 const Store = require("../models/store"); //
 const ShiftType = require("../models/shiftType");
@@ -292,6 +289,9 @@ async function getAllData(email) {
         Coupon.find({ storeID: store._id }).exec(),
         Employee.find({ managerID: store._id }).exec(),
         Product.find({ storeID: store._id }).exec(),
+        ProductType.find({ storeID: store._id }).exec(),
+        ProductJoinType.find({ storeID: store._id }).exec(),
+        Revenue.find({ storeID: store._id }).exec(),
         Receipt.find({ storeID: store._id }).exec(),
         ReturnProduct.find({ storeID: store._id }).exec(),
         ShiftAssign.find({ storeID: store._id }).exec(),
