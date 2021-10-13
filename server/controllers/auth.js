@@ -60,7 +60,7 @@ class Authentication {
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
                                         message: MESSAGES.SIGN_IN_SUCCESS,
-                                        token: JWTAuthToken(result),
+                                        token: JWTAuthToken(result.email),
                                         email: result.email,
                                         data,
                                     })
@@ -73,7 +73,7 @@ class Authentication {
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
                                         message: MESSAGES.SIGN_IN_SUCCESS,
-                                        token: JWTAuthToken(result),
+                                        token: JWTAuthToken(result.email),
                                         email: result.email,
                                         data: {},
                                     })
@@ -204,8 +204,6 @@ class Authentication {
                         JSON.stringify({
                             status: STATUS.SUCCESS,
                             message: MESSAGES.RESET_PASSWORD_SUCCESS,
-                            token: JWTAuthToken(data),
-                            email: req.body.email,
                         })
                     );
                 } else {
