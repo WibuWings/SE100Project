@@ -54,7 +54,7 @@ class meProfile {
         const newSalary = req.body.salary;
         Manager.findOneAndUpdate(
             {
-                _id: "lngthinphc@gmail.com_Google",
+                email: email,
             },
             {$set:{
                 lastName:newlastName,
@@ -69,7 +69,14 @@ class meProfile {
             {
                 returnOriginal: false,
             },
-        );
+            function(err, doc){
+                if(err){
+                    console.log("Something wrong when updating data!");
+                }
+            
+                console.log(doc);
+            });
+        
           
     }
     addShift = async (req, res) => {
