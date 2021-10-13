@@ -16,6 +16,7 @@ const Manager = new Schema({
     address: String,
     salary : String,
     storeID: String,
+    imgUrl: String,
 });
 
 module.exports = mongoose.model("Manager", Manager);

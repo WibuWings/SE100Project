@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken"); // authentication & authorization
 const PRIVATE_KEY = require("../privateKey"); // temp private key
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");// decode
 
 const mongoose = require("mongoose");
 const Manager = require("../models/manager"); // db model
@@ -12,6 +12,8 @@ const Receipt = require("../models/receipt");
 const Product = require("../models/product");
 const Employee = require("../models/employee");
 const Coupon = require("../models/coupon");
+
+const {JWTAuthToken} = require("../helper/JWT");
 
 const MESSAGES = {
     SIGN_IN_SUCCESS: "Sign-in successfully.",
@@ -64,15 +66,18 @@ class Authentication {
                                 );
                             });
                         } else {
-                            res.send(
-                                JSON.stringify({
-                                    status: STATUS.SUCCESS,
-                                    message: MESSAGES.SIGN_IN_SUCCESS,
-                                    token: JWTAuthToken(newManager),
-                                    email: newManager.email,
-                                    data: {},
-                                })
-                            );
+                            newManager.save()
+                            .then(result => {
+                                res.send(
+                                    JSON.stringify({
+                                        status: STATUS.SUCCESS,
+                                        message: MESSAGES.SIGN_IN_SUCCESS,
+                                        token: JWTAuthToken(result),
+                                        email: result.email,
+                                        data: {},
+                                    })
+                                );
+                            })
                         }
                     });
                 }
@@ -221,20 +226,11 @@ class Authentication {
 
     };
     
-
+    refreshUI = async (req, res) => {
+        res.send(res.locals.test);
+    }
     
 }
-
-// this function return a token representing a data of use and using for authenticating and authorizating
-function JWTAuthToken(data) {
-    return (token = jwt.sign(
-        { ...data },
-        PRIVATE_KEY,
-        { algorithm: "HS256" },
-        { expiresIn: 600 }
-    ));
-}
-
 
 async function getAllData(managerID) {
     const manager = await Manager.findOne({ _id: managerID });

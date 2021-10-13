@@ -18,12 +18,18 @@ const Receipt = new Schema({
   ],
   totalMoney: Number,
   totalProducts: Number,
-  isValid: Boolean,
   coupon: {
     type: Schema.Types.ObjectId,
     ref: "Coupon",
   },
   createAt: Date,
+  editAt: Date,
+  deleteAt: Date,
+  restoreAt: Date,
+  oldReceipt: {
+    type: Schema.Types.ObjectId,
+    ref: "Receipt",
+  }
 });
 
 module.exports = mongoose.model("Receipt", Receipt);
