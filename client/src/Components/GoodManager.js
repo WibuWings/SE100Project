@@ -12,6 +12,7 @@ class GoodManager extends Component {
 
     handleConfirm(){
         this.props.changeConfirmStatus();
+        this.props.unsetDelete();
     }
     handleConfirmDelete(){
         this.props.changeConfirmStatus();
@@ -85,9 +86,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         changeToDelete: () => {
             dispatch({
-                type: "CHANGE_DELETE_STATUS",
+                type: "SET_DELETE_STATUS",
             })
-        }
+        },
+        unsetDelete: () => {
+            dispatch({
+                type: "UNSET_DELETE_STATUS",
+            })
+        },
     }
 }
 export default connect(mapStateToProps , mapDispatchToProps)(GoodManager);
