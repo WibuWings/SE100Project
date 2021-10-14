@@ -64,16 +64,16 @@ class AddTypeModal extends Component {
 
 
     // Tạo code để xác nhận
-    makeCode = (length) => {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for (var i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() *
-                charactersLength));
-        }
-        return result;
-    }
+    // makeCode = (length) => {
+    //     var result = '';
+    //     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    //     var charactersLength = characters.length;
+    //     for (var i = 0; i < length; i++) {
+    //         result += characters.charAt(Math.floor(Math.random() *
+    //             charactersLength));
+    //     }
+    //     return result;
+    // }
 
     // editShift = () => {
         
@@ -103,30 +103,37 @@ class AddTypeModal extends Component {
     }
 
     // Call API
-    addShift = () => {
-        var data = {
-            token: localStorage.getItem('token'),
-            idUser: this.props.infoUser.email,
-            id: this.makeCode(6),
-            salary: this.salary,
-            description: this.descriptionShift,
-            from: this.timeFrom,
-            to: this.timeTo,
-        }
-        if (data) {
-            this.props.addShift(data);
-            axios.post(`http://localhost:5000/api/add-shift`, {
-                email: this.props.infoUser.email,
-                data: data,
-            })
-                .then(res => {
-                    console.log('Thành Công');
-                })
-                .catch(err => {
-                    console.log('thất bại');
-                })
-            this.props.changeAddStatus();
-        }
+    // addShift = () => {
+    //     var data = {
+    //         token: localStorage.getItem('token'),
+    //         idUser: this.props.infoUser.email,
+    //         id: this.makeCode(6),
+    //         salary: this.salary,
+    //         description: this.descriptionShift,
+    //         from: this.timeFrom,
+    //         to: this.timeTo,
+    //     }
+    //     if (data) {
+    //         this.props.addShift(data);
+    //         axios.post(`http://localhost:5000/api/add-shift`, {
+    //             email: this.props.infoUser.email,
+    //             data: data,
+    //         })
+    //             .then(res => {
+    //                 console.log('Thành Công');
+    //             })
+    //             .catch(err => {
+    //                 console.log('thất bại');
+    //             })
+    //         this.props.changeAddStatus();
+    //     }
+    // }
+    addType = () => {
+        this.props.changeAddStatus();
+    }
+
+    cancel = () => {
+        this.props.changeAddStatus();
     }
 
     render() {
@@ -134,33 +141,27 @@ class AddTypeModal extends Component {
         return (
             <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Create shift" />
+                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Add type" />
                     <Divider />
                     <CardContent>
-                        <Grid container spacing={2}>
-                            <Grid item md={12} xs={12}>
+                        <Grid 
+                            container 
+                            spacing={2}
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                        >
+                            <Grid item md={2} xs={12}>
+                                TypeName
+                            </Grid>
+                            <Grid item md={10} xs={12}>
                                 <TextField
                                     id="outlined-basic"
                                     variant="outlined"
                                     fullWidth
                                     defaultValue={(this.props.editShiftStatus ? this.props.objectEditShift.description : "")}
                                     onBlur={(e) => this.blurDiscription(e)}
-                                    label="Shift description"
                                     required
                                     type="text"
-                                />
-                            </Grid>
-                            <Grid item md={12} xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    onBlur={(e) => this.blurSalary(e)}
-                                    label="Salary/1h"
-                                    defaultValue={this.props.editShiftStatus ? this.props.objectEditShift.salary : this.salary}
-                                    type="number"
-                                    id="outlined-error-helper-text"
-                                    name="salary"
-                                    variant="outlined"
                                 />
                             </Grid>
                             <Grid item md={12} xs={12}>
@@ -173,16 +174,38 @@ class AddTypeModal extends Component {
                     <Divider />
                     <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2 }}>
                         {this.props.editShiftStatus ? (
-                            <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.editShift()} variant="contained" startIcon={<BiEdit />}>
-                                Edit
-                            </Button>) : (
-                            <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.addShift()} variant="contained" startIcon={<BiPlusMedical />}>
+                            <Button 
+                                style={{ backgroundColor: 'yellowgreen' }} 
+                                // onClick={() => this.editShift()}
+                                onClick={() => this.cancel()}
+                                variant="contained" 
+                                startIcon={<BiEdit />}
+                            >
+                                Cancel
+                            </Button>
+                            ) : (
+                            <Button 
+                                style={{ backgroundColor: 'yellowgreen' }} 
+                                // onClick={() => this.addShift()} 
+                                onClick={() => this.addType()}
+                                variant="contained" 
+                                startIcon={<BiPlusMedical />}
+                            >
                                 Xác nhận
                             </Button>
                         )}
-                        <Button style={{ backgroundColor: 'red' }} onClick={(e) => this.hanhleCancel(e)} variant="contained" startIcon={<GiCancel />}>
-                            Hủy
+                        <Button 
+                            style={{ backgroundColor: 'red' }} 
+                            // onClick={() => this.editShift()}
+                            onClick={() => this.cancel()}
+                            variant="contained" 
+                            startIcon={<GiCancel />}
+                        >
+                            Cancel
                         </Button>
+                        {/* <Button style={{ backgroundColor: 'red' }} onClick={(e) => this.hanhleCancel(e)} variant="contained" startIcon={<GiCancel />}>
+                            Hủy
+                        </Button> */}
                     </Box>
                 </Card>
             </form>

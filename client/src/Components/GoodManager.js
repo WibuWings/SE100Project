@@ -26,11 +26,8 @@ class GoodManager extends Component {
                             <NavLink style={{color: '#fff', textDecoration: 'none'}} to="/goodmanager/import">Import</NavLink>
                         </Button>
                         <SearchBar style={{height: '120px'}}/>
-                        <Button variant="text" onClick={() => this.handleAdd()}>
-                            Add Type
-                        </Button>  
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleAdd()} variant="contained">
-                            add
+                            add type
                         </Button>
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirm()} variant="contained">
                             Delete
