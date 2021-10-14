@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Component } from 'react';
-// import Image from "material-ui-image";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
@@ -17,7 +16,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/styles';
 import { withStyles } from '@material-ui/styles';
-import { height } from '@mui/system';
 import GoodImage from './goodExample.jpg';
 
 
@@ -99,13 +97,11 @@ function Row(props) {
                                         ))}
                                     </TableBody>
                                 </Table>
-                                <div className="button-contianer">
+                                <div className="button-container">
                                     <Button variant="contained">Update</Button>
                                     <Button variant="contained">Delete</Button>
                                 </div>
-                                
-                            </div>
-                            
+                            </div>  
                         </Box>
                     </Collapse>
                 </TableCell>

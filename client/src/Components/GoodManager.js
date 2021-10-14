@@ -6,11 +6,15 @@ import Button from '@mui/material/Button';
 import SearchBar from './GoodPartials/SearchBar';
 import {connect} from 'react-redux'
 import AddTypeModal from './GoodPartials/AddTypeModal';
-import '../CSS/GoodManager.css'
+import '../CSS/GoodManager.css';
+import ConfirmModal from './GoodPartials/ConfirmModal';
 class GoodManager extends Component {
 
     handleAdd(){
         this.props.changeAddStatus();
+    }
+    handleConfirm(){
+        this.props.changeConfirmStatus();
     }
     render() {
         return (
@@ -28,7 +32,10 @@ class GoodManager extends Component {
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleAdd()} variant="contained">
                             add
                         </Button>
-                    </div>
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirm()} variant="contained">
+                            Delete
+                        </Button>
+                     </div>
 
                     <GoodTable />
                     {/* <div className="modal-add">
@@ -41,6 +48,12 @@ class GoodManager extends Component {
                             <AddTypeModal></AddTypeModal>
                         </div>
                     ): null}
+                    {this.props.confirmStatus ? (
+                        <div className="modal-add">
+                            <div onClick={() => {this.props.changeConfirmStatus();}} className="modal-overlay"></div>
+                            <ConfirmModal></ConfirmModal>
+                        </div>
+                    ): null}
                 </div>
             </div>
         );
@@ -50,6 +63,7 @@ class GoodManager extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         addStatus: state.addStatus,
+        confirmStatus: state.confirmStatus,
         editShiftStatus: state.editShiftStatus,
     }
 }
@@ -59,6 +73,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         changeAddStatus: () => {
             dispatch({
                 type: "CHANGE_ADD_STATUS",
+            });
+        },
+        changeConfirmStatus: () => {
+            dispatch({
+                type: "CHANGE_CONFIRM_STATUS",
             });
         },
         changeEditShiftStatus: () => {

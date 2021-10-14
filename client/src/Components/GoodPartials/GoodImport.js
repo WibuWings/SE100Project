@@ -144,16 +144,6 @@ class GoodImport extends Component {
                         />
                     </div>
                     <div class="input-container">
-                        <div class="input-label">Expired Date:</div>
-                        <TextField 
-                            type="date" 
-                            class="input-val" 
-                            size="small" 
-                            name="expiredDate" 
-                            variant="outlined" 
-                        />
-                    </div>
-                    <div class="input-container">
                         <div class="input-label">Unit:</div>
                         <TextField 
                             type="text" 
