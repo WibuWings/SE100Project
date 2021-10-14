@@ -27,7 +27,7 @@ class ProductTab {
     };
 
     createProduct = async (req, res) => {
-        var reqProduct = req.body.data.product;
+        var reqProduct = req.body.product;
 
         var newProduct = new Product({
             _id: {
