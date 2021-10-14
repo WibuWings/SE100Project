@@ -92,7 +92,7 @@ class ModalAdd extends Component {
         this.props.updateShift(data);
         this.props.changeEditShiftStatus();
         this.props.changeAddStatus();
-        axios.post(`http://localhost:5000/api/update-shift`, data)
+        axios.post(`http://localhost:5000/api/profile/update-shift`, data)
         .then(res => {
             console.log('thành công');
         })
@@ -118,7 +118,7 @@ class ModalAdd extends Component {
         }
         if (data) {
             this.props.addShift(data);
-            axios.post(`http://localhost:5000/api/add-shift`, {
+            axios.post(`http://localhost:5000/api/profile/add-shift`, {
                 email: this.props.infoUser.email,
                 token: localStorage.getItem('token'),
                 data: data,

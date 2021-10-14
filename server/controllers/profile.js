@@ -15,34 +15,7 @@ const Coupon = require("../models/coupon");
 const {JWTVerify} = require("../helper/JWT");
 
 class meProfile {
-    AuthVerify (req, res, next) {
-        const token  = req.header('authorization');
-        token = token.split(' ')[1];
-        if(!token) return res.status(401).send('Access Denied')
-        jwt.verify(token,PRIVATE_KEY, (err,data) => {
-            res.data = data;
-            next();
-        })
-        if(err){
-            return res.status(400).send('Invalid token')
-        }
-    
-    }
-    verifySignIn = async (req, res) => {
-        const data = req.body
-        accessToken = jwt.sign(...data, PRIVATE_KEY, {expiresIn: 900})
-        res.json(accessToken)
-    }
-        
-    Profile = async (req, res) => {
-        const manager = Manager.find({_id : req.body.email})
-        const store = Store.find({_id :req.body._id})
-        res.status(200).send(
-            JSON.stringify({
-                data:{manager,store}
-            })
-        )
-    }
+
     updateProfileData = async (req, res) =>{
         const idcheck = req.body._id
         const email = req.body.email;   
