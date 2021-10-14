@@ -1,3 +1,21 @@
+/* Good Import */
+.good-import-header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 80px;
+    background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0, 0, 0, 0.4)),url(../img/good-import-header.jpg);
+    background-repeat: no-repeat;
+    background-position:center center;
+    background-size:cover;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+/* Modal */
 .modal-add{
     position: fixed;
     top: 0;

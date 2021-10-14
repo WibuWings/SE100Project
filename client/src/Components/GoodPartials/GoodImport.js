@@ -8,7 +8,7 @@ import { Image } from 'cloudinary-react';
 import axios from 'axios';
 import '../../CSS/GoodManager.css';
 import { connect } from 'react-redux';
-import GoodImage from './goodExample.jpg';
+import GoodImage from '../../img/good-example.jpg';
 import AddTypeModal from './AddTypeModal';
 var productTypes =[
      'food', 'detergent', 'cuisine'
@@ -24,7 +24,7 @@ class GoodImport extends Component {
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         }; 
-
+        
     }
     handleAdd(){
         this.props.changeAddTypeStatus();
@@ -85,14 +85,35 @@ class GoodImport extends Component {
     
     render() {
         return(
-            <div style={{ height: 600, width: '100%', overflowY: 'scroll'}}>
+            <div 
+                style={{ 
+                    height: 600, width: '100%', overflowY: 'scroll', backgroundColor: 'rgb(221,235,255)'   
+                }}
+            >   
+                <div className="good-import-header"></div>
                 <div>Good Import</div>
-                <label style={{ borderRadius: '100%', overflow: 'hidden', marginTop: '15px ' }}>
-                    <Image style={{ width: '100px', height: '100px' }} cloudName="databaseimg" 
-                        publicId={( GoodImage )}></Image>
+                <Grid className="import-container" container spacing={2}>
+                    <Grid item md={8} sm={12}  >
+                        
+                    </Grid>
+                    <Grid item md={4} sm={12} >
+                        
+                    </Grid>
+                    <Grid item sm={12} md={12} >
+                        
+                    </Grid>
+                </Grid>
+                <label style={{overflow: 'hidden', marginTop: '15px ' }}>
+                    <Image style={{ width: '100px', height: '100px' }} cloudName="databaseimg" ></Image>
                 </label>
-                {/* Ẩn đi */}
-                <input id="profile-header-update-avatar" type="file" accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input>
+                <input 
+                    id="profile-header-update-avatar" 
+                    type="file" 
+                    accept="image/png, image/jpeg" 
+                    style={{ display: 'none' }} 
+                    onChange={(e) => this.profileImageChange(e)}
+                >
+                </input>
                 <Button
                     variant="contained"
                     component="label"
