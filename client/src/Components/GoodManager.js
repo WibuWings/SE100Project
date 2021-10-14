@@ -10,11 +10,12 @@ import '../CSS/GoodManager.css';
 import ConfirmModal from './GoodPartials/ConfirmModal';
 class GoodManager extends Component {
 
-    handleAdd(){
-        this.props.changeAddStatus();
-    }
     handleConfirm(){
         this.props.changeConfirmStatus();
+    }
+    handleConfirmDelete(){
+        this.props.changeConfirmStatus();
+        this.props.changeToDelete();
     }
     render() {
         return (
@@ -29,8 +30,11 @@ class GoodManager extends Component {
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleAdd()} variant="contained">
                             add type
                         </Button>
-                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirm()} variant="contained">
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirmDelete()} variant="contained">
                             Delete
+                        </Button>
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirm()} variant="contained">
+                            Edit
                         </Button>
                      </div>
 
@@ -39,6 +43,8 @@ class GoodManager extends Component {
                         <div onClick={() => {this.props.changeAddStatus();}} className="modal-overlay"></div>
                         <AddTypeModal></AddTypeModal>
                     </div> */}
+
+                    {/* Đây là phần modal */}
                     {this.props.addStatus ? (
                         <div className="modal-add">
                             <div onClick={() => {this.props.changeAddStatus();}} className="modal-overlay"></div>
@@ -61,7 +67,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         addStatus: state.addStatus,
         confirmStatus: state.confirmStatus,
-        editShiftStatus: state.editShiftStatus,
+        deleteStatus: state.deleteStatus,
     }
 }
 
@@ -77,9 +83,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_CONFIRM_STATUS",
             });
         },
-        changeEditShiftStatus: () => {
+        changeToDelete: () => {
             dispatch({
-                type: "CHANGE_EDIT_SHIFT_STATUS",
+                type: "CHANGE_DELETE_STATUS",
             })
         }
     }

@@ -9,113 +9,15 @@ import axios from 'axios';
 class ConfirmModal extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            timeFrom: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.from} GMT+0700 (Giờ Đông Dương)` : Date.now(),
-            timeTo: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.to} GMT+0700 (Giờ Đông Dương)` : Date.now(),
-        }
+    }
+    confirm = () => {
+        // Thực hiện các lệnh xử lý tại đây
+        this.props.changeConfirmStatus();
     }
 
-    descriptionShift = ""
-    timeFrom = "00:00 AM"
-    timeTo = "00:00 PM"
-    salary = 10000
-
-    // Handle user
-    hanhleCancel = (e) => {
-        this.props.changeAddStatus();
-        if (this.props.editShiftStatus) {
-            this.props.changeEditShiftStatus();
-        }
+    cancel = () => {
+        this.props.changeConfirmStatus();
     }
-
-    changeTimeFrom = (e) => {
-        var hourse = e.getHours()
-        const minutes = e.getMinutes()
-        if (hourse >= 12) {
-            hourse = hourse - 12;
-            this.timeFrom = hourse.toString() + ":" + minutes.toString() + " PM"
-        } else {
-            this.timeFrom = hourse.toString() + ":" + minutes.toString() + " AM"
-        }
-        console.log(this.timeFrom);
-        this.setState({
-            timeFrom: e,
-        })
-    }
-
-    changeTimeTo = (e) => {
-        var hourse = e.getHours()
-        const minutes = e.getMinutes()
-        if (hourse >= 12) {
-            hourse = hourse - 12;
-            this.timeTo = hourse.toString() + ":" + minutes.toString() + " PM"
-        } else {
-            this.timeTo = hourse.toString() + ":" + minutes.toString() + " AM"
-        }
-        console.log(this.timeTo);
-        this.setState({
-            timeTo: e,
-        })
-    }
-
-    blurDiscription = (e) => {
-        this.descriptionShift = e.target.value;
-    }
-
-    // editShift = () => {
-        
-    //     var data = {
-    //         token: localStorage.getItem('token'),
-    //         idUser: this.props.infoUser.email,
-    //         id: this.props.objectEditShift.id,
-    //         salary: this.salary,
-    //         description: this.descriptionShift,
-    //         from: this.timeFrom,
-    //         to: this.timeTo,
-    //     }
-    //     this.props.updateShift(data);
-    //     this.props.changeEditShiftStatus();
-    //     this.props.changeAddStatus();
-    //     axios.post(`http://localhost:5000/api/update-shift`, data)
-    //     .then(res => {
-    //         console.log('thành công');
-    //     })
-    //     .catch(err => {
-    //         console.log("lỗi");
-    //     })
-    // }
-
-    blurSalary = (e) => {
-        this.salary = e.target.value;
-    }
-
-    // Call API
-    addShift = () => {
-        var data = {
-            token: localStorage.getItem('token'),
-            idUser: this.props.infoUser.email,
-            id: this.makeCode(6),
-            salary: this.salary,
-            description: this.descriptionShift,
-            from: this.timeFrom,
-            to: this.timeTo,
-        }
-        if (data) {
-            this.props.addShift(data);
-            axios.post(`http://localhost:5000/api/add-shift`, {
-                email: this.props.infoUser.email,
-                data: data,
-            })
-                .then(res => {
-                    console.log('Thành Công');
-                })
-                .catch(err => {
-                    console.log('thất bại');
-                })
-            this.props.changeAddStatus();
-        }
-    }
-
     render() {
         console.log(this.props.objectEditShift);
         return (
@@ -126,29 +28,12 @@ class ConfirmModal extends Component {
                     <CardContent>
                         <Grid container spacing={2}>
                             <Grid item md={12} xs={12}>
-                                <TextField
-                                    id="outlined-basic"
-                                    variant="outlined"
-                                    fullWidth
-                                    defaultValue={(this.props.editShiftStatus ? this.props.objectEditShift.description : "")}
-                                    onBlur={(e) => this.blurDiscription(e)}
-                                    label="Shift description"
-                                    required
-                                    type="text"
-                                />
-                            </Grid>
-                            <Grid item md={12} xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    onBlur={(e) => this.blurSalary(e)}
-                                    label="Salary/1h"
-                                    defaultValue={this.props.editShiftStatus ? this.props.objectEditShift.salary : this.salary}
-                                    type="number"
-                                    id="outlined-error-helper-text"
-                                    name="salary"
-                                    variant="outlined"
-                                />
+                                {
+                                    this.props.deleteStatus ? 
+                                    (<div>Are you sure to delete this good?</div>)
+                                    :
+                                    (<div>Are you sure to edit this good?</div>)
+                                }
                             </Grid>
                             <Grid item md={12} xs={12}>
                                 <Stack spacing={3}>
@@ -159,15 +44,10 @@ class ConfirmModal extends Component {
                     </CardContent>
                     <Divider />
                     <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2 }}>
-                        {this.props.editShiftStatus ? (
-                            <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.editShift()} variant="contained" startIcon={<BiEdit />}>
-                                Edit
-                            </Button>) : (
-                            <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.addShift()} variant="contained" startIcon={<BiPlusMedical />}>
-                                Xác nhận
-                            </Button>
-                        )}
-                        <Button style={{ backgroundColor: 'red' }} onClick={(e) => this.hanhleCancel(e)} variant="contained" startIcon={<GiCancel />}>
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.confirm()} variant="contained" startIcon={<BiPlusMedical />}>
+                            Xác nhận
+                        </Button>
+                        <Button style={{ backgroundColor: 'red' }} onClick={(e) => this.cancel(e)} variant="contained" startIcon={<GiCancel />}>
                             Hủy
                         </Button>
                     </Box>
@@ -179,43 +59,18 @@ class ConfirmModal extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        addStatus: state.addStatus,
         confirmStatus: state.confirmStatus,
-        infoUser: state.infoUser,
-        editShiftStatus: state.editShiftStatus,
-        objectEditShift: state.objectEditShift,
+        deleteStatus: state.deleteStatus,
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        changeAddStatus: () => {
-            dispatch({
-                type: "CHANGE_ADD_STATUS",
-            });
-        },
         changeConfirmStatus: () => {
             dispatch({
                 type: "CHANGE_CONFIRM_STATUS",
             });
         },
-        // addShift: (data) => {
-        //     dispatch({
-        //         type: "ADD_SHIFT",
-        //         newShift: data,
-        //     })
-        // },
-        // changeEditShiftStatus: () => {
-        //     dispatch({
-        //         type: "CHANGE_EDIT_SHIFT_STATUS",
-        //     })
-        // },
-        // updateShift: (data) => {
-        //     dispatch({
-        //         type: "OBJECT_UPDATE_SHIFT",
-        //         data: data,
-        //     })
-        // }
     }
 }
 

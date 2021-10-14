@@ -8,7 +8,7 @@ import statusEditShiftReducer from  './Status/StatusEditShiftReducer';
 import objectEditShiftReducer from './ObjectEditShiftReducer';
 import statusDarkmodeReducer from './Status/StatusDarkModeReducer';
 import statusConfirmReducer from './Status/StatusConfirmReducer';
-
+import statusDeleteConfirmReducer from './Status/StatusDeleteConfirmReducer';
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -17,6 +17,7 @@ const allReducers = redux.combineReducers({
     country: countryReducer,
     addStatus: statusAddShiftReducer,
     confirmStatus: statusConfirmReducer,
+    deleteStatus: statusDeleteConfirmReducer,
     infoUser: infoUserReducer,
     listShift: listShiftReducer,
     editShiftStatus: statusEditShiftReducer,
