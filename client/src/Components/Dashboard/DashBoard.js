@@ -5,6 +5,7 @@ import { Typography } from '@mui/material';
 import { DiApple } from 'react-icons/di'
 import StaticDateRangePickerDemo from './Calendar'
 import AppWebsiteVisits from './Statistic';
+import SplitButton from './GroupButton';
 
 class DashBoard extends Component {
     render() {
@@ -57,7 +58,7 @@ class DashBoard extends Component {
                             </div>
                         </Grid>
                         <Grid className="dashboard-item" item md={12} sm={12} >
-                            <div style={{borderRadius: '20px'}}>
+                            <div style={{ borderRadius: '20px' }}>
                                 <StaticDateRangePickerDemo></StaticDateRangePickerDemo>
                             </div>
                         </Grid>

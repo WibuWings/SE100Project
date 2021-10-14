@@ -4,7 +4,7 @@ import ReactApexChart from 'react-apexcharts';
 import { Card, CardHeader, Box } from '@mui/material';
 //
 import BaseOptionChart from './BaseOptionChart';
-
+import SplitButton from './GroupButton';
 // ----------------------------------------------------------------------
 
 const CHART_DATA = [
@@ -60,7 +60,11 @@ export default function AppWebsiteVisits() {
 
   return (
     <Card>
-      <CardHeader title="Website Visits" subheader="(+43%) than last year" />
+      <div className="titleStatistic">
+        <CardHeader title="Website Visits" subheader="(+43%) than last year" />
+        <SplitButton></SplitButton>
+      </div>
+
       <Box sx={{ p: 3, pb: 1 }} dir="ltr">
         <ReactApexChart type="line" series={CHART_DATA} options={chartOptions} height={364} />
       </Box>

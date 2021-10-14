@@ -74,3 +74,22 @@
 .dashboard-item-icon.error-receipt{
     color: rgb(122, 12, 46)
 }
+
+.titleStatistic{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 20;
+}
+
+.splitbutton{
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0 5px;
+}
+
+.css-dr3dyz-MuiButtonGroup-root{
+    margin: 25px;
+    z-index: 200;
+}

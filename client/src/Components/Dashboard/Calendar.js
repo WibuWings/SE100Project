@@ -12,7 +12,7 @@ export default function StaticDateRangePickerDemo() {
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <StaticDateRangePicker
-                displayStaticWrapperAs="desktop"
+                displayStaticWrapperAs="mobile"
                 value={value}
                 onChange={(newValue) => {
                     setValue(newValue);
