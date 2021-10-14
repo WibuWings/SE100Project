@@ -3,6 +3,7 @@ import {
     Route,
 } from "react-router-dom";
 import GoodManager from '../Components/GoodManager';
+import GoodImport from '../Components/GoodPartials/GoodImport';
 import EmployeeManager from '../Components/EmployeeManager';
 import DashBoard from '../Components/Dashboard/DashBoard';
 import Profile from '../Components/Profile/Profile';
@@ -14,6 +15,7 @@ class DashboardURL extends Component {
             <div>      
                 <Route exact path="/" component={DashBoard}></Route>
                 <Route exact path="/dashboard" component={DashBoard}></Route>
+                <Route path="/goodmanager/import" component={GoodImport}></Route>
                 <Route exact path="/goodmanager" component={GoodManager}></Route>
                 <Route exact path="/employeemanager" component={EmployeeManager}></Route>
                 <Route exact path="/receiptmanager" component={ReceiptManager}></Route> 
