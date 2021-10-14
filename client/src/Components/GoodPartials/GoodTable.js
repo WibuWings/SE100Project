@@ -47,6 +47,8 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+
+
 function Row(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
@@ -98,7 +100,14 @@ function Row(props) {
                                     </TableBody>
                                 </Table>
                                 <div className="button-container">
-                                    <Button variant="contained">Update</Button>
+                                    <Button 
+                                        onClick={() => {
+                                            removeRow(row)
+                                        }}
+                                        variant="contained"
+                                    >
+                                        Update
+                                    </Button>
                                     <Button variant="contained">Delete</Button>
                                 </div>
                             </div>  
@@ -110,23 +119,32 @@ function Row(props) {
     );
 }
 
+function removeRow(row)
+{
+    rows = rows.filter(function(item) {
+        return item !== row;
+    })   
+    alert(rows.length);
+    // Tới đây là ổn, tìm cách gọi hàm trong class nữa là ok
+    
+}
 
-const rows = [
+var rows = [
     createData(1,10001,'Frozen yoghurt', 159, 20, 24, '1/1/2021','food'),
     createData(2,10002,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
     createData(3,10003,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
     createData(4,10004,'Cupcake', 305, 47, 67, '4/4/2021', 'cuisine'),
     createData(5,10005,'Gingerbread', 356, 26, 49, '31/1/2021', 'cuisine'),
-    createData(1,10001,'Frozen yoghurt', 159, 20, 24, '1/1/2021','cuisine'),
-    createData(2,10002,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
-    createData(3,10003,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
-    createData(4,10004,'Cupcake', 305, 47, 67, '4/4/2021', 'detergent'),
-    createData(5,10005,'Gingerbread', 356, 26, 49, '31/1/2021', 'detergent'),
-    createData(1,10001,'Frozen yoghurt', 159, 20, 24, '1/1/2021','detergent'),
-    createData(2,10002,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
-    createData(3,10003,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
-    createData(4,10004,'Cupcake', 305, 47, 67, '4/4/2021', 'food'),
-    createData(5,10005,'Gingerbread', 356, 26, 49, '31/1/2021', 'food'),
+    createData(6,10006,'Frozen yoghurt', 159, 20, 24, '1/1/2021','cuisine'),
+    createData(7,10007,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
+    createData(8,10008,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
+    createData(9,10009,'Cupcake', 305, 47, 67, '4/4/2021', 'detergent'),
+    createData(10,10010,'Gingerbread', 356, 26, 49, '31/1/2021', 'detergent'),
+    createData(11,10011,'Frozen yoghurt', 159, 20, 24, '1/1/2021','detergent'),
+    createData(12,10012,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
+    createData(13,10013,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
+    createData(14,10014,'Cupcake', 305, 47, 67, '4/4/2021', 'food'),
+    createData(15,10015,'Gingerbread', 356, 26, 49, '31/1/2021', 'food'),
 ];
 const styles = theme =>  ({
     goodTable: {                                     
@@ -141,7 +159,24 @@ const styles = theme =>  ({
         height: '40px',
     } 
 })
+
+
+
 class GoodTable extends Component {
+    constructor(props) {
+        super(props);
+        this.state ={
+            update: false
+        }
+    }
+    removeProduct= (row) => {
+        // Đây là xử lý ở phía dữ liệu, có thể await gì đó.
+        // Xử lý ở phía giao diện(tạm)
+
+        // Đây là câu lệnh để update nhẹ
+        this.setState({update: this.state.update})
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -171,4 +206,4 @@ class GoodTable extends Component {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(GoodTable);
+export default (withStyles(styles, {withTheme: true}))(GoodTable);

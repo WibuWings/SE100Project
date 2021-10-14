@@ -9,7 +9,10 @@ import AddTypeModal from './GoodPartials/AddTypeModal';
 import '../CSS/GoodManager.css';
 import ConfirmModal from './GoodPartials/ConfirmModal';
 class GoodManager extends Component {
-
+    
+    handleAdd() {
+        this.props.changeAddStatus();
+    }
     handleConfirm(){
         this.props.changeConfirmStatus();
         this.props.unsetDelete();
