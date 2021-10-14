@@ -4,7 +4,7 @@ import {
 } from "react-router-dom";
 import GoodManager from '../Components/GoodManager';
 import EmployeeManager from '../Components/EmployeeManager';
-import DashBoard from '../Components/DashBoard';
+import DashBoard from '../Components/Dashboard/DashBoard';
 import Profile from '../Components/Profile/Profile';
 import ReceiptManager from '../Components/ReiceiptManager';
 
