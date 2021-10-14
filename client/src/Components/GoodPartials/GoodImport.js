@@ -67,20 +67,31 @@ class GoodImport extends Component {
     importGood = () => {
         const data = {
             token: localStorage.getItem('token'),
-            _id: {
-                // productID: document.querySelector('input[name="goodID"]').value,
-                importDate:document.querySelector('input[name="importDate"]').value
-            },
-            name: document.querySelector('input[name="goodName"]').value,
-            quantity: document.querySelector('input[name="goodQuantity"]').value,
-            remain: document.querySelector('input[name="goodQuantity"]').value,
-            importPrice: document.querySelector('input[name="originalPrice"]').value,
-            sellPrice: document.querySelector('input[name="sellPrice"]').value,
-            expires: document.querySelector('input[name="expiredDate"]').value,
-            imgUrl: this.imgUrl,
-            unit: document.querySelector('input[name="unit"]').value,
+            product: {
+                _id: {
+                    productID: document.querySelector('input[name="goodID"]').value,
+                    importDate:document.querySelector('input[name="importDate"]').value,
+    
+                },
+                name: document.querySelector('input[name="goodName"]').value,
+                quantity: document.querySelector('input[name="goodQuantity"]').value,
+                remain: document.querySelector('input[name="goodQuantity"]').value,
+                importPrice: document.querySelector('input[name="originalPrice"]').value,
+                sellPrice: document.querySelector('input[name="sellPrice"]').value,
+                expires: document.querySelector('input[name="expiredDate"]').value,
+                imgUrl: this.imgUrl,
+                unit: document.querySelector('input[name="unit"]').value,
+            }
         }
-        console.log(data.imgUrl);
+        axios.post(`http://localhost:5000/api/product`, data)
+            .then(res => {
+                console.log("Save success");
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+        console.log(data);
     }
     
     render() {
@@ -125,6 +136,14 @@ class GoodImport extends Component {
                     />
                 </Button>
                 <div class="info-container"> 
+                    <div class="input-label">ID</div>
+                        <TextField 
+                            type="text" 
+                            class="input-val" 
+                            size="small"  
+                            name="goodID" 
+                            variant="outlined" 
+                        />
                     <div class="input-label">Name</div>
                     <TextField 
                         type="text" 
