@@ -61,73 +61,10 @@ class AddTypeModal extends Component {
     blurDiscription = (e) => {
         this.descriptionShift = e.target.value;
     }
-
-
-    // Tạo code để xác nhận
-    // makeCode = (length) => {
-    //     var result = '';
-    //     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    //     var charactersLength = characters.length;
-    //     for (var i = 0; i < length; i++) {
-    //         result += characters.charAt(Math.floor(Math.random() *
-    //             charactersLength));
-    //     }
-    //     return result;
-    // }
-
-    // editShift = () => {
-        
-    //     var data = {
-    //         token: localStorage.getItem('token'),
-    //         idUser: this.props.infoUser.email,
-    //         id: this.props.objectEditShift.id,
-    //         salary: this.salary,
-    //         description: this.descriptionShift,
-    //         from: this.timeFrom,
-    //         to: this.timeTo,
-    //     }
-    //     this.props.updateShift(data);
-    //     this.props.changeEditShiftStatus();
-    //     this.props.changeAddStatus();
-    //     axios.post(`http://localhost:5000/api/update-shift`, data)
-    //     .then(res => {
-    //         console.log('thành công');
-    //     })
-    //     .catch(err => {
-    //         console.log("lỗi");
-    //     })
-    // }
-
     blurSalary = (e) => {
         this.salary = e.target.value;
     }
 
-    // Call API
-    // addShift = () => {
-    //     var data = {
-    //         token: localStorage.getItem('token'),
-    //         idUser: this.props.infoUser.email,
-    //         id: this.makeCode(6),
-    //         salary: this.salary,
-    //         description: this.descriptionShift,
-    //         from: this.timeFrom,
-    //         to: this.timeTo,
-    //     }
-    //     if (data) {
-    //         this.props.addShift(data);
-    //         axios.post(`http://localhost:5000/api/add-shift`, {
-    //             email: this.props.infoUser.email,
-    //             data: data,
-    //         })
-    //             .then(res => {
-    //                 console.log('Thành Công');
-    //             })
-    //             .catch(err => {
-    //                 console.log('thất bại');
-    //             })
-    //         this.props.changeAddStatus();
-    //     }
-    // }
     addType = () => {
         this.props.changeAddStatus();
     }

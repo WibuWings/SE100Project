@@ -8,6 +8,8 @@ import {connect} from 'react-redux'
 import AddTypeModal from './GoodPartials/AddTypeModal';
 import '../CSS/GoodManager.css';
 import ConfirmModal from './GoodPartials/ConfirmModal';
+import UpdateGoodModal from './GoodPartials/UpdateGoodModal';
+
 class GoodManager extends Component {
     
     handleAdd() {
@@ -20,6 +22,9 @@ class GoodManager extends Component {
     handleConfirmDelete(){
         this.props.changeConfirmStatus();
         this.props.changeToDelete();
+    }
+    handleUpdateGood() {
+        this.props.changeUpdateGoodStatus();
     }
     render() {
         return (
@@ -40,13 +45,12 @@ class GoodManager extends Component {
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirm()} variant="contained">
                             Edit
                         </Button>
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleUpdateGood()} variant="contained">
+                            Update Good
+                        </Button>
                      </div>
 
                     <GoodTable />
-                    {/* <div className="modal-add">
-                        <div onClick={() => {this.props.changeAddStatus();}} className="modal-overlay"></div>
-                        <AddTypeModal></AddTypeModal>
-                    </div> */}
 
                     {/* Đây là phần modal */}
                     {this.props.addStatus ? (
@@ -61,6 +65,12 @@ class GoodManager extends Component {
                             <ConfirmModal></ConfirmModal>
                         </div>
                     ): null}
+                    {this.props.updateGoodStatus ? (
+                        <div className="modal-add">
+                            <div onClick={() => {this.props.changeUpdateGoodStatus();}} className="modal-overlay"></div>
+                            <UpdateGoodModal></UpdateGoodModal>
+                        </div>
+                    ): null}
                 </div>
             </div>
         );
@@ -72,6 +82,7 @@ const mapStateToProps = (state, ownProps) => {
         addStatus: state.addStatus,
         confirmStatus: state.confirmStatus,
         deleteStatus: state.deleteStatus,
+        updateGoodStatus: state.updateGoodStatus,
     }
 }
 
@@ -97,6 +108,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "UNSET_DELETE_STATUS",
             })
         },
+        changeUpdateGoodStatus: () => {
+            dispatch({
+                type: "CHANGE_UPDATE_GOOD_STATUS",
+            })
+        }
     }
 }
 export default connect(mapStateToProps , mapDispatchToProps)(GoodManager);

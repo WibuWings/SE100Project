@@ -10,6 +10,7 @@
     align-content: center;
     align-self: center;
     justify-self: center;
+    overflow-x: auto;
 }
 
 .modal-overlay{
