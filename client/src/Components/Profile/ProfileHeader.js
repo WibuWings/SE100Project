@@ -32,7 +32,7 @@ class ProfileHeader extends Component {
                 .then(res => {
                     console.log(res.data.url);
                     this.props.updateAvatar(res.data.url);
-                    axios.post(`http://localhost:5000/api/update-avatar`,{
+                    axios.post(`http://localhost:5000/api/profile/update-avatar`,{
                         _id: this.props.infoUser.email,
                         avatar: res.data.url,
                         token: localStorage.getItem('token'),

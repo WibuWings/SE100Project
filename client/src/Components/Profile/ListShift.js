@@ -63,7 +63,7 @@ class ListShift extends Component {
 
         if (idShift) {
             this.props.deleteShift(idShift);
-            axios.post(`http://localhost:5000/api/delete-shift`, {
+            axios.post(`http://localhost:5000/api/profile/delete-shift`, {
                 token: localStorage.getItem('token'),
                 email: this.props.infoUser.email,
                 idShift: idShift
