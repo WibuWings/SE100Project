@@ -242,13 +242,11 @@ class Authentication {
         var decoded = res.locals.decoded;
 
         getAllData(decoded.email).then((data) => {
-
-            var {iat, exp, ...userInfo} = decoded;
             
             res.status(200).send(
                 JSON.stringify({
                     message: MESSAGES.SIGN_IN_SUCCESS,
-                    token: JWTAuthToken(userInfo),
+                    token: res.locals.newToken,
                     email: decoded.email,
                     data,
                 })

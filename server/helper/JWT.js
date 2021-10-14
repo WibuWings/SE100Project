@@ -26,11 +26,12 @@ function JWTVerify(token) {
 
 async function AuthMiddleware(req, res, next) {
     const result = JWTVerify(req.body.token);
-
+    
     if (result.status !== 200) {
         res.status(401).send(JSON.stringify(result.err));
     } else {
         res.locals.decoded = result.decoded;
+        res.locals.newToken = JWTAuthToken({email:result.decoded.email})
         next();
     }
 }
