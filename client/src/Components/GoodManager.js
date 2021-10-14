@@ -9,11 +9,13 @@ import AddTypeModal from './GoodPartials/AddTypeModal';
 import '../CSS/GoodManager.css';
 import ConfirmModal from './GoodPartials/ConfirmModal';
 import UpdateGoodModal from './GoodPartials/UpdateGoodModal';
+import EditTypeModal from './GoodPartials/EditTypeModal';
 
 class GoodManager extends Component {
     
     handleAdd() {
-        this.props.changeAddStatus();
+        this.props.changeAddTypeStatus();
+        this.props.setAddTypeStatus();
     }
     handleConfirm(){
         this.props.changeConfirmStatus();
@@ -25,6 +27,9 @@ class GoodManager extends Component {
     }
     handleUpdateGood() {
         this.props.changeUpdateGoodStatus();
+    }
+    handleEditType() {
+        this.props.changeEditTypeStatus();
     }
     render() {
         return (
@@ -39,6 +44,9 @@ class GoodManager extends Component {
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleAdd()} variant="contained">
                             add type
                         </Button>
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleEditType()} variant="contained">
+                            edit type
+                        </Button>
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirmDelete()} variant="contained">
                             Delete
                         </Button>
@@ -48,14 +56,15 @@ class GoodManager extends Component {
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleUpdateGood()} variant="contained">
                             Update Good
                         </Button>
+
                      </div>
 
                     <GoodTable />
 
                     {/* Đây là phần modal */}
-                    {this.props.addStatus ? (
+                    {this.props.addTypeStatus ? (
                         <div className="modal-add">
-                            <div onClick={() => {this.props.changeAddStatus();}} className="modal-overlay"></div>
+                            <div onClick={() => {this.props.changeAddTypeStatus();}} className="modal-overlay"></div>
                             <AddTypeModal></AddTypeModal>
                         </div>
                     ): null}
@@ -71,6 +80,12 @@ class GoodManager extends Component {
                             <UpdateGoodModal></UpdateGoodModal>
                         </div>
                     ): null}
+                     {this.props.editTypeStatus ? (
+                        <div className="modal-add">
+                            <div onClick={() => {this.props.changeEditTypeStatus();}} className="modal-overlay"></div>
+                            <EditTypeModal></EditTypeModal>
+                        </div>
+                    ): null}
                 </div>
             </div>
         );
@@ -79,18 +94,20 @@ class GoodManager extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        addStatus: state.addStatus,
+        addTypeStatus: state.addTypeStatus,
         confirmStatus: state.confirmStatus,
         deleteStatus: state.deleteStatus,
         updateGoodStatus: state.updateGoodStatus,
+        editTypeStatus: state.editTypeStatus,
+        isAddTypeStatus: state.isAddTypeStatus,
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        changeAddStatus: () => {
+        changeAddTypeStatus: () => {
             dispatch({
-                type: "CHANGE_ADD_STATUS",
+                type: "CHANGE_ADD_TYPE_STATUS",
             });
         },
         changeConfirmStatus: () => {
@@ -112,7 +129,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_UPDATE_GOOD_STATUS",
             })
-        }
+        },
+        changeEditTypeStatus: () => {
+            dispatch({
+                type: "CHANGE_EDIT_TYPE_STATUS",
+            })
+        },
+        setAddTypeStatus: () => {
+            dispatch({
+                type: "SET_ADD_TYPE_STATUS",
+            });
+        },
     }
 }
 export default connect(mapStateToProps , mapDispatchToProps)(GoodManager);

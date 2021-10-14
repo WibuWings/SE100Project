@@ -9,76 +9,24 @@ import axios from 'axios';
 class AddTypeModal extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            timeFrom: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.from} GMT+0700 (Giờ Đông Dương)` : Date.now(),
-            timeTo: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.to} GMT+0700 (Giờ Đông Dương)` : Date.now(),
-        }
-    }
-
-    descriptionShift = ""
-    timeFrom = "00:00 AM"
-    timeTo = "00:00 PM"
-    salary = 10000
-
-    // Handle user
-    hanhleCancel = (e) => {
-        this.props.changeAddStatus();
-        if (this.props.editShiftStatus) {
-            this.props.changeEditShiftStatus();
-        }
-    }
-
-    changeTimeFrom = (e) => {
-        var hourse = e.getHours()
-        const minutes = e.getMinutes()
-        if (hourse >= 12) {
-            hourse = hourse - 12;
-            this.timeFrom = hourse.toString() + ":" + minutes.toString() + " PM"
-        } else {
-            this.timeFrom = hourse.toString() + ":" + minutes.toString() + " AM"
-        }
-        console.log(this.timeFrom);
-        this.setState({
-            timeFrom: e,
-        })
-    }
-
-    changeTimeTo = (e) => {
-        var hourse = e.getHours()
-        const minutes = e.getMinutes()
-        if (hourse >= 12) {
-            hourse = hourse - 12;
-            this.timeTo = hourse.toString() + ":" + minutes.toString() + " PM"
-        } else {
-            this.timeTo = hourse.toString() + ":" + minutes.toString() + " AM"
-        }
-        console.log(this.timeTo);
-        this.setState({
-            timeTo: e,
-        })
-    }
-
-    blurDiscription = (e) => {
-        this.descriptionShift = e.target.value;
-    }
-    blurSalary = (e) => {
-        this.salary = e.target.value;
     }
 
     addType = () => {
-        this.props.changeAddStatus();
+        this.props.changeAddTypeStatus();
     }
 
     cancel = () => {
-        this.props.changeAddStatus();
+        this.props.changeAddTypeStatus();
     }
 
     render() {
-        console.log(this.props.objectEditShift);
         return (
             <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Add type" />
+                    <CardHeader 
+                        style={{ color: 'blue', backgroundColor: '#efeeef' }} 
+                        title={this.props.isAddTypeStatus? "Add Type" : "Edit Type"}
+                        />
                     <Divider />
                     <CardContent>
                         <Grid 
@@ -96,7 +44,6 @@ class AddTypeModal extends Component {
                                     variant="outlined"
                                     fullWidth
                                     defaultValue={(this.props.editShiftStatus ? this.props.objectEditShift.description : "")}
-                                    onBlur={(e) => this.blurDiscription(e)}
                                     required
                                     type="text"
                                 />
@@ -110,27 +57,15 @@ class AddTypeModal extends Component {
                     </CardContent>
                     <Divider />
                     <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2 }}>
-                        {this.props.editShiftStatus ? (
-                            <Button 
-                                style={{ backgroundColor: 'yellowgreen' }} 
-                                // onClick={() => this.editShift()}
-                                onClick={() => this.cancel()}
-                                variant="contained" 
-                                startIcon={<BiEdit />}
-                            >
-                                Cancel
-                            </Button>
-                            ) : (
-                            <Button 
-                                style={{ backgroundColor: 'yellowgreen' }} 
-                                // onClick={() => this.addShift()} 
-                                onClick={() => this.addType()}
-                                variant="contained" 
-                                startIcon={<BiPlusMedical />}
-                            >
-                                Xác nhận
-                            </Button>
-                        )}
+                        <Button 
+                            style={{ backgroundColor: 'yellowgreen' }} 
+                            // onClick={() => this.addShift()} 
+                            onClick={() => this.addType()}
+                            variant="contained" 
+                            startIcon={<BiPlusMedical />}
+                        >
+                            Xác nhận
+                        </Button>
                         <Button 
                             style={{ backgroundColor: 'red' }} 
                             // onClick={() => this.editShift()}
@@ -152,37 +87,18 @@ class AddTypeModal extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        addStatus: state.addStatus,
-        infoUser: state.infoUser,
-        editShiftStatus: state.editShiftStatus,
-        objectEditShift: state.objectEditShift,
+        addTypeStatus: state.addTypeStatus,
+        isAddTypeStatus: state.isAddTypeStatus,
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        changeAddStatus: () => {
+        changeAddTypeStatus: () => {
             dispatch({
-                type: "CHANGE_ADD_STATUS",
+                type: "CHANGE_ADD_TYPE_STATUS",
             });
         },
-        addShift: (data) => {
-            dispatch({
-                type: "ADD_SHIFT",
-                newShift: data,
-            })
-        },
-        changeEditShiftStatus: () => {
-            dispatch({
-                type: "CHANGE_EDIT_SHIFT_STATUS",
-            })
-        },
-        updateShift: (data) => {
-            dispatch({
-                type: "OBJECT_UPDATE_SHIFT",
-                data: data,
-            })
-        }
     }
 }
 

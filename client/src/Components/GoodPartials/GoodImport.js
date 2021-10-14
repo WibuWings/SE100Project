@@ -27,7 +27,8 @@ class GoodImport extends Component {
 
     }
     handleAdd(){
-        this.props.changeAddStatus();
+        this.props.changeAddTypeStatus();
+        this.props.setAddTypeStatus();
     }
     imgUrl= 'none';
     profileImageChange = (fileChangeEvent) => {
@@ -223,9 +224,9 @@ class GoodImport extends Component {
                     </Button>
                     {/* Chỗ này lỗi chetmẹ rồi =))) */}
                 </div>
-                {this.props.addStatus ? (
+                {this.props.addTypeStatus ? (
                     <div className="modal-add">
-                        <div onClick={() => {this.props.changeAddStatus();}} className="modal-overlay"></div>
+                        <div onClick={() => {this.props.changeAddTypeStatus();}} className="modal-overlay"></div>
                         <AddTypeModal></AddTypeModal>
                     </div>
                 ): null}
@@ -235,16 +236,17 @@ class GoodImport extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
     return {
-        addStatus: state.addStatus,
+        addTypeStatus: state.addTypeStatus,
         infoUser: state.infoUser,
+        isAddTypeStatus: state.isAddTypeStatus,
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        changeAddStatus: () => {
+        changeAddTypeStatus: () => {
             dispatch({
-                type: "CHANGE_ADD_STATUS",
+                type: "CHANGE_ADD_TYPE_STATUS",
             });
         },
         updateAvatar: (avatar) => {
@@ -252,6 +254,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "UPDATE_AVATAR",
                 avatar: avatar
             })
+        },
+        setAddTypeStatus: () => {
+            dispatch({
+                type: "SET_ADD_TYPE_STATUS",
+            });
         }
     }
 }

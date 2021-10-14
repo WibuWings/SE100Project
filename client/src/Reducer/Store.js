@@ -10,6 +10,10 @@ import statusDarkmodeReducer from './Status/StatusDarkModeReducer';
 import statusConfirmReducer from './Status/StatusConfirmReducer';
 import statusDeleteConfirmReducer from './Status/StatusDeleteConfirmReducer';
 import statusUpdateGoodReducer from './Status/StatusUpdateGoodReducer';
+import statusEditTypeReducer from './Status/StatusEditTypeReducer';
+import statusAddTypeReducer from './Status/StatusAddTypeReducer';
+import statusIsAddTypeReducer from './Status/StatusIsAddTypeReducer';
+
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -19,6 +23,9 @@ const allReducers = redux.combineReducers({
     addStatus: statusAddShiftReducer,
     confirmStatus: statusConfirmReducer,
     deleteStatus: statusDeleteConfirmReducer,
+    editTypeStatus: statusEditTypeReducer,
+    addTypeStatus: statusAddTypeReducer,
+    isAddTypeStatus: statusIsAddTypeReducer,
     updateGoodStatus: statusUpdateGoodReducer,
     infoUser: infoUserReducer,
     listShift: listShiftReducer,
