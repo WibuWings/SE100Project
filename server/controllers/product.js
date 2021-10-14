@@ -62,8 +62,8 @@ class ProductTab {
     };
 
     updateProduct = async (req, res) => {
-        var reqProduct = req.body.data.product;
-        var { _id, updateFields } = reqProduct;
+        var reqProduct = req.body.product;
+        var { _id, ...updateFields } = reqProduct;
 
         Product.findOneAndUpdate(_id, updateFields, { returnOriginal: false })
         .then((data) => {
