@@ -5,7 +5,7 @@ function JWTAuthToken(data) {
     return (token = jwt.sign(
         { ...data },
         PRIVATE_KEY,
-        { expiresIn: 600 }
+        { expiresIn: 60000 }
     ));
 }
 
@@ -26,7 +26,6 @@ function JWTVerify(token) {
 
 async function AuthMiddleware(req, res, next) {
     const result = JWTVerify(req.body.token);
-
     if (result.status !== 200) {
         res.status(401).send(JSON.stringify(result.err));
     } else {
@@ -35,4 +34,4 @@ async function AuthMiddleware(req, res, next) {
     }
 }
 
-module.exports = {JWTAuthToken,AuthMiddleware};
+module.exports = {JWTAuthToken,AuthMiddleware,JWTVerify };
