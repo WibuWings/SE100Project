@@ -3,7 +3,7 @@ import { TextField } from '@mui/material';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import { InputLabel, Button, Modal, Grid} from '@mui/material';
+import { InputLabel, Button, Modal, Grid, Card} from '@mui/material';
 import { Image } from 'cloudinary-react';
 import axios from 'axios';
 import '../../CSS/GoodManager.css';
@@ -90,7 +90,6 @@ class GoodImport extends Component {
             .catch(err => {
                 console.log(err);
             })
-
         console.log(data);
     }
     
@@ -104,46 +103,51 @@ class GoodImport extends Component {
                 <div className="good-import-header"></div>
                 <div>Good Import</div>
                 <Grid className="import-container" container spacing={2}>
-                    <Grid item md={8} sm={12}  >
-                        
+                    <Grid item md={3} sm={12}  
+                        style={{
+                            display: 'flex', 
+                            justifyContent:'center', 
+                            flexDirection:'column',
+                            alignItems:'center'
+                        }}
+                    >
+                        <label style={{overflow: 'hidden', marginTop: '15px ' }}>
+                            <Image style={{ width: '200px', height: '200px' }} cloudName="databaseimg" ></Image>
+                        </label>
+                        <input 
+                            id="profile-header-update-avatar" 
+                            type="file" 
+                            accept="image/png, image/jpeg" 
+                            // style={{ display: 'none' }} 
+                            onChange={(e) => this.profileImageChange(e)}
+                        >
+                        </input>
                     </Grid>
-                    <Grid item md={4} sm={12} >
-                        
+                    <Grid item md={9} sm={12}>
+                        <Card >
+                            <Grid item md={4} sm={12} 
+                                style={{
+                                    display: 'flex', 
+                                    margin: '12px',
+                                }} 
+                            >
+                                <div class="input-label">ID</div>
+                                <TextField 
+                                    type="text" 
+                                    class="input-val" 
+                                    size="small"  
+                                    name="goodID" 
+                                    variant="outlined" 
+                                />
+                            </Grid>
+                        </Card>
                     </Grid>
                     <Grid item sm={12} md={12} >
                         
                     </Grid>
-                </Grid>
-                <label style={{overflow: 'hidden', marginTop: '15px ' }}>
-                    <Image style={{ width: '100px', height: '100px' }} cloudName="databaseimg" ></Image>
-                </label>
-                <input 
-                    id="profile-header-update-avatar" 
-                    type="file" 
-                    accept="image/png, image/jpeg" 
-                    style={{ display: 'none' }} 
-                    onChange={(e) => this.profileImageChange(e)}
-                >
-                </input>
-                <Button
-                    variant="contained"
-                    component="label"
-                    >
-                    Upload File
-                    <input
-                        type="file"
-                        hidden
-                    />
-                </Button>
+                </Grid> 
                 <div class="info-container"> 
-                    <div class="input-label">ID</div>
-                        <TextField 
-                            type="text" 
-                            class="input-val" 
-                            size="small"  
-                            name="goodID" 
-                            variant="outlined" 
-                        />
+                    
                     <div class="input-label">Name</div>
                     <TextField 
                         type="text" 
