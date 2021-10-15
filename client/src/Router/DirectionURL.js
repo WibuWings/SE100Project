@@ -58,7 +58,7 @@ class DirectionURL extends Component {
         }
         return (
             <div>
-                {render}
+                {this.Login()}
             </div>
         );
     }

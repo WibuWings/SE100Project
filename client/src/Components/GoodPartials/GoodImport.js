@@ -11,6 +11,12 @@ import { connect } from 'react-redux';
 import GoodImage from '../../img/good-example.jpg';
 import AddTypeModal from './AddTypeModal';
 import { withStyles } from '@material-ui/styles';
+import { AiFillPlusCircle} from "react-icons/ai";
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
+
 
 var productTypes =[
      'food', 'detergent', 'cuisine'
@@ -20,11 +26,11 @@ var productTypes =[
 var typeSet = [];
 const StyledTextField = withStyles((theme) => ({
     root: {
-      width: 240,
       "& .MuiInputBase-root": {
         height: 40,
         "& input": {
-          textAlign: "right"
+          textAlign: "right",
+          marginLeft: '4px',
         }
       }
     }
@@ -37,6 +43,8 @@ class GoodImport extends Component {
             imageSelect: "null",
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
+            currentDateTime: new Date('2014-08-18T21:11:54'),
+            
         }; 
         
     }
@@ -45,6 +53,8 @@ class GoodImport extends Component {
         this.props.setAddTypeStatus();
     }
     imgUrl= 'none';
+    dateTime= Date.now();
+
     profileImageChange = (fileChangeEvent) => {
         this.setState({
             imageSelect: fileChangeEvent.target.files[0],
@@ -78,14 +88,17 @@ class GoodImport extends Component {
         }
 
     }
+    changeTimeFrom = (e) => {
+        this.dateTime=e;
+    }
+    
     importGood = () => {
         const data = {
             token: localStorage.getItem('token'),
             product: {
                 _id: {
                     productID: document.querySelector('input[name="goodID"]').value,
-                    importDate:document.querySelector('input[name="importDate"]').value,
-    
+                    importDate: Date(this.dateTime),
                 },
                 name: document.querySelector('input[name="goodName"]').value,
                 quantity: document.querySelector('input[name="goodQuantity"]').value,
@@ -97,9 +110,12 @@ class GoodImport extends Component {
                 unit: document.querySelector('input[name="unit"]').value,
             }
         }
+        // alert(document.querySelector('input[name="importDateTime"]').value);
+        // alert(this.dateTime.toString())
         axios.post(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Save success");
+                console.log(data._id.importDate)
             })
             .catch(err => {
                 console.log(err);
@@ -144,45 +160,202 @@ class GoodImport extends Component {
                             }}
                         >
                             <Grid container md={12}>
-                                <Grid item md={5} 
+                                <Grid item md={4} 
                                     className='input-item'
                                 >
-                                    <div class="input-label">ID</div>
-                                    <TextField 
+                                    <div className="input-label">ID</div>
+                                    <StyledTextField
+                                        classname='input-box' 
                                         type="text" 
                                         class="input-val" 
-                                        style = {{width: '80%'}} 
-                                        fullWidth  
+                                        // style = {{width: '70%'}} 
+                                        fullWidth 
+                                        size="small" 
                                         name="goodID" 
                                         variant="outlined" 
                                     />
                                 </Grid>
-                                <Grid item md={7} 
+                                <Grid item md={8} 
                                     className='input-item'
                                 >
-                                    <div class="input-label">Name</div>
-                                    <TextField 
-                                         
+                                    <div className="input-label">Import Date</div>
+                                    {/* <StyledTextField
+                                        classname='input-box'   
+                                        type="date" 
+                                        style = {{width: '60%'}} 
+                                        fullWidth
+                                        size="small"
+                                        name="importDate" 
+                                        variant="outlined" 
+                                    /> */}
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        {/* <DateTimePicker
+                                            style = {{width: '100%', height: 40}}
+                                            value={this.state.timeFrom}
+                                            onChange={(newValue) => this.changeTimeFrom(newValue)}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        /> */}
+                                        <DateTimePicker
+                                            renderInput={(params) => <StyledTextField {...params} name="importDateTime"/>}
+                                            value={this.dateTime}
+                                            onChange={(newValue) => {
+                                                this.changeTimeFrom(newValue);
+                                            }}
+                                        />
+                                    </LocalizationProvider>
+                                </Grid>
+                                
+                                <Grid item md={6} 
+                                    className='input-item'
+                                >
+                                    <div className="input-label">Name</div>
+                                    <StyledTextField
+                                        classname='input-box'   
                                         type="text" 
                                         class="input-val" 
-                                        style = {{width: '80%'}} 
+                                        style = {{width: '100%'}} 
                                         fullWidth
                                         size="small"
                                         name="goodName" 
                                         variant="outlined" 
                                     />
                                 </Grid>
+                                <Grid item md={3}
+                                    className='input-item'
+                                >
+                                    <div className="input-label">Quantity</div>
+                                    <StyledTextField
+                                        style = {{width: '100%', marginLeft: '4px'}} 
+                                        fullWidth
+                                        name="goodQuantity" 
+                                        variant="outlined"
+                                        type="number" 
+                                    />
+                                </Grid>
+                                <Grid item md={3}
+                                    className='input-item'
+                                >
+                                    <div className="input-label">Unit</div>
+                                    <StyledTextField
+                                        classname='input-box'
+                                        style = {{width: '100%', marginLeft: '4px'}} 
+                                        fullWidth
+                                        name="goodQuantity" 
+                                        variant="outlined"
+                                        type="text" 
+                                        name="unit" 
+                                    />
+                                </Grid>
                                 <Grid item md={5}
                                     className='input-item'
                                 >
-                                    <div class="input-label">Quantity:</div>
-                                    {/* <TextField 
+                                    <div className="input-label">Original Price</div>
+                                    <StyledTextField
+                                        classname='input-box'
+                                        style = {{width: '60%', marginLeft: '4px'}} 
+                                        fullWidth
+                                        name="originalPrice" 
+                                        variant="outlined"
                                         type="number" 
-                                        class="input-val" 
-                                        name="goodQuantity" 
+                                    />
+                                    đ
+                                </Grid>
+                                <Grid item md={5}
+                                    className='input-item'
+                                >
+                                    <div className="input-label">Sell Price</div>
+                                    <StyledTextField
+                                        classname='input-box'
+                                        style = {{width: '60%', marginLeft: '4px'}} 
+                                        fullWidth
+                                        name="sellPrice" 
+                                        variant="outlined"
+                                        type="number" 
+                                    />
+                                    đ
+                                </Grid>
+                                <Grid item md={7} 
+                                    className='input-item'
+                                >
+                                    <div className="input-label">Expired Date</div>
+                                    <StyledTextField
+                                        classname='input-box'   
+                                        type="date" 
+                                        style = {{width: '70%'}} 
+                                        fullWidth
+                                        size="small"
+                                        name="expiredDate" 
                                         variant="outlined" 
-                                    /> */}
-                                    <StyledTextField/>
+                                    />
+                                </Grid>
+                                <Grid item md={12}
+                                    className='input-item'
+                                >
+                                    <div className="input-label">Product Type:</div>
+                                    <FormControl sx={{ minWidth: 120 }}>
+                                        {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
+                                        <Select
+                                            value={this.state.type}
+                                            onChange={(event) => {
+                                                this.setState({type: event.target.value});
+                                                if(!typeSet.includes(event.target.value))
+                                                {
+                                                    typeSet.push(event.target.value);
+                                                }
+                                            }}
+                                            style={{
+                                                height: 40,
+                                            }}
+                                        >
+                                            {
+                                                productTypes.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
+                                                : productTypes.map((type) =>
+                                                    <MenuItem value={type}>{type}</MenuItem>
+                                                )
+                                            }   
+                                        </Select> 
+                                    </FormControl>
+                                    <Button onClick={() => this.handleAdd()}>
+                                        <AiFillPlusCircle
+                                            size={28}
+                                            style={{
+                                                fontSize: 28,
+                                                margin: 0,
+                                                padding: 0,
+                                                width: 28,
+                                                height: 28
+                                            }}    
+                                        />
+                                    </Button>
+                                    <div>
+                                            {
+                                                Array.from(typeSet).map((type) =>
+                                                    <button 
+                                                        onClick={() => {
+                                                            typeSet = typeSet.filter(function(item) {
+                                                                return item != type;
+                                                            })
+                                                            console.log(typeSet);
+                                                            this.setState({type: this.state.type});
+                                                        }}  
+                                                    >
+                                                        {type}
+                                                    </button>
+                                                )
+                                            }
+                                        </div>
+                                </Grid>
+                                <Grid item md={10}
+                                    className='input-item'
+                                >
+
+                                </Grid>
+                                <Grid item md={2}
+                                    className='input-item'
+                                >
+                                    <Button variant="contained" onClick={() => this.importGood()}>
+                                        Import
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </Card>
@@ -191,114 +364,7 @@ class GoodImport extends Component {
                         
                     </Grid>
                 </Grid> 
-                <div class="info-container"> 
                     
-                    
-                    <div class="input-container">
-                        
-                    </div>
-                    <div class="input-container">
-                        <div class="input-label">Original Price:</div>
-                        <TextField 
-                            type="number" 
-                            lass="input-val" 
-                            size="small" 
-                            name="originalPrice" 
-                            variant="outlined" 
-                            defaultValue={0}
-                        />
-                    </div>
-                    <div class="input-container">
-                        <div class="input-label">Sell Price:</div>
-                        <TextField 
-                            type="number" 
-                            lass="input-val" 
-                            size="small" 
-                            name="sellPrice" 
-                            variant="outlined" 
-                            defaultValue={0}
-                        />
-                    </div>
-                    <div class="input-container">
-                        <div class="input-label">Unit:</div>
-                        <TextField 
-                            type="text" 
-                            class="input-val" 
-                            size="small" 
-                            name="unit" 
-                            variant="outlined" 
-                        />
-                    </div>
-                    <div class="input-container">
-                        <div class="input-label">Import Time:</div>
-                        <TextField 
-                            type="date" 
-                            class="input-val" 
-                            size="small" 
-                            name="importDate" 
-                            variant="outlined" 
-                            defaultValue={new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear()}
-                        />
-                    </div>
-                    <div class="input-container">
-                        <div class="input-label">Expired Date:</div>
-                        <TextField 
-                            type="date" 
-                            class="input-val" 
-                            size="small" 
-                            name="expiredDate" 
-                            variant="outlined" 
-                        />
-                    </div>
-                    <div class="input-container">
-                        <div class="input-label">Product Type:</div>
-                        <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
-                            <InputLabel id="select-filled-label">Type</InputLabel>
-                            <Select
-                                labelid="select-filled-label"
-                                id="select-filled"
-                                value={this.state.type}
-                                onChange={(event) => {
-                                    this.setState({type: event.target.value});
-                                    if(!typeSet.includes(event.target.value))
-                                    {
-                                        typeSet.push(event.target.value);
-                                    }
-                                }}
-                            >
-                                {
-                                    productTypes.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
-                                    : productTypes.map((type) =>
-                                        <MenuItem value={type}>{type}</MenuItem>
-                                    )
-                                }   
-                            </Select>
-                        </FormControl>
-                        <div>
-                            {
-                                Array.from(typeSet).map((type) =>
-                                    <button 
-                                        onClick={() => {
-                                            typeSet = typeSet.filter(function(item) {
-                                                return item != type;
-                                            })
-                                            console.log(typeSet);
-                                            this.setState({type: this.state.type});
-                                        }}  
-                                    >
-                                        {type}
-                                    </button>
-                                )
-                            }
-                        </div>
-                        <Button onClick={() => this.handleAdd()}>Add type</Button>
-                        
-                    </div>
-                    <Button variant="contained" onClick={() => this.importGood()}>
-                        Import
-                    </Button>
-                    {/* Chỗ này lỗi chetmẹ rồi =))) */}
-                </div>
                 {this.props.addTypeStatus ? (
                     <div className="modal-add">
                         <div onClick={() => {this.props.changeAddTypeStatus();}} className="modal-overlay"></div>
