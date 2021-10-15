@@ -131,5 +131,5 @@ hr:not([size]).profile-header__divider {
 
 .css-1kty9di-MuiFormLabel-root-MuiInputLabel-root{
     background-color: white;
-    top: -5px;
+    top: -5px !important;
 }
