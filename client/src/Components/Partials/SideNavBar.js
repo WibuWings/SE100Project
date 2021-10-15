@@ -16,7 +16,7 @@ import {
 } from "react-icons/io5";
 import { RiProfileFill, RiProfileLine } from "react-icons/ri";
 import { FaSignOutAlt } from "react-icons/fa";
-
+import {GiSellCard} from 'react-icons/gi'
 import Avatar from '../../img/avatar_default.jpg';
 import { NavLink } from 'react-router-dom';
 
@@ -60,8 +60,13 @@ class SideNavBar extends Component {
                             <IoReceiptSharp class="nav-item-icon icon-activate"/>
                             <span>Receipt Manager</span>
                         </NavLink>
+                        <NavLink to="/sellproduct" className="nav-item" href='#'>
+                            <GiSellCard class="nav-item-icon"/>
+                            <IoReceiptSharp class="nav-item-icon icon-activate"/>
+                            <span>Sell Product</span>
+                        </NavLink>
                     </div>
-                    
+
                     <div class="nav-footer">
                         <NavLink to="/login" onClick={() => this.props.changeLoginStatus()} className="nav-item" style={{flex: 5}}>
                             <FaSignOutAlt class="nav-item-icon"/>

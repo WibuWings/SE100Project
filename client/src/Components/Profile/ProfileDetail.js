@@ -76,7 +76,7 @@ class ProfileDetail extends Component {
             this.setState({
                 isTel: true,
             })
-            if(this.state.isOld){
+            if (this.state.isOld) {
                 this.setState({
                     isSave: true,
                 })
@@ -103,7 +103,7 @@ class ProfileDetail extends Component {
             this.setState({
                 isOld: true,
             })
-            if ( this.state.isTel){
+            if (this.state.isTel) {
                 this.setState({
                     isSave: true,
                 })
@@ -125,8 +125,7 @@ class ProfileDetail extends Component {
 
     blurAll = (e) => {
         if (e.target.value !== "0" && e.target.value !== "") {
-            if(this.state.isOld && this.state.isTel)
-            {
+            if (this.state.isOld && this.state.isTel) {
                 this.setState({
                     isSave: true,
                 })
@@ -141,14 +140,14 @@ class ProfileDetail extends Component {
                 .then(res => {
                     console.log(res.data);
                     this.props.updateProvince(res.data);
-                    if(this.props.infoUser.province !== '0'){
+                    if (this.props.infoUser.province !== '0') {
                         this.props.updateDistrict(res.data.filter(word => word.codename === this.props.infoUser.province)[0].districts,)
                     }
                 })
                 .catch(err => {
                     console.log("fail");
                 })
-        } 
+        }
     }
 
 
@@ -163,16 +162,18 @@ class ProfileDetail extends Component {
                     <CardContent>
                         <Grid container spacing={3}>
                             <Grid item md={6} xs={12}>
-                                <TextField
-                                    id="outlined-basic"
-                                    variant="outlined"
-                                    fullWidth
-                                    onBlur={(e) => this.blurAll(e)}
-                                    label="First name"
-                                    required
-                                    name="firstName"
-                                    defaultValue={this.props.infoUser.firstName}
-                                />
+                                <Box >
+                                    <TextField
+                                        id="outlined-basic"
+                                        variant="outlined"
+                                        fullWidth
+                                        onBlur={(e) => this.blurAll(e)}
+                                        label="First name"
+                                        required
+                                        name="firstName"
+                                        defaultValue={this.props.infoUser.firstName}
+                                    />
+                                </Box>
                             </Grid>
                             <Grid item md={6} xs={12}>
                                 <TextField
@@ -254,7 +255,7 @@ class ProfileDetail extends Component {
                                     onBlur={(e) => this.blurTel(e)}
                                 />
                             </Grid>
-                            
+
                             <Grid item md={6} xs={12}>
                                 <TextField
                                     fullWidth
@@ -284,10 +285,10 @@ class ProfileDetail extends Component {
                                     label="Select district"
                                     name="district"
                                     defaultValue={this.props.infoUser.district}
-                                    value={this.state.nameDistrict} 
+                                    value={this.state.nameDistrict}
                                     onChange={(e) => this.changeDistrict(e)}
                                     required
-                                    disabled={this.props.infoUser.province? false : true}
+                                    disabled={this.props.infoUser.province ? false : true}
                                     select
                                     SelectProps={{ native: true }}
                                     variant="outlined"
