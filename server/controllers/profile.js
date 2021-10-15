@@ -56,8 +56,13 @@ class meProfile {
                         if(err){
                             console.log("Something wrong when updating data!");
                         }
-                    
-                        console.log(doc);
+                        res.status(200).send(
+                            JSON.stringify({
+                                token : res.locals.newToken,
+                                email : decode.email,
+                                data,
+                            })
+                        )
                     });
             });
 
@@ -81,8 +86,14 @@ class meProfile {
                 if(err){
                     console.log("Something wrong when updating data!");
                 }
-            
-                console.log(doc);
+                
+                res.status(200).send(
+                    JSON.stringify({
+                        token : res.locals.newToken,
+                        email : decode.email,
+                        data,
+                    })
+                )
             });
 }
     addShift = async (req, res) => {
@@ -104,7 +115,15 @@ class meProfile {
                     });
 
                 newShift.save()
+        res.status(200).send(
+                JSON.stringify({
+                    token : res.locals.newToken,
+                    email : decode.email,
+                    data,
+                    })
+                )
                 }
+        
  
     updateShift = async (req, res) => {
         const idUser = req.body.idUser
@@ -131,8 +150,13 @@ class meProfile {
                 if(err){
                     console.log("Something wrong when updating data!");
                 }
-            
-                console.log(doc);
+            res.status(200).send(
+                    JSON.stringify({
+                        token : res.locals.newToken,
+                        email : decode.email,
+                        data,
+                    })
+                )
             });
     }
     deleteShift = async (req, res) => {
@@ -144,8 +168,13 @@ class meProfile {
                 if(err){
                     console.log("Something wrong when updating data!");
                 }
-            
-                console.log(doc);
+                res.status(200).send(
+                    JSON.stringify({
+                        token : res.locals.newToken,
+                        email : decode.email,
+                        data,
+                    })
+                )
             });
     }
     changePassword = async (req, res) => {
