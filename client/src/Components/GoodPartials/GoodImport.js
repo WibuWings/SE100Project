@@ -10,11 +10,25 @@ import '../../CSS/GoodManager.css';
 import { connect } from 'react-redux';
 import GoodImage from '../../img/good-example.jpg';
 import AddTypeModal from './AddTypeModal';
+import { withStyles } from '@material-ui/styles';
+
 var productTypes =[
      'food', 'detergent', 'cuisine'
 ];
 
+
 var typeSet = [];
+const StyledTextField = withStyles((theme) => ({
+    root: {
+      width: 240,
+      "& .MuiInputBase-root": {
+        height: 40,
+        "& input": {
+          textAlign: "right"
+        }
+      }
+    }
+  }))(TextField);
 
 class GoodImport extends Component {
     constructor(props) {
@@ -101,7 +115,6 @@ class GoodImport extends Component {
                 }}
             >   
                 <div className="good-import-header"></div>
-                <div>Good Import</div>
                 <Grid className="import-container" container spacing={2}>
                     <Grid item md={3} sm={12}  
                         style={{
@@ -124,21 +137,53 @@ class GoodImport extends Component {
                         </input>
                     </Grid>
                     <Grid item md={9} sm={12}>
-                        <Card >
-                            <Grid item md={4} sm={12} 
-                                style={{
-                                    display: 'flex', 
-                                    margin: '12px',
-                                }} 
-                            >
-                                <div class="input-label">ID</div>
-                                <TextField 
-                                    type="text" 
-                                    class="input-val" 
-                                    size="small"  
-                                    name="goodID" 
-                                    variant="outlined" 
-                                />
+
+                        <Card 
+                            style={{
+                                marginRight: '18px'
+                            }}
+                        >
+                            <Grid container md={12}>
+                                <Grid item md={5} 
+                                    className='input-item'
+                                >
+                                    <div class="input-label">ID</div>
+                                    <TextField 
+                                        type="text" 
+                                        class="input-val" 
+                                        style = {{width: '80%'}} 
+                                        fullWidth  
+                                        name="goodID" 
+                                        variant="outlined" 
+                                    />
+                                </Grid>
+                                <Grid item md={7} 
+                                    className='input-item'
+                                >
+                                    <div class="input-label">Name</div>
+                                    <TextField 
+                                         
+                                        type="text" 
+                                        class="input-val" 
+                                        style = {{width: '80%'}} 
+                                        fullWidth
+                                        size="small"
+                                        name="goodName" 
+                                        variant="outlined" 
+                                    />
+                                </Grid>
+                                <Grid item md={5}
+                                    className='input-item'
+                                >
+                                    <div class="input-label">Quantity:</div>
+                                    {/* <TextField 
+                                        type="number" 
+                                        class="input-val" 
+                                        name="goodQuantity" 
+                                        variant="outlined" 
+                                    /> */}
+                                    <StyledTextField/>
+                                </Grid>
                             </Grid>
                         </Card>
                     </Grid>
@@ -148,23 +193,9 @@ class GoodImport extends Component {
                 </Grid> 
                 <div class="info-container"> 
                     
-                    <div class="input-label">Name</div>
-                    <TextField 
-                        type="text" 
-                        class="input-val" 
-                        size="small"  
-                        name="goodName" 
-                        variant="outlined" 
-                    />
+                    
                     <div class="input-container">
-                        <div class="input-label">Quantity:</div>
-                        <TextField 
-                            type="number" 
-                            class="input-val" 
-                            size="small" 
-                            name="goodQuantity" 
-                            variant="outlined" 
-                        />
+                        
                     </div>
                     <div class="input-container">
                         <div class="input-label">Original Price:</div>
