@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button } from '@mui/material';
+import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button, Alert } from '@mui/material';
 import { connect } from 'react-redux'
 import { BiPlusMedical, BiEdit } from 'react-icons/bi';
 import Stack from '@mui/material/Stack';
@@ -9,9 +9,47 @@ import axios from 'axios';
 class AddTypeModal extends Component {
     constructor(props) {
         super(props);
+        this.state= {
+            change: 'false'
+        }
     }
+    storeID = "";
+    typeList = [];
+    getAllTypeList = () => {
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+        axios.get(`http://localhost:5000/api/product/type`, data)
+        .then(res => {
+            alert("Get success");
+        })
+        .catch(err => {
+            alert(err);
+        })
 
+    }
     addType = () => {
+        const data = {
+            token: localStorage.getItem('token'),
+            productType: {
+                _id:{
+                    // typeID: '1',
+                    storeID: this.props.infoUser.email,
+                },
+                name: document.querySelector('input[name="typeName"]').value,
+            }    
+        }
+        axios.post(`http://localhost:5000/api/product/type`, data)
+            .then(res => {
+                alert("Save success");
+            })
+            .catch(err => {
+                alert(err);
+            })
+        // alert("Chạy được tới đây rồi")
         this.props.changeAddTypeStatus();
     }
 
@@ -20,11 +58,12 @@ class AddTypeModal extends Component {
     }
 
     render() {
+        this.getAllTypeList();
         return (
             <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader 
-                        style={{ color: 'blue', backgroundColor: '#efeeef' }} 
+                        style={{ color: 'blue', backgroundColor: '#efeeef', textAlign: 'center' }} 
                         title={this.props.isAddTypeStatus? "Add Type" : "Edit Type"}
                         />
                     <Divider />
@@ -43,9 +82,9 @@ class AddTypeModal extends Component {
                                     id="outlined-basic"
                                     variant="outlined"
                                     fullWidth
-                                    defaultValue={(this.props.editShiftStatus ? this.props.objectEditShift.description : "")}
                                     required
                                     type="text"
+                                    name="typeName"
                                 />
                             </Grid>
                             <Grid item md={12} xs={12}>
@@ -75,9 +114,6 @@ class AddTypeModal extends Component {
                         >
                             Cancel
                         </Button>
-                        {/* <Button style={{ backgroundColor: 'red' }} onClick={(e) => this.hanhleCancel(e)} variant="contained" startIcon={<GiCancel />}>
-                            Hủy
-                        </Button> */}
                     </Box>
                 </Card>
             </form>
@@ -89,6 +125,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         addTypeStatus: state.addTypeStatus,
         isAddTypeStatus: state.isAddTypeStatus,
+        infoUser: state.infoUser,
     }
 }
 
