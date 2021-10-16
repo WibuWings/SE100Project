@@ -20,17 +20,58 @@
     align-items: center;
     justify-content: flex-start;
     /* border: 1px solid #333; */
-    padding: 12px;
+    padding: 8px;
+    padding-right: 4px;
 }
 
 .input-label {
     margin-right: 12px;
-    min-width: 80px;
+    padding-left: 20px;
 }
 .input-box {
     flex: 1
 }
 
+.all-type-container {
+    display: flex;
+}
+
+.type-container {
+    position: relative;
+    /* border: 1px solid #333; */
+    margin-right: 20px;
+    padding: 4px;
+    min-width: 60px;
+    text-align: center;
+    background-color: #53ace4;
+    color: #fff;  
+    border-radius: 8px;  
+    pointer-events: none;
+}
+
+
+.type-title {
+    pointer-events: none;
+}
+
+.close-icon {
+    position: absolute;
+    right: -12px;
+    top: -12px;
+    color: #e63b3b;
+    font-size: 12px;
+    pointer-events: auto;
+}
+
+.close-icon:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.close-icon:hover + span{
+    cursor: pointer;
+    opacity: 0.7;
+}
 
 /* Modal */
 .modal-add{

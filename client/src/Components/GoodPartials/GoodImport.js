@@ -15,6 +15,7 @@ import { AiFillPlusCircle} from "react-icons/ai";
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 
 
@@ -23,11 +24,13 @@ var productTypes =[
 ];
 
 
-var typeSet = [];
+var typeSet = [
+    'foot', 'king'
+];
 const StyledTextField = withStyles((theme) => ({
     root: {
       "& .MuiInputBase-root": {
-        height: 40,
+        height: 36,
         "& input": {
           textAlign: "right",
           marginLeft: '4px',
@@ -44,7 +47,7 @@ class GoodImport extends Component {
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
             currentDateTime: new Date('2014-08-18T21:11:54'),
-            
+            change: true,
         }; 
         
     }
@@ -68,18 +71,10 @@ class GoodImport extends Component {
             formData.append("upload_preset", "qqqhcaa3");
             axios.post(`https://api.cloudinary.com/v1_1/databaseimg/image/upload`, formData)
                 .then(res => {
-                    alert(res.data.url);
-                    // this.props.updateAvatar(res.data.url);
                     this.imgUrl=res.data.url;
-                    // axios.post(`http://localhost:5000/api/update-avatar`,{
-                    //     _id: this.props.infoUser.email,
-                    //     avatar: res.data.url,
-                    //     token: localStorage.getItem('token'),
-                    // }).then(res => {
-                    //     console.log("Thành công");
-                    // }).catch(err => {
-                    //     console.log("Lỗi");
-                    // })
+                    this.setState({
+                        change: 'true'
+                    });
                 })
                 .catch(err => {
                     console.log("Thất bại");
@@ -130,77 +125,69 @@ class GoodImport extends Component {
             >   
                 <div className="good-import-header"></div>
                 <Grid className="import-container" container spacing={2}>
-                    <Grid item md={3} sm={12}  
+                    <Grid item md={3}  
                         style={{
                             display: 'flex', 
                             justifyContent:'center', 
                             flexDirection:'column',
-                            alignItems:'center'
+                            alignItems:'center',
+                            paddingLeft: '30px'
                         }}
                     >   
                         <label className="profile-header__avatar" for="profile-header-update-avatar" style={{ overflow: 'hidden', marginTop: '15px ' }}>
-                            <Image style={{width: '200px',height: '200px' }} cloudName="databaseimg" publicId={this.imgUrl!='none' ? 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png' : 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png'}></Image>
+                            <Image style={{width: '240px',height: '240px', padding: '10px' }} cloudName="databaseimg" publicId={this.imgUrl=='none' ? 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png' : this.imgUrl}></Image>
                         </label>
                         {/* Ẩn đi */}
                         <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input>
-                        <label style={{overflow: 'hidden', marginTop: '15px ' }}>
-                            <Image style={{ width: '200px', height: '200px' }} cloudName="databaseimg" ></Image>
-                        </label>
-                        <input 
-                            id="profile-header-update-avatar" 
-                            type="file" 
-                            accept="image/png, image/jpeg" 
-                            // style={{ display: 'none' }} 
-                            onChange={(e) => this.profileImageChange(e)}
-                        >
-                        </input>
                     </Grid>
-                    <Grid item md={9} sm={12}>
+                    <Grid item md={9}>
 
                         <Card 
                             style={{
-                                marginRight: '18px'
+                                marginRight: '18px',
                             }}
                         >
-                            <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Create shift" />
+                            <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="ADD GOOD" />
                             <Grid container md={12}>
-                                <Grid item md={4} 
+                                <Grid item md={6} 
                                     className='input-item'
                                 >
-                                    <div className="input-label">ID</div>
+                                    <div 
+                                        className="input-label"
+                                        style={{
+                                            width: '116px'
+                                        }}
+                                    >
+                                        ID
+                                    </div>
                                     <StyledTextField
                                         classname='input-box' 
                                         type="text" 
-                                        class="input-val" 
-                                        // style = {{width: '70%'}} 
+                                        // class="input-val" 
+                                        style = {{width: '100%'}} 
                                         fullWidth 
                                         size="small" 
                                         name="goodID" 
                                         variant="outlined" 
                                     />
                                 </Grid>
-                                <Grid item md={8} 
+                                <Grid item md={6} 
                                     className='input-item'
+                                    style={{
+                                        marginLeft: 0,
+                                        paddingLeft: 0
+                                    }}
                                 >
-                                    <div className="input-label">Import Date</div>
-                                    {/* <StyledTextField
-                                        classname='input-box'   
-                                        type="date" 
-                                        style = {{width: '60%'}} 
-                                        fullWidth
-                                        size="small"
-                                        name="importDate" 
-                                        variant="outlined" 
-                                    /> */}
+                                    <div className="input-label" style={{width: 128}}>Import Date</div>
                                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                        {/* <DateTimePicker
-                                            style = {{width: '100%', height: 40}}
-                                            value={this.state.timeFrom}
-                                            onChange={(newValue) => this.changeTimeFrom(newValue)}
-                                            renderInput={(params) => <TextField {...params} />}
-                                        /> */}
                                         <DateTimePicker
-                                            renderInput={(params) => <StyledTextField {...params} name="importDateTime"/>}
+                                            renderInput={(params) => <StyledTextField 
+                                                                        {...params} 
+                                                                        classname='input-box'
+                                                                        name="importDateTime"
+                                                                        style = {{width: '70%', marginRight: 20}} 
+                                                                        fullWidth 
+                                                                    />}
                                             value={this.dateTime}
                                             onChange={(newValue) => {
                                                 this.changeTimeFrom(newValue);
@@ -212,11 +199,11 @@ class GoodImport extends Component {
                                 <Grid item md={6} 
                                     className='input-item'
                                 >
-                                    <div className="input-label">Name</div>
+                                    <div className="input-label"style={{width: '114px'}}>Name</div>
                                     <StyledTextField
                                         classname='input-box'   
                                         type="text" 
-                                        class="input-val" 
+                                        // class="input-val" 
                                         style = {{width: '100%'}} 
                                         fullWidth
                                         size="small"
@@ -226,10 +213,16 @@ class GoodImport extends Component {
                                 </Grid>
                                 <Grid item md={3}
                                     className='input-item'
+                                    style={{padding: '0px', marginLeft: '0px'}}
                                 >
-                                    <div className="input-label">Quantity</div>
+                                    <div 
+                                        className="input-label" 
+                                        style={{width: '100px'}}
+                                    >
+                                        Quantity
+                                    </div>
                                     <StyledTextField
-                                        style = {{width: '100%', marginLeft: '4px'}} 
+                                        style = {{width: '60%'}} 
                                         fullWidth
                                         name="goodQuantity" 
                                         variant="outlined"
@@ -238,8 +231,19 @@ class GoodImport extends Component {
                                 </Grid>
                                 <Grid item md={3}
                                     className='input-item'
+                                    style={{
+                                        paddingRight: 24
+                                    }}
                                 >
-                                    <div className="input-label">Unit</div>
+                                    <div 
+                                        className="input-label"
+                                        style={{
+                                            marginLeft: 0,
+                                            paddingLeft: 4
+                                        }}
+                                    >
+                                        Unit
+                                    </div>
                                     <StyledTextField
                                         classname='input-box'
                                         style = {{width: '100%', marginLeft: '4px'}} 
@@ -250,13 +254,13 @@ class GoodImport extends Component {
                                         name="unit" 
                                     />
                                 </Grid>
-                                <Grid item md={5}
+                                <Grid item md={6}
                                     className='input-item'
                                 >
-                                    <div className="input-label">Original Price</div>
+                                    <div className="input-label" style={{width: 128}}>Original Price</div>
                                     <StyledTextField
                                         classname='input-box'
-                                        style = {{width: '60%', marginLeft: '4px'}} 
+                                        style = {{width: '60%', marginLeft: '4px', marginRight:'8px'}} 
                                         fullWidth
                                         name="originalPrice" 
                                         variant="outlined"
@@ -264,13 +268,19 @@ class GoodImport extends Component {
                                     />
                                     đ
                                 </Grid>
-                                <Grid item md={5}
+                                <Grid item md={6}
                                     className='input-item'
+                                    style={{padding: '0px', marginLeft: '0px', paddingRight: 24}}
                                 >
-                                    <div className="input-label">Sell Price</div>
+                                    <div 
+                                        className="input-label"
+                                        style={{width: '96px'}}
+                                    >
+                                        Sell Price
+                                    </div>
                                     <StyledTextField
                                         classname='input-box'
-                                        style = {{width: '60%', marginLeft: '4px'}} 
+                                        style = {{width: '80%', marginLeft: '4px',marginRight:'8px'}} 
                                         fullWidth
                                         name="sellPrice" 
                                         variant="outlined"
@@ -281,7 +291,7 @@ class GoodImport extends Component {
                                 <Grid item md={7} 
                                     className='input-item'
                                 >
-                                    <div className="input-label">Expired Date</div>
+                                    <div className="input-label" style={{width: 132}}>Expired Date</div>
                                     <StyledTextField
                                         classname='input-box'   
                                         type="date" 
@@ -292,10 +302,15 @@ class GoodImport extends Component {
                                         variant="outlined" 
                                     />
                                 </Grid>
-                                <Grid item md={12}
+                                <Grid item md={10}
                                     className='input-item'
                                 >
-                                    <div className="input-label">Product Type:</div>
+                                    <div 
+                                        className="input-label"
+                                        style={{width:132}}
+                                    >
+                                        Product Type
+                                    </div>
                                     <FormControl sx={{ minWidth: 120 }}>
                                         {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                         <Select
@@ -308,7 +323,7 @@ class GoodImport extends Component {
                                                 }
                                             }}
                                             style={{
-                                                height: 40,
+                                                height: 36,
                                             }}
                                         >
                                             {
@@ -331,29 +346,37 @@ class GoodImport extends Component {
                                             }}    
                                         />
                                     </Button>
-                                    <div>
+                                    <div className='all-type-container'>
                                             {
                                                 Array.from(typeSet).map((type) =>
-                                                    <button 
-                                                        onClick={() => {
-                                                            typeSet = typeSet.filter(function(item) {
-                                                                return item != type;
-                                                            })
-                                                            console.log(typeSet);
-                                                            this.setState({type: this.state.type});
-                                                        }}  
-                                                    >
-                                                        {type}
-                                                    </button>
+                                                    <div className='type-container'>
+                                                        
+                                                        <CancelIcon
+                                                            className='close-icon'
+                                                            size={10}
+                                                            onClick={() => {
+                                                                typeSet = typeSet.filter(function(item) {
+                                                                    return item != type;
+                                                                })
+                                                                console.log(typeSet);
+                                                                this.setState({type: 'none'});
+                                                            }}
+                                                
+                                                        />
+                                                        <span className='type-title'>
+                                                            {type}
+                                                        </span>
+                                                    </div>
+                                                    
                                                 )
                                             }
                                         </div>
                                 </Grid>
-                                <Grid item md={10}
+                                {/* <Grid item md={10}
                                     className='input-item'
                                 >
 
-                                </Grid>
+                                </Grid> */}
                                 <Grid item md={2}
                                     className='input-item'
                                 >
