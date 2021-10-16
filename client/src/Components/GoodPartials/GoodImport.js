@@ -3,7 +3,7 @@ import { TextField } from '@mui/material';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import { InputLabel, Button, Modal, Grid, Card} from '@mui/material';
+import { InputLabel, Button, Modal, Grid, Card, CardHeader} from '@mui/material';
 import { Image } from 'cloudinary-react';
 import axios from 'axios';
 import '../../CSS/GoodManager.css';
@@ -110,8 +110,6 @@ class GoodImport extends Component {
                 unit: document.querySelector('input[name="unit"]').value,
             }
         }
-        // alert(document.querySelector('input[name="importDateTime"]').value);
-        // alert(this.dateTime.toString())
         axios.post(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Save success");
@@ -139,7 +137,12 @@ class GoodImport extends Component {
                             flexDirection:'column',
                             alignItems:'center'
                         }}
-                    >
+                    >   
+                        <label className="profile-header__avatar" for="profile-header-update-avatar" style={{ overflow: 'hidden', marginTop: '15px ' }}>
+                            <Image style={{width: '200px',height: '200px' }} cloudName="databaseimg" publicId={this.imgUrl!='none' ? 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png' : 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png'}></Image>
+                        </label>
+                        {/* Ẩn đi */}
+                        <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input>
                         <label style={{overflow: 'hidden', marginTop: '15px ' }}>
                             <Image style={{ width: '200px', height: '200px' }} cloudName="databaseimg" ></Image>
                         </label>
@@ -159,6 +162,7 @@ class GoodImport extends Component {
                                 marginRight: '18px'
                             }}
                         >
+                            <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Create shift" />
                             <Grid container md={12}>
                                 <Grid item md={4} 
                                     className='input-item'
