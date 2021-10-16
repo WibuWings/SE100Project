@@ -27,7 +27,7 @@ class EditTypeModal extends Component {
         this.props.changeAddStatus();
         this.props.setEditTypeStatus();
     }
-
+    
     render() {
         console.log(this.props.objectEditShift);
         return (
@@ -42,6 +42,7 @@ class EditTypeModal extends Component {
                                     <Grid item md={3} style={{border:'1px solid #333', padding: 4}}>
                                         <span>{type}</span>
                                         <BiEdit onClick={() => this.edit()}/>
+
                                     </Grid>
                                 ))}
                             </Grid>
