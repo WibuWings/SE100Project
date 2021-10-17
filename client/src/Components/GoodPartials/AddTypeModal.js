@@ -29,6 +29,7 @@ class AddTypeModal extends Component {
             })
             .catch(err => {
                 console.log(err);
+                alert(err)
             })
         // Get data và lưu các tên Type vào bảng 
     }

@@ -15,6 +15,7 @@ import AddTypeModal from './AddTypeModal';
 import { withStyles } from '@material-ui/styles';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DatePicker from '@mui/lab/DatePicker';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import { AiFillPlusCircle} from "react-icons/ai";
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -40,26 +41,28 @@ const StyledTextField = withStyles((theme) => ({
 class UpdateGoodModal extends Component {
     constructor(props) {
         super(props);
+        
         this.state = {
+            goodID : "",
+            change: false,
             imageSelect: "null",
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         }; 
+        this.loadInitialData = this.loadInitialData.bind(this);
+        // this.loadInitialData();
+        // alert(this.state.goodID)
     }
     imgUrl='none';
-    // Handle user
-    hanhleCancel = () => {
-        
-    }
-
-    changeTimeFrom = (e) => {
-    
-    }
-
-    changeTimeTo = (e) => {
-        
-    }
-
+    goodID='';
+    importDate='';
+    name='';
+    imgUrl='';
+    quantity = 0;
+    remain = 0;
+    unit = "";
+    sellPrice = "";
+    expire ="";
     blurDiscription = (e) => {
         this.descriptionShift = e.target.value;
     }
@@ -69,22 +72,95 @@ class UpdateGoodModal extends Component {
 
     updateGood = () => {
         this.props.changeUpdateGoodStatus();
+        const data = {
+            token: localStorage.getItem('token'),
+            product: {
+                _id: {
+                    productID: document.querySelector('input[name="goodID"]').value,
+                    importDate: Date(this.dateTime),
+                },
+                name: document.querySelector('input[name="goodName"]').value,
+                quantity: document.querySelector('input[name="goodQuantity"]').value,
+                remain: document.querySelector('input[name="goodQuantity"]').value,
+                importPrice: document.querySelector('input[name="originalPrice"]').value,
+                sellPrice: document.querySelector('input[name="sellPrice"]').value,
+                expires: document.querySelector('input[name="expiredDate"]').value,
+                imgUrl: this.imgUrl,
+                unit: document.querySelector('input[name="unit"]').value,
+            }
+        }
+        axios.put(`http://localhost:5000/api/product`, data)
+            .then(res => {
+                console.log("Update success");
+                alert('update được rồi anh trai')
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        console.log(data);
     }
 
     cancel = () => {
         this.props.changeUpdateGoodStatus();
     }
 
+    sampleData = {
+        email:"19522006@gm.uit.edu.vn",
+        token:"this is token",
+        data: [
+            {
+                _id:{
+                    productID:"1212121",
+                    importDate:"2021-10-08T00:00:00.000Z"
+                },
+                name:"SHIIijjjiI",
+                imgUrl:"none",
+                quantity:4,
+                remain:4,
+                unit:"12",
+                importPrice:7,
+                sellPrice:7,
+                expires:"2000-11-10T00:00:00.000Z",
+            },
+            {
+                _id:{
+                    productID:"121212aa1",
+                    importDate:"2021-10-08T00:00:00.000Z"
+                }, 
+                name:"q",
+                imgUrl:"none",
+                quantity:11,
+                remain:11,
+                unit:"11",
+                importPrice:212,
+                sellPrice:120,
+                expires:"2021-10-28"
+            }
+        ]
+    }
+
     loadInitialData = () => {
-        // Load các dữ liệu ban đầu của form ở đây để mà update
+        // Load các dữ liệu ban đầu của form ở đây để mà update nhưng mà bị lỗi 401 mẹ
+        var data = this.sampleData;
+        //Xử lý sampleData
+        var productInfo = data.data[0];
+        this.goodID = productInfo._id.productID;
+        this.importDate = productInfo._id.importDate;
+        this.name = productInfo.name;
+        this.imgUrl = productInfo.imgUrl;
+        this.quantity = productInfo.quantity;
+        this.remain = productInfo.remain;
+        this.unit = productInfo.unit;
+        this.sellPrice = productInfo.sellPrice;
+        this.expire = productInfo.expires;
     }
 
     render() {
-
+        this.loadInitialData();
         return (
-            <form style={{ zIndex: '10', width: '70%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
+            <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="ADD GOOD" />
+                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="UPDATE GOOD" />
                         <div 
                         style={{ 
                             width: '100%', backgroundColor: 'rgb(221,235,255)'   
@@ -132,6 +208,7 @@ class UpdateGoodModal extends Component {
                                             size="small" 
                                             name="goodID" 
                                             variant="outlined" 
+                                            value={this.goodID}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -151,7 +228,7 @@ class UpdateGoodModal extends Component {
                                                                             style = {{width: '70%', marginRight: 20}} 
                                                                             fullWidth 
                                                                         />}
-                                                value={this.dateTime}
+                                                value={this.importDate}
                                                 onChange={(newValue) => {
                                                     this.changeTimeFrom(newValue);
                                                 }}
@@ -171,7 +248,8 @@ class UpdateGoodModal extends Component {
                                             fullWidth
                                             size="small"
                                             name="goodName" 
-                                            variant="outlined" 
+                                            variant="outlined"
+                                            value={this.name} 
                                         />
                                     </Grid>
                                     <Grid item md={3}
@@ -190,6 +268,7 @@ class UpdateGoodModal extends Component {
                                             name="goodQuantity" 
                                             variant="outlined"
                                             type="number" 
+                                            value={this.quantity}
                                         />
                                     </Grid>
                                     <Grid item md={3}
@@ -211,10 +290,10 @@ class UpdateGoodModal extends Component {
                                             classname='input-box'
                                             style = {{width: '100%', marginLeft: '4px'}} 
                                             fullWidth
-                                            name="goodQuantity" 
                                             variant="outlined"
                                             type="text" 
                                             name="unit" 
+                                            value={this.unit}
                                         />
                                     </Grid>
                                     <Grid item md={6}
@@ -227,7 +306,8 @@ class UpdateGoodModal extends Component {
                                             fullWidth
                                             name="originalPrice" 
                                             variant="outlined"
-                                            type="number" 
+                                            type="number"
+                                            value={this.importPrice}
                                         />
                                         đ
                                     </Grid>
@@ -248,6 +328,7 @@ class UpdateGoodModal extends Component {
                                             name="sellPrice" 
                                             variant="outlined"
                                             type="number" 
+                                            value={this.sellPrice}
                                         />
                                         đ
                                     </Grid>
@@ -255,15 +336,23 @@ class UpdateGoodModal extends Component {
                                         className='input-item'
                                     >
                                         <div className="input-label" style={{width: 132}}>Expired Date</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="date" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            name="expiredDate" 
-                                            variant="outlined" 
-                                        />
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DatePicker
+                                                renderInput={(params) => <StyledTextField 
+                                                                            {...params} 
+                                                                            classname='input-box'
+                                                                            name="expiredDate"
+                                                                            style = {{width: '70%', marginRight: 20}} 
+                                                                            fullWidth 
+                                                                            value={this.expire}
+                                                                        />}
+                                                value={this.expire}
+                                                onChange={(newValue) => {
+                                                    this.changeTimeFrom(newValue);
+                                                }}
+                                            />
+                                        </LocalizationProvider>
+                                        
                                     </Grid>
                                     <Grid item md={10}
                                         className='input-item'
@@ -343,8 +432,8 @@ class UpdateGoodModal extends Component {
                                     <Grid item md={2}
                                         className='input-item'
                                     >
-                                        <Button variant="contained" onClick={() => this.importGood()}>
-                                            Import
+                                        <Button variant="contained" onClick={() => this.updateGood()}>
+                                            UPDATE
                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -364,7 +453,7 @@ class UpdateGoodModal extends Component {
                 </div>
                 </Card>
             </form>
-        );
+        )
     }
 }
 

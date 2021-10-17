@@ -247,7 +247,6 @@ class GoodImport extends Component {
                                         classname='input-box'
                                         style = {{width: '100%', marginLeft: '4px'}} 
                                         fullWidth
-                                        name="goodQuantity" 
                                         variant="outlined"
                                         type="text" 
                                         name="unit" 
