@@ -111,9 +111,16 @@ class GoodManager extends Component {
                         </div>
                     ): null}
                     {this.props.updateGoodStatus ? (
-                        <div className="modal-add">
+                        <div 
+                            className="modal-add"
+                        >
                             <div onClick={() => {this.props.changeUpdateGoodStatus();}} className="modal-overlay"></div>
-                            <UpdateGoodModal></UpdateGoodModal>
+                            <UpdateGoodModal
+                                style={{
+                                    marginTop: 0
+                                }}
+                            >
+                            </UpdateGoodModal>
                         </div>
                     ): null}
                      {this.props.editTypeStatus ? (

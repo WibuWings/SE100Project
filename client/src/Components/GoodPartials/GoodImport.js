@@ -18,7 +18,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 
-
 var productTypes =[
      'food', 'detergent', 'cuisine'
 ];
