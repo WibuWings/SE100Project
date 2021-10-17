@@ -15,6 +15,7 @@ class AddTypeModal extends Component {
     }
     storeID = "";
     typeList = [];
+
     getAllTypeList = () => {
         const data = {
             token: localStorage.getItem('token'),
@@ -22,6 +23,7 @@ class AddTypeModal extends Component {
                 storeID: this.props.infoUser.email,
             }   
         }
+        alert(this.props.infoUser.email);
         axios.get(`http://localhost:5000/api/product/type`, data)
         .then(res => {
             alert("Get success");
@@ -36,7 +38,7 @@ class AddTypeModal extends Component {
             token: localStorage.getItem('token'),
             productType: {
                 _id:{
-                    // typeID: '1',
+                    typeID: '5',
                     storeID: this.props.infoUser.email,
                 },
                 name: document.querySelector('input[name="typeName"]').value,
