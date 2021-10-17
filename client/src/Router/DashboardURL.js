@@ -11,7 +11,7 @@ import SellProduct from '../Components/SellProduct/SellProduct';
 
 class DashboardURL extends Component {
     render() {
-        return (
+        return ( 
             <div>      
                 <Route exact path="/" component={DashBoard}></Route>
                 <Route exact path="/dashboard" component={DashBoard}></Route>
