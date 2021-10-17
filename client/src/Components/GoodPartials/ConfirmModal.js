@@ -13,10 +13,28 @@ class ConfirmModal extends Component {
     confirm = () => {
         // Thực hiện các lệnh xử lý tại đây
         this.props.changeConfirmStatus();
+        this.props.setConfirm();
     }
 
     cancel = () => {
         this.props.changeConfirmStatus();
+        this.props.setQuit();
+    }
+
+    getMessage = ()  => {
+        var message = "Cái này chưa code";
+        switch(this.props.confirmCode)
+        {
+            case 'confirm-delete-good':
+                message = "Are you sure to delete this product ?";
+            case 'confirm-import-good':
+                message = "Are you sure to import this product ?";
+        }
+        return (
+            <div>
+                {message}
+            </div>
+        );
     }
     render() {
         console.log(this.props.objectEditShift);
@@ -28,12 +46,7 @@ class ConfirmModal extends Component {
                     <CardContent>
                         <Grid container spacing={2}>
                             <Grid item md={12} xs={12}>
-                                {
-                                    this.props.deleteStatus ? 
-                                    (<div>Are you sure to delete this good?</div>)
-                                    :
-                                    (<div>Are you sure to edit this good?</div>)
-                                }
+                                {this.getMessage()}
                             </Grid>
                             <Grid item md={12} xs={12}>
                                 <Stack spacing={3}>
@@ -61,6 +74,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         confirmStatus: state.confirmStatus,
         deleteStatus: state.deleteStatus,
+        confirmCode: state.confirmCode,
     }
 }
 
@@ -71,6 +85,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_CONFIRM_STATUS",
             });
         },
+        setConfirm: () => {
+            dispatch({
+                type: "CONFIRM",
+            });
+        },
+        setQuit: () => {
+            dispatch({
+                type: "QUIT",
+            });
+        }
     }
 }
 

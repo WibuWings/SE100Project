@@ -19,6 +19,7 @@ import DatePicker from '@mui/lab/DatePicker';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import { AiFillPlusCircle} from "react-icons/ai";
 import CancelIcon from '@mui/icons-material/Cancel';
+import ConfirmModal from './ConfirmModal';
 
 var productTypes =[
     'food', 'detergent', 'cuisine'
@@ -209,7 +210,9 @@ class UpdateGoodModal extends Component {
                                             size="small" 
                                             name="goodID" 
                                             variant="outlined" 
-                                            defaultValue={this.goodID}
+                                            value={this.goodID}
+                                            readOnly={true}
+                                            disabled={true}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -230,6 +233,8 @@ class UpdateGoodModal extends Component {
                                                                             fullWidth 
                                                                         />}
                                                 value={this.importDate}
+                                                readOnly={true}
+                                                disabled={true}
                                             />
                                         </LocalizationProvider>
                                     </Grid>
@@ -448,6 +453,12 @@ class UpdateGoodModal extends Component {
                             <AddTypeModal></AddTypeModal>
                         </div>
                     ): null}
+                    {this.props.confirmStatus ? (
+                        <div className="modal-add">
+                            <div onClick={() => {this.props.changeConfirmStatus();}} className="modal-overlay"></div>
+                            <ConfirmModal></ConfirmModal>
+                        </div>
+                    ): null}
                 </div>
                 </Card>
             </form>
@@ -458,6 +469,7 @@ class UpdateGoodModal extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         updateGoodStatus: state.updateGoodStatus,
+        confirmStatus: state.confirmStatus,
     }
 }
 
@@ -468,6 +480,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_UPDATE_GOOD_STATUS",
             });
         },
+        changeConfirmStatus: () => {
+            dispatch({
+                type: "CHANGE_CONFIRM_STATUS",
+            });
+        },
+        setUpdateConfirm: () => {
+            dispatch({
+                type: "SET_CONFIRM_UPDATE_GOOD",
+            }); 
+        }
     }
 }
 
