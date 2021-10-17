@@ -20,17 +20,18 @@ class AddTypeModal extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                storeID: this.props.infoUser.email,
+                // storeID: this.props.infoUser.email,
             }   
         }
-        alert(this.props.infoUser.email);
+        // console.log(data)
+        // alert(this.props.infoUser.email);
         axios.get(`http://localhost:5000/api/product/type`, data)
-        .then(res => {
-            alert("Get success");
-        })
-        .catch(err => {
-            alert(err);
-        })
+            .then(res => {
+                console.log("Get success");
+            })
+            .catch(err => {
+                alert("WHY THE FUCK TOKEN ???")
+            })
 
     }
     addType = () => {
