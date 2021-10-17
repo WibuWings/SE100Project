@@ -38,16 +38,15 @@ class SellProduct extends Component {
 
     render() {
         return (
-            <div className="sell-product" style={{}}>
-
-                <Container maxWidth="xl">
-                    <Grid container spacing={2}>
-                        <Grid item md={8} sm={4}  >
-                            <div style={{ marginTop: '20px', backgroundColor: 'beige', height: 'calc(100vh - 40px)', overflow: 'scroll', overflowX: 'hidden' }}>
+            <div className="sell-product" >
+                <Container  maxWidth="xl">
+                    <Grid  container spacing={2}>
+                        <Grid style={{borderRadius: '10px'}} item md={8} sm={4}  >
+                            <div style={{ borderRadius: '8px' ,marginTop: '20px', backgroundColor: 'beige', height: 'calc(100vh - 40px)', overflow: 'scroll', overflow: 'hidden' }}>
                                 <div style={{ overflow: 'hidden' }}>
                                     <Tabs></Tabs>
                                 </div>
-                                <Container maxWidth="xl">
+                                <Container id="choses-product" style={{height: '94%' , overflowY: 'scroll'}}  maxWidth="xl">
                                     <Grid container spacing={2}>
                                         <Grid item md={3} sm={3}>
                                             <Card>
@@ -55,11 +54,21 @@ class SellProduct extends Component {
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         Word of the Day
                                                     </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        be{this.bull}nev{this.bull}o{this.bull}lent
+                                                    <Typography variant="body2">
+                                                        well meaning and kindly.
+                                                        <br />
+                                                        {'"a benevolent smile"'}
                                                     </Typography>
-                                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                        adjective
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid> <Grid item md={3} sm={3}>
+                                            <Card>
+                                                <CardContent>
+                                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                        Word of the Day
                                                     </Typography>
                                                     <Typography variant="body2">
                                                         well meaning and kindly.
@@ -71,18 +80,11 @@ class SellProduct extends Component {
                                                     <Button size="small">Learn More</Button>
                                                 </CardActions>
                                             </Card>
-                                        </Grid>
-                                        <Grid item md={3} sm={3}>
+                                        </Grid> <Grid item md={3} sm={3}>
                                             <Card>
                                                 <CardContent>
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         Word of the Day
-                                                    </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        be{this.bull}nev{this.bull}o{this.bull}lent
-                                                    </Typography>
-                                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                        adjective
                                                     </Typography>
                                                     <Typography variant="body2">
                                                         well meaning and kindly.
@@ -94,18 +96,11 @@ class SellProduct extends Component {
                                                     <Button size="small">Learn More</Button>
                                                 </CardActions>
                                             </Card>
-                                        </Grid>
-                                        <Grid item md={3} sm={3}>
+                                        </Grid> <Grid item md={3} sm={3}>
                                             <Card>
                                                 <CardContent>
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         Word of the Day
-                                                    </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        be{this.bull}nev{this.bull}o{this.bull}lent
-                                                    </Typography>
-                                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                        adjective
                                                     </Typography>
                                                     <Typography variant="body2">
                                                         well meaning and kindly.
@@ -117,18 +112,11 @@ class SellProduct extends Component {
                                                     <Button size="small">Learn More</Button>
                                                 </CardActions>
                                             </Card>
-                                        </Grid>
-                                        <Grid item md={3} sm={3}>
+                                        </Grid> <Grid item md={3} sm={3}>
                                             <Card>
                                                 <CardContent>
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         Word of the Day
-                                                    </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        be{this.bull}nev{this.bull}o{this.bull}lent
-                                                    </Typography>
-                                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                        adjective
                                                     </Typography>
                                                     <Typography variant="body2">
                                                         well meaning and kindly.
@@ -140,18 +128,11 @@ class SellProduct extends Component {
                                                     <Button size="small">Learn More</Button>
                                                 </CardActions>
                                             </Card>
-                                        </Grid>
-                                        <Grid item md={3} sm={3}>
+                                        </Grid> <Grid item md={3} sm={3}>
                                             <Card>
                                                 <CardContent>
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         Word of the Day
-                                                    </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        be{this.bull}nev{this.bull}o{this.bull}lent
-                                                    </Typography>
-                                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                        adjective
                                                     </Typography>
                                                     <Typography variant="body2">
                                                         well meaning and kindly.
@@ -163,17 +144,11 @@ class SellProduct extends Component {
                                                     <Button size="small">Learn More</Button>
                                                 </CardActions>
                                             </Card>
-                                        </Grid><Grid item md={3} sm={3}>
+                                        </Grid> <Grid item md={3} sm={3}>
                                             <Card>
                                                 <CardContent>
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         Word of the Day
-                                                    </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        be{this.bull}nev{this.bull}o{this.bull}lent
-                                                    </Typography>
-                                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                        adjective
                                                     </Typography>
                                                     <Typography variant="body2">
                                                         well meaning and kindly.
@@ -185,17 +160,11 @@ class SellProduct extends Component {
                                                     <Button size="small">Learn More</Button>
                                                 </CardActions>
                                             </Card>
-                                        </Grid><Grid item md={3} sm={3}>
+                                        </Grid> <Grid item md={3} sm={3}>
                                             <Card>
                                                 <CardContent>
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         Word of the Day
-                                                    </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        be{this.bull}nev{this.bull}o{this.bull}lent
-                                                    </Typography>
-                                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                        adjective
                                                     </Typography>
                                                     <Typography variant="body2">
                                                         well meaning and kindly.
@@ -207,17 +176,11 @@ class SellProduct extends Component {
                                                     <Button size="small">Learn More</Button>
                                                 </CardActions>
                                             </Card>
-                                        </Grid><Grid item md={3} sm={3}>
+                                        </Grid> <Grid item md={3} sm={3}>
                                             <Card>
                                                 <CardContent>
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         Word of the Day
-                                                    </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        be{this.bull}nev{this.bull}o{this.bull}lent
-                                                    </Typography>
-                                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                        adjective
                                                     </Typography>
                                                     <Typography variant="body2">
                                                         well meaning and kindly.
@@ -229,17 +192,11 @@ class SellProduct extends Component {
                                                     <Button size="small">Learn More</Button>
                                                 </CardActions>
                                             </Card>
-                                        </Grid><Grid item md={3} sm={3}>
+                                        </Grid> <Grid item md={3} sm={3}>
                                             <Card>
                                                 <CardContent>
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         Word of the Day
-                                                    </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        be{this.bull}nev{this.bull}o{this.bull}lent
-                                                    </Typography>
-                                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                        adjective
                                                     </Typography>
                                                     <Typography variant="body2">
                                                         well meaning and kindly.
@@ -251,17 +208,11 @@ class SellProduct extends Component {
                                                     <Button size="small">Learn More</Button>
                                                 </CardActions>
                                             </Card>
-                                        </Grid><Grid item md={3} sm={3}>
+                                        </Grid> <Grid item md={3} sm={3}>
                                             <Card>
                                                 <CardContent>
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         Word of the Day
-                                                    </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        be{this.bull}nev{this.bull}o{this.bull}lent
-                                                    </Typography>
-                                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                        adjective
                                                     </Typography>
                                                     <Typography variant="body2">
                                                         well meaning and kindly.
@@ -273,17 +224,171 @@ class SellProduct extends Component {
                                                     <Button size="small">Learn More</Button>
                                                 </CardActions>
                                             </Card>
-                                        </Grid><Grid item md={3} sm={3}>
+                                        </Grid> <Grid item md={3} sm={3}>
                                             <Card>
                                                 <CardContent>
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         Word of the Day
                                                     </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        be{this.bull}nev{this.bull}o{this.bull}lent
+                                                    <Typography variant="body2">
+                                                        well meaning and kindly.
+                                                        <br />
+                                                        {'"a benevolent smile"'}
                                                     </Typography>
-                                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                        adjective
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid> <Grid item md={3} sm={3}>
+                                            <Card>
+                                                <CardContent>
+                                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                        Word of the Day
+                                                    </Typography>
+                                                    <Typography variant="body2">
+                                                        well meaning and kindly.
+                                                        <br />
+                                                        {'"a benevolent smile"'}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid> <Grid item md={3} sm={3}>
+                                            <Card>
+                                                <CardContent>
+                                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                        Word of the Day
+                                                    </Typography>
+                                                    <Typography variant="body2">
+                                                        well meaning and kindly.
+                                                        <br />
+                                                        {'"a benevolent smile"'}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid> <Grid item md={3} sm={3}>
+                                            <Card>
+                                                <CardContent>
+                                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                        Word of the Day
+                                                    </Typography>
+                                                    <Typography variant="body2">
+                                                        well meaning and kindly.
+                                                        <br />
+                                                        {'"a benevolent smile"'}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid> <Grid item md={3} sm={3}>
+                                            <Card>
+                                                <CardContent>
+                                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                        Word of the Day
+                                                    </Typography>
+                                                    <Typography variant="body2">
+                                                        well meaning and kindly.
+                                                        <br />
+                                                        {'"a benevolent smile"'}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid> <Grid item md={3} sm={3}>
+                                            <Card>
+                                                <CardContent>
+                                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                        Word of the Day
+                                                    </Typography>
+                                                    <Typography variant="body2">
+                                                        well meaning and kindly.
+                                                        <br />
+                                                        {'"a benevolent smile"'}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid> <Grid item md={3} sm={3}>
+                                            <Card>
+                                                <CardContent>
+                                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                        Word of the Day
+                                                    </Typography>
+                                                    <Typography variant="body2">
+                                                        well meaning and kindly.
+                                                        <br />
+                                                        {'"a benevolent smile"'}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid> <Grid item md={3} sm={3}>
+                                            <Card>
+                                                <CardContent>
+                                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                        Word of the Day
+                                                    </Typography>
+                                                    <Typography variant="body2">
+                                                        well meaning and kindly.
+                                                        <br />
+                                                        {'"a benevolent smile"'}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid> <Grid item md={3} sm={3}>
+                                            <Card>
+                                                <CardContent>
+                                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                        Word of the Day
+                                                    </Typography>
+                                                    <Typography variant="body2">
+                                                        well meaning and kindly.
+                                                        <br />
+                                                        {'"a benevolent smile"'}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid> <Grid item md={3} sm={3}>
+                                            <Card>
+                                                <CardContent>
+                                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                        Word of the Day
+                                                    </Typography>
+                                                    <Typography variant="body2">
+                                                        well meaning and kindly.
+                                                        <br />
+                                                        {'"a benevolent smile"'}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid> <Grid item md={3} sm={3}>
+                                            <Card>
+                                                <CardContent>
+                                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                        Word of the Day
                                                     </Typography>
                                                     <Typography variant="body2">
                                                         well meaning and kindly.
