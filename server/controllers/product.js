@@ -65,7 +65,7 @@ class ProductTab {
         var reqProduct = req.body.product;
         var { _id, ...updateFields } = reqProduct;
 
-        Product.findOneAndUpdate(_id, updateFields, { returnOriginal: false })
+        Product.findOneAndUpdate({}, updateFields, { returnOriginal: false })
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
