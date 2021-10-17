@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
 } from "react-router-dom";
 import DirectionURL from './Router/DirectionURL';
-import './CSS/App.css'
+import './css/App.css'
 import { connect } from 'react-redux'
 import axios from 'axios';
 

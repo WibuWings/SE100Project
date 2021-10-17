@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../CSS/Dashboard.css'
+import '../../css/Dashboard.css'
 import { Container, Grid } from '@mui/material';
 import { Typography } from '@mui/material';
 import { DiApple } from 'react-icons/di'
