@@ -31,6 +31,7 @@ class Login extends Component {
     // Login with google
     onLoginSuccess = (res) => {
         this.OutAlert();
+        this.props.setRole();
         axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
                 console.log("thành công");
@@ -93,6 +94,7 @@ class Login extends Component {
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = (e) => {
         this.OutAlert();
+        this.props.setRole();
         if (this.blurEmail() && this.blurPassword()) {
             axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
                 email: document.querySelector('#email').value,
@@ -303,6 +305,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 province: data.province,
                 district: data.district,
                 address: data.address,
+            })
+        },
+        setRole: () => {
+            dispatch({
+                type: "ADMIN_ROLE"
             })
         }
     }

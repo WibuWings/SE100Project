@@ -34,39 +34,43 @@ class LoginWithEmployee extends Component {
 
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = (e) => {
-        this.OutAlert();
-        if (this.blurEmail() && this.blurPassword()) {
-            axios.post(`http://localhost:5000/sign-in-employee`, {
-                username: document.querySelector('#username').value,
-                password: document.getElementById('password').value,
-            })
-                .then(res => {
-                    switch (res.data.status) {
-                        case 1:
-                            this.message = res.data.message;
-                            this.setState({
-                                statusSucces: true,
-                            })
-                            localStorage.setItem('token', res.data.token);
-                            this.props.changeLoginStatus();
-                            break;
-                        case -1:
-                            this.message = res.data.message;
-                            this.setState({
-                                statusFailed: true,
-                            })
-                            break;
-                        default:
-                            break;
-                    }
-                })
-                .catch(err => {
-                    this.message = "Enter again";
-                    this.setState({
-                        statusFailed: true,
-                    })
-                })
-        }
+        // this.OutAlert();
+        // if (this.blurEmail() && this.blurPassword()) {
+        //     axios.post(`http://localhost:5000/sign-in-employee`, {
+        //         username: document.querySelector('#username').value,
+        //         password: document.getElementById('password').value,
+        //     })
+        //         .then(res => {
+        //             switch (res.data.status) {
+        //                 case 1:
+        //                     this.message = res.data.message;
+        //                     this.setState({
+        //                         statusSucces: true,
+        //                     })
+        //                     localStorage.setItem('token', res.data.token);
+        //                     this.props.changeLoginStatus();
+        //                     break;
+        //                 case -1:
+        //                     this.message = res.data.message;
+        //                     this.setState({
+        //                         statusFailed: true,
+        //                     })
+        //                     break;
+        //                 default:
+        //                     break;
+        //             }
+        //         })
+        //         .catch(err => {
+        //             this.message = "Enter again";
+        //             this.setState({
+        //                 statusFailed: true,
+        //             })
+        //         })
+        // }
+        this.setState({
+            statusSucces: true,
+        })
+        this.props.setRole()
     }
 
 
@@ -162,7 +166,7 @@ class LoginWithEmployee extends Component {
                                     <span className="form-message" />
                                 </div>
                                 <div className="auth-form__btn">
-                                    <div to="/thungan" id="navlink" onClick={(e) => this.isLoginCheck(e)} className="auth-form__btn-log-in auth-form__switch-btn">Sign In</div>
+                                    <div to="/sellproduct" id="navlink" onClick={(e) => this.isLoginCheck(e)} className="auth-form__btn-log-in auth-form__switch-btn">Sign In</div>
                                 </div>
                             </form>
                         </div>
@@ -187,6 +191,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_LOGIN_STATUS",
             });
+        },
+        setRole: () => {
+            dispatch({
+                type: "EMPLOYEE_ROLE",
+            })
         }
     }
 }

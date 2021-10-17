@@ -15,7 +15,7 @@ import statusEditTypeReducer from './Status/StatusEditTypeReducer';
 import statusAddTypeReducer from './Status/StatusAddTypeReducer';
 import statusIsAddTypeReducer from './Status/StatusIsAddTypeReducer';
 import statusModalConfirmPasswordReducer from './Status/StatusModalConfirmPassword';
-
+import roleReducer from './RoleReducer';
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -32,6 +32,7 @@ const allReducers = redux.combineReducers({
     updateGoodStatus: statusUpdateGoodReducer,
     infoUser: infoUserReducer,
     listShift: listShiftReducer,
+    role: roleReducer,
     editShiftStatus: statusEditShiftReducer,
     objectEditShift: objectEditShiftReducer,
     statusDarkmode: statusDarkmodeReducer,

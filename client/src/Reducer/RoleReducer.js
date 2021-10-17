@@ -1,13 +1,13 @@
-const RoleInitialState = "",
-RoleReducer = (state = RoleInitialState, action) => {
+const RoleInitialState = false,
+roleReducer = (state = RoleInitialState, action) => {
     switch(action.type) {
         case "ADMIN_ROLE":
-            return  "admin"; 
+            return  true; 
         case "EMPLOYEE_ROLE": 
-            return "employee";   
+            return false;   
         default:
-            return "admin";
+            return state;
     }
 }
 
-export default RoleReducer;
+export default roleReducer;

@@ -23,13 +23,14 @@ import { NavLink } from 'react-router-dom';
 import '../../CSS/SideNavBar.css';
 
 class SideNavBar extends Component {
+    
     render() {
         return (
             <div class="navbar-container">
                 <div class="navibar sidebar">
                     <div class="nav-heading">
                         <div class="navbar-heading-container">
-                            <img
+                            {/* <img
                                 src={Avatar}
                                 style={{
                                     width: 40,
@@ -37,49 +38,62 @@ class SideNavBar extends Component {
                                     borderRadius: '100%',
                                 }}
                             ></img>
-                            <span class="user-name">Đào Xuân Trường</span>
+                            <span class="user-name">Đào Xuân Trường</span> */}
                             <img src={this.props.infoUser.avatar ? this.props.infoUser.avatar: Avatar} style ={{width: 40, height: 40, borderRadius: '100%'}}></img>
                             <span class="user-name">{this.props.infoUser.lastName +" " + this.props.infoUser.firstName}</span>
                         </div>
                     </div>
                     <div class="nav-container">
-                        <NavLink className="nav-item" to="/dashboard">
-                            <AiOutlineDashboard class="nav-item-icon" />
-                            <AiFillDashboard class="nav-item-icon icon-activate" />
-                            <span>Dashboard</span>
-                        </NavLink>
+                        {   
+                            this.props.role == true ?
+                            (<NavLink className="nav-item" to="/dashboard">
+                                <AiOutlineDashboard class="nav-item-icon" />
+                                <AiFillDashboard class="nav-item-icon icon-activate" />
+                                <span>Dashboard</span>
+                            </NavLink>):(null)
+                        }
+                        
                         <NavLink to="/profile" className="nav-item" href="#">
                             <RiProfileLine class="nav-item-icon" />
                             <RiProfileFill class="nav-item-icon icon-activate" />
                             <span>Profile</span>
                         </NavLink>
-                        <NavLink
-                            to="/employeemanager"
-                            className="nav-item"
-                            href="#"
-                        >
-                            <IoPeopleOutline class="nav-item-icon" />
-                            <IoPeopleSharp class="nav-item-icon icon-activate" />
-                            <span>Employee Manager</span>
-                        </NavLink>
-                        <NavLink
-                            to="/goodmanager"
-                            className="nav-item"
-                            href="#"
-                        >
-                            <AiOutlineContainer className="nav-item-icon" />
-                            <AiFillContainer className="nav-item-icon icon-activate" />
-                            <span>Goods Manager</span>
-                        </NavLink>
-                        <NavLink
-                            to="/receiptmanager"
-                            className="nav-item"
-                            href="#"
-                        >
-                            <IoReceiptOutline class="nav-item-icon" />
-                            <IoReceiptSharp class="nav-item-icon icon-activate" />
-                            <span>Receipt Manager</span>
-                        </NavLink>
+
+                        {   
+                            this.props.role == true ?
+                            (   
+                                <div>
+                                    <NavLink
+                                        to="/employeemanager"
+                                        className="nav-item"
+                                        href="#"
+                                    >
+                                        <IoPeopleOutline class="nav-item-icon" />
+                                        <IoPeopleSharp class="nav-item-icon icon-activate" />
+                                        <span>Employee Manager</span>
+                                    </NavLink>
+                                    <NavLink
+                                        to="/goodmanager"
+                                        className="nav-item"
+                                        href="#"
+                                    >
+                                        <AiOutlineContainer className="nav-item-icon" />
+                                        <AiFillContainer className="nav-item-icon icon-activate" />
+                                        <span>Goods Manager</span>
+                                    </NavLink>
+                                    <NavLink
+                                        to="/receiptmanager"
+                                        className="nav-item"
+                                        href="#"
+                                    >
+                                        <IoReceiptOutline class="nav-item-icon" />
+                                        <IoReceiptSharp class="nav-item-icon icon-activate" />
+                                        <span>Receipt Manager</span>
+                                    </NavLink>
+                                </div>    
+                            ):(null)
+                        }   
+                        
                         <NavLink to="/sellproduct" className="nav-item" href='#'>
                             <GiSellCard class="nav-item-icon"/>
                             <IoReceiptSharp class="nav-item-icon icon-activate"/>
@@ -114,6 +128,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         isLogin: state.loginStatus,
         infoUser: state.infoUser,
+        role: state.role,
     }
 }
 
