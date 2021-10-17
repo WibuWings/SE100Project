@@ -195,7 +195,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         setRole: () => {
             dispatch({
                 type: "EMPLOYEE_ROLE",
-            })
+            });
+            localStorage.setItem('role', 'employee');
         }
     }
 }

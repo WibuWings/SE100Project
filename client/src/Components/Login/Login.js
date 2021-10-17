@@ -310,7 +310,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         setRole: () => {
             dispatch({
                 type: "ADMIN_ROLE"
-            })
+            });
+            localStorage.setItem('role', 'admin');
         }
     }
 }

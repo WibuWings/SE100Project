@@ -14,6 +14,7 @@ import {
     IoReceiptOutline,
     IoReceiptSharp,
 } from "react-icons/io5";
+import { IoIosArrowBack } from "react-icons/io";
 import { RiProfileFill, RiProfileLine } from "react-icons/ri";
 import { FaSignOutAlt } from "react-icons/fa";
 import {GiSellCard} from 'react-icons/gi'
@@ -25,42 +26,49 @@ import '../../CSS/SideNavBar.css';
 class SideNavBar extends Component {
     
     render() {
+
+        const navbarContainer = document.querySelector('.navbar-container');
+        console.log(navbarContainer);
+        // navbarContainer.setAttribute("style","width:20px");
         return (
-            <div class="navbar-container">
+            <div 
+                class="navbar-container"
+                style={{
+                    width: 0
+                }}
+            >
                 <div class="navibar sidebar">
+                    <div className="nav-icon" >
+                        <IoIosArrowBack
+                            size={20}
+                        />
+                    </div>
                     <div class="nav-heading">
                         <div class="navbar-heading-container">
-                            {/* <img
-                                src={Avatar}
-                                style={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: '100%',
-                                }}
-                            ></img>
-                            <span class="user-name">Đào Xuân Trường</span> */}
                             <img src={this.props.infoUser.avatar ? this.props.infoUser.avatar: Avatar} style ={{width: 40, height: 40, borderRadius: '100%'}}></img>
                             <span class="user-name">{this.props.infoUser.lastName +" " + this.props.infoUser.firstName}</span>
                         </div>
                     </div>
                     <div class="nav-container">
                         {   
-                            this.props.role == true ?
+                            // this.props.role == true ?
+                            localStorage.getItem('role')=='admin' ?
                             (<NavLink className="nav-item" to="/dashboard">
                                 <AiOutlineDashboard class="nav-item-icon" />
                                 <AiFillDashboard class="nav-item-icon icon-activate" />
-                                <span>Dashboard</span>
+                                <span className="nav-item-lable">Dashboard</span>
                             </NavLink>):(null)
                         }
                         
                         <NavLink to="/profile" className="nav-item" href="#">
                             <RiProfileLine class="nav-item-icon" />
                             <RiProfileFill class="nav-item-icon icon-activate" />
-                            <span>Profile</span>
+                            <span className="nav-item-lable">Profile</span>
                         </NavLink>
 
                         {   
-                            this.props.role == true ?
+                            // this.props.role == true ?
+                            localStorage.getItem('role')=='admin' ?
                             (   
                                 <div>
                                     <NavLink
@@ -70,7 +78,7 @@ class SideNavBar extends Component {
                                     >
                                         <IoPeopleOutline class="nav-item-icon" />
                                         <IoPeopleSharp class="nav-item-icon icon-activate" />
-                                        <span>Employee Manager</span>
+                                        <span className="nav-item-lable">Employee Manager</span>
                                     </NavLink>
                                     <NavLink
                                         to="/goodmanager"
@@ -79,7 +87,7 @@ class SideNavBar extends Component {
                                     >
                                         <AiOutlineContainer className="nav-item-icon" />
                                         <AiFillContainer className="nav-item-icon icon-activate" />
-                                        <span>Goods Manager</span>
+                                        <span className="nav-item-lable">Goods Manager</span>
                                     </NavLink>
                                     <NavLink
                                         to="/receiptmanager"
@@ -88,7 +96,7 @@ class SideNavBar extends Component {
                                     >
                                         <IoReceiptOutline class="nav-item-icon" />
                                         <IoReceiptSharp class="nav-item-icon icon-activate" />
-                                        <span>Receipt Manager</span>
+                                        <span className="nav-item-lable">Receipt Manager</span>
                                     </NavLink>
                                 </div>    
                             ):(null)
@@ -96,8 +104,8 @@ class SideNavBar extends Component {
                         
                         <NavLink to="/sellproduct" className="nav-item" href='#'>
                             <GiSellCard class="nav-item-icon"/>
-                            <IoReceiptSharp class="nav-item-icon icon-activate"/>
-                            <span>Sell Product</span>
+                            <GiSellCard class="nav-item-icon icon-activate"/>
+                            <span className="nav-item-lable">Sell Product</span>
                         </NavLink>
                     </div>
 
@@ -109,13 +117,13 @@ class SideNavBar extends Component {
                             style={{ flex: 5 }}
                         >
                             <FaSignOutAlt class="nav-item-icon" />
-                            <span>Sign out</span>
+                            <span className="nav-item-lable">Sign out</span>
                         </NavLink>
                         {/* <a href="#" className="nav-item" style={{ flex: 4 }}>
                             <BsInfoCircleFill class="nav-item-icon" /> */}
                         <a href="#" className="nav-item" onClick={() => this.props.changeConfirmPasswordTest()} style={{flex: 4}}>
                             <BsInfoCircleFill class="nav-item-icon"/>
-                            <span>About</span>
+                            <span className="nav-item-lable">About</span>
                         </a>
                     </div>
                 </div>

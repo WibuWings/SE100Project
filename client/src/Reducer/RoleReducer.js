@@ -1,4 +1,4 @@
-const RoleInitialState = false,
+const RoleInitialState = true,
 roleReducer = (state = RoleInitialState, action) => {
     switch(action.type) {
         case "ADMIN_ROLE":
