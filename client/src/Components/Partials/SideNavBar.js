@@ -7,8 +7,7 @@ import {
     AiOutlineContainer,
     AiFillContainer
 } from "react-icons/ai";
-import { ImProfile } from "react-icons/im";
-import { BsFillPeopleFill,BsInfoCircleFill} from "react-icons/bs";
+import { BsInfoCircleFill} from "react-icons/bs";
 import { 
     IoPeopleOutline,
     IoPeopleSharp,
@@ -17,7 +16,7 @@ import {
 } from "react-icons/io5";
 import { RiProfileFill, RiProfileLine } from "react-icons/ri";
 import { FaSignOutAlt } from "react-icons/fa";
-
+import {GiSellCard} from 'react-icons/gi'
 import Avatar from '../../img/avatar_default.jpg';
 import { NavLink } from 'react-router-dom';
 
@@ -31,8 +30,8 @@ class SideNavBar extends Component {
                 <div class="navibar sidebar">
                     <div class="nav-heading">
                         <div class="navbar-heading-container">
-                            <img src={Avatar} style ={{width: 40, height: 40, borderRadius: '100%'}}></img>
-                            <span class="user-name">Đào Xuân Trường</span>
+                            <img src={this.props.infoUser.avatar ? this.props.infoUser.avatar: Avatar} style ={{width: 40, height: 40, borderRadius: '100%'}}></img>
+                            <span class="user-name">{this.props.infoUser.lastName +" " + this.props.infoUser.firstName}</span>
                         </div>
                     </div>
                     <div class="nav-container">
@@ -61,14 +60,19 @@ class SideNavBar extends Component {
                             <IoReceiptSharp class="nav-item-icon icon-activate"/>
                             <span>Receipt Manager</span>
                         </NavLink>
+                        <NavLink to="/sellproduct" className="nav-item" href='#'>
+                            <GiSellCard class="nav-item-icon"/>
+                            <IoReceiptSharp class="nav-item-icon icon-activate"/>
+                            <span>Sell Product</span>
+                        </NavLink>
                     </div>
-                    
+
                     <div class="nav-footer">
                         <NavLink to="/login" onClick={() => this.props.changeLoginStatus()} className="nav-item" style={{flex: 5}}>
                             <FaSignOutAlt class="nav-item-icon"/>
                             <span>Sign out</span>
                         </NavLink>
-                        <a href="#" className="nav-item" style={{flex: 4}}>
+                        <a href="#" className="nav-item" onClick={() => this.props.changeConfirmPasswordTest()} style={{flex: 4}}>
                             <BsInfoCircleFill class="nav-item-icon"/>
                             <span>About</span>
                         </a>
@@ -82,6 +86,7 @@ class SideNavBar extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         isLogin: state.loginStatus,
+        infoUser: state.infoUser,
     }
 }
 
@@ -90,6 +95,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         changeLoginStatus: () => {
             dispatch({
                 type: "CHANGE_LOGIN_STATUS",
+            })
+        },
+        changeConfirmPasswordTest: () => {
+            dispatch({
+                type:"CHANGE_MODAL_CONFIRM_PASSWORD_STATUS",
             })
         }
     }

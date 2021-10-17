@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const ShiftAssign = new Shema({
+const ShiftAssign = new Schema({
     _id: {
         date: Date,
         storeID: String,

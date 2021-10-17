@@ -132,6 +132,6 @@
 }
 
 .nav-item.active {
-    border-right: 2px solid var(--primary-color);
+    border-right: 4px solid var(--primary-color);
     background-color: #ebf0f8;
 }

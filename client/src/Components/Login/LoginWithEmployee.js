@@ -35,7 +35,6 @@ class LoginWithEmployee extends Component {
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = (e) => {
         this.OutAlert();
-        const form = document.getElementById('login-form');
         if (this.blurEmail() && this.blurPassword()) {
             axios.post(`http://localhost:5000/sign-in-employee`, {
                 username: document.querySelector('#username').value,
