@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import {connect} from 'react-redux';
-import { 
+import { connect } from 'react-redux';
+import {
     AiOutlineDashboard,
     AiFillDashboard,
     AiOutlineContainer,
@@ -12,22 +12,37 @@ import {
     IoPeopleOutline,
     IoPeopleSharp,
     IoReceiptOutline,
-    IoReceiptSharp
+    IoReceiptSharp,
 } from "react-icons/io5";
+import { IoIosArrowBack } from "react-icons/io";
 import { RiProfileFill, RiProfileLine } from "react-icons/ri";
 import { FaSignOutAlt } from "react-icons/fa";
 import {GiSellCard} from 'react-icons/gi'
 import Avatar from '../../img/avatar_default.jpg';
 import { NavLink } from 'react-router-dom';
 
-import '../../CSS/SideNavBar.css'
-
+import '../../css/SideNavBar.css';
 
 class SideNavBar extends Component {
+    
     render() {
+
+        const navbarContainer = document.querySelector('.navbar-container');
+        console.log(navbarContainer);
+        // navbarContainer.setAttribute("style","width:20px");
         return (
-            <div class="navbar-container">
+            <div 
+                class="navbar-container"
+                style={{
+                    width: 0
+                }}
+            >
                 <div class="navibar sidebar">
+                    <div className="nav-icon" >
+                        <IoIosArrowBack
+                            size={20}
+                        />
+                    </div>
                     <div class="nav-heading">
                         <div class="navbar-heading-container">
                             <img src={this.props.infoUser.avatar ? this.props.infoUser.avatar: Avatar} style ={{width: 40, height: 40, borderRadius: '100%'}}></img>
@@ -35,58 +50,93 @@ class SideNavBar extends Component {
                         </div>
                     </div>
                     <div class="nav-container">
-                        <NavLink className="nav-item" to="/dashboard">
-                            <AiOutlineDashboard class="nav-item-icon"/>
-                            <AiFillDashboard class="nav-item-icon icon-activate"/>   
-                            <span>Dashboard</span>
+                        {   
+                            // this.props.role == true ?
+                            localStorage.getItem('role')=='admin' ?
+                            (<NavLink className="nav-item" to="/dashboard">
+                                <AiOutlineDashboard class="nav-item-icon" />
+                                <AiFillDashboard class="nav-item-icon icon-activate" />
+                                <span className="nav-item-lable">Dashboard</span>
+                            </NavLink>):(null)
+                        }
+                        
+                        <NavLink to="/profile" className="nav-item" href="#">
+                            <RiProfileLine class="nav-item-icon" />
+                            <RiProfileFill class="nav-item-icon icon-activate" />
+                            <span className="nav-item-lable">Profile</span>
                         </NavLink>
-                        <NavLink to='/profile' className="nav-item" href='#'>
-                            <RiProfileLine class="nav-item-icon"/>
-                            <RiProfileFill class="nav-item-icon icon-activate"/>
-                            <span>Profile</span>
-                        </NavLink>
-                        <NavLink to='/employeemanager' className="nav-item" href='#'>
-                            <IoPeopleOutline class="nav-item-icon"/>
-                            <IoPeopleSharp class="nav-item-icon icon-activate"/>
-                            <span>Employee Manager</span>
-                        </NavLink>
-                        <NavLink to="/goodmanager" className="nav-item" href='#'>
-                            <AiOutlineContainer className="nav-item-icon"/>
-                            <AiFillContainer className="nav-item-icon icon-activate"/>
-                            <span>Goods Manager</span>
-                        </NavLink>
-                        <NavLink to="/receiptmanager" className="nav-item" href='#'>
-                            <IoReceiptOutline class="nav-item-icon"/>
-                            <IoReceiptSharp class="nav-item-icon icon-activate"/>
-                            <span>Receipt Manager</span>
-                        </NavLink>
+
+                        {   
+                            // this.props.role == true ?
+                            localStorage.getItem('role')=='admin' ?
+                            (   
+                                <div>
+                                    <NavLink
+                                        to="/employeemanager"
+                                        className="nav-item"
+                                        href="#"
+                                    >
+                                        <IoPeopleOutline class="nav-item-icon" />
+                                        <IoPeopleSharp class="nav-item-icon icon-activate" />
+                                        <span className="nav-item-lable">Employee Manager</span>
+                                    </NavLink>
+                                    <NavLink
+                                        to="/goodmanager"
+                                        className="nav-item"
+                                        href="#"
+                                    >
+                                        <AiOutlineContainer className="nav-item-icon" />
+                                        <AiFillContainer className="nav-item-icon icon-activate" />
+                                        <span className="nav-item-lable">Goods Manager</span>
+                                    </NavLink>
+                                    <NavLink
+                                        to="/receiptmanager"
+                                        className="nav-item"
+                                        href="#"
+                                    >
+                                        <IoReceiptOutline class="nav-item-icon" />
+                                        <IoReceiptSharp class="nav-item-icon icon-activate" />
+                                        <span className="nav-item-lable">Receipt Manager</span>
+                                    </NavLink>
+                                </div>    
+                            ):(null)
+                        }   
+                        
                         <NavLink to="/sellproduct" className="nav-item" href='#'>
                             <GiSellCard class="nav-item-icon"/>
-                            <IoReceiptSharp class="nav-item-icon icon-activate"/>
-                            <span>Sell Product</span>
+                            <GiSellCard class="nav-item-icon icon-activate"/>
+                            <span className="nav-item-lable">Sell Product</span>
                         </NavLink>
                     </div>
 
                     <div class="nav-footer">
-                        <NavLink to="/login" onClick={() => this.props.changeLoginStatus()} className="nav-item" style={{flex: 5}}>
-                            <FaSignOutAlt class="nav-item-icon"/>
-                            <span>Sign out</span>
+                        <NavLink
+                            to="/login"
+                            onClick={() => this.props.changeLoginStatus()}
+                            className="nav-item"
+                            style={{ flex: 5 }}
+                        >
+                            <FaSignOutAlt class="nav-item-icon" />
+                            <span className="nav-item-lable">Sign out</span>
                         </NavLink>
+                        {/* <a href="#" className="nav-item" style={{ flex: 4 }}>
+                            <BsInfoCircleFill class="nav-item-icon" /> */}
                         <a href="#" className="nav-item" onClick={() => this.props.changeConfirmPasswordTest()} style={{flex: 4}}>
                             <BsInfoCircleFill class="nav-item-icon"/>
-                            <span>About</span>
+                            <span className="nav-item-lable">About</span>
                         </a>
                     </div>
                 </div>
             </div>
         );
-    }   
+    }
 }
 
 const mapStateToProps = (state, ownProps) => {
     return {
         isLogin: state.loginStatus,
         infoUser: state.infoUser,
+        role: state.role,
     }
 }
 

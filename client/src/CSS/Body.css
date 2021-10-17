@@ -16,3 +16,7 @@
 .card-confirm-password{
     margin: auto;
 }
+
+.body-content {
+    width: calc(100% - 224px),
+}
