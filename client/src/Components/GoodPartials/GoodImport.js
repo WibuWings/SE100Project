@@ -16,7 +16,7 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CancelIcon from '@mui/icons-material/Cancel';
-
+import ConfirmModal from './ConfirmModal';
 
 var productTypes =[
      'food', 'detergent', 'cuisine'
@@ -114,7 +114,15 @@ class GoodImport extends Component {
             })
         console.log(data);
     }
+    checkConstraint = () => {
+        // Kiểm tra các constraint ở đây coi thử ổn chưa
+        // Kiểm tra thử form ok ko
+        this.props.changeConfirmStatus();
+        this.props.setConfirm();
+    }
+
     
+
     render() {
         return(
             <div 
@@ -378,7 +386,7 @@ class GoodImport extends Component {
                                 <Grid item md={2}
                                     className='input-item'
                                 >
-                                    <Button variant="contained" onClick={() => this.importGood()}>
+                                    <Button variant="contained" onClick={() => this.checkConstraint()}>
                                         Import
                                     </Button>
                                 </Grid>
@@ -396,6 +404,12 @@ class GoodImport extends Component {
                         <AddTypeModal></AddTypeModal>
                     </div>
                 ): null}
+                {this.props.confirmStatus ? (
+                    <div className="modal-add">
+                        <div onClick={() => {this.props.changeConfirmStatus();}} className="modal-overlay"></div>
+                        <ConfirmModal></ConfirmModal>
+                    </div>
+                ): null}
             </div>
         );        
     }
@@ -405,6 +419,7 @@ const mapStateToProps = (state, ownProps) => {
         addTypeStatus: state.addTypeStatus,
         infoUser: state.infoUser,
         isAddTypeStatus: state.isAddTypeStatus,
+        confirmStatus: state.confirmStatus
     }
 }
 
@@ -424,6 +439,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         setAddTypeStatus: () => {
             dispatch({
                 type: "SET_ADD_TYPE_STATUS",
+            });
+        },
+        changeConfirmStatus: () => {
+            dispatch({
+                type: "CHANGE_CONFIRM_STATUS",
+            });
+        },
+        setConfirm: () => {
+            dispatch({
+                type: "SET_CONFIRM_IMPORT_GOOD",
             });
         }
     }
