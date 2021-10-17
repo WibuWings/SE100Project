@@ -63,6 +63,7 @@ class UpdateGoodModal extends Component {
     unit = "";
     sellPrice = "";
     expire ="";
+    
     blurDiscription = (e) => {
         this.descriptionShift = e.target.value;
     }
@@ -81,7 +82,7 @@ class UpdateGoodModal extends Component {
                 },
                 name: document.querySelector('input[name="goodName"]').value,
                 quantity: document.querySelector('input[name="goodQuantity"]').value,
-                remain: document.querySelector('input[name="goodQuantity"]').value,
+                // remain: document.querySelector('input[name="goodQuantity"]').value,
                 importPrice: document.querySelector('input[name="originalPrice"]').value,
                 sellPrice: document.querySelector('input[name="sellPrice"]').value,
                 expires: document.querySelector('input[name="expiredDate"]').value,
@@ -149,7 +150,7 @@ class UpdateGoodModal extends Component {
         this.name = productInfo.name;
         this.imgUrl = productInfo.imgUrl;
         this.quantity = productInfo.quantity;
-        this.remain = productInfo.remain;
+        // this.remain = productInfo.remain;
         this.unit = productInfo.unit;
         this.sellPrice = productInfo.sellPrice;
         this.expire = productInfo.expires;
@@ -208,7 +209,7 @@ class UpdateGoodModal extends Component {
                                             size="small" 
                                             name="goodID" 
                                             variant="outlined" 
-                                            value={this.goodID}
+                                            defaultValue={this.goodID}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -229,9 +230,6 @@ class UpdateGoodModal extends Component {
                                                                             fullWidth 
                                                                         />}
                                                 value={this.importDate}
-                                                onChange={(newValue) => {
-                                                    this.changeTimeFrom(newValue);
-                                                }}
                                             />
                                         </LocalizationProvider>
                                     </Grid>
@@ -249,7 +247,7 @@ class UpdateGoodModal extends Component {
                                             size="small"
                                             name="goodName" 
                                             variant="outlined"
-                                            value={this.name} 
+                                            defaultValue={this.name} 
                                         />
                                     </Grid>
                                     <Grid item md={3}
@@ -268,7 +266,7 @@ class UpdateGoodModal extends Component {
                                             name="goodQuantity" 
                                             variant="outlined"
                                             type="number" 
-                                            value={this.quantity}
+                                            defaultValue={this.quantity}
                                         />
                                     </Grid>
                                     <Grid item md={3}
@@ -293,7 +291,7 @@ class UpdateGoodModal extends Component {
                                             variant="outlined"
                                             type="text" 
                                             name="unit" 
-                                            value={this.unit}
+                                            defaultValue={this.unit}
                                         />
                                     </Grid>
                                     <Grid item md={6}
@@ -307,7 +305,7 @@ class UpdateGoodModal extends Component {
                                             name="originalPrice" 
                                             variant="outlined"
                                             type="number"
-                                            value={this.importPrice}
+                                            defaultValue={this.importPrice}
                                         />
                                         đ
                                     </Grid>
@@ -328,7 +326,7 @@ class UpdateGoodModal extends Component {
                                             name="sellPrice" 
                                             variant="outlined"
                                             type="number" 
-                                            value={this.sellPrice}
+                                            defaultValue={this.sellPrice}
                                         />
                                         đ
                                     </Grid>
@@ -346,7 +344,7 @@ class UpdateGoodModal extends Component {
                                                                             fullWidth 
                                                                             value={this.expire}
                                                                         />}
-                                                value={this.expire}
+                                                defaultvalue={this.expire}
                                                 onChange={(newValue) => {
                                                     this.changeTimeFrom(newValue);
                                                 }}
