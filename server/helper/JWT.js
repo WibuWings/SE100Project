@@ -25,7 +25,9 @@ function JWTVerify(token) {
 }
 
 async function AuthMiddleware(req, res, next) {
+    // console.log(req.body);
     const result = JWTVerify(req.body.token);
+    
     if (result.status !== 200) {
         res.status(401).send(JSON.stringify(result.err));
     } else {

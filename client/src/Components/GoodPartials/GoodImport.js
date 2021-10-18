@@ -16,16 +16,13 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CancelIcon from '@mui/icons-material/Cancel';
+import ConfirmModal from './ConfirmModal';
+
+var productTypes =[];
 
 
-var productTypes =[
-     'food', 'detergent', 'cuisine'
-];
+var typeSet = [];
 
-
-var typeSet = [
-    'foot', 'king'
-];
 const StyledTextField = withStyles((theme) => ({
     root: {
       "& .MuiInputBase-root": {
@@ -48,7 +45,9 @@ class GoodImport extends Component {
             currentDateTime: new Date('2014-08-18T21:11:54'),
             change: true,
         }; 
-        
+        this.getAllTypeList(); 
+        this.getAllGoodData();
+        this.getTypeToTypeSet();
     }
     handleAdd(){
         this.props.changeAddTypeStatus();
@@ -112,10 +111,143 @@ class GoodImport extends Component {
             .catch(err => {
                 console.log(err);
             })
-        console.log(data);
+
+        // Thêm vào bảng joinType nữa
+        // const data = {
+        //     token: localStorage.getItem('token'),
+        //     productJoinType: {
+                
+        //     }
+        // }
+        // axios.post(`http://localhost:5000/api/product/join`, data)
+        //     .then(res => {
+        //         console.log("Save success");
+        //         console.log(data._id.importDate)
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //     })
+
+        // console.log(data);
     }
-    
+    checkConstraint = () => {
+        // Kiểm tra các constraint ở đây coi thử ổn chưa
+        // Kiểm tra thử form ok ko
+        this.props.changeConfirmStatus();
+        this.props.setConfirm();
+    }
+
+    getAllTypeList = () => {
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+        axios.get(`http://localhost:5000/api/product/type`, data)
+            .then(res => {
+                console.log("Get success");
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+        // Get data và lưu các tên Type vào bảng
+        
+    }
+    getAllGoodData = () => {
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+        axios.get(`http://localhost:5000/api/product/`, data)
+            .then(res => {
+                console.log("Get success");
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+        // Get data và lưu các tên Type vào dữ liệU
+        
+    }
+
+    sampleTypeData = {
+        email:"19522006@gm.uit.edu.vn",
+        token: "this is token",
+        data:[
+            {
+                _id: {
+                    typeID:"11",
+                    storeID:"19522006@gm.uit.edu.vn"
+                },
+                name:"Kinggg",
+            },
+            {
+                _id:{
+                    typeID:"12",
+                    storeID:"19522007@gm.uit.edu.vn"
+                },
+                name: "Đồ ăn",
+                createdAt:"2001-09-30T17:00:00.000Z"
+            },
+            {
+                _id:{
+                    typeID:"5",
+                    storeID:"19522006@gm.uit.edu.vn"
+                },
+                name:"AA"
+            }
+        ]
+    }
+
+    sampleGoodData = {
+        email:"19522006@gm.uit.edu.vn",
+        token:"this is token",
+        data: [
+            {
+                _id:{
+                    productID:"1212121",
+                    importDate:"2021-10-08T00:00:00.000Z"
+                },
+                name:"SHIIijjjiI",
+                imgUrl:"none",
+                quantity:4,
+                remain:4,
+                unit:"12",
+                importPrice:7,
+                sellPrice:7,
+                expires:"2000-11-10T00:00:00.000Z",
+            },
+            {
+                _id:{
+                    productID:"121212aa1",
+                    importDate:"2021-10-08T00:00:00.000Z"
+                }, 
+                name:"q",
+                imgUrl:"none",
+                quantity:11,
+                remain:11,
+                unit:"11",
+                importPrice:212,
+                sellPrice:120,
+                expires:"2021-10-28"
+            }
+        ]
+    };
+
+    getTypeToTypeSet = () => {
+        var typeList = this.sampleTypeData.data;
+        for(var i=0 ; i< typeList.length ; i++)
+        {
+            productTypes.push(typeList[i].name)
+        }
+    }
+
     render() {
+        
         return(
             <div 
                 style={{ 
@@ -378,7 +510,7 @@ class GoodImport extends Component {
                                 <Grid item md={2}
                                     className='input-item'
                                 >
-                                    <Button variant="contained" onClick={() => this.importGood()}>
+                                    <Button variant="contained" onClick={() => this.checkConstraint()}>
                                         Import
                                     </Button>
                                 </Grid>
@@ -396,6 +528,12 @@ class GoodImport extends Component {
                         <AddTypeModal></AddTypeModal>
                     </div>
                 ): null}
+                {this.props.confirmStatus ? (
+                    <div className="modal-add">
+                        <div onClick={() => {this.props.changeConfirmStatus();}} className="modal-overlay"></div>
+                        <ConfirmModal></ConfirmModal>
+                    </div>
+                ): null}
             </div>
         );        
     }
@@ -405,6 +543,7 @@ const mapStateToProps = (state, ownProps) => {
         addTypeStatus: state.addTypeStatus,
         infoUser: state.infoUser,
         isAddTypeStatus: state.isAddTypeStatus,
+        confirmStatus: state.confirmStatus
     }
 }
 
@@ -424,6 +563,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         setAddTypeStatus: () => {
             dispatch({
                 type: "SET_ADD_TYPE_STATUS",
+            });
+        },
+        changeConfirmStatus: () => {
+            dispatch({
+                type: "CHANGE_CONFIRM_STATUS",
+            });
+        },
+        setConfirm: () => {
+            dispatch({
+                type: "SET_CONFIRM_IMPORT_GOOD",
             });
         }
     }
