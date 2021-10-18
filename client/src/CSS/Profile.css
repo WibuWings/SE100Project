@@ -128,3 +128,8 @@ hr:not([size]).profile-header__divider {
     cursor: pointer;
     opacity: 0.7;
 }
+
+.css-1kty9di-MuiFormLabel-root-MuiInputLabel-root{
+    background-color: white;
+    top: -5px !important;
+}

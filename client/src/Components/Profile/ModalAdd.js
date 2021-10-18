@@ -15,10 +15,13 @@ class ModalAdd extends Component {
         this.state = {
             timeFrom: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.from} GMT+0700 (Giờ Đông Dương)` : Date.now(),
             timeTo: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.to} GMT+0700 (Giờ Đông Dương)` : Date.now(),
+            isSalary: false,
+            isDescription: false,
+            isTimeTo: false,
         }
     }
 
-    descriptionShift = ""
+    descriptionShift = "Example : abc"
     timeFrom = "00:00 AM"
     timeTo = "00:00 PM"
     salary = 10000
@@ -63,6 +66,15 @@ class ModalAdd extends Component {
 
     blurDiscription = (e) => {
         this.descriptionShift = e.target.value;
+        if (e.target.value === "") {
+            this.setState({
+                isDescription: true,
+            })
+        } else {
+            this.setState({
+                isDescription: false,
+            })
+        }
     }
 
 
@@ -79,15 +91,26 @@ class ModalAdd extends Component {
     }
 
     editShift = () => {
-        
-        var data = {
-            token: localStorage.getItem('token'),
-            idUser: this.props.infoUser.email,
-            id: this.props.objectEditShift.id,
-            salary: this.salary,
-            description: this.descriptionShift,
-            from: this.timeFrom,
-            to: this.timeTo,
+        if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
+            var data = {
+                token: localStorage.getItem('token'),
+                idUser: this.props.infoUser.email,
+                id: this.props.objectEditShift.id,
+                salary: this.salary,
+                description: this.descriptionShift,
+                from: this.timeFrom,
+                to: this.timeTo,
+            }
+            this.props.updateShift(data);
+            this.props.changeEditShiftStatus();
+            this.props.changeAddStatus();
+            axios.post(`http://localhost:5000/api/update-shift`, data)
+                .then(res => {
+                    console.log('thành công');
+                })
+                .catch(err => {
+                    console.log("lỗi");
+                })
         }
         this.props.updateShift(data);
         this.props.changeEditShiftStatus();
@@ -102,39 +125,49 @@ class ModalAdd extends Component {
     }
 
     blurSalary = (e) => {
+        console.log(e.target.value);
+        if (e.target.value <= -1) {
+            this.setState({
+                isSalary: true,
+            })
+        } else {
+            this.setState({
+                isSalary: false,
+            })
+        }
         this.salary = e.target.value;
     }
 
     // Call API
     addShift = () => {
-        var data = {
-            
-            idUser: this.props.infoUser.email,
-            id: this.makeCode(6),
-            salary: this.salary,
-            description: this.descriptionShift,
-            from: this.timeFrom,
-            to: this.timeTo,
-        }
-        if (data) {
-            this.props.addShift(data);
-            axios.post(`http://localhost:5000/api/profile/add-shift`, {
-                email: this.props.infoUser.email,
+        if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
+            var data = {
                 token: localStorage.getItem('token'),
-                data: data,
-            })
-                .then(res => {
-                    console.log('Thành Công');
+                idUser: this.props.infoUser.email,
+                id: this.makeCode(6),
+                salary: this.salary,
+                description: this.descriptionShift,
+                from: this.timeFrom,
+                to: this.timeTo,
+            }
+            if (data) {
+                this.props.addShift(data);
+                axios.post(`http://localhost:5000/api/add-shift`, {
+                    email: this.props.infoUser.email,
+                    data: data,
                 })
-                .catch(err => {
-                    console.log('thất bại');
-                })
-            this.props.changeAddStatus();
+                    .then(res => {
+                        console.log('Thành Công');
+                    })
+                    .catch(err => {
+                        console.log('thất bại');
+                    })
+                this.props.changeAddStatus();
+            }
         }
     }
 
     render() {
-        console.log(this.props.objectEditShift);
         return (
             <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
@@ -147,9 +180,11 @@ class ModalAdd extends Component {
                                     id="outlined-basic"
                                     variant="outlined"
                                     fullWidth
-                                    defaultValue={(this.props.editShiftStatus ? this.props.objectEditShift.description : "")}
+                                    defaultValue={(this.props.editShiftStatus ? this.props.objectEditShift.description : this.descriptionShift)}
                                     onBlur={(e) => this.blurDiscription(e)}
                                     label="Shift description"
+                                    error={this.state.isDescription}
+                                    helperText={this.state.isDescription ? "Enter something" : ""}
                                     required
                                     type="text"
                                 />
@@ -161,6 +196,8 @@ class ModalAdd extends Component {
                                     onBlur={(e) => this.blurSalary(e)}
                                     label="Salary/1h"
                                     defaultValue={this.props.editShiftStatus ? this.props.objectEditShift.salary : this.salary}
+                                    error={this.state.isSalary}
+                                    helperText={this.state.isSalary ? "Greater than 0" : ""}
                                     type="number"
                                     id="outlined-error-helper-text"
                                     name="salary"
