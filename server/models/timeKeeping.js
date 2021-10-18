@@ -3,7 +3,7 @@ const {getCurrentDateTimeString} = require('../helper/DateTime');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const ShiftAssign = new Schema({
+const TimeKeeping = new Schema({
     _id: {
         dateInWeek: String,
         storeID: String,
@@ -16,7 +16,12 @@ const ShiftAssign = new Schema({
             ref: "Employee",
         },
     },
+    isAttending: Boolean,
+    alternativeEmployee: {
+        type: Schema.Types.ObjectId,
+        ref: "Employee",
+    },
     createdAt: getCurrentDateTimeString(),
 });
 
-module.exports = mongoose.model('ShiftAssign', ShiftAssign);
+module.exports = mongoose.model('TimeKeeping', TimeKeeping);
