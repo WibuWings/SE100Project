@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button } from '@mui/material';
 import { connect } from 'react-redux'
-import { BiPlusMedical, BiEdit } from 'react-icons/bi';
+import { BiPlusMedical, BiEdit} from 'react-icons/bi';
+import { TiDelete } from "react-icons/ti";
 import Stack from '@mui/material/Stack';
 import { GiCancel } from 'react-icons/gi'
 import axios from 'axios';
@@ -22,11 +23,35 @@ class EditTypeModal extends Component {
         this.props.changeConfirmStatus();
     }
     cancel = () => {
-        this.props.changeConfirmStatus();
+        // this.props.changeConfirmStatus();
+        this.props.changeEditTypeStatus();
     }
     edit = () => {
-        this.props.changeAddStatus();
+        this.props.changeAddTypeStatus();
         this.props.setEditTypeStatus();
+    }
+    delete = () => {
+        const data = {
+            token: localStorage.getItem('token'),
+            productTypes: {
+                _id: {
+                    typeID: this.sampleTypeData._id.typeID,
+                    storeID: this.props.infoUser.email,
+                }, 
+                name:document.querySelector('input[name="typeName"]').value + "SHITs",
+            }
+        }
+        alert(data.product.name)
+        axios.delete(`http://localhost:5000/api/product/type`, data)
+            .then(res => {
+                console.log("Update success");
+                alert('delete được rồi anh trai')
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Lỗi gì cmnr")
+            })
+        this.props.changeAddTypeStatus();
     }
     
     sampleTypeData = {
@@ -80,7 +105,7 @@ class EditTypeModal extends Component {
                                     <Grid item md={3} style={{border:'1px solid #333', padding: 4}}>
                                         <span>{type}</span>
                                         <BiEdit onClick={() => this.edit()}/>
-
+                                        <TiDelete onClick={() => this.delete()}/>
                                     </Grid>
                                 ))}
                             </Grid>
@@ -98,9 +123,9 @@ class EditTypeModal extends Component {
                         </Button>
                     </Box>
                 </Card>
-                {this.props.addStatus ? (
+                {this.props.addTypeStatus ? (
                         <div className="modal-add">
-                            <div onClick={() => {this.props.changeAddStatus();}} className="modal-overlay"></div>
+                            <div onClick={() => {this.props.changeAddTypeStatus();}} className="modal-overlay"></div>
                             <AddTypeModal></AddTypeModal>
                         </div>
                     ): null}
@@ -112,7 +137,7 @@ class EditTypeModal extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         editTypeStatus: state.editTypeStatus,
-        addStatus: state.addStatus,
+        addTypeStatus: state.addTypeStatus,
         isAddTypeStatus: state.isAddTypeStatus,
     }
 }
@@ -124,9 +149,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_EDIT_TYPE_STATUS",
             });
         },
-        changeAddStatus: () => {
+        changeAddTypeStatus: () => {
             dispatch({
-                type: "CHANGE_ADD_STATUS",
+                type: "CHANGE_ADD_TYPE_STATUS",
             });
         },
         setEditTypeStatus: () => {

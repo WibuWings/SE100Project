@@ -18,14 +18,10 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ConfirmModal from './ConfirmModal';
 
-var productTypes =[
-     'food', 'detergent', 'cuisine'
-];
+var productTypes =[];
 
 
-var typeSet = {
-
-}
+var typeSet = [];
 
 const StyledTextField = withStyles((theme) => ({
     root: {
@@ -51,6 +47,7 @@ class GoodImport extends Component {
         }; 
         this.getAllTypeList(); 
         this.getAllGoodData();
+        this.getTypeToTypeSet();
     }
     handleAdd(){
         this.props.changeAddTypeStatus();
@@ -114,7 +111,24 @@ class GoodImport extends Component {
             .catch(err => {
                 console.log(err);
             })
-        console.log(data);
+
+        // Thêm vào bảng joinType nữa
+        // const data = {
+        //     token: localStorage.getItem('token'),
+        //     productJoinType: {
+                
+        //     }
+        // }
+        // axios.post(`http://localhost:5000/api/product/join`, data)
+        //     .then(res => {
+        //         console.log("Save success");
+        //         console.log(data._id.importDate)
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //     })
+
+        // console.log(data);
     }
     checkConstraint = () => {
         // Kiểm tra các constraint ở đây coi thử ổn chưa
@@ -166,15 +180,17 @@ class GoodImport extends Component {
         data:[
             {
                 _id: {
+                    typeID:"11",
                     storeID:"19522006@gm.uit.edu.vn"
                 },
-                name:"Kai havert",
+                name:"Kinggg",
             },
             {
                 _id:{
+                    typeID:"12",
                     storeID:"19522007@gm.uit.edu.vn"
                 },
-                name: "Kai havert 1",
+                name: "Đồ ăn",
                 createdAt:"2001-09-30T17:00:00.000Z"
             },
             {
@@ -226,7 +242,7 @@ class GoodImport extends Component {
         var typeList = this.sampleTypeData.data;
         for(var i=0 ; i< typeList.length ; i++)
         {
-            // typeSet[typeList[0].]
+            productTypes.push(typeList[i].name)
         }
     }
 

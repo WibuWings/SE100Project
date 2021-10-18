@@ -79,24 +79,26 @@ class AddTypeModal extends Component {
 
     editType = () => {
         alert("Giờ mình sẽ edit")
-        // const data = {
-        //     token: localStorage.getItem('token'),
-        //     product: {
-        //         _id: {
-        //             typeID: this.sampleTypeData._id.typeID,
-        //             storeID: this.sampleTypeData._id.storeID,
-        //         },   
-        //     }
-        // }
-        // axios.put(`http://localhost:5000/api/product/type`, data)
-        //     .then(res => {
-        //         console.log("Update success");
-        //         alert('update được rồi anh trai')
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //         alert("Lỗi gì cmnr")
-        //     })
+        const data = {
+            token: localStorage.getItem('token'),
+            productType: {
+                _id: {
+                    typeID: this.sampleTypeData._id.typeID,
+                    storeID: this.props.infoUser.email,
+                }, 
+                name:document.querySelector('input[name="typeName"]').value + "SHITs",
+            }
+        }
+        alert(data.product.name)
+        axios.put(`http://localhost:5000/api/product/type`, data)
+            .then(res => {
+                console.log("Update success");
+                alert('update được rồi anh trai')
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Lỗi gì cmnr")
+            })
         this.props.changeAddTypeStatus();
     }
     typeName = "";
