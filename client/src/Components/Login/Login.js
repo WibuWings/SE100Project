@@ -4,7 +4,7 @@ import {
     NavLink
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../CSS/Login.css'
+import '../../css/Login.css'
 import { BsFillEnvelopeFill, BsLockFill } from "react-icons/bs";
 import { FiChevronRight, FiXSquare } from "react-icons/fi";
 import { BiUser } from "react-icons/bi";
@@ -26,14 +26,16 @@ class Login extends Component {
         }
     }
 
-    message = "Login success";
+    message = "";
 
     // Login with google
     onLoginSuccess = (res) => {
         this.OutAlert();
+        this.props.setRole();
         axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
                 console.log("thành công");
+                console.log(res.data);
                 switch (res.data.status) {
                     case 1:
                         this.message = res.data.message;
@@ -92,6 +94,7 @@ class Login extends Component {
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = (e) => {
         this.OutAlert();
+        this.props.setRole();
         if (this.blurEmail() && this.blurPassword()) {
             axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
                 email: document.querySelector('#email').value,
@@ -303,6 +306,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 district: data.district,
                 address: data.address,
             })
+        },
+        setRole: () => {
+            dispatch({
+                type: "ADMIN_ROLE"
+            });
+            localStorage.setItem('role', 'admin');
         }
     }
 }

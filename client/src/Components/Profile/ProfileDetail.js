@@ -13,8 +13,6 @@ class ProfileDetail extends Component {
             isTel: true,
             isOld: true,
             isSave: false,
-            listDistrict: "",
-            reLoad: true,
         }
     }
 
@@ -78,7 +76,7 @@ class ProfileDetail extends Component {
             this.setState({
                 isTel: true,
             })
-            if(this.state.isOld){
+            if (this.state.isOld) {
                 this.setState({
                     isSave: true,
                 })
@@ -105,7 +103,7 @@ class ProfileDetail extends Component {
             this.setState({
                 isOld: true,
             })
-            if ( this.state.isTel){
+            if (this.state.isTel) {
                 this.setState({
                     isSave: true,
                 })
@@ -127,8 +125,7 @@ class ProfileDetail extends Component {
 
     blurAll = (e) => {
         if (e.target.value !== "0" && e.target.value !== "") {
-            if(this.state.isOld && this.state.isTel)
-            {
+            if (this.state.isOld && this.state.isTel) {
                 this.setState({
                     isSave: true,
                 })
@@ -141,21 +138,18 @@ class ProfileDetail extends Component {
         if (!this.props.country[0]) {
             axios.get(`https://provinces.open-api.vn/api/?depth=2`)
                 .then(res => {
+                    console.log(res.data);
                     this.props.updateProvince(res.data);
+                    if (this.props.infoUser.province !== '0') {
+                        this.props.updateDistrict(res.data.filter(word => word.codename === this.props.infoUser.province)[0].districts,)
+                    }
                 })
                 .catch(err => {
                     console.log("fail");
                 })
-        } else {
-            if(this.props.infoUser.province !== '0'){
-                this.setState({
-                    listDistrict: this.props.country[0].filter(word => word.codename === this.props.infoUser.province)[0].districts,
-                    disabledHuyen: false,
-                })
-            }
         }
-        console.log("compoenetWillLoad");
     }
+
 
 
     render() {
@@ -168,16 +162,18 @@ class ProfileDetail extends Component {
                     <CardContent>
                         <Grid container spacing={3}>
                             <Grid item md={6} xs={12}>
-                                <TextField
-                                    id="outlined-basic"
-                                    variant="outlined"
-                                    fullWidth
-                                    onBlur={(e) => this.blurAll(e)}
-                                    label="First name"
-                                    required
-                                    name="firstName"
-                                    defaultValue={this.props.infoUser.firstName}
-                                />
+                                <Box >
+                                    <TextField
+                                        id="outlined-basic"
+                                        variant="outlined"
+                                        fullWidth
+                                        onBlur={(e) => this.blurAll(e)}
+                                        label="First name"
+                                        required
+                                        name="firstName"
+                                        defaultValue={this.props.infoUser.firstName}
+                                    />
+                                </Box>
                             </Grid>
                             <Grid item md={6} xs={12}>
                                 <TextField
@@ -259,7 +255,7 @@ class ProfileDetail extends Component {
                                     onBlur={(e) => this.blurTel(e)}
                                 />
                             </Grid>
-                            
+
                             <Grid item md={6} xs={12}>
                                 <TextField
                                     fullWidth
@@ -281,7 +277,6 @@ class ProfileDetail extends Component {
                                             </option>
                                         )
                                     }) : null}
-
                                 </TextField>
                             </Grid>
                             <Grid item md={6} xs={12}>
@@ -293,16 +288,15 @@ class ProfileDetail extends Component {
                                     value={this.state.nameDistrict}
                                     onChange={(e) => this.changeDistrict(e)}
                                     required
-                                    disabled={this.state.disabledHuyen}
+                                    disabled={this.props.infoUser.province ? false : true}
                                     select
                                     SelectProps={{ native: true }}
                                     variant="outlined"
                                 >
                                     <option value="0">--Select district--</option>
-                                    {(this.state.listDistrict !== "") ? this.state.listDistrict.map(item => {
+                                    {(this.props.district.length !== 0) ? this.props.district[0].map(item => {
                                         return (
-                                            <option value={item.codename}
-                                            >
+                                            <option value={item.codename}>
                                                 {item.name}
                                             </option>
                                         )
@@ -335,6 +329,7 @@ class ProfileDetail extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         country: state.country,
+        district: state.district,
         infoUser: state.infoUser,
     }
 }
@@ -343,7 +338,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         updateProvince: (data) => {
             dispatch({
-                type: "UPDATE_DATA",
+                type: "UPDATE_DATA_PROVINCE",
+                data: data,
+            })
+        },
+        updateDistrict: (data) => {
+            dispatch({
+                type: "UPDATE_DATA_DISTRICT",
                 data: data,
             })
         },

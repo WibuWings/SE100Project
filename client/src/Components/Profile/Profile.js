@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ProfileHeader from './ProfileHeader';
-import '../../CSS/Profile.css';
+import '../../css/Profile.css';
 import { Container, Grid } from '@mui/material';
 import ProfileDetail from './ProfileDetail';
 import ChangePassword from './ChangePassword';

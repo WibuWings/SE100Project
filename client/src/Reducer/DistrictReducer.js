@@ -1,13 +1,13 @@
-const countryInitialState = [],
-    countryReducer = (state = countryInitialState, action) => {
+const districtInitialState = [],
+    districtReducer = (state = districtInitialState, action) => {
         switch (action.type) {
             case "GET_DATA":
                 return state;
-            case "UPDATE_DATA_PROVINCE":
+            case "UPDATE_DATA_DISTRICT":
                 return [...state, action.data];
             default:
                 return state
         }
     }
 
-export default countryReducer;
+export default districtReducer;
