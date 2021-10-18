@@ -82,9 +82,12 @@ class ProductTab {
     };
 
     deleteProduct = async (req, res) => {
-        var reqProductIDs = req.body.productIDs;
+        var reqProducts = req.body.products;
 
-        Product.deleteMany({_id : { $in: [...reqProductIDs]}})
+        reqProducts.forEach(element => {
+            element.importDate= new Date(element.importDate);
+        });
+        Product.deleteMany({_id : { $in: [...reqProducts]}})
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
@@ -168,7 +171,7 @@ class ProductTab {
     deleteProductType = async (req, res) => {
         var reqProductTypeIDs = req.body.productTypes;
 
-        Product.deleteMany({_id : { $in: [...reqProductTypeIDs]}})
+        ProductType.deleteMany({_id : { $in: [...reqProductTypeIDs]}})
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
@@ -205,7 +208,7 @@ class ProductTab {
     createProductJoin = async (req, res) => {
         var reqProductJoinType = req.body.productJoinType;
 
-        var newProductJoinType = new ProductType({
+        var newProductJoinType = new ProductJoinType({
             _id: {
                 productID: reqProductJoinType._id.productID,
                 typeID: reqProductJoinType._id.typeID,
@@ -252,9 +255,12 @@ class ProductTab {
     };
 
     deleteProductJoin = async (req, res) => {
-        var reqProductJoinTypeIDs = req.body.productJoinTypes;
-
-        ProductJoinType.deleteMany({_id : { $in: [...reqProductJoinTypeIDs]}})
+        var reqProductJoinTypes = req.body.productJoinTypes;
+        
+        reqProductJoinTypes.forEach(element => {
+            element.importDate= new Date(element.importDate);
+        });
+        ProductJoinType.deleteMany({_id : { $in: [...reqProductJoinTypes]}})
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
