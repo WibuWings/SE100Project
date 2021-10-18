@@ -23,9 +23,10 @@ var productTypes =[
 ];
 
 
-var typeSet = [
-    'foot', 'king'
-];
+var typeSet = {
+
+}
+
 const StyledTextField = withStyles((theme) => ({
     root: {
       "& .MuiInputBase-root": {
@@ -48,7 +49,8 @@ class GoodImport extends Component {
             currentDateTime: new Date('2014-08-18T21:11:54'),
             change: true,
         }; 
-        
+        this.getAllTypeList(); 
+        this.getAllGoodData();
     }
     handleAdd(){
         this.props.changeAddTypeStatus();
@@ -121,9 +123,115 @@ class GoodImport extends Component {
         this.props.setConfirm();
     }
 
-    
+    getAllTypeList = () => {
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+        axios.get(`http://localhost:5000/api/product/type`, data)
+            .then(res => {
+                console.log("Get success");
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+        // Get data và lưu các tên Type vào bảng
+        
+    }
+    getAllGoodData = () => {
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+        axios.get(`http://localhost:5000/api/product/`, data)
+            .then(res => {
+                console.log("Get success");
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+        // Get data và lưu các tên Type vào dữ liệU
+        
+    }
+
+    sampleTypeData = {
+        email:"19522006@gm.uit.edu.vn",
+        token: "this is token",
+        data:[
+            {
+                _id: {
+                    storeID:"19522006@gm.uit.edu.vn"
+                },
+                name:"Kai havert",
+            },
+            {
+                _id:{
+                    storeID:"19522007@gm.uit.edu.vn"
+                },
+                name: "Kai havert 1",
+                createdAt:"2001-09-30T17:00:00.000Z"
+            },
+            {
+                _id:{
+                    typeID:"5",
+                    storeID:"19522006@gm.uit.edu.vn"
+                },
+                name:"AA"
+            }
+        ]
+    }
+
+    sampleGoodData = {
+        email:"19522006@gm.uit.edu.vn",
+        token:"this is token",
+        data: [
+            {
+                _id:{
+                    productID:"1212121",
+                    importDate:"2021-10-08T00:00:00.000Z"
+                },
+                name:"SHIIijjjiI",
+                imgUrl:"none",
+                quantity:4,
+                remain:4,
+                unit:"12",
+                importPrice:7,
+                sellPrice:7,
+                expires:"2000-11-10T00:00:00.000Z",
+            },
+            {
+                _id:{
+                    productID:"121212aa1",
+                    importDate:"2021-10-08T00:00:00.000Z"
+                }, 
+                name:"q",
+                imgUrl:"none",
+                quantity:11,
+                remain:11,
+                unit:"11",
+                importPrice:212,
+                sellPrice:120,
+                expires:"2021-10-28"
+            }
+        ]
+    };
+
+    getTypeToTypeSet = () => {
+        var typeList = this.sampleTypeData.data;
+        for(var i=0 ; i< typeList.length ; i++)
+        {
+            // typeSet[typeList[0].]
+        }
+    }
 
     render() {
+        
         return(
             <div 
                 style={{ 

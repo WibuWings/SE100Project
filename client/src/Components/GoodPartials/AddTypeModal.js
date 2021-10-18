@@ -12,6 +12,7 @@ class AddTypeModal extends Component {
         this.state= {
             change: 'false'
         }
+        this.loadInitialData();
     }
     storeID = "";
     typeList = [];
@@ -31,15 +32,16 @@ class AddTypeModal extends Component {
                 console.log(err);
                 alert(err)
             })
-        // Get data và lưu các tên Type vào bảng 
+        // Get data và lưu các tên Type vào bảng
+
     }
     addType = () => {
         const data = {
             token: localStorage.getItem('token'),
             productType: {
                 _id:{
-                    typeID: '5',
-                    storeID: this.props.infoUser.email,
+                    typeID: '1999',
+                    // storeID: this.props.infoUser.email,
                 },
                 name: document.querySelector('input[name="typeName"]').value,
             }    
@@ -57,6 +59,56 @@ class AddTypeModal extends Component {
 
     cancel = () => {
         this.props.changeAddTypeStatus();
+    }
+
+    sampleTypeData=
+        {
+            _id: {
+                typeID:"11",
+                storeID:"19522006@gm.uit.edu.vn"
+            },
+            name:"Kinggg",
+        };
+
+    handle = () => {
+        if (this.props.isAddTypeStatus)
+            this.addType();
+        else 
+            this.editType();
+    }
+
+    editType = () => {
+        alert("Giờ mình sẽ edit")
+        // const data = {
+        //     token: localStorage.getItem('token'),
+        //     product: {
+        //         _id: {
+        //             typeID: this.sampleTypeData._id.typeID,
+        //             storeID: this.sampleTypeData._id.storeID,
+        //         },   
+        //     }
+        // }
+        // axios.put(`http://localhost:5000/api/product/type`, data)
+        //     .then(res => {
+        //         console.log("Update success");
+        //         alert('update được rồi anh trai')
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //         alert("Lỗi gì cmnr")
+        //     })
+        this.props.changeAddTypeStatus();
+    }
+    typeName = "";
+    loadInitialData = () => {
+        if (this.props.isAddTypeStatus) {
+            // alert('Ủa sao lại là add')
+        }
+        else
+        {
+            this.typeName = this.sampleTypeData.name;
+            this.setState({change: true});
+        } 
     }
 
     render() {
@@ -87,6 +139,7 @@ class AddTypeModal extends Component {
                                     required
                                     type="text"
                                     name="typeName"
+                                    defaultValue={this.typeName}
                                 />
                             </Grid>
                             <Grid item md={12} xs={12}>
@@ -101,7 +154,7 @@ class AddTypeModal extends Component {
                         <Button 
                             style={{ backgroundColor: 'yellowgreen' }} 
                             // onClick={() => this.addShift()} 
-                            onClick={() => this.addType()}
+                            onClick={() => this.handle()}
                             variant="contained" 
                             startIcon={<BiPlusMedical />}
                         >

@@ -8,13 +8,14 @@ import axios from 'axios';
 import AddTypeModal from './AddTypeModal';
 
 var productTypes =[
-    'food', 'detergent', 'cuisine'
+    
 ];
 
 
 class EditTypeModal extends Component {
     constructor(props) {
         super(props);
+        this.loadType();
     }
     confirm = () => {
         // Thực hiện các lệnh xử lý tại đây
@@ -28,8 +29,45 @@ class EditTypeModal extends Component {
         this.props.setEditTypeStatus();
     }
     
+    sampleTypeData = {
+        email:"19522006@gm.uit.edu.vn",
+        token: "this is token",
+        data:[
+            {
+                _id: {
+                    typeID:"11",
+                    storeID:"19522006@gm.uit.edu.vn"
+                },
+                name:"Kinggg",
+            },
+            {
+                _id:{
+                    typeID:"12",
+                    storeID:"19522007@gm.uit.edu.vn"
+                },
+                name: "Đồ ăn",
+                createdAt:"2001-09-30T17:00:00.000Z"
+            },
+            {
+                _id:{
+                    typeID:"5",
+                    storeID:"19522006@gm.uit.edu.vn"
+                },
+                name:"AA"
+            }
+        ]
+    }
+
+    loadType = () => {
+        var typeList = this.sampleTypeData.data;
+        productTypes = [];
+        for(var i=0 ; i< typeList.length ; i ++)
+        {
+            productTypes.push(typeList[i].name);
+        }
+    }
+
     render() {
-        console.log(this.props.objectEditShift);
         return (
             <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
@@ -95,6 +133,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "SET_EDIT_TYPE_STATUS",
             })
+        },
+        changeConfirmStatus: () => {
+            dispatch({
+                type: "CHANGE_CONFIRM_STATUS",
+            });
         },
     }
 }
