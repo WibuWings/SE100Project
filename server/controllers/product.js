@@ -64,8 +64,9 @@ class ProductTab {
     updateProduct = async (req, res) => {
         var reqProduct = req.body.product;
         var { _id, ...updateFields } = reqProduct;
+        _id.importDate = new Date(_id.importDate);
 
-        Product.findOneAndUpdate(_id, updateFields, { returnOriginal: false })
+        Product.findOneAndUpdate({_id}, updateFields, { returnOriginal: false })
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
@@ -81,7 +82,7 @@ class ProductTab {
     };
 
     deleteProduct = async (req, res) => {
-        var reqProductIDs = req.body.data.product;
+        var reqProductIDs = req.body.productIDs;
 
         Product.deleteMany({_id : { $in: [...reqProductIDs]}})
         .then((data) => {
@@ -104,7 +105,7 @@ class ProductTab {
     getSomeProductTypes = async (req, res) => {
         var filter = req.body.filter;
 
-        ProductType.find({filter})
+        ProductType.find(filter)
         .then(data => {
             res.status(200).send(
                 JSON.stringify({
@@ -146,10 +147,10 @@ class ProductTab {
     };
 
     updateProductType = async (req, res) => {
-        var reqProductType = req.body.data.productType;
-        var { _id, updateFields } = reqProductType;
+        var reqProductType = req.body.productType;
+        var { _id, ...updateFields } = reqProductType;
 
-        ProductType.findOneAndUpdate(_id, updateFields, { returnOriginal: false })
+        ProductType.findOneAndUpdate({_id}, updateFields, { returnOriginal: false })
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
@@ -165,7 +166,7 @@ class ProductTab {
     };
 
     deleteProductType = async (req, res) => {
-        var reqProductTypeIDs = req.body.data.productTypes;
+        var reqProductTypeIDs = req.body.productTypes;
 
         Product.deleteMany({_id : { $in: [...reqProductTypeIDs]}})
         .then((data) => {
@@ -183,13 +184,89 @@ class ProductTab {
     //------
 
     //productJoin
-    getSomeProductJoins = async (req, res) => {};
+    getSomeProductJoins = async (req, res) => {
+        var filter = req.body.filter;
 
-    createProductJoin = async (req, res) => {};
+        ProductJoinType.find(filter)
+        .then(data => {
+            res.status(200).send(
+                JSON.stringify({
+                    email: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                    data,
+                })
+            );
+        })
+        .catch((err) => {
+            res.status(404).send(err);
+        })
+    };
 
-    updateProductJoin = async (req, res) => {};
+    createProductJoin = async (req, res) => {
+        var reqProductJoinType = req.body.productJoinType;
 
-    deleteProductJoin = async (req, res) => {};
+        var newProductJoinType = new ProductType({
+            _id: {
+                productID: reqProductJoinType._id.productID,
+                typeID: reqProductJoinType._id.typeID,
+                importDate: reqProductJoinType._id.importDate,
+                storeID: reqProductJoinType._id.storeID,
+            },
+        })
+
+        newProductJoinType.save()
+        .then(data => {
+            res.status(200).send(
+                JSON.stringify({
+                    email: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                    data,
+                })
+            );
+        }).catch((err) => {
+            res.status(404).send(err);
+        });
+    };
+
+    updateProductJoin = async (req, res) => {
+        var reqProductJoinType = req.body.productJoinType;
+        var { _id } = reqProductJoinType;
+
+        ProductJoinType.deleteOne({_id})
+        .then(data => {
+            var newProductJoinType = new ProductJoinType({_id});
+            
+            newProductJoinType.save()
+            .then((data) => {
+                res.status(200).send(
+                    JSON.stringify({
+                        email: res.locals.decoded.email,
+                        token: res.locals.newToken,
+                    })
+                );
+            })
+        })
+        .catch((err) => {
+            res.status(404).send(err);
+        });
+    };
+
+    deleteProductJoin = async (req, res) => {
+        var reqProductJoinTypeIDs = req.body.productJoinTypes;
+
+        ProductJoinType.deleteMany({_id : { $in: [...reqProductJoinTypeIDs]}})
+        .then((data) => {
+            res.status(200).send(
+                JSON.stringify({
+                    email: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                })
+            );
+        })
+        .catch((err) => {
+            res.status(404).send(err);
+        });
+    };
     //------
 }
 
