@@ -53,16 +53,20 @@ class meProfile {
                         returnOriginal: false,
                     },
                     function(err, doc){
+                        console.log(err);
                         if(err){
                             console.log("Something wrong when updating data!");
                         }
-                        res.status(200).send(
+                        else 
+                        {
+                            res.status(200).send(
                             JSON.stringify({
                                 token : res.locals.newToken,
-                                email : decode.email,
-                                data,
-                            })
-                        )
+                                email : res.locals.decoded.email,
+                                data : doc,
+                                })
+                            )
+                        }
                     });
             });
 
@@ -90,8 +94,8 @@ class meProfile {
                 res.status(200).send(
                     JSON.stringify({
                         token : res.locals.newToken,
-                        email : decode.email,
-                        data,
+                        email : res.locals.decoded.email,
+                        data : doc
                     })
                 )
             });
@@ -118,8 +122,8 @@ class meProfile {
         res.status(200).send(
                 JSON.stringify({
                     token : res.locals.newToken,
-                    email : decode.email,
-                    data,
+                    email : res.locals.decoded.email,
+                    data : doc,
                     })
                 )
                 }
@@ -153,8 +157,8 @@ class meProfile {
             res.status(200).send(
                     JSON.stringify({
                         token : res.locals.newToken,
-                        email : decode.email,
-                        data,
+                        email : res.locals.decoded.email,
+                        data : doc,
                     })
                 )
             });
@@ -171,8 +175,8 @@ class meProfile {
                 res.status(200).send(
                     JSON.stringify({
                         token : res.locals.newToken,
-                        email : decode.email,
-                        data,
+                        email : res.locals.decoded.email,
+                        data : doc,
                     })
                 )
             });
