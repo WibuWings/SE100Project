@@ -46,7 +46,7 @@ class GoodImport extends Component {
             change: true,
         }; 
         this.getAllTypeList(); 
-        this.getAllGoodData();
+        //this.getAllGoodData();
         this.getTypeToTypeSet();
     }
     handleAdd(){
@@ -510,7 +510,7 @@ class GoodImport extends Component {
                                 <Grid item md={2}
                                     className='input-item'
                                 >
-                                    <Button variant="contained" onClick={() => this.checkConstraint()}>
+                                    <Button variant="contained" onClick={() => this.importGood()}>
                                         Import
                                     </Button>
                                 </Grid>

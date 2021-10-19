@@ -1,14 +1,36 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import { useSelector , useDispatch} from 'react-redux';
 import { BiAddToQueue } from 'react-icons/bi';
 
 export default function IconLabelTabs() {
     const [value, setValue] = React.useState(0);
+    const typeProduct = useSelector(state => state.typeProduct)
+    const dispatch = useDispatch();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        console.log(newValue);
+        var index;
+        if ( newValue === 0 ) {
+            index = 'all'
+        } else {
+            typeProduct.map((value ,key) => {
+                 if (key === newValue - 1) {
+                    index = value.type
+                   
+                }
+            })
+        }
+
+        dispatch({
+            type: "UPDATE_TYPE_CHOOSE",
+            typeProduct: index,
+        })
     };
+
+    
 
     return (
 
@@ -19,20 +41,10 @@ export default function IconLabelTabs() {
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
         >
-            <Tab label="Item One" />
-            <Tab label="Item Two" />
-            <Tab label="Item Three" />
-            <Tab label="Item Four" />
-            <Tab label="Item Five" />
-            <Tab label="Item Six" />
-            <Tab label="Item Seven" />
-            <Tab label="Item One" />
-            <Tab label="Item Two" />
-            <Tab label="Item Three" />
-            <Tab label="Item Four" />
-            <Tab label="Item Five" />
-            <Tab label="Item Six" />
-            <Tab label="Item Seven" />
+            <Tab  label="Tất cả" />
+            {typeProduct.map(value => (
+                <Tab  label={value.name} />
+            ))}
         </Tabs>
     );
 }

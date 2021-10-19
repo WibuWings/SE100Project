@@ -33,13 +33,14 @@ class EditTypeModal extends Component {
     delete = () => {
         const data = {
             token: localStorage.getItem('token'),
-            productTypes: {
-                _id: {
-                    typeID: this.sampleTypeData._id.typeID,
-                    storeID: this.props.infoUser.email,
-                }, 
-                name:document.querySelector('input[name="typeName"]').value + "SHITs",
-            }
+            productTypes:
+            [
+                {
+                    typeID:"12",
+                    storeID:"19522006@gm.uit.edu.vn"
+                }
+            ]
+                
         }
         alert(data.product.name)
         axios.delete(`http://localhost:5000/api/product/type`, data)
