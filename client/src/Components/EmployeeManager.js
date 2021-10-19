@@ -294,7 +294,7 @@ class EmployeeManager extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         addEmployeeStatus: state.addEmployeeStatus,
-        updateEmployeeStatus: state.updateEmployeeStatus,
+        updateEmployeeStatus: state.updateEmpoyeeStatus,
     }
 }
 
