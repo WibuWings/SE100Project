@@ -28,6 +28,8 @@ import EmployeeTableHeader from './EmployeePartials/EmployeeTableHeader';
 import USERLIST from './EmployeePartials/fakeData'
 import AddEmployeeModal from './EmployeePartials/AddEmployeeModal';
 import UpdateEmployeeModal from './EmployeePartials/UpdateEmployeeModal';
+import PayMoneyModal from './EmployeePartials/PayMoneyModal';
+
 
 const TABLE_HEAD = [
     { id: 'ID', label: 'ID', alignRight: false },
@@ -285,6 +287,19 @@ class EmployeeManager extends Component {
                         </UpdateEmployeeModal>
                     </div>
                 ): null}
+                {this.props.payEmployeeStatus ? (
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changePayEmployeeStatus();}} className="modal-overlay"></div>
+                        <PayMoneyModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </PayMoneyModal>
+                    </div>
+                ): null}
             </div>
             
         );
@@ -295,6 +310,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         addEmployeeStatus: state.addEmployeeStatus,
         updateEmployeeStatus: state.updateEmpoyeeStatus,
+        payEmployeeStatus: state.payEmployeeStatus,
     }
 }
 
@@ -310,6 +326,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_UPDATE_EMPLOYEE_STATUS",
             });
         },
+        changePayEmployeeStatus: () => {
+            dispatch({
+                type: "CHANGE_PAY_EMPLOYEE_STATUS",
+            });
+        }
     }
 }
 export default connect(mapStateToProps , mapDispatchToProps)(EmployeeManager);

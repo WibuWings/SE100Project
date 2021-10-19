@@ -231,7 +231,7 @@ class ForgotPassword extends Component {
                         <div className="auth-form__container">
                             <div className="auth-form__header">
                                 <div className="auth-form__heading">Find password</div>
-                                <NavLink onclick="" to="/login" className="auth-form__switch-btn"><BsBoxArrowInLeft className="arrow-return"></BsBoxArrowInLeft></NavLink>
+                                <NavLink to="/login" className="auth-form__switch-btn"><BsBoxArrowInLeft className="arrow-return"></BsBoxArrowInLeft></NavLink>
                             </div>
                         </div>
                         <div className="auth-form__body">

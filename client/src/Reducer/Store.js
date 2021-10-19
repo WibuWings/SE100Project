@@ -20,6 +20,8 @@ import confirmModalReducer from './ConfirmModalReducer';
 import statusYesConfirmReducer from './Status/StatusYesConfirmReducer';
 import statusAddEmployeeReducer from './Status/StatusAddEmployeeReducer';
 import statusUpdateEmployeeReducer from './Status/StatusUpdateEmployeeReducer';
+import statusPayEmployeeReducer from './Status/StatusPayMoneyStatus';
+
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -40,6 +42,7 @@ const allReducers = redux.combineReducers({
     confirmCode: confirmModalReducer,
     yesConfirm: statusYesConfirmReducer,
     addEmployeeStatus: statusAddEmployeeReducer,
+    payEmployeeStatus: statusPayEmployeeReducer,
     updateEmpoyeeStatus: statusUpdateEmployeeReducer,
     editShiftStatus: statusEditShiftReducer,
     objectEditShift: objectEditShiftReducer,

@@ -244,7 +244,7 @@ class Login extends Component {
                                 </div>
                                 <div className="auth-form__support">
                                     <span className="auth-form__support-forget">
-                                        <NavLink onclick="" to="/forgot" className="auth-form__switch-btn">Forgot password</NavLink>
+                                        <NavLink to="/forgot" className="auth-form__switch-btn">Forgot password</NavLink>
                                     </span>
                                     <span className="auth-form__help-separate" />
                                     <span className="auth-form__support-need-support">Need help?</span>

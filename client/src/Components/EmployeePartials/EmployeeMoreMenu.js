@@ -72,7 +72,9 @@ class EmployeeMoreMenu extends Component {
             </ListItemIcon>
             <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
-          <MenuItem sx={{ color: 'text.secondary' }}>
+          <MenuItem sx={{ color: 'text.secondary' }}
+            onClick={()=> this.props.changePayEmployeeStatus()}
+          >
             <ListItemIcon>
               <GiPayMoney size={24}/> 
             </ListItemIcon>
@@ -87,6 +89,7 @@ class EmployeeMoreMenu extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     updateEmployeeStatus: state.updateEmpoyeeStatus,
+    payEmployeeStatus: state.payEmployeeStatus,
   }
 }
 
@@ -97,6 +100,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
               type: "CHANGE_UPDATE_EMPLOYEE_STATUS",
           });
       },
+      changePayEmployeeStatus: () => {
+        dispatch({
+            type: "CHANGE_PAY_EMPLOYEE_STATUS",
+        });
+    },
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeMoreMenu);

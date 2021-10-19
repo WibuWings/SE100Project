@@ -36,7 +36,7 @@ const StyledTextField = withStyles((theme) => ({
     }
   }))(TextField);
 
-class UpdateEmployeeModal extends Component {
+class PayEmployeeModal extends Component {
     constructor(props) {
         super(props);
         
@@ -61,7 +61,7 @@ class UpdateEmployeeModal extends Component {
         return (
             <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="UPDATE EMPLOYEE" />
+                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="PAY EMPLOYEE" />
                         <div 
                         style={{ 
                             width: '100%', backgroundColor: 'rgb(221,235,255)'   
@@ -241,8 +241,8 @@ class UpdateEmployeeModal extends Component {
                                     <Grid item md={3}
                                         className='input-item'
                                     >
-                                        <Button variant="contained" onClick={() => this.props.changeUpdateEmployeeStatus()}>
-                                            UPDATE employee
+                                        <Button variant="contained" onClick={() => this.props.changePayEmployeeStatus()}>
+                                            Pay employee
                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -261,26 +261,20 @@ class UpdateEmployeeModal extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        addEmployeeStatus: state.addEmployeeStatus,
-        confirmStatus: state.confirmStatus,
+
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        changeAddEmployeeStatus: () => {
+        changePayEmployeeStatus: () => {
             dispatch({
-                type: "CHANGE_ADD_EMPLOYEE_STATUS",
+                type: "CHANGE_PAY_EMPLOYEE_STATUS",
             });
         },
-        changeUpdateEmployeeStatus: () => {
-            dispatch({
-                type: "CHANGE_UPDATE_EMPLOYEE_STATUS",
-            });
-        }
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateEmployeeModal);
+export default connect(mapStateToProps, mapDispatchToProps)(PayEmployeeModal);
 
                
