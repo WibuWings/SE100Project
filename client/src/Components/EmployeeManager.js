@@ -27,12 +27,16 @@ import EmployeeTableHeader from './EmployeePartials/EmployeeTableHeader';
 import USERLIST from './EmployeePartials/fakeData'
 
 const TABLE_HEAD = [
-{ id: 'name', label: 'Name', alignRight: false },
-{ id: 'company', label: 'Company', alignRight: false },
-{ id: 'role', label: 'Role', alignRight: false },
-{ id: 'isVerified', label: 'Verified', alignRight: false },
-{ id: 'status', label: 'Status', alignRight: false },
-{ id: '' }
+    { id: 'ID', label: 'ID', alignRight: false },
+    { id: 'firstName', label: 'Name', alignRight: false },
+    { id: 'lastName', label: 'Last Name', alignRight: false },
+    { id: 'old', label: 'Old', alignRight: false },
+    { id: 'gender', label: 'Gender', alignRight: false },
+    { id: 'province', label: 'Province', alignRight: false },
+    { id: 'phoneNumber', label: 'Phone', alignRight: false },
+    { id: 'email', label: 'Email', alignRight: false },
+    { id: 'adress', label: 'Adress', alignRight: false },
+    { id: '' }
 ];
 
 var selected = [];
@@ -47,7 +51,7 @@ class EmployeeManager extends Component {
     render() {
         return (
             <div
-                style={{height: '800px', overflowY: 'auto'}}
+                style={{height:'800px', overflowY: 'auto'}}
             >
                 <Container
                     style={{marginTop: 60}}
@@ -77,13 +81,14 @@ class EmployeeManager extends Component {
                                 // onSelectAllClick={handleSelectAllClick}
                             />
                             <TableBody
-                                style={{height: '400px'}}
+                                style={{height: '400px', width: '100%'}}
                             >
                             {
                                 filteredUsers
                                 .map((row) => {
-                                const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                                const isItemSelected = selected.indexOf(name) !== -1;
+                                    
+                                const { id, firstName, lastName, gender, province,email, adress, old, phone, avatarUrl, isVerified } = row;
+                                const isItemSelected = selected.indexOf(firstName) !== -1;
 
                                 return (
                                     <TableRow
@@ -100,26 +105,22 @@ class EmployeeManager extends Component {
                                             // onChange={(event) => handleClick(event, name)}
                                             />
                                         </TableCell>
+                                        <TableCell align="left">{id}</TableCell>
                                         <TableCell component="th" scope="row" padding="none">
                                             <Stack direction="row" alignItems="center" spacing={2}>
-                                            <Avatar alt={name} src={avatarUrl} />
+                                            <Avatar alt={firstName} src={avatarUrl} />
                                             <Typography variant="subtitle2" noWrap>
-                                                {name}
+                                                {firstName}
                                             </Typography>
                                             </Stack>
                                         </TableCell>
-                                        <TableCell align="left">{company}</TableCell>
-                                        <TableCell align="left">{role}</TableCell>
-                                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                                        <TableCell align="left">
-                                            <Label
-                                            variant="ghost"
-                                            color={(status === 'banned' && 'error') || 'success'}
-                                            >
-                                            {sentenceCase(status)}
-                                            </Label>
-                                        </TableCell>
-
+                                        <TableCell align="left">{lastName}</TableCell>  
+                                        <TableCell align="left">{old}</TableCell>
+                                        <TableCell align="left">{gender}</TableCell>
+                                        <TableCell align="left">{province}</TableCell>
+                                        <TableCell align="left">{phone}</TableCell>
+                                        <TableCell align="left">{email}</TableCell>
+                                        <TableCell align="left">{adress}</TableCell>
                                         <TableCell align="right">
                                             <EmployeeMoreMenu />
                                         </TableCell>
@@ -168,52 +169,49 @@ class EmployeeManager extends Component {
                             style={{height: '400px'}}
                         >
                         {
-                            filteredUsers
-                            .map((row) => {
-                            const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                            const isItemSelected = selected.indexOf(name) !== -1;
+                                filteredUsers
+                                .map((row) => {
+                                    
+                                const { id, firstName, lastName, gender, province,email, adress, old, phone, avatarUrl, isVerified } = row;
+                                const isItemSelected = selected.indexOf(firstName) !== -1;
 
-                            return (
-                                <TableRow
-                                    hover
-                                    key={id}
-                                    tabIndex={-1}
-                                    role="checkbox"
-                                    // selected={isItemSelected}
-                                    // aria-checked={isItemSelected}
-                                >
-                                    <TableCell padding="checkbox">
-                                        <Checkbox
-                                        checked={isItemSelected}
-                                        // onChange={(event) => handleClick(event, name)}
-                                        />
-                                    </TableCell>
-                                    <TableCell component="th" scope="row" padding="none">
-                                        <Stack direction="row" alignItems="center" spacing={2}>
-                                        <Avatar alt={name} src={avatarUrl} />
-                                        <Typography variant="subtitle2" noWrap>
-                                            {name}
-                                        </Typography>
-                                        </Stack>
-                                    </TableCell>
-                                    <TableCell align="left">{company}</TableCell>
-                                    <TableCell align="left">{role}</TableCell>
-                                    <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                                    <TableCell align="left">
-                                        <Label
-                                        variant="ghost"
-                                        color={(status === 'banned' && 'error') || 'success'}
-                                        >
-                                        {sentenceCase(status)}
-                                        </Label>
-                                    </TableCell>
-
-                                    <TableCell align="right">
-                                        <EmployeeMoreMenu />
-                                    </TableCell>
-                                </TableRow>
-                            );
-                            })}
+                                return (
+                                    <TableRow
+                                        hover
+                                        key={id}
+                                        tabIndex={-1}
+                                        role="checkbox"
+                                        // selected={isItemSelected}
+                                        // aria-checked={isItemSelected}
+                                    >
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                            checked={isItemSelected}
+                                            // onChange={(event) => handleClick(event, name)}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="left">{id}</TableCell>
+                                        <TableCell component="th" scope="row" padding="none">
+                                            <Stack direction="row" alignItems="center" spacing={2}>
+                                            <Avatar alt={firstName} src={avatarUrl} />
+                                            <Typography variant="subtitle2" noWrap>
+                                                {firstName}
+                                            </Typography>
+                                            </Stack>
+                                        </TableCell>
+                                        <TableCell align="left">{lastName}</TableCell>  
+                                        <TableCell align="left">{old}</TableCell>
+                                        <TableCell align="left">{gender}</TableCell>
+                                        <TableCell align="left">{province}</TableCell>
+                                        <TableCell align="left">{phone}</TableCell>
+                                        <TableCell align="left">{email}</TableCell>
+                                        <TableCell align="left">{adress}</TableCell>
+                                        <TableCell align="right">
+                                            <EmployeeMoreMenu />
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                                })}
                         </TableBody>
                     </Table>
                     </TableContainer>
