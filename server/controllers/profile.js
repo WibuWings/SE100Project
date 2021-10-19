@@ -14,23 +14,6 @@ const Employee = require("../models/employee");
 const Coupon = require("../models/coupon");
 const {JWTVerify} = require("../helper/JWT");
 
-const MESSAGES = {
-    SIGN_IN_SUCCESS: "Sign-in successfully.",
-    REGISTER_SUCCESS: "Register successfully.",
-    RESET_PASSWORD_SUCCESS: "Reset password successfully.",
-    PASSWORD_OR_ACCOUNT_ERROR:
-        "The email IS NOT registered or you entered the WRONG password.",
-    EMAIL_ERROR: "The email IS NOT registered.",
-    EMAIL_HAS_BEEN_USED:
-        "The email address has been used for regular or Google account.",
-    EMAIL_USED_GG: "The email has to sign in WITH GOOGLE.",
-    MONGODB_ERROR: "Some errors with database.",
-};
-const STATUS = {
-    SUCCESS: 1,
-    FAILURE: -1,
-};
-
 class meProfile {
 
     updateProfileData = async (req, res) =>{
@@ -43,7 +26,6 @@ class meProfile {
         const newProvince = req.body.province;
         const newDistrict = req.body.district;
         const newstoreName = req.body.storeName;
-        
         Store.findOne({ _id: email })
             .exec()
             .then((data) => {
@@ -71,7 +53,7 @@ class meProfile {
                         returnOriginal: false,
                     },
                     
-            });
+                )});
 
         Manager.findOneAndUpdate(
             {
@@ -100,9 +82,8 @@ class meProfile {
                         email : res.locals.decoded.email,
                         data : doc
                     })
-                )}
-            });
-}
+                )}})}
+        
     addShift = async (req, res) => {
         const idUserJwt = req.body.data.idUser;
         const idShift = req.body.data.id;
