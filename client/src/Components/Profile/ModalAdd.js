@@ -95,7 +95,7 @@ class ModalAdd extends Component {
             var data = {
                 token: localStorage.getItem('token'),
                 idUser: this.props.infoUser.email,
-                id: this.props.objectEditShift.id,
+                id: this.props.objectEditShift._id,
                 salary: this.salary,
                 description: this.descriptionShift,
                 from: this.timeFrom,

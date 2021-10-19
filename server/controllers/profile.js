@@ -38,10 +38,12 @@ class meProfile {
         const newfirstName = req.body.firstName;
         const newlastName = req.body.lastName;
         const newphoneNumber = req.body.phoneNumber;
+        const newgender = req.body.gender
         const newAddress = req.body.address;
         const newProvince = req.body.province;
         const newDistrict = req.body.district;
         const newstoreName = req.body.storeName;
+        const old = req.body.old
         Store.findOne({ _id: email })
             .exec()
             .then((data) => {
@@ -83,6 +85,8 @@ class meProfile {
                 province:newProvince,
                 district:newDistrict,
                 storeID: email,
+                gender:newgender,
+                old:old,
             }},
             {
                 returnOriginal: false,
@@ -92,6 +96,7 @@ class meProfile {
                     console.log("Something wrong when updating data!");
                 }
                 else{
+                console.log(doc);
                 res.status(200).send(
                     JSON.stringify({
                         token : res.locals.newToken,
