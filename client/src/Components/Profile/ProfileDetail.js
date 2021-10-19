@@ -35,6 +35,7 @@ class ProfileDetail extends Component {
 
             axios.post(`http://localhost:5000/api/profile/update-profile`, data)
                 .then(res => {
+                    localStorage.setItem('token', res.data.token);
                     console.log("Save success");
                 })
                 .catch(err => {

@@ -106,6 +106,7 @@ class ModalAdd extends Component {
             this.props.changeAddStatus();
             axios.post(`http://localhost:5000/api/update-shift`, data)
                 .then(res => {
+                    localStorage.setItem('token', res.data.token);
                     console.log('thành công');
                 })
                 .catch(err => {
@@ -157,6 +158,7 @@ class ModalAdd extends Component {
                     data: data,
                 })
                     .then(res => {
+                        localStorage.setItem('token', res.data.token);
                         console.log('Thành Công');
                     })
                     .catch(err => {
