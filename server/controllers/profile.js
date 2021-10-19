@@ -24,6 +24,9 @@ const MESSAGES = {
         "The email address has been used for regular or Google account.",
     EMAIL_USED_GG: "The email has to sign in WITH GOOGLE.",
     MONGODB_ERROR: "Some errors with database.",
+    FAILURE_UPDATE : "failure when update",
+    FAILURE_ADD : " failure when adding ",
+    FAILURE_DELETE : "failure when delete"
 };
 const STATUS = {
     SUCCESS: 1,
@@ -83,7 +86,12 @@ class meProfile {
             },
             function(err, doc){
                 if(err){
-                    console.log("Something wrong when updating data!");
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.FAILURE_UPDATE,
+                        })
+                    );;
                 }
                 else{
                 console.log(doc);
@@ -114,14 +122,23 @@ class meProfile {
                     });
 
                 newShift.save()
-                console.log(req.body);
-        res.status(200).send(
+        .then((data) => {        
+            res.status(200).send(
+            JSON.stringify({
+                token : res.locals.newToken,
+                email : res.locals.decoded.email,
+                data,
+                })
+            )})
+        .catch((err) => {
+            res.send(
                 JSON.stringify({
-                    token : res.locals.newToken,
-                    email : res.locals.decoded.email,
-                    data : doc,
-                    })
-                )
+                    status: STATUS.FAILURE,
+                    message: MESSAGES.FAILURE_ADD,
+                })
+            );
+        })
+
                 }
         
  
@@ -144,7 +161,12 @@ class meProfile {
             },
             function(err, doc){
                 if(err){
-                    console.log("Something wrong when updating data!");
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.FAILURE_UPDATE,
+                        })
+                    );
                 }
                 else{
             res.status(200).send(
@@ -163,7 +185,12 @@ class meProfile {
             {shiftID : idShift,storeID : idUser,},
             function(err, doc){
                 if(err){
-                    console.log("Something wrong when updating data!");
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.FAILURE_DELETE,
+                        })
+                    );;;
                 }
                 else{
                 res.status(200).send(
@@ -193,7 +220,12 @@ class meProfile {
             },
             function(err, doc){
                 if(err){
-                    console.log("Something wrong when updating data!");
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.EMAIL_ERROR,
+                        })
+                    );;
                 }
                 else{
                 res.status(200).send(
@@ -206,7 +238,12 @@ class meProfile {
             }
         ) }
         else{
-            console.log("Something wrong when updating data!");
+            res.send(
+                JSON.stringify({
+                    status: STATUS.FAILURE,
+                    message: MESSAGES.EMAIL_ERROR,
+                })
+            );;
         }
 
     };
