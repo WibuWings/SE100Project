@@ -1,16 +1,15 @@
-import faker from 'faker';
 import { sample } from 'lodash';
 // utils
-import { mockImgAvatar } from '../utils/mockImages';
+import mockImgAvatar from "../../img/avatar_default.jpg"
 
 // ----------------------------------------------------------------------
 
-const users = [...Array(24)].map((_, index) => ({
-  id: faker.datatype.uuid(),
-  avatarUrl: mockImgAvatar(index + 1),
-  name: faker.name.findName(),
-  company: faker.company.companyName(),
-  isVerified: faker.datatype.boolean(),
+const users = [...Array(5)].map((_, index) => ({
+  id: '1',
+  avatarUrl: mockImgAvatar,
+  name: 'Mason Mount',
+  company: "Chelsea",
+  isVerified: "True",
   status: sample(['active', 'banned']),
   role: sample([
     'Leader',
