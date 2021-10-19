@@ -208,13 +208,13 @@ class ModalAdd extends Component {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <Stack spacing={3}>
                                         <TimePicker
-                                            label="Time"
+                                            label="Time From"
                                             value={this.state.timeFrom}
                                             onChange={(newValue) => this.changeTimeFrom(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
                                         />
                                         <TimePicker
-                                            label="Time"
+                                            label="Time To"
                                             value={this.state.timeTo}
                                             onChange={(newValue) => this.changeTimeTo(newValue)}
                                             renderInput={(params) => <TextField onChange={(e) => this.changeTime(e)} {...params} />}
