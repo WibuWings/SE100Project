@@ -15,7 +15,6 @@ import statusUpdateGoodReducer from './Status/StatusUpdateGoodReducer';
 import statusEditTypeReducer from './Status/StatusEditTypeReducer';
 import statusAddTypeReducer from './Status/StatusAddTypeReducer';
 import statusIsAddTypeReducer from './Status/StatusIsAddTypeReducer';
-import statusModalConfirmPasswordReducer from './Status/StatusModalConfirmPassword';
 import roleReducer from './RoleReducer';
 import confirmModalReducer from './ConfirmModalReducer';
 import statusYesConfirmReducer from './Status/StatusYesConfirmReducer';
