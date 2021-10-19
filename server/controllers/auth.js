@@ -1,8 +1,5 @@
-const jwt = require("jsonwebtoken"); // authentication & authorization
-const PRIVATE_KEY = require("../privateKey"); // temp private key
 const bcrypt = require("bcryptjs");// decode
 
-const mongoose = require("mongoose");
 const Manager = require("../models/manager"); // db model
 const Store = require("../models/store"); //
 const ShiftType = require("../models/shiftType");
@@ -245,12 +242,11 @@ class Authentication {
         var decoded = res.locals.decoded;
 
         getAllData(decoded.email).then((data) => {
-
-            var {iat, exp, ...userInfo} = decoded;
+            
             res.status(200).send(
                 JSON.stringify({
                     message: MESSAGES.SIGN_IN_SUCCESS,
-                    token: JWTAuthToken(userInfo),
+                    token: res.locals.newToken,
                     email: decoded.email,
                     data,
                 })
@@ -291,6 +287,9 @@ async function getAllData(email) {
         Coupon.find({ storeID: store._id }).exec(),
         Employee.find({ managerID: store._id }).exec(),
         Product.find({ storeID: store._id }).exec(),
+        ProductType.find({ storeID: store._id }).exec(),
+        ProductJoinType.find({ storeID: store._id }).exec(),
+        Revenue.find({ storeID: store._id }).exec(),
         Receipt.find({ storeID: store._id }).exec(),
         ReturnProduct.find({ storeID: store._id }).exec(),
         ShiftAssign.find({ storeID: store._id }).exec(),

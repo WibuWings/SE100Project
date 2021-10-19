@@ -5,7 +5,7 @@ function JWTAuthToken(data) {
     return (token = jwt.sign(
         { ...data },
         PRIVATE_KEY,
-        { expiresIn: 600 }
+        { expiresIn: 60000 }
     ));
 }
 
@@ -25,14 +25,16 @@ function JWTVerify(token) {
 }
 
 async function AuthMiddleware(req, res, next) {
+    // console.log(req.body);
     const result = JWTVerify(req.body.token);
-
+    
     if (result.status !== 200) {
         res.status(401).send(JSON.stringify(result.err));
     } else {
         res.locals.decoded = result.decoded;
+        res.locals.newToken = JWTAuthToken({email:result.decoded.email})
         next();
     }
 }
 
-module.exports = {JWTAuthToken,AuthMiddleware};
+module.exports = {JWTAuthToken,AuthMiddleware,JWTVerify };

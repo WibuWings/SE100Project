@@ -8,6 +8,7 @@ import listShiftReducer from './ListShiftReducer';
 import statusEditShiftReducer from  './Status/StatusEditShiftReducer';
 import objectEditShiftReducer from './ObjectEditShiftReducer';
 import statusDarkmodeReducer from './Status/StatusDarkModeReducer';
+import statusModalConfirmPasswordReducer from './Status/StatusModalConfirmPassword';
 import statusConfirmReducer from './Status/StatusConfirmReducer';
 import statusDeleteConfirmReducer from './Status/StatusDeleteConfirmReducer';
 import statusUpdateGoodReducer from './Status/StatusUpdateGoodReducer';

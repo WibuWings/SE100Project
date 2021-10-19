@@ -30,7 +30,7 @@ class ChangePassword extends Component {
             curPass: this.curPass,
             newPass: this.hash(this.newPass),
         }
-        axios.post(`http://localhost:5000/api/change-password`,data)
+        axios.post(`http://localhost:5000/api/profile/change-password`,data)
         .then(res => {
             console.log("thành công");
         })

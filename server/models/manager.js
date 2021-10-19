@@ -14,7 +14,6 @@ const Manager = new Schema({
     province: String,   
     district: String,
     address: String,
-    salary : String,
     storeID: String,
     imgUrl: String,
 });
