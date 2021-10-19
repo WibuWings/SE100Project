@@ -26,6 +26,7 @@ class meProfile {
         const newProvince = req.body.province;
         const newDistrict = req.body.district;
         const newstoreName = req.body.storeName;
+        
         Store.findOne({ _id: email })
             .exec()
             .then((data) => {
@@ -52,22 +53,7 @@ class meProfile {
                     {
                         returnOriginal: false,
                     },
-                    function(err, doc){
-                        console.log(err);
-                        if(err){
-                            console.log("Something wrong when updating data!");
-                        }
-                        else 
-                        {
-                            res.status(200).send(
-                            JSON.stringify({
-                                token : res.locals.newToken,
-                                email : res.locals.decoded.email,
-                                data : doc,
-                                })
-                            )
-                        }
-                    });
+                    
             });
 
         Manager.findOneAndUpdate(
@@ -90,14 +76,14 @@ class meProfile {
                 if(err){
                     console.log("Something wrong when updating data!");
                 }
-                
+                else{
                 res.status(200).send(
                     JSON.stringify({
                         token : res.locals.newToken,
                         email : res.locals.decoded.email,
                         data : doc
                     })
-                )
+                )}
             });
 }
     addShift = async (req, res) => {
@@ -136,10 +122,6 @@ class meProfile {
         const name = req.body.description
         const from = req.body.from
         const to = req.body.to
-        const obj = {
-            storeID : idUser,
-            shiftID : idShift,
-        }
         ShiftType.findOneAndUpdate(
             {shiftID : idShift,storeID : idUser,},
             {$set:{
