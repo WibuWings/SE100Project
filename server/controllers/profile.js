@@ -43,34 +43,25 @@ class meProfile {
         const newProvince = req.body.province;
         const newDistrict = req.body.district;
         const newstoreName = req.body.storeName;
-        const old = req.body.old
-        Store.findOne({ _id: email })
-            .exec()
-            .then((data) => {
-                if (data) {
-                    throw new Error();
-                }  else {
-                    const newStore = new Store({
-                        _id: email,
-                        name: newstoreName
-                    });
-
-                    newStore.save()
-                }
-            })
-            .catch((err) => {
-                Store.findOneAndUpdate(
-                    {
-                        _id: email,
-                    },
-                    {$set:{
-                        name: newstoreName,
-                    }},
-                    {
-                        returnOriginal: false,
-                    },
-                    
-                )});
+        const old = req.body.old                  
+        Store.findOneAndUpdate(
+                {
+                    _id: email,
+                },
+                {$set:{
+                    name: newstoreName,
+                }},
+                {
+                    returnOriginal: false,
+                },
+                function(err, doc){
+                    if(err){
+                        console.log("Something wrong when updating data!");
+                    }
+                    else{
+                    console.log(doc);}}
+                
+            )   
 
         Manager.findOneAndUpdate(
             {
@@ -105,7 +96,7 @@ class meProfile {
                 )}})}
         
     addShift = async (req, res) => {
-        const idUserJwt = req.body.data.idUser;
+        const idUserJwt = req.body.email;
         const idShift = req.body.data.id;
         const newSalary = req.body.data.salary
         const name = req.body.data.description
@@ -123,6 +114,7 @@ class meProfile {
                     });
 
                 newShift.save()
+                console.log(req.body);
         res.status(200).send(
                 JSON.stringify({
                     token : res.locals.newToken,
@@ -186,10 +178,11 @@ class meProfile {
     changePassword = async (req, res) => {
         const email = req.body.email;
         const newPassword = req.body.newPass;
-
+        const curPass = req.body.curPass;
         Manager.findOneAndUpdate(
             {
                 email: email,
+                password : curPass,
             },
             {
                 password: newPassword,

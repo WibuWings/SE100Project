@@ -142,7 +142,7 @@ class ModalAdd extends Component {
     addShift = () => {
         if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
             var data = {
-                token: localStorage.getItem('token'),
+                
                 idUser: this.props.infoUser.email,
                 id: this.makeCode(6),
                 salary: this.salary,
@@ -152,8 +152,9 @@ class ModalAdd extends Component {
             }
             if (data) {
                 this.props.addShift(data);
-                axios.post(`http://localhost:5000/api/add-shift`, {
+                axios.post(`http://localhost:5000/api/profile/add-shift`, {
                     email: this.props.infoUser.email,
+                    token: localStorage.getItem('token'),
                     data: data,
                 })
                     .then(res => {

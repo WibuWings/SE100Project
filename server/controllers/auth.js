@@ -137,7 +137,7 @@ class Authentication {
 
         Manager.findOne({ _id: email })
             .exec()
-            .then((data) => {
+            .then((data) =>     {
                 if (data) {
                     throw new Error();
                 } else {
