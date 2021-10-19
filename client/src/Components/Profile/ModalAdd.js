@@ -95,7 +95,7 @@ class ModalAdd extends Component {
             var data = {
                 token: localStorage.getItem('token'),
                 idUser: this.props.infoUser.email,
-                id: this.props.objectEditShift.id,
+                id: this.props.objectEditShift._id,
                 salary: this.salary,
                 description: this.descriptionShift,
                 from: this.timeFrom,
@@ -112,6 +112,16 @@ class ModalAdd extends Component {
                     console.log("lỗi");
                 })
         }
+        this.props.updateShift(data);
+        this.props.changeEditShiftStatus();
+        this.props.changeAddStatus();
+        axios.post(`http://localhost:5000/api/profile/update-shift`, data)
+        .then(res => {
+            console.log('thành công');
+        })
+        .catch(err => {
+            console.log("lỗi");
+        })
     }
 
     blurSalary = (e) => {

@@ -13,6 +13,22 @@ const Product = require("../models/product");
 const Employee = require("../models/employee");
 const Coupon = require("../models/coupon");
 const {JWTVerify} = require("../helper/JWT");
+const MESSAGES = {
+    SIGN_IN_SUCCESS: "Sign-in successfully.",
+    REGISTER_SUCCESS: "Register successfully.",
+    RESET_PASSWORD_SUCCESS: "Reset password successfully.",
+    PASSWORD_OR_ACCOUNT_ERROR:
+        "The email IS NOT registered or you entered the WRONG password.",
+    EMAIL_ERROR: "The email IS NOT registered.",
+    EMAIL_HAS_BEEN_USED:
+        "The email address has been used for regular or Google account.",
+    EMAIL_USED_GG: "The email has to sign in WITH GOOGLE.",
+    MONGODB_ERROR: "Some errors with database.",
+};
+const STATUS = {
+    SUCCESS: 1,
+    FAILURE: -1,
+};
 
 class meProfile {
 
@@ -22,23 +38,24 @@ class meProfile {
         const newfirstName = req.body.firstName;
         const newlastName = req.body.lastName;
         const newphoneNumber = req.body.phoneNumber;
+        const newgender = req.body.gender
         const newAddress = req.body.address;
         const newProvince = req.body.province;
         const newDistrict = req.body.district;
         const newstoreName = req.body.storeName;
-        Manager.findOne({ _id: email })
+        const old = req.body.old
+        Store.findOne({ _id: email })
             .exec()
             .then((data) => {
                 if (data) {
                     throw new Error();
                 }  else {
-                    const newManager = new Manager({
+                    const newStore = new Store({
                         _id: email,
                         name: newstoreName
                     });
 
-                    newManager
-                        .save()
+                    newStore.save()
                 }
             })
             .catch((err) => {
@@ -52,23 +69,12 @@ class meProfile {
                     {
                         returnOriginal: false,
                     },
-                    function(err, doc){
-                        if(err){
-                            console.log("Something wrong when updating data!");
-                        }
-                        res.status(200).send(
-                            JSON.stringify({
-                                token : res.locals.newToken,
-                                email : decode.email,
-                                data,
-                            })
-                        )
-                    });
-            });
+                    
+                )});
 
         Manager.findOneAndUpdate(
             {
-                email: email,
+                _id : email,
             },
             {$set:{
                 lastName:newlastName,
@@ -78,6 +84,8 @@ class meProfile {
                 province:newProvince,
                 district:newDistrict,
                 storeID: email,
+                gender:newgender,
+                old:old,
             }},
             {
                 returnOriginal: false,
@@ -86,16 +94,16 @@ class meProfile {
                 if(err){
                     console.log("Something wrong when updating data!");
                 }
-                
+                else{
+                console.log(doc);
                 res.status(200).send(
                     JSON.stringify({
                         token : res.locals.newToken,
-                        email : decode.email,
-                        data,
+                        email : res.locals.decoded.email,
+                        data : doc
                     })
-                )
-            });
-}
+                )}})}
+        
     addShift = async (req, res) => {
         const idUserJwt = req.body.data.idUser;
         const idShift = req.body.data.id;
@@ -118,8 +126,8 @@ class meProfile {
         res.status(200).send(
                 JSON.stringify({
                     token : res.locals.newToken,
-                    email : decode.email,
-                    data,
+                    email : res.locals.decoded.email,
+                    data : doc,
                     })
                 )
                 }
@@ -132,10 +140,6 @@ class meProfile {
         const name = req.body.description
         const from = req.body.from
         const to = req.body.to
-        const obj = {
-            storeID : idUser,
-            shiftID : idShift,
-        }
         ShiftType.findOneAndUpdate(
             {shiftID : idShift,storeID : idUser,},
             {$set:{
@@ -150,13 +154,14 @@ class meProfile {
                 if(err){
                     console.log("Something wrong when updating data!");
                 }
+                else{
             res.status(200).send(
                     JSON.stringify({
                         token : res.locals.newToken,
-                        email : decode.email,
-                        data,
+                        email : res.locals.decoded.email,
+                        data : doc,
                     })
-                )
+                )}
             });
     }
     deleteShift = async (req, res) => {
@@ -168,13 +173,14 @@ class meProfile {
                 if(err){
                     console.log("Something wrong when updating data!");
                 }
+                else{
                 res.status(200).send(
                     JSON.stringify({
                         token : res.locals.newToken,
-                        email : decode.email,
-                        data,
+                        email : res.locals.decoded.email,
+                        data : doc,
                     })
-                )
+                )}
             });
     }
     changePassword = async (req, res) => {

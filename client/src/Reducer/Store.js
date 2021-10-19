@@ -15,10 +15,15 @@ import statusUpdateGoodReducer from './Status/StatusUpdateGoodReducer';
 import statusEditTypeReducer from './Status/StatusEditTypeReducer';
 import statusAddTypeReducer from './Status/StatusAddTypeReducer';
 import statusIsAddTypeReducer from './Status/StatusIsAddTypeReducer';
-import statusModalConfirmPasswordReducer from './Status/StatusModalConfirmPassword';
 import roleReducer from './RoleReducer';
 import confirmModalReducer from './ConfirmModalReducer';
 import statusYesConfirmReducer from './Status/StatusYesConfirmReducer';
+import statusAddEmployeeReducer from './Status/StatusAddEmployeeReducer';
+import statusUpdateEmployeeReducer from './Status/StatusUpdateEmployeeReducer';
+import statusPayEmployeeReducer from './Status/StatusPayMoneyStatus';
+import listProductReducer from './ListProductReducer';
+import typeProductReducer from './typeProduct';
+import chooseTypeProductReducer from './chooseTypeProduct';
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -38,10 +43,16 @@ const allReducers = redux.combineReducers({
     role: roleReducer,
     confirmCode: confirmModalReducer,
     yesConfirm: statusYesConfirmReducer,
+    addEmployeeStatus: statusAddEmployeeReducer,
+    payEmployeeStatus: statusPayEmployeeReducer,
+    updateEmpoyeeStatus: statusUpdateEmployeeReducer,
     editShiftStatus: statusEditShiftReducer,
     objectEditShift: objectEditShiftReducer,
     statusDarkmode: statusDarkmodeReducer,
     statusConfirmPassword: statusModalConfirmPasswordReducer,
+    listProduct: listProductReducer,
+    typeProduct: typeProductReducer,
+    chooseTypeProduct: chooseTypeProductReducer,
 })
 
 
