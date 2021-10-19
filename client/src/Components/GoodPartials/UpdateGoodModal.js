@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { Image } from 'cloudinary-react';
 import axios from 'axios';
-import '../../CSS/GoodManager.css';
+import '../../css/GoodManager.css';
 import GoodImage from './goodExample.jpg';
 import AddTypeModal from './AddTypeModal';
 import { withStyles } from '@material-ui/styles';

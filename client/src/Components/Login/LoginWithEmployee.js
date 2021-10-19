@@ -4,7 +4,7 @@ import {
     NavLink
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../CSS/Login.css'
+import '../../css/Login.css'
 import { BsFillEnvelopeFill, BsLockFill } from "react-icons/bs";
 import {  FiXSquare,FiChevronLeft } from "react-icons/fi";
 import {FaUserTie} from 'react-icons/fa'

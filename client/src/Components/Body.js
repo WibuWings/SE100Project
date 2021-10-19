@@ -6,7 +6,7 @@ import DashboardURL from '../Router/DashboardURL';
 import { connect } from 'react-redux';
 import SideNavBar from './Partials/SideNavBar';
 
-import '../CSS/Body.css'
+import '../css/Body.css'
 import ModalConfirmPassword from './ModalConfirmPassword';
 
 class Body extends Component {

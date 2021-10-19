@@ -6,7 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import { InputLabel, Button, Modal, Grid, Card, CardHeader} from '@mui/material';
 import { Image } from 'cloudinary-react';
 import axios from 'axios';
-import '../../CSS/GoodManager.css';
+import '../../css/GoodManager.css';
 import { connect } from 'react-redux';
 import GoodImage from '../../img/good-example.jpg';
 import AddTypeModal from './AddTypeModal';

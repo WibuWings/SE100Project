@@ -12,7 +12,7 @@ import SellProduct from '../Components/SellProduct/SellProduct';
 
 class DashboardURL extends Component {
     render() {
-        return (
+        return ( 
             <div>      
                 <Route exact path="/" component={DashBoard}></Route>
                 <Route exact path="/dashboard" component={DashBoard}></Route>
@@ -20,8 +20,8 @@ class DashboardURL extends Component {
                 <Route exact path="/goodmanager" component={GoodManager}></Route>
                 <Route exact path="/employeemanager" component={EmployeeManager}></Route>
                 <Route exact path="/receiptmanager" component={ReceiptManager}></Route> 
-                <Route exact path="/profile" component={Profile}></Route>   
-                <Route exact path="/sellproduct" component={SellProduct}></Route>      
+                <Route exact path="/profile" component={Profile}></Route>
+                <Route exact path="/sellproduct" component={SellProduct}></Route>         
             </div>
         );
     }
