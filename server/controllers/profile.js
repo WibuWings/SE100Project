@@ -55,8 +55,7 @@ class meProfile {
                         name: newstoreName
                     });
 
-                    newStore
-                        .save()
+                    newStore.save()
                 }
             })
             .catch((err) => {
@@ -75,7 +74,7 @@ class meProfile {
 
         Manager.findOneAndUpdate(
             {
-                email: email,
+                _id : email,
             },
             {$set:{
                 lastName:newlastName,
