@@ -22,7 +22,7 @@ import statusAddEmployeeReducer from './Status/StatusAddEmployeeReducer';
 import statusUpdateEmployeeReducer from './Status/StatusUpdateEmployeeReducer';
 import statusPayEmployeeReducer from './Status/StatusPayMoneyStatus';
 import listProductReducer from './ListProductReducer';
-import typeProductReducer from './typeProduct';
+import typeProductReducer from './typeProductReducer';
 import chooseTypeProductReducer from './chooseTypeProduct';
 var redux = require('redux');
 

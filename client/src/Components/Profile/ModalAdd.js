@@ -106,6 +106,7 @@ class ModalAdd extends Component {
             this.props.changeAddStatus();
             axios.post(`http://localhost:5000/api/update-shift`, data)
                 .then(res => {
+                    localStorage.setItem('token', res.data.token);
                     console.log('thành công');
                 })
                 .catch(err => {
@@ -158,6 +159,7 @@ class ModalAdd extends Component {
                     data: data,
                 })
                     .then(res => {
+                        localStorage.setItem('token', res.data.token);
                         console.log('Thành Công');
                     })
                     .catch(err => {
@@ -209,13 +211,13 @@ class ModalAdd extends Component {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <Stack spacing={3}>
                                         <TimePicker
-                                            label="Time"
+                                            label="Time From"
                                             value={this.state.timeFrom}
                                             onChange={(newValue) => this.changeTimeFrom(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
                                         />
                                         <TimePicker
-                                            label="Time"
+                                            label="Time To"
                                             value={this.state.timeTo}
                                             onChange={(newValue) => this.changeTimeTo(newValue)}
                                             renderInput={(params) => <TextField onChange={(e) => this.changeTime(e)} {...params} />}

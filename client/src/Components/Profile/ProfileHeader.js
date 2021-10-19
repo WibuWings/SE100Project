@@ -36,6 +36,7 @@ class ProfileHeader extends Component {
                         avatar: res.data.url,
                         token: localStorage.getItem('token'),
                     }).then(res => {
+                        localStorage.setItem('token', res.data.token);
                         console.log("Thành công");
                     }).catch(err => {
                         console.log("Lỗi");

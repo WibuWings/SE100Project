@@ -8,6 +8,7 @@ class ProfileDetail extends Component {
         super(props);
         this.state = {
             disabledHuyen: true,
+            listProvince: null,
             nameProvince: this.props.infoUser.province,
             nameDistrict: this.props.infoUser.district,
             isTel: true,
@@ -34,6 +35,7 @@ class ProfileDetail extends Component {
 
             axios.post(`http://localhost:5000/api/profile/update-profile`, data)
                 .then(res => {
+                    localStorage.setItem('token', res.data.token);
                     console.log("Save success");
                 })
                 .catch(err => {
@@ -45,6 +47,7 @@ class ProfileDetail extends Component {
     }
 
     changeCountry = (e) => {
+        this.props.updateDistrict(this.state.listProvince.filter(word => word.codename === e.target.value)[0].districts)
         this.setState({
             nameProvince: e.target.value,
         })
@@ -138,10 +141,12 @@ class ProfileDetail extends Component {
         if (!this.props.country[0]) {
             axios.get(`https://provinces.open-api.vn/api/?depth=2`)
                 .then(res => {
-                    console.log(res.data);
                     this.props.updateProvince(res.data);
+                    this.setState({
+                        listProvince: res.data,
+                    })
                     if (this.props.infoUser.province !== '0') {
-                        this.props.updateDistrict(res.data.filter(word => word.codename === this.props.infoUser.province)[0].districts,)
+                        this.props.updateDistrict(res.data.filter(word => word.codename === this.props.infoUser.province)[0].districts)
                     }
                 })
                 .catch(err => {
@@ -153,7 +158,6 @@ class ProfileDetail extends Component {
 
 
     render() {
-        console.log(this.props.infoUser);
         return (
             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
                 <Card>
@@ -294,7 +298,7 @@ class ProfileDetail extends Component {
                                     variant="outlined"
                                 >
                                     <option value="0">--Select district--</option>
-                                    {(this.props.district.length !== 0) ? this.props.district[0].map(item => {
+                                    {(this.props.district.length !== 0) ? this.props.district.map(item => {
                                         return (
                                             <option value={item.codename}>
                                                 {item.name}
