@@ -26,18 +26,18 @@ class meProfile {
         const newProvince = req.body.province;
         const newDistrict = req.body.district;
         const newstoreName = req.body.storeName;
-        Manager.findOne({ _id: email })
+        Store.findOne({ _id: email })
             .exec()
             .then((data) => {
                 if (data) {
                     throw new Error();
                 }  else {
-                    const newManager = new Manager({
+                    const newStore = new Store({
                         _id: email,
                         name: newstoreName
                     });
 
-                    newManager
+                    newStore
                         .save()
                 }
             })
