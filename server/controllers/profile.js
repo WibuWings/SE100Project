@@ -179,55 +179,35 @@ class meProfile {
         const email = req.body.email;
         const newPassword = req.body.newPass;
         const curPass = req.body.curPass;
+        const curPassJWT = res.locals.decoded.password
+        if (curPass === curPassJWT) {
         Manager.findOneAndUpdate(
             {
                 email: email,
-                password : curPass,
             },
-            {
+            {$set:{
                 password: newPassword,
-            },
+            }},
             {
                 returnOriginal: false,
-            }
-        )
-            .then((data) => {
-                if (data) {
-                    res.send(
-                        JSON.stringify({
-                            status: STATUS.SUCCESS,
-                            message: MESSAGES.RESET_PASSWORD_SUCCESS,
-                        })
-                    );
-                } else {
-
-                    Manager.findOne({ email: email }).then((data) => {
-                        if (data) {
-                            res.send(
-                                JSON.stringify({
-                                    status: STATUS.FAILURE,
-                                    message: MESSAGES.EMAIL_USED_GG,
-                                })
-                            );
-                        } else {
-                            res.send(
-                                JSON.stringify({
-                                    status: STATUS.FAILURE,
-                                    message: MESSAGES.EMAIL_ERROR,
-                                })
-                            );
-                        }
-                    })
+            },
+            function(err, doc){
+                if(err){
+                    console.log("Something wrong when updating data!");
                 }
-            })
-            .catch((err) => {
-                res.send(
+                else{
+                res.status(200).send(
                     JSON.stringify({
-                        status: STATUS.FAILURE,
-                        message: err.message,
+                        token : res.locals.newToken,
+                        email : res.locals.decoded.email,
+                        data : doc,
                     })
-                );
-            });
+                )}
+            }
+        ) }
+        else{
+            console.log("Something wrong when updating data!");
+        }
 
     };
     
