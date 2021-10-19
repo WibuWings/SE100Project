@@ -21,7 +21,7 @@ import {GiSellCard} from 'react-icons/gi'
 import Avatar from '../../img/avatar_default.jpg';
 import { NavLink } from 'react-router-dom';
 
-import '../../CSS/SideNavBar.css';
+import '../../css/SideNavBar.css';
 
 class SideNavBar extends Component {
     

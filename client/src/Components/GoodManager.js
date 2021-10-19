@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import SearchBar from './GoodPartials/SearchBar';
 import {connect} from 'react-redux'
 import AddTypeModal from './GoodPartials/AddTypeModal';
-import '../CSS/GoodManager.css';
+import '../css/GoodManager.css';
 import ConfirmModal from './GoodPartials/ConfirmModal';
 import UpdateGoodModal from './GoodPartials/UpdateGoodModal';
 import EditTypeModal from './GoodPartials/EditTypeModal';

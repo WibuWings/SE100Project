@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactToPrint from 'react-to-print';
 import { Container, Grid } from '@mui/material';
 import { ComponentToPrint } from './ComponentToPrint';
-import '../../CSS/SellProduct.css'
+import '../../css/SellProduct.css'
 import Tabs from './Tabs'
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
