@@ -18,6 +18,7 @@ import statusModalConfirmPasswordReducer from './Status/StatusModalConfirmPasswo
 import roleReducer from './RoleReducer';
 import confirmModalReducer from './ConfirmModalReducer';
 import statusYesConfirmReducer from './Status/StatusYesConfirmReducer';
+import statusAddEmployeeReducer from './Status/StatusAddEmployeeReducer';
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -37,6 +38,7 @@ const allReducers = redux.combineReducers({
     role: roleReducer,
     confirmCode: confirmModalReducer,
     yesConfirm: statusYesConfirmReducer,
+    addEmployeeStatus: statusAddEmployeeReducer,
     editShiftStatus: statusEditShiftReducer,
     objectEditShift: objectEditShiftReducer,
     statusDarkmode: statusDarkmodeReducer,

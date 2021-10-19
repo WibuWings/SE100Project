@@ -5,6 +5,7 @@ import Scrollbar from './EmployeePartials/Scrollbar';
 import SearchNotFound from './EmployeePartials/SearchNotFound';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
+import {connect} from 'react-redux'
 import plusFill from '@iconify/icons-eva/plus-fill';
 import {
     Card,
@@ -25,6 +26,8 @@ import EmployeeToolbar from './EmployeePartials/EmployeeToolbar';
 import EmployeeMoreMenu from './EmployeePartials/EmployeeMoreMenu';
 import EmployeeTableHeader from './EmployeePartials/EmployeeTableHeader';
 import USERLIST from './EmployeePartials/fakeData'
+import AddEmployeeModal from './EmployeePartials/AddEmployeeModal';
+import UpdateEmployeeModal from './EmployeePartials/UpdateEmployeeModal';
 
 const TABLE_HEAD = [
     { id: 'ID', label: 'ID', alignRight: false },
@@ -48,6 +51,9 @@ class EmployeeManager extends Component {
     handleFilterByName(event){
         filterName = event.target.value;
     }
+    addEmployee () {
+        this.props.changeAddEmployeeStatus();
+    }
     render() {
         return (
             <div
@@ -56,9 +62,20 @@ class EmployeeManager extends Component {
                 <Container
                     style={{marginTop: 60}}
                 >
+                    <span
+                        style = {{
+                            color: "#fff",
+                            border: '1px solid cyan',
+                            padding: 12,
+                            backgroundColor: '#222'
+                        }}
+                    >
+                        Current Employee
+                    </span>
                     <Button
                         variant='contained'
                         startIcon={<Icon icon={plusFill} />}
+                        onClick={() => this.addEmployee()}
                     >
                         New User
                     </Button>
@@ -145,9 +162,22 @@ class EmployeeManager extends Component {
                 <Container
                     style={{marginTop: 60}}
                     style={{
-                        marginBottom: 220
+                        marginBottom: 220,
+                        marginTop: 40
                     }}
                 >
+                    <span
+                        style = {{
+                            color: "#fff",
+                            border: '1px solid cyan',
+                            padding: 12,
+                            margin: 12,
+                            height: 40,
+                            backgroundColor: '#222'
+                        }}
+                    >
+                        Sacked Employee
+                    </span>
                     <Card>
                     {/* <EmployeeToolbar
                         numSelected={selected.length}
@@ -228,10 +258,58 @@ class EmployeeManager extends Component {
                     />
                     </Card>
                 </Container>
+                {/* Đây là phần modal */}
+                {this.props.addEmployeeStatus ? (
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changeAddEmployeeStatus();}} className="modal-overlay"></div>
+                        <AddEmployeeModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </AddEmployeeModal>
+                    </div>
+                ): null}
+                {this.props.updateEmployeeStatus ? (
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changeUpdateEmployeeStatus();}} className="modal-overlay"></div>
+                        <UpdateEmployeeModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </UpdateEmployeeModal>
+                    </div>
+                ): null}
             </div>
             
         );
     }
 }
 
-export default EmployeeManager;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        addEmployeeStatus: state.addEmployeeStatus,
+        updateEmployeeStatus: state.updateEmployeeStatus,
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        changeAddEmployeeStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_EMPLOYEE_STATUS",
+            });
+        },
+        changeUpdateEmployeeStatus: () => {
+            dispatch({
+                type: "CHANGE_UPDATE_EMPLOYEE_STATUS",
+            });
+        },
+    }
+}
+export default connect(mapStateToProps , mapDispatchToProps)(EmployeeManager);

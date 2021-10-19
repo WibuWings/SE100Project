@@ -36,7 +36,7 @@ const StyledTextField = withStyles((theme) => ({
     }
   }))(TextField);
 
-class AddEmployeeModal extends Component {
+class UpdateEmployeeModal extends Component {
     constructor(props) {
         super(props);
         
@@ -61,7 +61,7 @@ class AddEmployeeModal extends Component {
         return (
             <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="ADD EMPLOYEE" />
+                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="UPDATE EMPLOYEE" />
                         <div 
                         style={{ 
                             width: '100%', backgroundColor: 'rgb(221,235,255)'   
@@ -242,7 +242,7 @@ class AddEmployeeModal extends Component {
                                         className='input-item'
                                     >
                                         <Button variant="contained" onClick={() => this.addEmployee()}>
-                                            Add employee
+                                            UPDATE employee
                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -276,6 +276,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddEmployeeModal);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateEmployeeModal);
 
                
