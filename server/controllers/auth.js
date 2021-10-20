@@ -62,6 +62,7 @@ class Authentication {
                                         message: MESSAGES.SIGN_IN_SUCCESS,
                                         token: JWTAuthToken({email:result.email}),
                                         email: result.email,
+                                        _id: result._id,
                                         data,
                                     })
                                 );
@@ -80,6 +81,7 @@ class Authentication {
                                         message: MESSAGES.SIGN_IN_SUCCESS,
                                         token: JWTAuthToken({email:result.email}),
                                         email: result.email,
+                                        _id: result._id,
                                         data: {},
                                     })
                                 );
@@ -171,6 +173,7 @@ class Authentication {
                                     message: MESSAGES.REGISTER_SUCCESS,
                                     token: JWTAuthToken({email: data.email}),
                                     email: req.body.email,
+                                    _id: data._id,
                                 })
                             );
                         })
