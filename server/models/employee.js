@@ -12,6 +12,7 @@ const Employee = new Schema({
     firstName: String,
     lastName: String,
     phoneNumber: String,
+    dateOfBirth: Date,
     email: String,
     address: String,
     cardID: String,
