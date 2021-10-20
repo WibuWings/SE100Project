@@ -12,9 +12,20 @@ import axios from 'axios';
 class ModalAdd extends Component {
     constructor(props) {
         super(props);
+
+        var _timeFrom = new Date();
+        var fromHour = parseInt(this.props.objectEditShift.from.slice(0,this.props.objectEditShift.from.indexOf(':')));
+        var fromMin = parseInt(this.props.objectEditShift.from.slice(this.props.objectEditShift.from.indexOf(':') + 1));
+        _timeFrom.setHours(fromHour, fromMin);
+
+        var _timeTo = new Date();
+        var toHour = parseInt(this.props.objectEditShift.to.slice(0,this.props.objectEditShift.from.indexOf(':')));
+        var toMin = parseInt(this.props.objectEditShift.to.slice(this.props.objectEditShift.from.indexOf(':') + 1));
+        _timeTo.setHours(toHour, toMin);
+        
         this.state = {
-            timeFrom: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.from} GMT+0700 (Giờ Đông Dương)` : Date.now(),
-            timeTo: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.to} GMT+0700 (Giờ Đông Dương)` : Date.now(),
+            timeFrom: this.props.editShiftStatus ? _timeFrom : Date.now(),
+            timeTo: this.props.editShiftStatus ? _timeTo : Date.now(),
             isSalary: false,
             isDescription: false,
             isTimeTo: false,
@@ -94,7 +105,7 @@ class ModalAdd extends Component {
     editShift = () => {
         console.log(this.state.isSalary);
         console.log(this.state.isDescription);
-        console.log(this.state.timeTo - this.state.timeFrom);
+        alert(this.state.timeTo - this.state.timeFrom);
         if (!this.state.isSalary && !this.state.isDescription && (this.state.valueTime > 0)) {
             var data = {
                 token: localStorage.getItem('token'),
