@@ -247,6 +247,38 @@ class meProfile {
         }
 
     };
+    updateImage = async (req, res) => {
+        const email = req.body.email;
+        const image = req.body.avatar
+        Manager.findOneAndUpdate(
+            {
+                email: email,
+            },
+            {$set:{
+                imgUrl : image,
+            }},
+            {
+                returnOriginal: false,
+            },
+            function(err, doc){
+                if(err){
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.FAILURE_UPDATE,
+                        })
+                    );;
+                }
+                else{
+                res.status(200).send(
+                    JSON.stringify({
+                        token : res.locals.newToken,
+                        email : res.locals.decoded.email,
+                        data : doc,
+                    })
+                )}
+            })
+    }
     
 }
 module.exports = new meProfile();

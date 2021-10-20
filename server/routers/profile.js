@@ -10,4 +10,5 @@ router.post("/add-shift",AuthMiddleware ,meProfilecontroller.addShift)
 router.post("/update-shift",AuthMiddleware ,meProfilecontroller.updateShift)
 router.post("/delete-shift",AuthMiddleware ,meProfilecontroller.deleteShift)
 router.post("/change-password",AuthMiddleware,meProfilecontroller.changePassword )
+router.post("/update-avatar",AuthMiddleware,meProfilecontroller.updateImage)
 module.exports = router;
