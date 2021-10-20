@@ -241,7 +241,7 @@ class meProfile {
             res.send(
                 JSON.stringify({
                     status: STATUS.FAILURE,
-                    message: MESSAGES.EMAIL_ERROR,
+                    message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
                 })
             );;
         }
