@@ -29,7 +29,7 @@ const infoUserInitialState = {
                     address: action.address,    
                 }
             case "UPDATE_AVATAR":
-                return{
+                return {
                     ...state,
                     avatar: action.avatar
                 }

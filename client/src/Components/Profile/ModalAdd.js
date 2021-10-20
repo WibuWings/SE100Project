@@ -18,14 +18,15 @@ class ModalAdd extends Component {
             isSalary: false,
             isDescription: false,
             isTimeTo: false,
+            valueTime: this.props.editShiftStatus ?  1 : null,
         }
     }
 
     descriptionShift = "Example : abc"
-    timeFrom = "00:00 AM"
-    timeTo = "00:00 PM"
-    salary = 10000
-
+    timeFrom = this.props.editShiftStatus? this.props.objectEditShift.from : "00:00 AM"
+    timeTo = this.props.editShiftStatus? this.props.objectEditShift.to : "00:00 AM"
+    salary = this.props.editShiftStatus? this.props.objectEditShift.salary : 10000
+    // time = this.state.timeTo - this.state.timeFrom;
     // Handle user
     hanhleCancel = (e) => {
         this.props.changeAddStatus();
@@ -91,7 +92,10 @@ class ModalAdd extends Component {
     }
 
     editShift = () => {
-        if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
+        console.log(this.state.isSalary);
+        console.log(this.state.isDescription);
+        console.log(this.state.timeTo - this.state.timeFrom);
+        if (!this.state.isSalary && !this.state.isDescription && (this.state.valueTime > 0)) {
             var data = {
                 token: localStorage.getItem('token'),
                 idUser: this.props.infoUser.email,
@@ -101,6 +105,7 @@ class ModalAdd extends Component {
                 from: this.timeFrom,
                 to: this.timeTo,
             }
+            console.log(data);
             this.props.updateShift(data);
             this.props.changeEditShiftStatus();
             this.props.changeAddStatus();
@@ -113,16 +118,6 @@ class ModalAdd extends Component {
                     console.log("lỗi");
                 })
         }
-        this.props.updateShift(data);
-        this.props.changeEditShiftStatus();
-        this.props.changeAddStatus();
-        axios.post(`http://localhost:5000/api/profile/update-shift`, data)
-        .then(res => {
-            console.log('thành công');
-        })
-        .catch(err => {
-            console.log("lỗi");
-        })
     }
 
     blurSalary = (e) => {
@@ -143,7 +138,6 @@ class ModalAdd extends Component {
     addShift = () => {
         if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
             var data = {
-                
                 idUser: this.props.infoUser.email,
                 id: this.makeCode(6),
                 salary: this.salary,
