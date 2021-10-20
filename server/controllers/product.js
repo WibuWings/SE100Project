@@ -8,8 +8,8 @@ const ProductJoinType = require("../models/productJoinType");
 class ProductTab {
     //product
     getSomeProducts = async (req, res) => {
-        var filter = req.body.filter;
-
+        var filter = typeof req.body.filter === 'object' ? req.body.filter : JSON.parse(req.body.filter);
+        
         Product.find(filter)
             .exec()
             .then((data) => {
@@ -106,8 +106,7 @@ class ProductTab {
 
     //productTypes
     getSomeProductTypes = async (req, res) => {
-        var filter = req.body.filter;
-
+        var filter = typeof req.body.filter === 'object' ? req.body.filter : JSON.parse(req.body.filter);
         ProductType.find(filter)
         .then(data => {
             res.status(200).send(
@@ -188,7 +187,7 @@ class ProductTab {
 
     //productJoin
     getSomeProductJoins = async (req, res) => {
-        var filter = req.body.filter;
+        var filter = typeof req.body.filter === 'object' ? req.body.filter : JSON.parse(req.body.filter);
 
         ProductJoinType.find(filter)
         .then(data => {
