@@ -355,6 +355,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         updateProfile: (data) => {
             dispatch({
                 type: "UPDATA_DATA_USER",
+                email: data.email,
                 firstName: data.firstName,
                 lastName: data.lastName,
                 old: data.old,
