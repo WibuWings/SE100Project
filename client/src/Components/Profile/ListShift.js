@@ -69,6 +69,7 @@ class ListShift extends Component {
                 idShift: idShift
             })
                 .then(res => {
+                    localStorage.setItem('token', res.data.token);
                     console.log("Thành công");
                 })
                 .catch(err => {

@@ -13,7 +13,6 @@ const Product = require("../models/product");
 const Employee = require("../models/employee");
 const Coupon = require("../models/coupon");
 const {JWTVerify} = require("../helper/JWT");
-
 const MESSAGES = {
     SIGN_IN_SUCCESS: "Sign-in successfully.",
     REGISTER_SUCCESS: "Register successfully.",
@@ -25,6 +24,9 @@ const MESSAGES = {
         "The email address has been used for regular or Google account.",
     EMAIL_USED_GG: "The email has to sign in WITH GOOGLE.",
     MONGODB_ERROR: "Some errors with database.",
+    FAILURE_UPDATE : "failure when update",
+    FAILURE_ADD : " failure when adding ",
+    FAILURE_DELETE : "failure when delete"
 };
 const STATUS = {
     SUCCESS: 1,
@@ -39,57 +41,34 @@ class meProfile {
         const newfirstName = req.body.firstName;
         const newlastName = req.body.lastName;
         const newphoneNumber = req.body.phoneNumber;
+        const newgender = req.body.gender
         const newAddress = req.body.address;
         const newProvince = req.body.province;
         const newDistrict = req.body.district;
         const newstoreName = req.body.storeName;
-        Store.findOne({ _id: email })
-            .exec()
-            .then((data) => {
-                if (data) {
-                    throw new Error();
-                }  else {
-                    const newStore = new Store({
-                        _id: email,
-                        name: newstoreName
-                    });
-
-                    newStore
-                        .save()
-                }
-            })
-            .catch((err) => {
-                Store.findOneAndUpdate(
-                    {
-                        _id: email,
-                    },
-                    {$set:{
-                        name: newstoreName,
-                    }},
-                    {
-                        returnOriginal: false,
-                    },
-                    function(err, doc){
-                        console.log(err);
-                        if(err){
-                            console.log("Something wrong when updating data!");
-                        }
-                        else 
-                        {
-                            res.status(200).send(
-                            JSON.stringify({
-                                token : res.locals.newToken,
-                                email : res.locals.decoded.email,
-                                data : doc,
-                                })
-                            )
-                        }
-                    });
-            });
+        const old = req.body.old                  
+        Store.findOneAndUpdate(
+                {
+                    _id: email,
+                },
+                {$set:{
+                    name: newstoreName,
+                }},
+                {
+                    returnOriginal: false,
+                },
+                function(err, doc){
+                    if(err){
+                        console.log("Something wrong when updating data!");
+                    }
+                    else{
+                    console.log(doc);}}
+                
+            )   
 
         Manager.findOneAndUpdate(
             {
-                email: email,
+                _id : email,
             },
             {$set:{
                 lastName:newlastName,
@@ -99,26 +78,33 @@ class meProfile {
                 province:newProvince,
                 district:newDistrict,
                 storeID: email,
+                gender:newgender,
+                old:old,
             }},
             {
                 returnOriginal: false,
             },
             function(err, doc){
                 if(err){
-                    console.log("Something wrong when updating data!");
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.FAILURE_UPDATE,
+                        })
+                    );;
                 }
-                // Bỏ đây nha bro
-                // res.status(200).send(
-                //     JSON.stringify({
-                //         token : res.locals.newToken,
-                //         email : res.locals.decoded.email,
-                //         data : doc
-                //     })
-                // )
-            });
-}
+                else{
+                console.log(doc);
+                res.status(200).send(
+                    JSON.stringify({
+                        token : res.locals.newToken,
+                        email : res.locals.decoded.email,
+                        data : doc
+                    })
+                )}})}
+        
     addShift = async (req, res) => {
-        const idUserJwt = req.body.data.idUser;
+        const idUserJwt = req.body.email;
         const idShift = req.body.data.id;
         const newSalary = req.body.data.salary
         const name = req.body.data.description
@@ -136,13 +122,23 @@ class meProfile {
                     });
 
                 newShift.save()
-        res.status(200).send(
+        .then((data) => {        
+            res.status(200).send(
+            JSON.stringify({
+                token : res.locals.newToken,
+                email : res.locals.decoded.email,
+                data,
+                })
+            )})
+        .catch((err) => {
+            res.send(
                 JSON.stringify({
-                    token : res.locals.newToken,
-                    email : res.locals.decoded.email,
-                    data : doc,
-                    })
-                )
+                    status: STATUS.FAILURE,
+                    message: MESSAGES.FAILURE_ADD,
+                })
+            );
+        })
+
                 }
         
  
@@ -153,10 +149,6 @@ class meProfile {
         const name = req.body.description
         const from = req.body.from
         const to = req.body.to
-        const obj = {
-            storeID : idUser,
-            shiftID : idShift,
-        }
         ShiftType.findOneAndUpdate(
             {shiftID : idShift,storeID : idUser,},
             {$set:{
@@ -169,15 +161,21 @@ class meProfile {
             },
             function(err, doc){
                 if(err){
-                    console.log("Something wrong when updating data!");
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.FAILURE_UPDATE,
+                        })
+                    );
                 }
+                else{
             res.status(200).send(
                     JSON.stringify({
                         token : res.locals.newToken,
                         email : res.locals.decoded.email,
                         data : doc,
                     })
-                )
+                )}
             });
     }
     deleteShift = async (req, res) => {
@@ -187,71 +185,100 @@ class meProfile {
             {shiftID : idShift,storeID : idUser,},
             function(err, doc){
                 if(err){
-                    console.log("Something wrong when updating data!");
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.FAILURE_DELETE,
+                        })
+                    );;;
                 }
+                else{
                 res.status(200).send(
                     JSON.stringify({
                         token : res.locals.newToken,
                         email : res.locals.decoded.email,
                         data : doc,
                     })
-                )
+                )}
             });
     }
     changePassword = async (req, res) => {
         const email = req.body.email;
         const newPassword = req.body.newPass;
-
+        const curPass = req.body.curPass;
+        const curPassJWT = res.locals.decoded.password
+        if (curPass === curPassJWT) {
         Manager.findOneAndUpdate(
             {
                 email: email,
             },
-            {
+            {$set:{
                 password: newPassword,
-            },
+            }},
             {
                 returnOriginal: false,
-            }
-        )
-            .then((data) => {
-                if (data) {
+            },
+            function(err, doc){
+                if(err){
                     res.send(
                         JSON.stringify({
-                            status: STATUS.SUCCESS,
-                            message: MESSAGES.RESET_PASSWORD_SUCCESS,
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.EMAIL_ERROR,
                         })
-                    );
-                } else {
-
-                    Manager.findOne({ email: email }).then((data) => {
-                        if (data) {
-                            res.send(
-                                JSON.stringify({
-                                    status: STATUS.FAILURE,
-                                    message: MESSAGES.EMAIL_USED_GG,
-                                })
-                            );
-                        } else {
-                            res.send(
-                                JSON.stringify({
-                                    status: STATUS.FAILURE,
-                                    message: MESSAGES.EMAIL_ERROR,
-                                })
-                            );
-                        }
-                    })
+                    );;
                 }
-            })
-            .catch((err) => {
-                res.send(
+                else{
+                res.status(200).send(
                     JSON.stringify({
-                        status: STATUS.FAILURE,
-                        message: err.message,
+                        token : res.locals.newToken,
+                        email : res.locals.decoded.email,
+                        data : doc,
                     })
-                );
-            });
+                )}
+            }
+        ) }
+        else{
+            res.send(
+                JSON.stringify({
+                    status: STATUS.FAILURE,
+                    message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
+                })
+            );;
+        }
 
     };
+    updateImage = async (req, res) => {
+        const email = req.body.email;
+        const image = req.body.avatar
+        Manager.findOneAndUpdate(
+            {
+                email: email,
+            },
+            {$set:{
+                imgUrl : image,
+            }},
+            {
+                returnOriginal: false,
+            },
+            function(err, doc){
+                if(err){
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.FAILURE_UPDATE,
+                        })
+                    );;
+                }
+                else{
+                res.status(200).send(
+                    JSON.stringify({
+                        token : res.locals.newToken,
+                        email : res.locals.decoded.email,
+                        data : doc,
+                    })
+                )}
+            })
+    }
     
 }
 module.exports = new meProfile();

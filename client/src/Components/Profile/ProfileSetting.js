@@ -4,7 +4,7 @@ import UseSwitchesCustom from './DarkMode'
 class ProfileSetting extends Component {
   render() {
     return (
-      <form style={{ marginTop: '25px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
+      <form style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
         <Card>
           <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Setting" />
           <Divider />

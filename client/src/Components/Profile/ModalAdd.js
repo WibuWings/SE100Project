@@ -95,7 +95,7 @@ class ModalAdd extends Component {
             var data = {
                 token: localStorage.getItem('token'),
                 idUser: this.props.infoUser.email,
-                id: this.props.objectEditShift.id,
+                id: this.props.objectEditShift._id,
                 salary: this.salary,
                 description: this.descriptionShift,
                 from: this.timeFrom,
@@ -104,8 +104,9 @@ class ModalAdd extends Component {
             this.props.updateShift(data);
             this.props.changeEditShiftStatus();
             this.props.changeAddStatus();
-            axios.post(`http://localhost:5000/api/update-shift`, data)
+            axios.post(`http://localhost:5000/api/profile/update-shift`, data)
                 .then(res => {
+                    localStorage.setItem('token', res.data.token);
                     console.log('thành công');
                 })
                 .catch(err => {
@@ -142,7 +143,7 @@ class ModalAdd extends Component {
     addShift = () => {
         if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
             var data = {
-                token: localStorage.getItem('token'),
+                
                 idUser: this.props.infoUser.email,
                 id: this.makeCode(6),
                 salary: this.salary,
@@ -152,11 +153,13 @@ class ModalAdd extends Component {
             }
             if (data) {
                 this.props.addShift(data);
-                axios.post(`http://localhost:5000/api/add-shift`, {
+                axios.post(`http://localhost:5000/api/profile/add-shift`, {
                     email: this.props.infoUser.email,
+                    token: localStorage.getItem('token'),
                     data: data,
                 })
                     .then(res => {
+                        localStorage.setItem('token', res.data.token);
                         console.log('Thành Công');
                     })
                     .catch(err => {
@@ -208,13 +211,13 @@ class ModalAdd extends Component {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <Stack spacing={3}>
                                         <TimePicker
-                                            label="Time"
+                                            label="Time From"
                                             value={this.state.timeFrom}
                                             onChange={(newValue) => this.changeTimeFrom(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
                                         />
                                         <TimePicker
-                                            label="Time"
+                                            label="Time To"
                                             value={this.state.timeTo}
                                             onChange={(newValue) => this.changeTimeTo(newValue)}
                                             renderInput={(params) => <TextField onChange={(e) => this.changeTime(e)} {...params} />}

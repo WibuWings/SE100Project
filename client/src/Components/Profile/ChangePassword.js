@@ -124,7 +124,7 @@ class ChangePassword extends Component {
 
     render() {
         return (
-            <form style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
+            <form style={{marginBottom: '15px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Change Password" />
                     <Divider />
