@@ -4,7 +4,7 @@ const districtInitialState = [],
             case "GET_DATA":
                 return state;
             case "UPDATE_DATA_DISTRICT":
-                return [...state, action.data];
+                return action.data;
             default:
                 return state
         }

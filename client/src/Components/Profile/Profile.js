@@ -7,9 +7,18 @@ import ChangePassword from './ChangePassword';
 import ListShift from './ListShift';
 import ProfileSetting from './ProfileSetting';
 import ModalAdd from './ModalAdd';
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 class Profile extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isFindPassword: this.props.infoUser.email.includes("_Google") ? true : false,
+        }
+    }
+
+
     render() {
         return (
             <div className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
@@ -20,7 +29,7 @@ class Profile extends Component {
                             <ProfileDetail></ProfileDetail>
                         </Grid>
                         <Grid item md={4} sm={12} >
-                            <ChangePassword></ChangePassword>
+                            {this.state.isFindPassword ? null : <ChangePassword></ChangePassword>}
                             <ProfileSetting></ProfileSetting>
                         </Grid>
                         <Grid item sm={12} md={12} >
@@ -29,9 +38,9 @@ class Profile extends Component {
                     </Grid>
                 </Container>
                 {this.props.addStatus ? (<div className="modal-add">
-                    <div onClick={() => {this.props.changeAddStatus();if (this.props.editShiftStatus) {this.props.changeEditShiftStatus()}}} className="modal-overlay"></div>
+                    <div onClick={() => { this.props.changeAddStatus(); if (this.props.editShiftStatus) { this.props.changeEditShiftStatus() } }} className="modal-overlay"></div>
                     <ModalAdd></ModalAdd>
-                </div>): null}
+                </div>) : null}
             </div>
         );
     }
@@ -41,6 +50,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         addStatus: state.addStatus,
         editShiftStatus: state.editShiftStatus,
+        infoUser: state.infoUser,
     }
 }
 
@@ -63,4 +73,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 
 
-export default  connect(mapStateToProps , mapDispatchToProps) (Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
