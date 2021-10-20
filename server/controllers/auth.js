@@ -39,7 +39,7 @@ class Authentication {
             email: req.body.email,
             firstName: req.body.givenName,
             lastName: req.body.familyName,
-            storeID: req.body.email + "_Google",
+            storeID: req.body.email,
         });
 
         // check whether gmail is registered by regular method
@@ -69,6 +69,11 @@ class Authentication {
                         } else {
                             newManager.save()
                             .then(result => {
+                                const newStore = new Store({
+                                    _id: result.storeID,
+                                })
+                                newStore.save();
+
                                 res.send(
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
@@ -132,7 +137,7 @@ class Authentication {
 
         Manager.findOne({ _id: email })
             .exec()
-            .then((data) => {
+            .then((data) =>     {
                 if (data) {
                     throw new Error();
                 } else {
@@ -154,11 +159,17 @@ class Authentication {
                     newManager
                         .save()
                         .then((data) => {
+                            const newStore = new Store({
+                                _id: newManager.storeID,
+                            });
+
+                            newStore.save();
+
                             res.send(
                                 JSON.stringify({
                                     status: STATUS.SUCCESS,
                                     message: MESSAGES.REGISTER_SUCCESS,
-                                    token: JWTAuthToken(data),
+                                    token: JWTAuthToken({email: data.email}),
                                     email: req.body.email,
                                 })
                             );
