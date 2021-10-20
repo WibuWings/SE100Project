@@ -16,7 +16,7 @@ const ShiftAssign = new Schema({
             ref: "Employee",
         },
     },
-    createdAt: getCurrentDateTimeString(),
+    createdAt: Date,
 });
 
 module.exports = mongoose.model('ShiftAssign', ShiftAssign);
