@@ -8,15 +8,16 @@ import { GiCancel } from 'react-icons/gi'
 import axios from 'axios';
 import AddTypeModal from './AddTypeModal';
 
-var productTypes =[
-    
-];
-
+var productTypes =[];
+var listTypeInfor = [];
 
 class EditTypeModal extends Component {
     constructor(props) {
         super(props);
-        this.loadType();
+        this.loadAllType();
+        this.state = {
+            change: false
+        }
     }
     confirm = () => {
         // Thực hiện các lệnh xử lý tại đây
@@ -55,42 +56,42 @@ class EditTypeModal extends Component {
         this.props.changeAddTypeStatus();
     }
     
-    sampleTypeData = {
-        email:"19522006@gm.uit.edu.vn",
-        token: "this is token",
-        data:[
-            {
-                _id: {
-                    typeID:"11",
-                    storeID:"19522006@gm.uit.edu.vn"
-                },
-                name:"Kinggg",
-            },
-            {
-                _id:{
-                    typeID:"12",
-                    storeID:"19522007@gm.uit.edu.vn"
-                },
-                name: "Đồ ăn",
-                createdAt:"2001-09-30T17:00:00.000Z"
-            },
-            {
-                _id:{
-                    typeID:"5",
-                    storeID:"19522006@gm.uit.edu.vn"
-                },
-                name:"AA"
-            }
-        ]
-    }
 
-    loadType = () => {
-        var typeList = this.sampleTypeData.data;
-        productTypes = [];
-        for(var i=0 ; i< typeList.length ; i ++)
-        {
-            productTypes.push(typeList[i].name);
+
+    async loadAllType() {
+        var result;
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
         }
+        console.log(data.token);
+        // alert(data.token);
+        console.log(data.filter);
+        await axios.get(`http://localhost:5000/api/product/type`, 
+        {
+            params: {...data}
+        })
+            .then(res => {
+                result = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err); // 401 ở đây
+            })
+        //Get data và lưu các tên Type vào bảng
+        listTypeInfor=[];
+        for(var i=0; i < result.length ; i++)
+        {
+            listTypeInfor.push(result[i]);
+        }
+        productTypes=[];
+        for(var i=0 ; i< listTypeInfor.length ; i ++)
+        {
+            productTypes.push(listTypeInfor[i].name);
+        }
+        this.setState({change: true});
     }
 
     render() {
@@ -140,6 +141,7 @@ const mapStateToProps = (state, ownProps) => {
         editTypeStatus: state.editTypeStatus,
         addTypeStatus: state.addTypeStatus,
         isAddTypeStatus: state.isAddTypeStatus,
+        infoUser: state.infoUser,
     }
 }
 
