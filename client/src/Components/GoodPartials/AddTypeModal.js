@@ -3,7 +3,7 @@ import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button, A
 import { connect } from 'react-redux'
 import { BiPlusMedical, BiEdit } from 'react-icons/bi';
 import Stack from '@mui/material/Stack';
-import { GiCancel } from 'react-icons/gi'
+import { GiCancel, GiVampireCape } from 'react-icons/gi'
 import axios from 'axios';
 
 var listTypeInfor = [];
@@ -98,15 +98,6 @@ class AddTypeModal extends Component {
         this.props.changeAddTypeStatus();
     }
 
-    sampleTypeData=
-        {
-            _id: {
-                typeID:"11",
-                storeID:"19522006@gm.uit.edu.vn"
-            },
-            name:"Kinggg",
-        };
-
     handle = () => {
         if (this.props.isAddTypeStatus)
             this.addType();
@@ -115,20 +106,22 @@ class AddTypeModal extends Component {
     }
 
     editType = () => {
-        alert("Giờ mình sẽ edit")
+        var newTypeName = this.typeName;
+        if(this.checkConstraint(newTypeName)==false) return;
         const data = {
             token: localStorage.getItem('token'),
             productType: {
                 _id: {
-                    typeID: this.sampleTypeData._id.typeID,
+                    typeID: this.props.typeProductValue._id.typeID,
                     storeID: this.props.infoUser.email,
                 }, 
-                name:document.querySelector('input[name="typeName"]').value + "SHITs",
+                name: newTypeName,
             }
         }
-        alert(data.product.name)
+        // alert(data.product.name)
         axios.put(`http://localhost:5000/api/product/type`, data)
             .then(res => {
+                // Có khi mình sẽ cập nhật type ở dây
                 console.log("Update success");
                 alert('update được rồi anh trai')
             })
@@ -145,11 +138,15 @@ class AddTypeModal extends Component {
         }
         else
         {
-            this.typeName = this.sampleTypeData.name;
+            this.typeName = this.props.typeProductValue.name;
             this.setState({change: true});
         } 
     }
 
+    changeTypeName(e)
+    {
+        this.typeName = e.target.value;
+    }
     render() {
         return (
             <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
@@ -178,6 +175,7 @@ class AddTypeModal extends Component {
                                     type="text"
                                     name="typeName"
                                     defaultValue={this.typeName}
+                                    onChange={(e) => this.changeTypeName(e)}
                                 />
                             </Grid>
                             <Grid item md={12} xs={12}>
@@ -219,6 +217,7 @@ const mapStateToProps = (state, ownProps) => {
         addTypeStatus: state.addTypeStatus,
         isAddTypeStatus: state.isAddTypeStatus,
         infoUser: state.infoUser,
+        typeProductValue: state.typeProductValue
     }
 }
 

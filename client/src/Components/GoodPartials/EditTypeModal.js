@@ -27,34 +27,35 @@ class EditTypeModal extends Component {
         // this.props.changeConfirmStatus();
         this.props.changeEditTypeStatus();
     }
-    edit = () => {
+    edit = (type) => {
         this.props.changeAddTypeStatus();
         this.props.setEditTypeStatus();
+        this.props.typeToUpdate(type);
     }
-    delete = () => {
-        const data = {
-            token: localStorage.getItem('token'),
-            productTypes:
-            [
-                {
-                    typeID:"12",
-                    storeID:"19522006@gm.uit.edu.vn"
-                }
-            ]
+    // delete = () => {
+    //     const data = {
+    //         token: localStorage.getItem('token'),
+    //         productTypes:
+    //         [
+    //             {
+    //                 typeID:"12",
+    //                 storeID:"19522006@gm.uit.edu.vn"
+    //             }
+    //         ]
                 
-        }
-        alert(data.product.name)
-        axios.delete(`http://localhost:5000/api/product/type`, data)
-            .then(res => {
-                console.log("Update success");
-                alert('delete được rồi anh trai')
-            })
-            .catch(err => {
-                console.log(err);
-                alert("Lỗi gì cmnr")
-            })
-        this.props.changeAddTypeStatus();
-    }
+    //     }
+    //     alert(data.product.name)
+    //     axios.delete(`http://localhost:5000/api/product/type`, data)
+    //         .then(res => {
+    //             console.log("Update success");
+    //             alert('delete được rồi anh trai')
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //             alert("Lỗi gì cmnr")
+    //         })
+    //     this.props.changeAddTypeStatus();
+    // }
     
 
 
@@ -103,10 +104,10 @@ class EditTypeModal extends Component {
                     <CardContent>
                         <Grid container spacing={2}>
                             <Grid container item md={12} xs={12} spacing={0}>
-                                {productTypes.map((type) => (
+                                { listTypeInfor.map((type) => (
                                     <Grid item md={3} style={{border:'1px solid #333', padding: 4}}>
-                                        <span>{type}</span>
-                                        <BiEdit onClick={() => this.edit()}/>
+                                        <span>{type.name}</span>
+                                        <BiEdit onClick={() => this.edit(type)}/>
                                         <TiDelete onClick={() => this.delete()}/>
                                     </Grid>
                                 ))}
@@ -142,6 +143,7 @@ const mapStateToProps = (state, ownProps) => {
         addTypeStatus: state.addTypeStatus,
         isAddTypeStatus: state.isAddTypeStatus,
         infoUser: state.infoUser,
+        typeProductValue: state.typeProductValue,
     }
 }
 
@@ -167,6 +169,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_CONFIRM_STATUS",
             });
         },
+        typeToUpdate: (data) => {
+            dispatch({
+                type: "UPDATE_PRODUCT_TYPE",
+                _id: {
+                    typeID: data._id.typeID,
+                    storeID: data._id.storeID,
+                },
+                name: data.name
+            })
+        }
     }
 }
 
