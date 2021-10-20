@@ -10,6 +10,15 @@ import ModalAdd from './ModalAdd';
 import { connect } from 'react-redux'
 
 class Profile extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isFindPassword: this.props.infoUser.email.includes("_Google") ? true : false,
+        }
+    }
+
+
     render() {
         return (
             <div className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
@@ -20,10 +29,7 @@ class Profile extends Component {
                             <ProfileDetail></ProfileDetail>
                         </Grid>
                         <Grid item md={4} sm={12} >
-                            {console.log(this.props.infoUser)}
-                            {this.props.infoUser.email.includes("_Google") ? null : (
-                                <ChangePassword></ChangePassword>
-                            )}
+                            {this.state.isFindPassword ? null : <ChangePassword></ChangePassword>}
                             <ProfileSetting></ProfileSetting>
                         </Grid>
                         <Grid item sm={12} md={12} >

@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { Image } from 'cloudinary-react';
 import axios from 'axios';
-import '../../CSS/GoodManager.css';
+import '../../css/GoodManager.css';
 import { withStyles } from '@material-ui/styles';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
