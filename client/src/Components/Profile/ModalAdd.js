@@ -13,8 +13,8 @@ class ModalAdd extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            timeFrom: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.from} GMT+0700 (Giờ Đông Dương)` : Date.now(),
-            timeTo: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.to} GMT+0700 (Giờ Đông Dương)` : Date.now(),
+            timeFrom: this.props.editShiftStatus ? Date(`Mon Oct 11 2021 ${this.props.objectEditShift.from} GMT+0700 (Giờ Đông Dương)`) : Date.now(),
+            timeTo: this.props.editShiftStatus ? Date(`Mon Oct 11 2021 ${this.props.objectEditShift.to} GMT+0700 (Giờ Đông Dương)`) : Date.now(),
             isSalary: false,
             isDescription: false,
             isTimeTo: false,
@@ -26,7 +26,7 @@ class ModalAdd extends Component {
     timeFrom = this.props.editShiftStatus? this.props.objectEditShift.from : "00:00 AM"
     timeTo = this.props.editShiftStatus? this.props.objectEditShift.to : "00:00 AM"
     salary = this.props.editShiftStatus? this.props.objectEditShift.salary : 10000
-    // time = this.state.timeTo - this.state.timeFrom;
+    
     // Handle user
     hanhleCancel = (e) => {
         this.props.changeAddStatus();
@@ -92,20 +92,19 @@ class ModalAdd extends Component {
     }
 
     editShift = () => {
-        console.log(this.state.isSalary);
-        console.log(this.state.isDescription);
-        console.log(this.state.timeTo - this.state.timeFrom);
+        console.log(this.state.timeFrom);
+        console.log(document.querySelector('.timeFrom'));
+        console.log(this.state.timeTo);
         if (!this.state.isSalary && !this.state.isDescription && (this.state.valueTime > 0)) {
             var data = {
                 token: localStorage.getItem('token'),
                 idUser: this.props.infoUser.email,
-                id: this.props.objectEditShift._id,
+                id: this.props.objectEditShift.id,
                 salary: this.salary,
                 description: this.descriptionShift,
                 from: this.timeFrom,
                 to: this.timeTo,
             }
-            console.log(data);
             this.props.updateShift(data);
             this.props.changeEditShiftStatus();
             this.props.changeAddStatus();
@@ -165,6 +164,8 @@ class ModalAdd extends Component {
     }
 
     render() {
+        console.log(this.props.objectEditShift);
+        console.log(this.state.timeTo - this.state.timeFrom);
         return (
             <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
@@ -207,6 +208,7 @@ class ModalAdd extends Component {
                                         <TimePicker
                                             label="Time From"
                                             value={this.state.timeFrom}
+                                            className="timeFrom"
                                             onChange={(newValue) => this.changeTimeFrom(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
                                         />

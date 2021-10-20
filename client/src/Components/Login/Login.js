@@ -44,7 +44,7 @@ class Login extends Component {
                         })
                         localStorage.setItem('token', res.data.token);
                         const data = {
-                            email: res.data.data._id,
+                            email: res.data._id,
                             firstName: res.data.data.firstName ? res.data.data.firstName : "",
                             lastName: res.data.data.lastName ? res.data.data.lastName : "",
                             old: res.data.data.old ? res.data.data.old : "",
@@ -125,6 +125,7 @@ class Login extends Component {
                                 address: res.data.data.address ? res.data.data.address : "",
                             }
                             this.props.updateProfile(data);
+                            this.props.updateAvatar(res.data.data.imgUrl);
                             this.props.changeLoginStatus();
                             break;
                         case -1:
