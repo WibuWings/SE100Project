@@ -35,6 +35,7 @@ class App extends Component {
             address: res.data.data.address ? res.data.data.address : "",
           }
           this.props.updateProfile(data);
+          this.props.updateAvatar(res.data.data.imgUrl)
           this.props.changeLoginStatus();
         }
       }).catch(err => {
@@ -73,19 +74,25 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     updateProfile: (data) => {
       dispatch({
-          type: "UPDATA_DATA_USER",
-          email: data.email,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          old: data.old,
-          gender: data.gender,
-          storeName: data.storeName,
-          tel: data.tel,
-          province: data.province,
-          district: data.district,
-          address: data.address,
+        type: "UPDATA_DATA_USER",
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        old: data.old,
+        gender: data.gender,
+        storeName: data.storeName,
+        tel: data.tel,
+        province: data.province,
+        district: data.district,
+        address: data.address,
       })
-  }
+    },
+    updateAvatar: (avatar) => {
+      dispatch({
+        type: "UPDATE_AVATAR",
+        avatar: avatar,
+      })
+    }
   }
 }
 
