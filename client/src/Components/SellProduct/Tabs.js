@@ -2,7 +2,6 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useSelector , useDispatch} from 'react-redux';
-import { BiAddToQueue } from 'react-icons/bi';
 
 export default function IconLabelTabs() {
     const [value, setValue] = React.useState(0);
@@ -19,7 +18,6 @@ export default function IconLabelTabs() {
             typeProduct.map((value ,key) => {
                  if (key === newValue - 1) {
                     index = value.type
-                   
                 }
             })
         }
@@ -29,11 +27,7 @@ export default function IconLabelTabs() {
             typeProduct: index,
         })
     };
-
-    
-
     return (
-
         <Tabs
             value={value}
             onChange={handleChange}
