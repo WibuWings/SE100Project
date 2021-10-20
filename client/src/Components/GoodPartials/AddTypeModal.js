@@ -24,6 +24,7 @@ class AddTypeModal extends Component {
                 storeID: this.props.infoUser.email,
             }   
         }
+        console.log(data.filter);
         axios.get(`http://localhost:5000/api/product/type`, data)
             .then(res => {
                 console.log("Get success");
