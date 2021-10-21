@@ -32,35 +32,33 @@ class EditTypeModal extends Component {
         this.props.setEditTypeStatus();
         this.props.typeToUpdate(type);
     }
-    // delete = () => {
-    //     const data = {
-    //         token: localStorage.getItem('token'),
-    //         productTypes:
-    //         [
-    //             {
-    //                 typeID:"12",
-    //                 storeID:"19522006@gm.uit.edu.vn"
-    //             }
-    //         ]
+    delete = (type) => {
+        const data = {
+            token: localStorage.getItem('token'),
+            productTypes:
+            [
+                {
+                    typeID: type._id.typeID,
+                    storeID: type._id.storeID
+                }
+            ]
                 
-    //     }
-    //     alert(data.product.name)
-    //     axios.delete(`http://localhost:5000/api/product/type`, data)
-    //         .then(res => {
-    //             console.log("Update success");
-    //             alert('delete được rồi anh trai')
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //             alert("Lỗi gì cmnr")
-    //         })
-    //     this.props.changeAddTypeStatus();
-    // }
+        }
+        axios.delete(`http://localhost:5000/api/product/type`,{data: data})
+            .then(res => {
+                console.log("Update success");
+                alert('delete được rồi anh trai')
+            })
+            .catch(err => {
+                alert(err);
+                // alert("Lỗi gì cmnr")
+            })
+    }
     
 
 
     async loadAllType() {
-        var result;
+        var result = [];
         const data = {
             token: localStorage.getItem('token'),
             filter: {
@@ -108,7 +106,7 @@ class EditTypeModal extends Component {
                                     <Grid item md={3} style={{border:'1px solid #333', padding: 4}}>
                                         <span>{type.name}</span>
                                         <BiEdit onClick={() => this.edit(type)}/>
-                                        <TiDelete onClick={() => this.delete()}/>
+                                        <TiDelete onClick={() => this.delete(type)}/>
                                     </Grid>
                                 ))}
                             </Grid>
