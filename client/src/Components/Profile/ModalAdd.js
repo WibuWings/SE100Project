@@ -13,31 +13,34 @@ class ModalAdd extends Component {
     constructor(props) {
         super(props);
 
-        var _timeFrom = new Date();
-        var fromHour = parseInt(this.props.objectEditShift.from.slice(0,this.props.objectEditShift.from.indexOf(':')));
-        var fromMin = parseInt(this.props.objectEditShift.from.slice(this.props.objectEditShift.from.indexOf(':') + 1));
-        _timeFrom.setHours(fromHour, fromMin);
+        if (this.props.editShiftStatus) {
+            var _timeFrom = new Date();
+            var fromHour = parseInt(this.props.objectEditShift.from.slice(0, this.props.objectEditShift.from.indexOf(':')));
+            var fromMin = parseInt(this.props.objectEditShift.from.slice(this.props.objectEditShift.from.indexOf(':') + 1));
+            _timeFrom.setHours(fromHour, fromMin);
 
-        var _timeTo = new Date();
-        var toHour = parseInt(this.props.objectEditShift.to.slice(0,this.props.objectEditShift.from.indexOf(':')));
-        var toMin = parseInt(this.props.objectEditShift.to.slice(this.props.objectEditShift.from.indexOf(':') + 1));
-        _timeTo.setHours(toHour, toMin);
-        
+            var _timeTo = new Date();
+            var toHour = parseInt(this.props.objectEditShift.to.slice(0, this.props.objectEditShift.from.indexOf(':')));
+            var toMin = parseInt(this.props.objectEditShift.to.slice(this.props.objectEditShift.from.indexOf(':') + 1));
+            _timeTo.setHours(toHour, toMin);
+        }
+
+
         this.state = {
             timeFrom: this.props.editShiftStatus ? _timeFrom : Date.now(),
             timeTo: this.props.editShiftStatus ? _timeTo : Date.now(),
             isSalary: false,
             isDescription: false,
             isTimeTo: false,
-            valueTime: this.props.editShiftStatus ?  1 : null,
+            valueTime: this.props.editShiftStatus ? 1 : null,
         }
     }
 
     descriptionShift = "Example : abc"
-    timeFrom = this.props.editShiftStatus? this.props.objectEditShift.from : "00:00 AM"
-    timeTo = this.props.editShiftStatus? this.props.objectEditShift.to : "00:00 AM"
-    salary = this.props.editShiftStatus? this.props.objectEditShift.salary : 10000
-    
+    timeFrom = this.props.editShiftStatus ? this.props.objectEditShift.from : "00:00 AM"
+    timeTo = this.props.editShiftStatus ? this.props.objectEditShift.to : "00:00 AM"
+    salary = this.props.editShiftStatus ? this.props.objectEditShift.salary : 10000
+
     // Handle user
     hanhleCancel = (e) => {
         this.props.changeAddStatus();
