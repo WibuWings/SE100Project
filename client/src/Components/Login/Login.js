@@ -56,6 +56,7 @@ class Login extends Component {
                             address: res.data.data.address ? res.data.data.address : "",
                         }
                         this.props.updateProfile(data);
+                        this.props.updateAvatar(res.data.data.imgAvt);
                         this.props.changeLoginStatus();
                         break;
                     case -1:
@@ -111,7 +112,7 @@ class Login extends Component {
                             })
                             localStorage.setItem('token', res.data.token);
                             const data = {
-                                email: res.data.email? res.data.email : res.data.data._id,
+                                email: res.data.email ? res.data.email : res.data.data._id,
                                 firstName: res.data.data.firstName ? res.data.data.firstName : "cc",
                                 lastName: res.data.data.lastName ? res.data.data.lastName : "abc",
                                 old: res.data.data.old ? res.data.data.old : "",
@@ -312,6 +313,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "ADMIN_ROLE"
             });
             localStorage.setItem('role', 'admin');
+        },
+        updateAvatar: (avatar) => {
+            dispatch({
+                type: "UPDATE_AVATAR",
+                avatar: avatar,
+            })
         }
     }
 }
