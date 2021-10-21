@@ -12,20 +12,32 @@ import axios from 'axios';
 class ModalAdd extends Component {
     constructor(props) {
         super(props);
+
+        var _timeFrom = new Date();
+        var fromHour = parseInt(this.props.objectEditShift.from.slice(0,this.props.objectEditShift.from.indexOf(':')));
+        var fromMin = parseInt(this.props.objectEditShift.from.slice(this.props.objectEditShift.from.indexOf(':') + 1));
+        _timeFrom.setHours(fromHour, fromMin);
+
+        var _timeTo = new Date();
+        var toHour = parseInt(this.props.objectEditShift.to.slice(0,this.props.objectEditShift.from.indexOf(':')));
+        var toMin = parseInt(this.props.objectEditShift.to.slice(this.props.objectEditShift.from.indexOf(':') + 1));
+        _timeTo.setHours(toHour, toMin);
+        
         this.state = {
-            timeFrom: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.from} GMT+0700 (Giờ Đông Dương)` : Date.now(),
-            timeTo: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.to} GMT+0700 (Giờ Đông Dương)` : Date.now(),
+            timeFrom: this.props.editShiftStatus ? _timeFrom : Date.now(),
+            timeTo: this.props.editShiftStatus ? _timeTo : Date.now(),
             isSalary: false,
             isDescription: false,
             isTimeTo: false,
+            valueTime: this.props.editShiftStatus ?  1 : null,
         }
     }
 
     descriptionShift = "Example : abc"
-    timeFrom = "00:00 AM"
-    timeTo = "00:00 PM"
-    salary = 10000
-
+    timeFrom = this.props.editShiftStatus? this.props.objectEditShift.from : "00:00 AM"
+    timeTo = this.props.editShiftStatus? this.props.objectEditShift.to : "00:00 AM"
+    salary = this.props.editShiftStatus? this.props.objectEditShift.salary : 10000
+    
     // Handle user
     hanhleCancel = (e) => {
         this.props.changeAddStatus();
@@ -95,7 +107,7 @@ class ModalAdd extends Component {
             var data = {
                 token: localStorage.getItem('token'),
                 idUser: this.props.infoUser.email,
-                id: this.props.objectEditShift._id,
+                id: this.props.objectEditShift.id,
                 salary: this.salary,
                 description: this.descriptionShift,
                 from: this.timeFrom,
@@ -113,16 +125,6 @@ class ModalAdd extends Component {
                     console.log("lỗi");
                 })
         }
-        this.props.updateShift(data);
-        this.props.changeEditShiftStatus();
-        this.props.changeAddStatus();
-        axios.post(`http://localhost:5000/api/profile/update-shift`, data)
-        .then(res => {
-            console.log('thành công');
-        })
-        .catch(err => {
-            console.log("lỗi");
-        })
     }
 
     blurSalary = (e) => {
@@ -143,7 +145,6 @@ class ModalAdd extends Component {
     addShift = () => {
         if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
             var data = {
-                
                 idUser: this.props.infoUser.email,
                 id: this.makeCode(6),
                 salary: this.salary,
@@ -171,6 +172,8 @@ class ModalAdd extends Component {
     }
 
     render() {
+        console.log(this.props.objectEditShift);
+        console.log(this.state.timeTo - this.state.timeFrom);
         return (
             <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
@@ -213,6 +216,7 @@ class ModalAdd extends Component {
                                         <TimePicker
                                             label="Time From"
                                             value={this.state.timeFrom}
+                                            className="timeFrom"
                                             onChange={(newValue) => this.changeTimeFrom(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
                                         />
