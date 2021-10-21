@@ -90,15 +90,14 @@ class meProfile {
                                 );;
                             }
                             else{
-                            doc.newstoreName = newstoreName 
-                            console.log(doc);
+                            var newDoc = { ...doc._doc, name : newstoreName}
+                            console.log(newDoc);
                             
                             res.status(200).send(
                                 JSON.stringify({
                                     token : res.locals.newToken,
                                     email : res.locals.decoded.email,
-                                        
-                                    data : doc
+                                    data : newDoc,  
                                 })
                             )}})
                     }}
