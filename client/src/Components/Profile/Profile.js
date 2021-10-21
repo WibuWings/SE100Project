@@ -7,6 +7,7 @@ import ChangePassword from './ChangePassword';
 import ListShift from './ListShift';
 import ProfileSetting from './ProfileSetting';
 import ModalAdd from './ModalAdd';
+import Regulation from './Regulation';
 import { connect } from 'react-redux'
 
 class Profile extends Component {
@@ -31,6 +32,9 @@ class Profile extends Component {
                         <Grid item md={4} sm={12} >
                             {this.state.isFindPassword ? null : <ChangePassword></ChangePassword>}
                             <ProfileSetting></ProfileSetting>
+                        </Grid>
+                        <Grid item md={12} sm={12}  >
+                            <Regulation></Regulation>
                         </Grid>
                         <Grid item sm={12} md={12} >
                             <ListShift></ListShift>

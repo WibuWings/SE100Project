@@ -103,10 +103,7 @@ class ModalAdd extends Component {
     }
 
     editShift = () => {
-        console.log(this.state.isSalary);
-        console.log(this.state.isDescription);
-        alert(this.state.timeTo - this.state.timeFrom);
-        if (!this.state.isSalary && !this.state.isDescription && (this.state.valueTime > 0)) {
+        if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
             var data = {
                 token: localStorage.getItem('token'),
                 idUser: this.props.infoUser.email,
