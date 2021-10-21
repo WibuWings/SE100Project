@@ -1,9 +1,8 @@
 
-const {getCurrentDateTimeString} = require('../helper/DateTime');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const TimeKeeping = new Schema({
+const NextWeekTimeKeeping = new Schema ({
     _id: {
         dateInWeek: String,
         storeID: String,
@@ -22,7 +21,6 @@ const TimeKeeping = new Schema({
         ref: "Employee",
     },
     realDate: Date,
-    isPaidSalary: Boolean,
 });
 
-module.exports = mongoose.model('TimeKeeping', TimeKeeping);
+module.exports = mongoose.model("NextWeekTimeKeeping", NextWeekTimeKeeping);
