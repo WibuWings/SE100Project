@@ -161,7 +161,7 @@ class Regulation extends Component {
         return (
             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Profile" />
+                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Regulation11111" />
                     <Divider />
                     <CardContent>
                         <Grid container spacing={3}>
