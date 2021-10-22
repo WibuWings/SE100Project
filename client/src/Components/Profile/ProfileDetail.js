@@ -143,6 +143,8 @@ class ProfileDetail extends Component {
                     if (this.props.infoUser.province !== '0') {
                         this.props.updateDistrict(res.data.filter(word => word.codename === this.props.infoUser.province)[0].districts,)
                     }
+                    console.log(this.props.infoUser.province);
+                    console.log(this.props.district);
                 })
                 .catch(err => {
                     console.log("fail");
@@ -270,6 +272,7 @@ class ProfileDetail extends Component {
                                     variant="outlined"
                                 >
                                     <option value="0">--Select province--</option>
+                                    
                                     {(this.props.country.length !== 0) ? this.props.country[0].map(item => {
                                         return (
                                             <option value={item.codename}>
@@ -294,6 +297,9 @@ class ProfileDetail extends Component {
                                     variant="outlined"
                                 >
                                     <option value="0">--Select district--</option>
+                                    {
+                                        console.log(this.props.district)
+                                    }
                                     {(this.props.district.length !== 0) ? this.props.district[0].map(item => {
                                         return (
                                             <option value={item.codename}>
