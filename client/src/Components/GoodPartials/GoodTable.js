@@ -17,7 +17,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/styles';
 import { withStyles } from '@material-ui/styles';
 import GoodImage from './goodExample.jpg';
-
+import axios from 'axios';
 
 
 function createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType) {
@@ -161,6 +161,7 @@ const styles = theme =>  ({
 })
 
 
+var listProductInfor = [];
 
 class GoodTable extends Component {
     constructor(props) {
@@ -176,7 +177,37 @@ class GoodTable extends Component {
         // Đây là câu lệnh để update nhẹ
         this.setState({update: this.state.update})
     }
-
+    async loadAllGood() {
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/`, {
+            params: {...data}
+        })
+            .then(res => {
+                alert("Lấy hết đc product ròi anh chai");
+                result = res.data.data;
+                console.log(res.data.data);
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+        // Get data và lưu các tên Type vào dữ liệU
+        //Get data và lưu các tên Type vào bảng
+        listProductInfor=[];
+        for(var i=0; i < result.length ; i++)
+        {
+            listProductInfor.push(result[i]);
+        }
+        this.generatedID = listProductInfor.length;
+        alert(this.generatedID);
+        this.setState({change: false});
+    }
     render() {
         const { classes } = this.props;
         return (

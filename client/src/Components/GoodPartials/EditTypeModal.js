@@ -31,8 +31,9 @@ class EditTypeModal extends Component {
         this.props.changeAddTypeStatus();
         this.props.setEditTypeStatus();
         this.props.typeToUpdate(type);
+        this.props.changeEditTypeStatus();
     }
-    delete = (type) => {
+    async delete(type){
         const data = {
             token: localStorage.getItem('token'),
             productTypes:
@@ -44,7 +45,7 @@ class EditTypeModal extends Component {
             ]
                 
         }
-        axios.delete(`http://localhost:5000/api/product/type`,{data: data})
+        await axios.delete(`http://localhost:5000/api/product/type`,{data: data})
             .then(res => {
                 console.log("Update success");
                 alert('delete được rồi anh trai')
@@ -53,6 +54,7 @@ class EditTypeModal extends Component {
                 alert(err);
                 // alert("Lỗi gì cmnr")
             })
+        this.loadAllType();
     }
     
 
@@ -124,12 +126,12 @@ class EditTypeModal extends Component {
                         </Button>
                     </Box>
                 </Card>
-                {this.props.addTypeStatus ? (
+                {/* {this.props.addTypeStatus ? (
                         <div className="modal-add">
                             <div onClick={() => {this.props.changeAddTypeStatus();}} className="modal-overlay"></div>
                             <AddTypeModal></AddTypeModal>
                         </div>
-                    ): null}
+                    ): null} */}
             </form>
         );
     }

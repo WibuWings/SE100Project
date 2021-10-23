@@ -79,6 +79,11 @@ class AddTypeModal extends Component {
         {
             if(listTypeInfor[i].name==typeName)
             {
+                if(!this.props.isAddTypeStatus && typeName.trim()==this.props.typeProductValue.name)
+                {
+                    alert("Không đổi tên à anh zai");
+                    return false;
+                }
                 alert("Trùng tên rồi anh chai");
                 return false;
             }
@@ -129,6 +134,7 @@ class AddTypeModal extends Component {
                 alert("Lỗi gì cmnr")
             })
         this.props.changeAddTypeStatus();
+        this.props.changeEditTypeStatus();
     }
     typeName = "";
     loadInitialData = () => {
@@ -222,6 +228,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
+        changeEditTypeStatus: () => {
+            dispatch({
+                type: "CHANGE_EDIT_TYPE_STATUS",
+            });
+        },
         changeAddTypeStatus: () => {
             dispatch({
                 type: "CHANGE_ADD_TYPE_STATUS",
