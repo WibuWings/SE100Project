@@ -85,14 +85,15 @@ class GoodImport extends Component {
 
     }
 
-    importGood = () => {
+    async importGood() {
         // Thêm hàng hoá
         const data = {
             token: localStorage.getItem('token'),
             product: {
                 _id: {
-                    productID: document.querySelector('input[name="goodID"]').value,
+                    productID: this.generatedID,
                     importDate: Date(this.dateTime),
+                    storeID: this.props.infoUser.email,
                 },
                 name: document.querySelector('input[name="goodName"]').value,
                 quantity: document.querySelector('input[name="goodQuantity"]').value,
@@ -116,20 +117,31 @@ class GoodImport extends Component {
             })
 
         //Thêm vào bảng joinType nữa
-        const data1 = {
-            token: localStorage.getItem('token'),
-            productJoinType: {
-                
+        // Giờ thêm nhiều type thì phải làm cái này nhiều lần
+        for(var i = 0 ; i < typeSet.length ; i++)
+        {
+            const data1 = {
+                token: localStorage.getItem('token'),
+                productJoinType: {
+                    _id : {
+                        productID: this.generatedID,
+                        typeID: typeSet[i], 
+                        importDate: Date.now(),
+                        storeID: this.props.infoUser.email,
+                    }
+                }
             }
+            console.log(data1);
+            console.log("Đang thêm vô bảng join")
+            axios.post(`http://localhost:5000/api/product/join`, data1)
+                .then(res => {
+                    console.log("lưu vô bảng join thành công");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         }
-        axios.post(`http://localhost:5000/api/product/join`, data1)
-            .then(res => {
-                console.log("Save success");
-                console.log(data._id.importDate)
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        
 
         // console.log(data);
     }
@@ -207,6 +219,19 @@ class GoodImport extends Component {
     }
 
     generatedID = 0;
+
+    getTypeNamebyTypeID (typeID) {
+        var typeName='';
+        for(var i = 0; i<listTypeInfor.length;i++)
+        {   
+            if(listTypeInfor[i]._id.typeID == typeID)
+            {
+                typeName = listTypeInfor[i].name;
+                break;
+            }
+        }
+        return typeName;
+    }
 
     render() {
         
@@ -423,9 +448,9 @@ class GoodImport extends Component {
                                             }}
                                         >
                                             {
-                                                productTypes.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
-                                                : productTypes.map((type) =>
-                                                    <MenuItem value={type}>{type}</MenuItem>
+                                                listTypeInfor.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
+                                                : listTypeInfor.map((type) =>
+                                                    <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
                                                 )
                                             }   
                                         </Select> 
@@ -460,7 +485,7 @@ class GoodImport extends Component {
                                                 
                                                         />
                                                         <span className='type-title'>
-                                                            {type}
+                                                            {this.getTypeNamebyTypeID(type)}
                                                         </span>
                                                     </div>
                                                     
