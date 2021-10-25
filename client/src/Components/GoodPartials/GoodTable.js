@@ -19,8 +19,9 @@ import { withStyles } from '@material-ui/styles';
 import GoodImage from './goodExample.jpg';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { Image } from 'cloudinary-react';
 
-function createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType) {
+function createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType, imgUrl) {
     return {
         index,
         id,
@@ -28,6 +29,7 @@ function createData(index, id, name, quantity, originalPrice, sellPrice, importT
         quantity,
         sellPrice,
         importTime,
+        imgLink: imgUrl,
         hidden: [
             {
                 date: '2020-01-05',
@@ -76,7 +78,13 @@ function Row(props) {
                                 Other information
                             </Typography>
                             <div style={{display: 'flex'}}>
-                                <img src={GoodImage} style={{width: '100px', height: '100px', objectFit:'cover'}}/>
+                                {  
+                                    row.imgLink == "none"
+                                    ? <img src={GoodImage} style={{width: '100px', height: '100px', objectFit:'cover'}}/>
+                                    : <Image style={{width: '100px', height: '100px', objectFit:'cover'}} cloudName="databaseimg" publicId={row.imgLink}>{row.imgLink}</Image>
+                                }
+                                
+                                
                                 <Table size="small" aria-label="purchases">
                                     <TableHead>
                                         <TableRow>
@@ -234,7 +242,7 @@ class GoodTable extends Component {
             joinTypeInfor.push(result[i]);
         }
 
-        //createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType)
+        //createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType, imgUrl)
         // Cập nhật vào cái row đi cho chắc
         rows = [];
         for(var i = 0; i < listProductInfor.length ; i++)
@@ -255,8 +263,9 @@ class GoodTable extends Component {
 
             rows.push(
                 createData((i+1), obj._id.productID, obj.name, obj.quantity, 
-                    obj.importPrice, obj.sellPrice, obj._id.importDate, joinType)
+                    obj.importPrice, obj.sellPrice, obj._id.importDate, joinType, obj.imgUrl)
             );
+            console.log("obj.imgUrl",obj.imgUrl);
         }
         
         this.setState({change: !this.state.change});
