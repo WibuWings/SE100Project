@@ -31,7 +31,7 @@ function createData(index, id, name, quantity, originalPrice, sellPrice, importT
         hidden: [
             {
                 date: '2020-01-05',
-                remaining: 100,
+                remaining: quantity,
                 originalPrice: originalPrice,
                 productType: productType,
             }
@@ -162,6 +162,8 @@ const styles = theme =>  ({
 
 
 var listProductInfor = [];
+var joinTypeInfor = [];
+var listTypeInfor = [];
 
 class GoodTable extends Component {
     constructor(props) {
@@ -169,6 +171,7 @@ class GoodTable extends Component {
         this.state ={
             update: false
         }
+        this.loadAllType();
         this.loadAllGood();
     }
     removeProduct= (row) => {
@@ -205,6 +208,31 @@ class GoodTable extends Component {
         {
             listProductInfor.push(result[i]);
         }
+        // Get hết từ cái productjoinType
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, {
+            params: {...data}
+        })
+            .then(res => {
+                alert("Lấy hết đc join ròi anh chai");
+                result = res.data.data;
+                console.log(res.data.data);
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })  
+        // Lấy các cái jointype
+        joinTypeInfor = [];
+        for(var i = 0 ; i < result.length; i++)
+        {
+            joinTypeInfor.push(result[i]);
+        }
 
         //createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType)
         // Cập nhật vào cái row đi cho chắc
@@ -212,14 +240,70 @@ class GoodTable extends Component {
         for(var i = 0; i < listProductInfor.length ; i++)
         {
             var obj = listProductInfor[i];
+
+            var joinType = '';
+            // // Lấy tất cả các type trong cái product
+            for(var j = 0; j < joinTypeInfor.length ; j++)
+            {
+
+                // console.log("joinTypeInfor[]", j ,joinTypeInfor[j])
+                if(joinTypeInfor[j]._id.productID == obj._id.productID)
+                {
+                    joinType = joinType + ' ' + this.getTypeNamebyTypeID(joinTypeInfor[j]._id.typeID);
+                }
+            }
+
             rows.push(
                 createData((i+1), obj._id.productID, obj.name, obj.quantity, 
-                    obj.importPrice, obj.sellPrice, obj._id.importDate)
+                    obj.importPrice, obj.sellPrice, obj._id.importDate, joinType)
             );
         }
         
         this.setState({change: !this.state.change});
     }
+
+    async loadAllType() {
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+
+        await axios.get(`http://localhost:5000/api/product/type`, 
+        {
+            params: {...data}
+        })
+            .then(res => {
+                result = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        //Get data và lưu các tên Type vào bảng
+        listTypeInfor=[];
+        for(var i=0; i < result.length ; i++)
+        {
+            listTypeInfor.push(result[i]);
+        }
+
+        this.setState({change: true});
+    }
+    getTypeNamebyTypeID (typeID) {
+        var typeName='';
+        for(var i = 0; i<listTypeInfor.length;i++)
+        {   
+            if(listTypeInfor[i]._id.typeID == typeID)
+            {
+                typeName = listTypeInfor[i].name;
+                break;
+            }
+        }
+        return typeName;
+    }
+
     render() {
         const { classes } = this.props;
         return (
