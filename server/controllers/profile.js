@@ -52,7 +52,7 @@ class meProfile {
                     email: email
                 },
                 {$set:{
-                    name: newstoreName,
+                    storeName: newstoreName,
                 }},
                 {
                     returnOriginal: false,
@@ -90,7 +90,7 @@ class meProfile {
                                 );;
                             }
                             else{
-                            var newDoc = { ...doc._doc, name : newstoreName}
+                            var newDoc = { ...doc._doc, storeName : newstoreName}
                             console.log(newDoc);
                             
                             res.status(200).send(
