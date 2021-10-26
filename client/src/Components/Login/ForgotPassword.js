@@ -208,6 +208,10 @@ class ForgotPassword extends Component {
         formGroup.querySelector('.form-message').innerText = "";
     }
 
+    componentWillMount() {
+        document.title = 'Find password'
+    }
+
     render() {
         const enterPress = this.findPassword;
         document.onkeydown = function (e) {

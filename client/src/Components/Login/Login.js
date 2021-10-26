@@ -188,6 +188,12 @@ class Login extends Component {
         formGroup.querySelector('.form-message').innerText = "";
     }
 
+    
+    componentWillMount() {
+        document.title = 'Login'
+    }
+    
+
 
     render() {
         const enterPress = this.isLoginCheck;

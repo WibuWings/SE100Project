@@ -246,6 +246,10 @@ class Register extends Component {
         formGroup.querySelector('.form-message').innerText = "";
     }
 
+    componentWillMount() {
+        document.title = 'Register'
+    }
+
     render() {
         const enterPress = this.SignUp;
         document.onkeydown = function (e) {
