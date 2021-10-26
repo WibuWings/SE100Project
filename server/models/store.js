@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const Store = new Schema ({
     _id: String,
-    name: String,
+    storeName: String,
     address: String,
     imgUrl: String,
 });
