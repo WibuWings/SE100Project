@@ -37,11 +37,13 @@ class Regulation extends Component {
             this.setState({
                 isNumberEmployees: true,
                 numberEmployees: e.target.value,
+                isSaveRegulations: true,
             })
         } else {
             this.setState({
                 isNumberEmployees: false,
                 numberEmployees: e.target.value,
+                isSaveRegulations: true,
             })
         }
     }
