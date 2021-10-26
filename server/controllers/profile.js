@@ -49,7 +49,7 @@ class meProfile {
         const old = req.body.old                  
         Store.findOneAndUpdate(
                 {
-                    _id: email,
+                    email: email
                 },
                 {$set:{
                     name: newstoreName,
@@ -64,7 +64,7 @@ class meProfile {
                     else{
                         Manager.findOneAndUpdate(
                         {
-                            _id : email,
+                            email : email,
                         },
                         {$set:{
                             lastName:newlastName,
