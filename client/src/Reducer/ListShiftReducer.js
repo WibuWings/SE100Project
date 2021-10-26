@@ -47,8 +47,9 @@ const listShiftInitialState = [
                 })
                 return state
             case "UPDATE_DATA_SHIFT_USER":
-                console.log(action.shiftTypes[0]._id.shiftID);
-                state = action.shiftTypes
+                if (action.shiftTypes !== []){
+                    state = action.shiftTypes
+                }
                 return state
             default:
                 return state
