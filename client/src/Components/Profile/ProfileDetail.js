@@ -291,7 +291,6 @@ class ProfileDetail extends Component {
                                     value={this.state.nameDistrict}
                                     onChange={(e) => this.changeDistrict(e)}
                                     required
-                                    // disabled={this.props.infoUser.province ? false : true}
                                     select
                                     SelectProps={{ native: true }}
                                     variant="outlined"
@@ -355,16 +354,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "UPDATA_PROFILE_DATA_USER",
                 data: data,
-                // email: data.email,
-                // firstName: data.firstName,
-                // lastName: data.lastName,
-                // old: data.old,
-                // gender: data.gender,
-                // storeName: data.storeName,
-                // tel: data.tel,
-                // province: data.province,
-                // district: data.district,
-                // address: data.address,
             })
         }
     }
