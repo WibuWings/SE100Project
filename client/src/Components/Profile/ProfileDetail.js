@@ -47,7 +47,8 @@ class ProfileDetail extends Component {
     }
 
     changeCountry = (e) => {
-        this.props.updateDistrict(this.state.listProvince.filter(word => word.codename === e.target.value)[0].districts)
+       console.log(this.state.listProvince);
+     this.props.updateDistrict(this.state.listProvince.filter(word => word.codename === e.target.value)[0].districts)
         this.setState({
             nameProvince: e.target.value,
         })
@@ -138,7 +139,7 @@ class ProfileDetail extends Component {
 
 
     componentWillMount() {
-        if (!this.props.country[0]) {
+      
             axios.get(`https://provinces.open-api.vn/api/?depth=2`)
                 .then(res => {
                     this.props.updateProvince(res.data);
@@ -152,7 +153,6 @@ class ProfileDetail extends Component {
                 .catch(err => {
                     console.log("fail");
                 })
-        }
     }
 
 

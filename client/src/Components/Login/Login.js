@@ -38,10 +38,6 @@ class Login extends Component {
                 console.log(res.data);
                 switch (res.data.status) {
                     case 1:
-                        this.message = res.data.message;
-                        this.setState({
-                            statusSucces: true,
-                        })
                         localStorage.setItem('token', res.data.token);
                         const data = {
                             email: res.data._id,
@@ -56,7 +52,7 @@ class Login extends Component {
                             address: res.data.data.address ? res.data.data.address : "",
                         }
                         this.props.updateProfile(data);
-                        this.props.updateAvatar(res.data.data.imgAvt);
+                        this.props.updateAvatar(res.data.data.imgUrl);
                         this.props.changeLoginStatus();
                         break;
                     case -1:
@@ -106,10 +102,6 @@ class Login extends Component {
                     // console.log(res.data.email);
                     switch (res.data.status) {
                         case 1:
-                            this.message = res.data.message;
-                            this.setState({
-                                statusSucces: true,
-                            })
                             localStorage.setItem('token', res.data.token);
                             const data = {
                                 email: res.data.email ? res.data.email : res.data.data._id,
@@ -124,8 +116,8 @@ class Login extends Component {
                                 district: res.data.data.district ? res.data.data.district : "0",
                                 address: res.data.data.address ? res.data.data.address : "",
                             }
-                            this.props.updateProfile(data);
                             this.props.updateAvatar(res.data.data.imgUrl);
+                            this.props.updateProfile(data);
                             this.props.changeLoginStatus();
                             break;
                         case -1:
