@@ -7,7 +7,6 @@ class ProfileDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            disabledHuyen: true,
             listProvince: null,
             nameProvince: this.props.infoUser.province,
             nameDistrict: this.props.infoUser.district,
@@ -27,7 +26,7 @@ class ProfileDetail extends Component {
                 old: document.querySelector('input[name="old"]').value,
                 gender: document.querySelector('select[name="gender"],select').value,
                 storeName: document.querySelector('input[name="storeName"]').value,
-                tel: document.querySelector('input[name="tel"]').value,
+                phoneNumber: document.querySelector('input[name="tel"]').value,
                 province: document.querySelector('select[name="province"]').value,
                 district: document.querySelector('select[name="district"]').value,
                 address: document.querySelector('input[name="address"]').value,
@@ -47,8 +46,8 @@ class ProfileDetail extends Component {
     }
 
     changeCountry = (e) => {
-       console.log(this.state.listProvince);
-     this.props.updateDistrict(this.state.listProvince.filter(word => word.codename === e.target.value)[0].districts)
+        console.log(this.state.listProvince);
+        this.props.updateDistrict(this.state.listProvince.filter(word => word.codename === e.target.value)[0].districts)
         this.setState({
             nameProvince: e.target.value,
         })
@@ -139,20 +138,20 @@ class ProfileDetail extends Component {
 
 
     componentWillMount() {
-      
-            axios.get(`https://provinces.open-api.vn/api/?depth=2`)
-                .then(res => {
-                    this.props.updateProvince(res.data);
-                    this.setState({
-                        listProvince: res.data,
-                    })
-                    if (this.props.infoUser.province !== '0') {
-                        this.props.updateDistrict(res.data.filter(word => word.codename === this.props.infoUser.province)[0].districts)
-                    }
+
+        axios.get(`https://provinces.open-api.vn/api/?depth=2`)
+            .then(res => {
+                this.props.updateProvince(res.data);
+                this.setState({
+                    listProvince: res.data,
                 })
-                .catch(err => {
-                    console.log("fail");
-                })
+                if (this.props.infoUser.province !== '0') {
+                    this.props.updateDistrict(res.data.filter(word => word.codename === this.props.infoUser.province)[0].districts)
+                }
+            })
+            .catch(err => {
+                console.log("fail");
+            })
     }
 
 
@@ -292,7 +291,6 @@ class ProfileDetail extends Component {
                                     value={this.state.nameDistrict}
                                     onChange={(e) => this.changeDistrict(e)}
                                     required
-                                    disabled={this.props.infoUser.province ? false : true}
                                     select
                                     SelectProps={{ native: true }}
                                     variant="outlined"
@@ -354,17 +352,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         updateProfile: (data) => {
             dispatch({
-                type: "UPDATA_DATA_USER",
-                email: data.email,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                old: data.old,
-                gender: data.gender,
-                storeName: data.storeName,
-                tel: data.tel,
-                province: data.province,
-                district: data.district,
-                address: data.address,
+                type: "UPDATA_PROFILE_DATA_USER",
+                data: data,
             })
         }
     }

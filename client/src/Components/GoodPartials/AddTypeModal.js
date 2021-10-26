@@ -21,7 +21,7 @@ class AddTypeModal extends Component {
     typeList = [];
 
     async getAllTypeList(){
-        var result;
+        var result = [];
         const data = {
             token: localStorage.getItem('token'),
             filter: {
@@ -48,7 +48,6 @@ class AddTypeModal extends Component {
         {
             listTypeInfor.push(result[i]);
         }
-        console.log(listTypeInfor[0].name);
     }
     addType = () => {
         var newTypeName = document.querySelector('input[name="typeName"]').value.trim();
@@ -76,14 +75,19 @@ class AddTypeModal extends Component {
     
     checkConstraint(typeName) {
         //Constraint 1: Check name
-        // BUG
-        for(var i=0;i<listTypeInfor;i++)
+        for(var i=0;i<listTypeInfor.length;i++)
         {
             if(listTypeInfor[i].name==typeName)
             {
+                if(!this.props.isAddTypeStatus && typeName.trim()==this.props.typeProductValue.name)
+                {
+                    alert("Không đổi tên à anh zai");
+                    return false;
+                }
+                alert("Trùng tên rồi anh chai");
                 return false;
             }
-            alert("Trùng tên rồi anh chai")
+            
         }        
         // Constraint 2: Not blank
         if(typeName.length==0)
@@ -130,6 +134,7 @@ class AddTypeModal extends Component {
                 alert("Lỗi gì cmnr")
             })
         this.props.changeAddTypeStatus();
+        this.props.changeEditTypeStatus();
     }
     typeName = "";
     loadInitialData = () => {
@@ -223,6 +228,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
+        changeEditTypeStatus: () => {
+            dispatch({
+                type: "CHANGE_EDIT_TYPE_STATUS",
+            });
+        },
         changeAddTypeStatus: () => {
             dispatch({
                 type: "CHANGE_ADD_TYPE_STATUS",

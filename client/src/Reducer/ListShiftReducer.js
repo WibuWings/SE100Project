@@ -33,18 +33,22 @@ const listShiftInitialState = [
     listShiftReducer = (state = listShiftInitialState, action) => {
         switch (action.type) {
             case "DELETE_SHIFT":
-                return state.filter((value, key) => (value.id.toString() !== action.idShift));
+                return state.filter((value, key) => (value._id.shiftID !== action.idShift));
             case "ADD_SHIFT":
                 return [...state, action.newShift]
             case "OBJECT_UPDATE_SHIFT":
                 state.forEach(item => {
-                    if(item.id === action.data.id) {
-                        item.description = action.data.description;
+                    if(item._id.shiftID === action.data.id) {
+                        item.name = action.data.description;
                         item.salary = action.data.salary;
-                        item.from = action.data.from;
-                        item.to = action.data.to;
+                        item.timeFrom = action.data.from;
+                        item.timeTo = action.data.to;
                     }
                 })
+                return state
+            case "UPDATE_DATA_SHIFT_USER":
+                console.log(action.shiftTypes[0]._id.shiftID);
+                state = action.shiftTypes
                 return state
             default:
                 return state
