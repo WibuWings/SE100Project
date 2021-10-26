@@ -116,6 +116,7 @@ class Authentication {
                                 message: MESSAGES.SIGN_IN_SUCCESS,
                                 token: JWTAuthToken(req.body),
                                 email: req.body.email,
+                                _id: req.body.email,
                                 data,
                             })
                         );
