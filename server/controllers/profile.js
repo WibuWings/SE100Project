@@ -49,7 +49,7 @@ class meProfile {
         const old = req.body.old                  
         Store.findOneAndUpdate(
                 {
-                    _id: email,
+                    email: email
                 },
                 {$set:{
                     name: newstoreName,
@@ -62,45 +62,49 @@ class meProfile {
                         console.log("Something wrong when updating data!");
                     }
                     else{
-                    console.log(doc);}}
+                        Manager.findOneAndUpdate(
+                        {
+                            email : email,
+                        },
+                        {$set:{
+                            lastName:newlastName,
+                            firstName:newfirstName,
+                            phoneNumber:newphoneNumber,
+                            address:newAddress,
+                            province:newProvince,
+                            district:newDistrict,
+                            storeID: email,
+                            gender:newgender,
+                            old:old,
+                        }},
+                        {
+                            returnOriginal: false,
+                        },
+                        function(err, doc){
+                            if(err){
+                                res.send(
+                                    JSON.stringify({
+                                        status: STATUS.FAILURE,
+                                        message: MESSAGES.FAILURE_UPDATE,
+                                    })
+                                );;
+                            }
+                            else{
+                            var newDoc = { ...doc._doc, name : newstoreName}
+                            console.log(newDoc);
+                            
+                            res.status(200).send(
+                                JSON.stringify({
+                                    token : res.locals.newToken,
+                                    email : res.locals.decoded.email,
+                                    data : newDoc,  
+                                })
+                            )}})
+                    }}
+                
             )   
 
-        Manager.findOneAndUpdate(
-            {
-                _id : email,
-            },
-            {$set:{
-                lastName:newlastName,
-                firstName:newfirstName,
-                phoneNumber:newphoneNumber,
-                address:newAddress,
-                province:newProvince,
-                district:newDistrict,
-                storeID: email,
-                gender:newgender,
-                old:old,
-            }},
-            {
-                returnOriginal: false,
-            },
-            function(err, doc){
-                if(err){
-                    res.send(
-                        JSON.stringify({
-                            status: STATUS.FAILURE,
-                            message: MESSAGES.FAILURE_UPDATE,
-                        })
-                    );;
-                }
-                else{
-                console.log(doc);
-                res.status(200).send(
-                    JSON.stringify({
-                        token : res.locals.newToken,
-                        email : res.locals.decoded.email,
-                        data : doc
-                    })
-                )}})}
+}
         
     addShift = async (req, res) => {
         const idUserJwt = req.body.email;
