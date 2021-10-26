@@ -75,16 +75,18 @@ class Authentication {
                                 })
                                 newStore.save();
 
-                                res.send(
-                                    JSON.stringify({
-                                        status: STATUS.SUCCESS,
-                                        message: MESSAGES.SIGN_IN_SUCCESS,
-                                        token: JWTAuthToken({email:result.email}),
-                                        email: result.email,
-                                        _id: result._id,
-                                        data: {},
-                                    })
-                                );
+                                getAllData(result.email).then((data) => {
+                                    res.send(
+                                        JSON.stringify({
+                                            status: STATUS.SUCCESS,
+                                            message: MESSAGES.SIGN_IN_SUCCESS,
+                                            token: JWTAuthToken({email:result.email}),
+                                            email: req.body.email,
+                                            _id: req.body.email,
+                                            data,
+                                        })
+                                    );
+                                });
                             })
                         }
                     });
@@ -114,7 +116,7 @@ class Authentication {
                             JSON.stringify({
                                 status: STATUS.SUCCESS,
                                 message: MESSAGES.SIGN_IN_SUCCESS,
-                                token: JWTAuthToken(req.body),
+                                token: JWTAuthToken({email: req.body.email}),
                                 email: req.body.email,
                                 _id: req.body.email,
                                 data,

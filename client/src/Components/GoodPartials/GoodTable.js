@@ -17,10 +17,11 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/styles';
 import { withStyles } from '@material-ui/styles';
 import GoodImage from './goodExample.jpg';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { Image } from 'cloudinary-react';
 
-
-
-function createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType) {
+function createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType, imgUrl) {
     return {
         index,
         id,
@@ -28,10 +29,11 @@ function createData(index, id, name, quantity, originalPrice, sellPrice, importT
         quantity,
         sellPrice,
         importTime,
+        imgLink: imgUrl,
         hidden: [
             {
                 date: '2020-01-05',
-                remaining: 100,
+                remaining: quantity,
                 originalPrice: originalPrice,
                 productType: productType,
             }
@@ -76,7 +78,13 @@ function Row(props) {
                                 Other information
                             </Typography>
                             <div style={{display: 'flex'}}>
-                                <img src={GoodImage} style={{width: '100px', height: '100px', objectFit:'cover'}}/>
+                                {  
+                                    row.imgLink == "none"
+                                    ? <img src={GoodImage} style={{width: '100px', height: '100px', objectFit:'cover'}}/>
+                                    : <Image style={{width: '100px', height: '100px', objectFit:'cover'}} cloudName="databaseimg" publicId={row.imgLink}>{row.imgLink}</Image>
+                                }
+                                
+                                
                                 <Table size="small" aria-label="purchases">
                                     <TableHead>
                                         <TableRow>
@@ -130,21 +138,21 @@ function removeRow(row)
 }
 
 var rows = [
-    createData(1,10001,'Frozen yoghurt', 159, 20, 24, '1/1/2021','food'),
-    createData(2,10002,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
-    createData(3,10003,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
-    createData(4,10004,'Cupcake', 305, 47, 67, '4/4/2021', 'cuisine'),
-    createData(5,10005,'Gingerbread', 356, 26, 49, '31/1/2021', 'cuisine'),
-    createData(6,10006,'Frozen yoghurt', 159, 20, 24, '1/1/2021','cuisine'),
-    createData(7,10007,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
-    createData(8,10008,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
-    createData(9,10009,'Cupcake', 305, 47, 67, '4/4/2021', 'detergent'),
-    createData(10,10010,'Gingerbread', 356, 26, 49, '31/1/2021', 'detergent'),
-    createData(11,10011,'Frozen yoghurt', 159, 20, 24, '1/1/2021','detergent'),
-    createData(12,10012,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
-    createData(13,10013,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
-    createData(14,10014,'Cupcake', 305, 47, 67, '4/4/2021', 'food'),
-    createData(15,10015,'Gingerbread', 356, 26, 49, '31/1/2021', 'food'),
+    // createData(1,10001,'Frozen yoghurt', 159, 20, 24, '1/1/2021','food'),
+    // createData(2,10002,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
+    // createData(3,10003,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
+    // createData(4,10004,'Cupcake', 305, 47, 67, '4/4/2021', 'cuisine'),
+    // createData(5,10005,'Gingerbread', 356, 26, 49, '31/1/2021', 'cuisine'),
+    // createData(6,10006,'Frozen yoghurt', 159, 20, 24, '1/1/2021','cuisine'),
+    // createData(7,10007,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
+    // createData(8,10008,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
+    // createData(9,10009,'Cupcake', 305, 47, 67, '4/4/2021', 'detergent'),
+    // createData(10,10010,'Gingerbread', 356, 26, 49, '31/1/2021', 'detergent'),
+    // createData(11,10011,'Frozen yoghurt', 159, 20, 24, '1/1/2021','detergent'),
+    // createData(12,10012,'Ice cream sandwich', 237, 27, 37, '2/2/2021', 'food'),
+    // createData(13,10013,'Eclair', 262, 16, 24, '3/3/2021', 'food'),
+    // createData(14,10014,'Cupcake', 305, 47, 67, '4/4/2021', 'food'),
+    // createData(15,10015,'Gingerbread', 356, 26, 49, '31/1/2021', 'food'),
 ];
 const styles = theme =>  ({
     goodTable: {                                     
@@ -161,6 +169,9 @@ const styles = theme =>  ({
 })
 
 
+var listProductInfor = [];
+var joinTypeInfor = [];
+var listTypeInfor = [];
 
 class GoodTable extends Component {
     constructor(props) {
@@ -168,6 +179,8 @@ class GoodTable extends Component {
         this.state ={
             update: false
         }
+        this.loadAllType();
+        this.loadAllGood();
     }
     removeProduct= (row) => {
         // Đây là xử lý ở phía dữ liệu, có thể await gì đó.
@@ -175,6 +188,129 @@ class GoodTable extends Component {
 
         // Đây là câu lệnh để update nhẹ
         this.setState({update: this.state.update})
+    }
+    async loadAllGood() {
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/`, {
+            params: {...data}
+        })
+            .then(res => {
+                alert("Lấy hết đc product ròi anh chai");
+                result = res.data.data;
+                console.log(res.data.data);
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+        // Get data và lưu các tên Type vào dữ liệU
+        //Get data và lưu các tên Type vào bảng
+        listProductInfor=[];
+        for(var i=0; i < result.length ; i++)
+        {
+            listProductInfor.push(result[i]);
+        }
+        // Get hết từ cái productjoinType
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, {
+            params: {...data}
+        })
+            .then(res => {
+                alert("Lấy hết đc join ròi anh chai");
+                result = res.data.data;
+                console.log(res.data.data);
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })  
+        // Lấy các cái jointype
+        joinTypeInfor = [];
+        for(var i = 0 ; i < result.length; i++)
+        {
+            joinTypeInfor.push(result[i]);
+        }
+
+        //createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType, imgUrl)
+        // Cập nhật vào cái row đi cho chắc
+        rows = [];
+        for(var i = 0; i < listProductInfor.length ; i++)
+        {
+            var obj = listProductInfor[i];
+
+            var joinType = '';
+            // // Lấy tất cả các type trong cái product
+            for(var j = 0; j < joinTypeInfor.length ; j++)
+            {
+
+                // console.log("joinTypeInfor[]", j ,joinTypeInfor[j])
+                if(joinTypeInfor[j]._id.productID == obj._id.productID)
+                {
+                    joinType = joinType + ' ' + this.getTypeNamebyTypeID(joinTypeInfor[j]._id.typeID);
+                }
+            }
+
+            rows.push(
+                createData((i+1), obj._id.productID, obj.name, obj.quantity, 
+                    obj.importPrice, obj.sellPrice, obj._id.importDate, joinType, obj.imgUrl)
+            );
+            console.log("obj.imgUrl",obj.imgUrl);
+        }
+        
+        this.setState({change: !this.state.change});
+    }
+
+    async loadAllType() {
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+
+        await axios.get(`http://localhost:5000/api/product/type`, 
+        {
+            params: {...data}
+        })
+            .then(res => {
+                result = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        //Get data và lưu các tên Type vào bảng
+        listTypeInfor=[];
+        for(var i=0; i < result.length ; i++)
+        {
+            listTypeInfor.push(result[i]);
+        }
+
+        this.setState({change: true});
+    }
+    getTypeNamebyTypeID (typeID) {
+        var typeName='';
+        for(var i = 0; i<listTypeInfor.length;i++)
+        {   
+            if(listTypeInfor[i]._id.typeID == typeID)
+            {
+                typeName = listTypeInfor[i].name;
+                break;
+            }
+        }
+        return typeName;
     }
 
     render() {
@@ -206,4 +342,19 @@ class GoodTable extends Component {
     }
 }
 
-export default (withStyles(styles, {withTheme: true}))(GoodTable);
+const mapStateToProps = (state, ownProps) => {
+    return {
+        addTypeStatus: state.addTypeStatus,
+        infoUser: state.infoUser,
+        isAddTypeStatus: state.isAddTypeStatus,
+        confirmStatus: state.confirmStatus
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, {withTheme: true}))(GoodTable));
