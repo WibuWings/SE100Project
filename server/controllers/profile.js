@@ -63,7 +63,6 @@ class meProfile {
                     }
                     else{
                     console.log(doc);}}
-                
             )   
 
         Manager.findOneAndUpdate(

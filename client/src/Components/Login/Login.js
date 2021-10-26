@@ -54,6 +54,7 @@ class Login extends Component {
                         }
                         this.props.updateProfile(res.data.data.manager);
                         this.props.updateAvatar(res.data.data.imgUrl);
+                        this.props.updateShiftTypes(res.data.data.shiftTypes);
                         this.props.changeLoginStatus();
                         break;
                     case -1:
@@ -119,6 +120,7 @@ class Login extends Component {
                             }
                             this.props.updateAvatar(res.data.data.manager.imgUrl);
                             this.props.updateProfile(res.data.data.manager);
+                            this.props.updateShiftTypes(res.data.data.shiftTypes);
                             this.props.changeLoginStatus();
                             break;
                         case -1:
@@ -189,11 +191,11 @@ class Login extends Component {
         formGroup.querySelector('.form-message').innerText = "";
     }
 
-    
+
     componentWillMount() {
         document.title = 'Login'
     }
-    
+
 
 
     render() {
@@ -309,6 +311,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "UPDATE_AVATAR",
                 avatar: avatar,
+            })
+        },
+        updateShiftTypes: (shiftTypes) => {
+            dispatch({
+                type: "UPDATE_DATA_SHIFT_USER",
+                shiftTypes: shiftTypes,
             })
         }
     }
