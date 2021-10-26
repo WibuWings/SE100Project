@@ -99,7 +99,7 @@ class Login extends Component {
             })
                 .then(res => {
                     console.log(res.data);
-                    console.log(res.data.email);
+                    // console.log(res.data.email);
                     switch (res.data.status) {
                         case 1:
                             localStorage.setItem('token', res.data.token);

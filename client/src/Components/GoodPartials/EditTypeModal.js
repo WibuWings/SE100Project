@@ -8,15 +8,16 @@ import { GiCancel } from 'react-icons/gi'
 import axios from 'axios';
 import AddTypeModal from './AddTypeModal';
 
-var productTypes =[
-    
-];
-
+var productTypes =[];
+var listTypeInfor = [];
 
 class EditTypeModal extends Component {
     constructor(props) {
         super(props);
-        this.loadType();
+        this.loadAllType();
+        this.state = {
+            change: false
+        }
     }
     confirm = () => {
         // Thực hiện các lệnh xử lý tại đây
@@ -26,71 +27,72 @@ class EditTypeModal extends Component {
         // this.props.changeConfirmStatus();
         this.props.changeEditTypeStatus();
     }
-    edit = () => {
+    edit = (type) => {
         this.props.changeAddTypeStatus();
         this.props.setEditTypeStatus();
+        this.props.typeToUpdate(type);
+        this.props.changeEditTypeStatus();
     }
-    delete = () => {
+    async delete(type){
         const data = {
             token: localStorage.getItem('token'),
             productTypes:
             [
                 {
-                    typeID:"12",
-                    storeID:"19522006@gm.uit.edu.vn"
+                    typeID: type._id.typeID,
+                    storeID: type._id.storeID
                 }
             ]
                 
         }
-        alert(data.product.name)
-        axios.delete(`http://localhost:5000/api/product/type`, data)
+        await axios.delete(`http://localhost:5000/api/product/type`,{data: data})
             .then(res => {
                 console.log("Update success");
                 alert('delete được rồi anh trai')
             })
             .catch(err => {
-                console.log(err);
-                alert("Lỗi gì cmnr")
+                alert(err);
+                // alert("Lỗi gì cmnr")
             })
-        this.props.changeAddTypeStatus();
+        this.loadAllType();
     }
     
-    sampleTypeData = {
-        email:"19522006@gm.uit.edu.vn",
-        token: "this is token",
-        data:[
-            {
-                _id: {
-                    typeID:"11",
-                    storeID:"19522006@gm.uit.edu.vn"
-                },
-                name:"Kinggg",
-            },
-            {
-                _id:{
-                    typeID:"12",
-                    storeID:"19522007@gm.uit.edu.vn"
-                },
-                name: "Đồ ăn",
-                createdAt:"2001-09-30T17:00:00.000Z"
-            },
-            {
-                _id:{
-                    typeID:"5",
-                    storeID:"19522006@gm.uit.edu.vn"
-                },
-                name:"AA"
-            }
-        ]
-    }
 
-    loadType = () => {
-        var typeList = this.sampleTypeData.data;
-        productTypes = [];
-        for(var i=0 ; i< typeList.length ; i ++)
-        {
-            productTypes.push(typeList[i].name);
+
+    async loadAllType() {
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
         }
+        console.log(data.token);
+        // alert(data.token);
+        console.log(data.filter);
+        await axios.get(`http://localhost:5000/api/product/type`, 
+        {
+            params: {...data}
+        })
+            .then(res => {
+                result = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err); // 401 ở đây
+            })
+        //Get data và lưu các tên Type vào bảng
+        listTypeInfor=[];
+        for(var i=0; i < result.length ; i++)
+        {
+            listTypeInfor.push(result[i]);
+        }
+        productTypes=[];
+        for(var i=0 ; i< listTypeInfor.length ; i ++)
+        {
+            productTypes.push(listTypeInfor[i].name);
+        }
+        this.setState({change: true});
     }
 
     render() {
@@ -102,11 +104,11 @@ class EditTypeModal extends Component {
                     <CardContent>
                         <Grid container spacing={2}>
                             <Grid container item md={12} xs={12} spacing={0}>
-                                {productTypes.map((type) => (
+                                { listTypeInfor.map((type) => (
                                     <Grid item md={3} style={{border:'1px solid #333', padding: 4}}>
-                                        <span>{type}</span>
-                                        <BiEdit onClick={() => this.edit()}/>
-                                        <TiDelete onClick={() => this.delete()}/>
+                                        <span>{type.name}</span>
+                                        <BiEdit onClick={() => this.edit(type)}/>
+                                        <TiDelete onClick={() => this.delete(type)}/>
                                     </Grid>
                                 ))}
                             </Grid>
@@ -124,12 +126,12 @@ class EditTypeModal extends Component {
                         </Button>
                     </Box>
                 </Card>
-                {this.props.addTypeStatus ? (
+                {/* {this.props.addTypeStatus ? (
                         <div className="modal-add">
                             <div onClick={() => {this.props.changeAddTypeStatus();}} className="modal-overlay"></div>
                             <AddTypeModal></AddTypeModal>
                         </div>
-                    ): null}
+                    ): null} */}
             </form>
         );
     }
@@ -140,6 +142,8 @@ const mapStateToProps = (state, ownProps) => {
         editTypeStatus: state.editTypeStatus,
         addTypeStatus: state.addTypeStatus,
         isAddTypeStatus: state.isAddTypeStatus,
+        infoUser: state.infoUser,
+        typeProductValue: state.typeProductValue,
     }
 }
 
@@ -165,6 +169,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_CONFIRM_STATUS",
             });
         },
+        typeToUpdate: (data) => {
+            dispatch({
+                type: "UPDATE_PRODUCT_TYPE",
+                _id: {
+                    typeID: data._id.typeID,
+                    storeID: data._id.storeID,
+                },
+                name: data.name
+            })
+        }
     }
 }
 
