@@ -18,9 +18,13 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ConfirmModal from './ConfirmModal';
 
+// Use for save type
 var productTypes =[];
+var listTypeInfor = [];
 
+var listProductInfor = [];
 
+// Use for choose type:
 var typeSet = [];
 
 const StyledTextField = withStyles((theme) => ({
@@ -43,11 +47,10 @@ class GoodImport extends Component {
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
             currentDateTime: new Date('2014-08-18T21:11:54'),
-            change: true,
+            change: false,
         }; 
-        this.getAllTypeList(); 
-        //this.getAllGoodData();
-        this.getTypeToTypeSet();
+        this.loadAllType(); 
+        this.loadAllGood();
     }
     handleAdd(){
         this.props.changeAddTypeStatus();
@@ -81,17 +84,16 @@ class GoodImport extends Component {
         }
 
     }
-    changeTimeFrom = (e) => {
-        this.dateTime=e;
-    }
-    
-    importGood = () => {
+
+    async importGood() {
+        // Thêm hàng hoá
         const data = {
             token: localStorage.getItem('token'),
             product: {
                 _id: {
-                    productID: document.querySelector('input[name="goodID"]').value,
+                    productID: this.generatedID,
                     importDate: Date(this.dateTime),
+                    storeID: this.props.infoUser.email,
                 },
                 name: document.querySelector('input[name="goodName"]').value,
                 quantity: document.querySelector('input[name="goodQuantity"]').value,
@@ -106,27 +108,40 @@ class GoodImport extends Component {
         axios.post(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Save success");
+                alert("Lưu được rồi anh chai")
                 console.log(data._id.importDate)
             })
             .catch(err => {
+                alert(err);
                 console.log(err);
             })
 
-        // Thêm vào bảng joinType nữa
-        // const data = {
-        //     token: localStorage.getItem('token'),
-        //     productJoinType: {
-                
-        //     }
-        // }
-        // axios.post(`http://localhost:5000/api/product/join`, data)
-        //     .then(res => {
-        //         console.log("Save success");
-        //         console.log(data._id.importDate)
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //     })
+        //Thêm vào bảng joinType nữa
+        // Giờ thêm nhiều type thì phải làm cái này nhiều lần
+        for(var i = 0 ; i < typeSet.length ; i++)
+        {
+            const data1 = {
+                token: localStorage.getItem('token'),
+                productJoinType: {
+                    _id : {
+                        productID: this.generatedID,
+                        typeID: typeSet[i], 
+                        importDate: Date.now(),
+                        storeID: this.props.infoUser.email,
+                    }
+                }
+            }
+            console.log(data1);
+            console.log("Đang thêm vô bảng join")
+            axios.post(`http://localhost:5000/api/product/join`, data1)
+                .then(res => {
+                    console.log("lưu vô bảng join thành công");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        
 
         // console.log(data);
     }
@@ -137,113 +152,85 @@ class GoodImport extends Component {
         this.props.setConfirm();
     }
 
-    getAllTypeList = () => {
+    async loadAllType() {
+        var result = [];
         const data = {
             token: localStorage.getItem('token'),
             filter: {
                 storeID: this.props.infoUser.email,
             }   
         }
-        axios.get(`http://localhost:5000/api/product/type`, data)
+
+        await axios.get(`http://localhost:5000/api/product/type`, 
+        {
+            params: {...data}
+        })
             .then(res => {
-                console.log("Get success");
+                result = res.data.data;
             })
             .catch(err => {
                 console.log(err);
-                alert(err)
+                alert(err);
             })
-        // Get data và lưu các tên Type vào bảng
-        
+        //Get data và lưu các tên Type vào bảng
+        listTypeInfor=[];
+        for(var i=0; i < result.length ; i++)
+        {
+            listTypeInfor.push(result[i]);
+        }
+        productTypes=[];
+        for(var i=0 ; i< listTypeInfor.length ; i ++)
+        {
+            productTypes.push(listTypeInfor[i].name);
+        }
+        this.setState({change: true});
     }
-    getAllGoodData = () => {
+
+    async loadAllGood() {
+        var result = [];
         const data = {
             token: localStorage.getItem('token'),
             filter: {
                 storeID: this.props.infoUser.email,
             }   
         }
-        axios.get(`http://localhost:5000/api/product/`, data)
+        await axios.get(`http://localhost:5000/api/product/`, {
+            params: {...data}
+        })
             .then(res => {
-                console.log("Get success");
+                alert("Lấy hết đc product ròi anh chai");
+                result = res.data.data;
+                console.log(res.data.data);
             })
             .catch(err => {
                 console.log(err);
                 alert(err)
             })
         // Get data và lưu các tên Type vào dữ liệU
-        
-    }
-
-    sampleTypeData = {
-        email:"19522006@gm.uit.edu.vn",
-        token: "this is token",
-        data:[
-            {
-                _id: {
-                    typeID:"11",
-                    storeID:"19522006@gm.uit.edu.vn"
-                },
-                name:"Kinggg",
-            },
-            {
-                _id:{
-                    typeID:"12",
-                    storeID:"19522007@gm.uit.edu.vn"
-                },
-                name: "Đồ ăn",
-                createdAt:"2001-09-30T17:00:00.000Z"
-            },
-            {
-                _id:{
-                    typeID:"5",
-                    storeID:"19522006@gm.uit.edu.vn"
-                },
-                name:"AA"
-            }
-        ]
-    }
-
-    sampleGoodData = {
-        email:"19522006@gm.uit.edu.vn",
-        token:"this is token",
-        data: [
-            {
-                _id:{
-                    productID:"1212121",
-                    importDate:"2021-10-08T00:00:00.000Z"
-                },
-                name:"SHIIijjjiI",
-                imgUrl:"none",
-                quantity:4,
-                remain:4,
-                unit:"12",
-                importPrice:7,
-                sellPrice:7,
-                expires:"2000-11-10T00:00:00.000Z",
-            },
-            {
-                _id:{
-                    productID:"121212aa1",
-                    importDate:"2021-10-08T00:00:00.000Z"
-                }, 
-                name:"q",
-                imgUrl:"none",
-                quantity:11,
-                remain:11,
-                unit:"11",
-                importPrice:212,
-                sellPrice:120,
-                expires:"2021-10-28"
-            }
-        ]
-    };
-
-    getTypeToTypeSet = () => {
-        var typeList = this.sampleTypeData.data;
-        for(var i=0 ; i< typeList.length ; i++)
+        //Get data và lưu các tên Type vào bảng
+        listProductInfor=[];
+        for(var i=0; i < result.length ; i++)
         {
-            productTypes.push(typeList[i].name)
+            listProductInfor.push(result[i]);
         }
+        this.generatedID = listProductInfor.length;
+        alert(this.generatedID);
+        this.setState({change: false});
+    }
+
+    generatedID = 0;
+
+    getTypeNamebyTypeID (typeID) {
+        var typeName='';
+        for(var i = 0; i<listTypeInfor.length;i++)
+        {   
+            if(listTypeInfor[i]._id.typeID == typeID)
+            {
+                typeName = listTypeInfor[i].name;
+                break;
+            }
+        }
+        return typeName;
     }
 
     render() {
@@ -299,7 +286,11 @@ class GoodImport extends Component {
                                         fullWidth 
                                         size="small" 
                                         name="goodID" 
-                                        variant="outlined" 
+                                        variant="outlined"
+                                        value={this.generatedID}
+                                        inputProps={
+                                            { readOnly: true, }
+                                        } 
                                     />
                                 </Grid>
                                 <Grid item md={6} 
@@ -457,9 +448,9 @@ class GoodImport extends Component {
                                             }}
                                         >
                                             {
-                                                productTypes.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
-                                                : productTypes.map((type) =>
-                                                    <MenuItem value={type}>{type}</MenuItem>
+                                                listTypeInfor.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
+                                                : listTypeInfor.map((type) =>
+                                                    <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
                                                 )
                                             }   
                                         </Select> 
@@ -494,7 +485,7 @@ class GoodImport extends Component {
                                                 
                                                         />
                                                         <span className='type-title'>
-                                                            {type}
+                                                            {this.getTypeNamebyTypeID(type)}
                                                         </span>
                                                     </div>
                                                     

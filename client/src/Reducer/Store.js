@@ -24,6 +24,9 @@ import statusPayEmployeeReducer from './Status/StatusPayMoneyStatus';
 import listProductReducer from './ListProductReducer';
 import typeProductReducer from './typeProductReducer';
 import chooseTypeProductReducer from './chooseTypeProduct';
+import typeProductValueReducer from './TypeProductValueReducer';
+
+
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -50,6 +53,7 @@ const allReducers = redux.combineReducers({
     objectEditShift: objectEditShiftReducer,
     statusDarkmode: statusDarkmodeReducer,
     statusConfirmPassword: statusModalConfirmPasswordReducer,
+    typeProductValue: typeProductValueReducer,
     listProduct: listProductReducer,
     typeProduct: typeProductReducer,
     chooseTypeProduct: chooseTypeProductReducer,
