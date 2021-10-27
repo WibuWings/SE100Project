@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken"); // authentication & authorization
 const PRIVATE_KEY = require("../privateKey"); // temp private key
 const bcrypt = require("bcryptjs");
 
+
 const mongoose = require("mongoose");
 const Manager = require("../models/manager"); // db model
 const Store = require("../models/store"); //
@@ -209,8 +210,10 @@ class meProfile {
         const email = req.body.email;
         const newPassword = req.body.newPass;
         const curPass = req.body.curPass;
-        const curPassJWT = res.locals.decoded.password
-        if (curPass === curPassJWT) {
+        Manager.findOne({ _id: email })
+            .exec()
+            .then((data) => {
+        if (bcrypt.compareSync(curPass, data.password)) {
         Manager.findOneAndUpdate(
             {
                 email: email,
@@ -249,7 +252,15 @@ class meProfile {
             );;
         }
 
-    };
+    })  
+        .catch((err) => {
+            res.send(
+                JSON.stringify({
+                    status: STATUS.FAILURE,
+                    message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
+                 })  
+            );
+        });};
     updateImage = async (req, res) => {
         const email = req.body.email;
         const image = req.body.avatar
