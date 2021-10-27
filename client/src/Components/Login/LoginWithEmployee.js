@@ -117,6 +117,9 @@ class LoginWithEmployee extends Component {
         formGroup.querySelector('.form-message').innerText = "";
     }
 
+    componentWillMount() {
+        document.title = 'Employee'
+    }
 
     render() {
         const enterPress = this.isLoginCheck;

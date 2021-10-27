@@ -1,7 +1,7 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const mongooseDelete = require('mongoose-delete');
 const Employee = new Schema({
     _id: {
         employeeID: String,
@@ -19,5 +19,6 @@ const Employee = new Schema({
     startDate: Date,
     endDate: Date,
 });
-
+Employee.plugin(mongooseDelete,
+    {overrideMethods: true});
 module.exports = mongoose.model('Employee',Employee);

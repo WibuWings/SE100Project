@@ -29,22 +29,19 @@ class Login extends Component {
     message = "";
 
     // Login with google
-    onLoginSuccess = (res) => {
+    onLoginSuccess = async (res) => {
         this.OutAlert();
         this.props.setRole();
-        axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
+        await axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
                 console.log("thành công");
                 console.log(res.data);
                 switch (res.data.status) {
                     case 1:
-                        this.message = res.data.message;
-                        this.setState({
-                            statusSucces: true,
-                        })
                         localStorage.setItem('token', res.data.token);
                         const data = {
-                            email: res.data.data._id,
+                            _id: res.data.data_id,
+                            email: res.data.data.email,
                             firstName: res.data.data.firstName ? res.data.data.firstName : "",
                             lastName: res.data.data.lastName ? res.data.data.lastName : "",
                             old: res.data.data.old ? res.data.data.old : "",
@@ -55,8 +52,9 @@ class Login extends Component {
                             district: res.data.data.district ? res.data.data.district : "0",
                             address: res.data.data.address ? res.data.data.address : "",
                         }
-                        this.props.updateProfile(data);
-                        this.props.updateAvatar(res.data.data.imgAvt);
+                        this.props.updateProfile(res.data.data.manager);
+                        this.props.updateAvatar(res.data.data.imgUrl);
+                        this.props.updateShiftTypes(res.data.data.shiftTypes);
                         this.props.changeLoginStatus();
                         break;
                     case -1:
@@ -106,25 +104,23 @@ class Login extends Component {
                     // console.log(res.data.email);
                     switch (res.data.status) {
                         case 1:
-                            this.message = res.data.message;
-                            this.setState({
-                                statusSucces: true,
-                            })
                             localStorage.setItem('token', res.data.token);
                             const data = {
-                                email: res.data.email ? res.data.email : res.data.data._id,
-                                firstName: res.data.data.firstName ? res.data.data.firstName : "cc",
-                                lastName: res.data.data.lastName ? res.data.data.lastName : "abc",
-                                old: res.data.data.old ? res.data.data.old : "",
-                                gender: res.data.data.gender ? res.data.data.gender : "0",
-                                storeName: res.data.data.storeName ? res.data.data.storeName : "",
-                                tel: res.data.data.phoneNumber ? res.data.data.phoneNumber : "",
-                                salary: res.data.data.salary ? res.data.data.salary : "",
-                                province: res.data.data.province ? res.data.data.province : "0",
-                                district: res.data.data.district ? res.data.data.district : "0",
-                                address: res.data.data.address ? res.data.data.address : "",
+                                _id: res.data.data.manager._id,
+                                email: res.data.data.manager.email,
+                                firstName: res.data.data.manager.firstName ? res.data.data.manager.firstName : "",
+                                lastName: res.data.data.manager.lastName ? res.data.data.manager.lastName : "",
+                                old: res.data.data.manager.old ? res.data.data.manager.old : "",
+                                gender: res.data.data.manager.gender ? res.data.data.manager.gender : "0",
+                                storeName: res.data.data.manager.storeName ? res.data.data.manager.storeName : "",
+                                tel: res.data.data.manager.phoneNumber ? res.data.data.manager.phoneNumber : "",
+                                province: res.data.data.manager.province ? res.data.data.manager.province : "0",
+                                district: res.data.data.manager.district ? res.data.data.manager.district : "0",
+                                address: res.data.data.manager.address ? res.data.data.manager.address : "",
                             }
-                            this.props.updateProfile(data);
+                            this.props.updateAvatar(res.data.data.manager.imgUrl);
+                            this.props.updateProfile(res.data.data.manager);
+                            this.props.updateShiftTypes(res.data.data.shiftTypes);
                             this.props.changeLoginStatus();
                             break;
                         case -1:
@@ -194,6 +190,12 @@ class Login extends Component {
         formGroup.classList.remove('invalid');
         formGroup.querySelector('.form-message').innerText = "";
     }
+
+
+    componentWillMount() {
+        document.title = 'Login'
+    }
+
 
 
     render() {
@@ -296,16 +298,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         updateProfile: (data) => {
             dispatch({
                 type: "UPDATA_DATA_USER",
-                email: data.email,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                old: data.old,
-                gender: data.gender,
-                storeName: data.storeName,
-                tel: data.tel,
-                province: data.province,
-                district: data.district,
-                address: data.address,
+                data: data,
             })
         },
         setRole: () => {
@@ -318,6 +311,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "UPDATE_AVATAR",
                 avatar: avatar,
+            })
+        },
+        updateShiftTypes: (shiftTypes) => {
+            dispatch({
+                type: "UPDATE_DATA_SHIFT_USER",
+                shiftTypes: shiftTypes,
             })
         }
     }

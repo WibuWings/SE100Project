@@ -18,29 +18,21 @@ class App extends Component {
     if (localStorage.getItem('token') && localStorage.getItem('token') !== "") {
       axios.post(`http://localhost:5000/refresh`, {
         token: localStorage.getItem('token'),
-      }).then(res => {
-        console.log(res);
-        if (res.status === 200) {
-          localStorage.setItem('token', res.data.token);
-          const data = {
-            email: res.data.data._id,
-            firstName: res.data.data.firstName ? res.data.data.firstName : "",
-            lastName: res.data.data.lastName ? res.data.data.lastName : "",
-            old: res.data.data.old ? res.data.data.old : "",
-            gender: res.data.data.gender ? res.data.data.gender : "0",
-            storeName: res.data.data.storeName ? res.data.data.storeName : "",
-            tel: res.data.data.phoneNumber ? res.data.data.phoneNumber : "",
-            province: res.data.data.province ? res.data.data.province : "0",
-            district: res.data.data.district ? res.data.data.district : "0",
-            address: res.data.data.address ? res.data.data.address : "",
-          }
-          this.props.updateProfile(data);
-          this.props.updateAvatar(res.data.data.imgUrl)
-          this.props.changeLoginStatus();
-        }
-      }).catch(err => {
-        console.log("thất bại");
       })
+        .then(res => {
+          console.log("Thành công");
+          console.log(res.data);
+          if (res.status === 200) {
+            localStorage.setItem('token', res.data.token);
+            this.props.updateProfile(res.data.data.manager);
+            this.props.updateAvatar(res.data.data.manager.imgUrl)
+            this.props.updateShiftTypes(res.data.data.shiftTypes)
+            this.props.changeLoginStatus();
+          }
+        })
+        .catch(err => {
+          console.log("thất bại");
+        })
     }
   }
 
@@ -75,22 +67,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     updateProfile: (data) => {
       dispatch({
         type: "UPDATA_DATA_USER",
-        email: data.email,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        old: data.old,
-        gender: data.gender,
-        storeName: data.storeName,
-        tel: data.tel,
-        province: data.province,
-        district: data.district,
-        address: data.address,
+        data: data,
       })
     },
     updateAvatar: (avatar) => {
       dispatch({
         type: "UPDATE_AVATAR",
         avatar: avatar,
+      })
+    },
+    updateShiftTypes: (shiftTypes) => {
+      dispatch({
+        type: "UPDATE_DATA_SHIFT_USER",
+        shiftTypes: shiftTypes,
       })
     }
   }
