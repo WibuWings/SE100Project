@@ -49,7 +49,7 @@ class meProfile {
         const old = req.body.old                  
         Store.findOneAndUpdate(
                 {
-                    email: email
+                    _id: email
                 },
                 {$set:{
                     storeName: newstoreName,
