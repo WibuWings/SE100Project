@@ -67,19 +67,8 @@ class Register extends Component {
                                 statusSuccess: true,
                             })
                             localStorage.setItem('token', res.data.token);
-                            const data = {
-                                email: res.data.email,
-                                firstName: "",
-                                lastName:  "",
-                                old:  "",
-                                gender: "0",
-                                storeName: "",
-                                tel: document.getElementById('tel').value,
-                                province: "0",
-                                district:  "0",
-                                address:  "",
-                            }
-                            this.props.updateProfile(data);
+                            this.props.updateProfile(res.data.data);
+                            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                             this.props.changeLoginStatus();
                             break;
                         case -1:
@@ -358,18 +347,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         updateProfile: (data) => {
             dispatch({
                 type: "UPDATA_DATA_USER",
-                email: data.email,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                old: data.old,
-                gender: data.gender,
-                storeName: data.storeName,
-                tel: data.tel,
-                province: data.province,
-                district: data.district,
-                address: data.address,
+                data: data,
             })
-        }
+        },
+        updateAvatar: (avatar) => {
+            dispatch({
+                type: "UPDATE_AVATAR",
+                avatar: avatar,
+            })
+        },
     }
 }
 

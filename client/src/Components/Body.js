@@ -5,7 +5,8 @@ import {
 import DashboardURL from '../Router/DashboardURL';
 import { connect } from 'react-redux';
 import SideNavBar from './Partials/SideNavBar';
-
+import Alert from '@mui/material/Alert';
+import { FiChevronRight, FiXSquare } from "react-icons/fi";
 import '../css/Body.css'
 import ModalConfirmPassword from './ModalConfirmPassword';
 
@@ -28,6 +29,8 @@ class Body extends Component {
                         <ModalConfirmPassword></ModalConfirmPassword>
                     </div> : null
                 }
+                 {/* <Alert onClick={} className="message-error" severity="success">Hello — check it out! <FiXSquare></FiXSquare></Alert> */}
+                {/* {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null} */}
             </div>
         );
     }
