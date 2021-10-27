@@ -11,7 +11,6 @@ import axios from 'axios';
 class App extends Component {
   constructor(props) {
     super(props);
-
   }
 
   async componentWillMount() {
@@ -24,7 +23,7 @@ class App extends Component {
           console.log(res.data);
           if (res.status === 200) {
             localStorage.setItem('token', res.data.token);
-            this.props.updateProfile(res.data.data.manager);
+            this.props.updateProfile(res.data.data);
             this.props.updateAvatar(res.data.data.manager.imgUrl)
             this.props.updateShiftTypes(res.data.data.shiftTypes)
             this.props.changeLoginStatus();
