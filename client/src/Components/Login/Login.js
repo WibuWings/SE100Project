@@ -39,20 +39,7 @@ class Login extends Component {
                 switch (res.data.status) {
                     case 1:
                         localStorage.setItem('token', res.data.token);
-                        const data = {
-                            _id: res.data.data_id,
-                            email: res.data.data.email,
-                            firstName: res.data.data.firstName ? res.data.data.firstName : "",
-                            lastName: res.data.data.lastName ? res.data.data.lastName : "",
-                            old: res.data.data.old ? res.data.data.old : "",
-                            gender: res.data.data.gender ? res.data.data.gender : "0",
-                            storeName: res.data.data.storeName ? res.data.data.storeName : "",
-                            tel: res.data.data.phoneNumber ? res.data.data.phoneNumber : "",
-                            province: res.data.data.province ? res.data.data.province : "0",
-                            district: res.data.data.district ? res.data.data.district : "0",
-                            address: res.data.data.address ? res.data.data.address : "",
-                        }
-                        this.props.updateProfile(res.data.data.manager);
+                        this.props.updateProfile(res.data.data);
                         this.props.updateAvatar(res.data.data.imgUrl);
                         this.props.updateShiftTypes(res.data.data.shiftTypes);
                         this.props.changeLoginStatus();
@@ -105,21 +92,8 @@ class Login extends Component {
                     switch (res.data.status) {
                         case 1:
                             localStorage.setItem('token', res.data.token);
-                            const data = {
-                                _id: res.data.data.manager._id,
-                                email: res.data.data.manager.email,
-                                firstName: res.data.data.manager.firstName ? res.data.data.manager.firstName : "",
-                                lastName: res.data.data.manager.lastName ? res.data.data.manager.lastName : "",
-                                old: res.data.data.manager.old ? res.data.data.manager.old : "",
-                                gender: res.data.data.manager.gender ? res.data.data.manager.gender : "0",
-                                storeName: res.data.data.manager.storeName ? res.data.data.manager.storeName : "",
-                                tel: res.data.data.manager.phoneNumber ? res.data.data.manager.phoneNumber : "",
-                                province: res.data.data.manager.province ? res.data.data.manager.province : "0",
-                                district: res.data.data.manager.district ? res.data.data.manager.district : "0",
-                                address: res.data.data.manager.address ? res.data.data.manager.address : "",
-                            }
                             this.props.updateAvatar(res.data.data.manager.imgUrl);
-                            this.props.updateProfile(res.data.data.manager);
+                            this.props.updateProfile(res.data.data);
                             this.props.updateShiftTypes(res.data.data.shiftTypes);
                             this.props.changeLoginStatus();
                             break;

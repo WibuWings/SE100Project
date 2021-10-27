@@ -304,16 +304,16 @@ async function getAllData(email) {
         shiftAssigns,
         shiftTypes,
     ] = await Promise.all([
-        Coupon.find({ storeID: store._id }).exec(),
+        Coupon.find({ "_id.storeID": store._id }).exec(),
         Employee.find({ managerID: store._id }).exec(),
-        Product.find({ storeID: store._id }).exec(),
-        ProductType.find({ storeID: store._id }).exec(),
-        ProductJoinType.find({ storeID: store._id }).exec(),
-        Revenue.find({ storeID: store._id }).exec(),
-        Receipt.find({ storeID: store._id }).exec(),
-        ReturnProduct.find({ storeID: store._id }).exec(),
-        ShiftAssign.find({ storeID: store._id }).exec(),
-        ShiftType.find({ storeID: store._id }).exec(),
+        Product.find({ "_id.storeID": store._id }).exec(),
+        ProductType.find({ "_id.storeID": store._id }).exec(),
+        ProductJoinType.find({ "_id.storeID": store._id }).exec(),
+        Revenue.find({ "_id.storeID": store._id }).exec(),
+        Receipt.find({ "_id.storeID": store._id }).exec(),
+        ReturnProduct.find({ "_id.storeID": store._id }).exec(),
+        ShiftAssign.find({ "_id.storeID": store._id }).exec(),
+        ShiftType.find({  "_id.storeID": store._id }).exec(),
     ]);
 
     return {

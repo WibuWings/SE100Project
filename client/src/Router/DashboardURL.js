@@ -14,7 +14,6 @@ class DashboardURL extends Component {
     render() {
         return ( 
             <div>      
-                <Route exact path="/" component={DashBoard}></Route>
                 <Route exact path="/dashboard" component={DashBoard}></Route>
                 <Route path="/goodmanager/import" component={GoodImport}></Route>
                 <Route exact path="/goodmanager" component={GoodManager}></Route>
@@ -22,6 +21,7 @@ class DashboardURL extends Component {
                 <Route exact path="/receiptmanager" component={ReceiptManager}></Route> 
                 <Route exact path="/profile" component={Profile}></Route>
                 <Route exact path="/sellproduct" component={SellProduct}></Route>         
+                <Route exact path="/" component={DashBoard}></Route>
             </div>
         );
     }

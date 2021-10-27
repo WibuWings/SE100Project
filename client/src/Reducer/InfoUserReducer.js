@@ -18,17 +18,17 @@ const infoUserInitialState = {
             case "UPDATA_DATA_USER":
                 return {
                     ...state, 
-                    _id: action.data._id,
-                    email: action.data.email,
-                    firstName: action.data.firstName, 
-                    lastName: action.data.lastName,
-                    old: action.data.old, 
-                    gender: action.data.gender,
-                    storeName: action.data.storeName, 
-                    tel: action.data.phoneNumber,
-                    province: action.data.province,
-                    district: action.data.district, 
-                    address: action.data.address,    
+                    _id: action.data.manager._id,
+                    email: action.data.manager.email,
+                    firstName: action.data.manager.firstName, 
+                    lastName: action.data.manager.lastName,
+                    old: action.data.manager.old, 
+                    gender: action.data.manager.gender,
+                    storeName: action.data.store.storeName, 
+                    tel: action.data.manager.phoneNumber,
+                    province: action.data.manager.province,
+                    district: action.data.manager.district, 
+                    address: action.data.manager.address,    
                 }
             case "UPDATA_PROFILE_DATA_USER":
                 return {
