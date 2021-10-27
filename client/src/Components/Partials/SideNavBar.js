@@ -29,6 +29,7 @@ class SideNavBar extends Component {
         this.state ={
             change: true,
         }
+        this.getInitialScreen();
     }
     active= ['active', '', '','','',''];
     
@@ -41,6 +42,38 @@ class SideNavBar extends Component {
         this.setState({change: !this.state.change});
     }   
 
+    getInitialScreen() {
+        var link = window.location.href;
+        link = link.substring(link.lastIndexOf('/') + 1);
+
+        for(var i = 0; i<this.active.length;i++)
+        {
+            this.active[i]='';
+        }
+
+        switch(link)
+        {
+            case "profile":
+                this.active[1] = 'active';
+                break;
+            case "employeemanager":
+                this.active[2] = 'active';
+                break;
+            case "goodmanager":
+                this.active[3] = 'active';
+                break;
+            case "receiptmanager":
+                this.active[4] = 'active';
+                break;
+            case "sellproduct":
+                this.active[5] = 'active';
+                break;
+            default :
+                this.active[0] = 'active';
+                break;
+        }
+        this.setState({change: !this.state.change});
+    }
     render() {
 
         const navbarContainer = document.querySelector('.navbar-container');

@@ -273,7 +273,6 @@ class ProfileDetail extends Component {
                                     variant="outlined"
                                 >
                                     <option value="0">--Select province--</option>
-                                    
                                     {(this.props.country.length !== 0) ? this.props.country[0].map(item => {
                                         return (
                                             <option value={item.codename}>
@@ -297,10 +296,7 @@ class ProfileDetail extends Component {
                                     variant="outlined"
                                 >
                                     <option value="0">--Select district--</option>
-                                    {
-                                        console.log(this.props.district)
-                                    }
-                                    {(this.props.district.length !== 0) ? this.props.district[0].map(item => {
+                                    {(this.props.district.length !== 0) ? this.props.district.map(item => {
                                         return (
                                             <option value={item.codename}>
                                                 {item.name}
