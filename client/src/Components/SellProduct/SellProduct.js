@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import exampleImg from '../../img/good-example.jpg'
 import { BiPlusMedical } from 'react-icons/bi';
 import { connect } from 'react-redux'
+import axios from 'axios';
 
 class SellProduct extends Component {
 
@@ -19,6 +20,7 @@ class SellProduct extends Component {
         this.state = {
             value: 0,
         }
+        this.loadAllType();
     }
 
 
@@ -39,6 +41,36 @@ class SellProduct extends Component {
 
     AddProduct = () => {
         console.log("click");
+    }
+
+    async loadAllType() {
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+
+        await axios.get(`http://localhost:5000/api/product/type`, 
+        {
+            params: {...data}
+        })
+            .then(res => {
+                result = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        //Get data và lưu các tên Type vào bảng
+        var listTypeInfor=[];
+        for(var i=0; i < result.length ; i++)
+        {
+            listTypeInfor.push(result[i]);
+        }
+        this.props.getTypeToReducer(listTypeInfor);
+        this.setState({change: true});
     }
 
     render() {
@@ -123,6 +155,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         listProduct: state.listProduct,
         chooseTypeProduct: state.chooseTypeProduct,
+        infoUser: state.infoUser,
     }
 }
 
@@ -133,6 +166,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_ADD_STATUS",
             });
         },
+        getTypeToReducer: (data) => {
+            dispatch({
+                type: "GET_PRODUCT_TYPE",
+                data: data
+            });
+        }
     }
 }
 
