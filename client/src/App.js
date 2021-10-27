@@ -24,7 +24,7 @@ class App extends Component {
           if (res.status === 200) {
             localStorage.setItem('token', res.data.token);
             this.props.updateProfile(res.data.data);
-            this.props.updateAvatar(res.data.data.manager.imgUrl)
+            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
             this.props.updateShiftTypes(res.data.data.shiftTypes)
             this.props.changeLoginStatus();
           }

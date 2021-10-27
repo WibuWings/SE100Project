@@ -40,7 +40,7 @@ class Login extends Component {
                     case 1:
                         localStorage.setItem('token', res.data.token);
                         this.props.updateProfile(res.data.data);
-                        this.props.updateAvatar(res.data.data.imgUrl);
+                        this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                         this.props.updateShiftTypes(res.data.data.shiftTypes);
                         this.props.changeLoginStatus();
                         break;
@@ -78,22 +78,21 @@ class Login extends Component {
     }
 
     // Check để thay đổi trạng thái đã login hay chưa
-    isLoginCheck = (e) => {
+    isLoginCheck = async (e) => {
         this.OutAlert();
         this.props.setRole();
         if (this.blurEmail() && this.blurPassword()) {
-            axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
+            await axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
                 email: document.querySelector('#email').value,
                 password: document.getElementById('password').value,
             })
                 .then(res => {
                     console.log(res.data);
-                    // console.log(res.data.email);
                     switch (res.data.status) {
                         case 1:
                             localStorage.setItem('token', res.data.token);
-                            this.props.updateAvatar(res.data.data.manager.imgUrl);
                             this.props.updateProfile(res.data.data);
+                            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                             this.props.updateShiftTypes(res.data.data.shiftTypes);
                             this.props.changeLoginStatus();
                             break;
