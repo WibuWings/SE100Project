@@ -170,15 +170,18 @@ class Authentication {
 
                             newStore.save();
 
-                            res.send(
-                                JSON.stringify({
-                                    status: STATUS.SUCCESS,
-                                    message: MESSAGES.REGISTER_SUCCESS,
-                                    token: JWTAuthToken({email: data.email}),
-                                    email: req.body.email,
-                                    _id: data._id,
-                                })
-                            );
+                            getAllData(data.email).then((result) => {
+                                res.send(
+                                    JSON.stringify({
+                                        status: STATUS.SUCCESS,
+                                        message: MESSAGES.SIGN_IN_SUCCESS,
+                                        token: JWTAuthToken({email: data.email}),
+                                        email: data.email,
+                                        _id: data.email,
+                                        data: result,
+                                    })
+                                );
+                            });
                         })
                         .catch((err) => {
                             res.send(
