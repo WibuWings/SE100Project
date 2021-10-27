@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken"); // authentication & authorization
 const PRIVATE_KEY = require("../privateKey"); // temp private key
 const bcrypt = require("bcryptjs");
 
+
 const mongoose = require("mongoose");
 const Manager = require("../models/manager"); // db model
 const Store = require("../models/store"); //
@@ -49,10 +50,10 @@ class meProfile {
         const old = req.body.old                  
         Store.findOneAndUpdate(
                 {
-                    _id: email,
+                    _id: email
                 },
                 {$set:{
-                    name: newstoreName,
+                    storeName: newstoreName,
                 }},
                 {
                     returnOriginal: false,
@@ -62,46 +63,49 @@ class meProfile {
                         console.log("Something wrong when updating data!");
                     }
                     else{
-                    console.log(doc);}}
+                        Manager.findOneAndUpdate(
+                        {
+                            email : email,
+                        },
+                        {$set:{
+                            lastName:newlastName,
+                            firstName:newfirstName,
+                            phoneNumber:newphoneNumber,
+                            address:newAddress,
+                            province:newProvince,
+                            district:newDistrict,
+                            storeID: email,
+                            gender:newgender,
+                            old:old,
+                        }},
+                        {
+                            returnOriginal: false,
+                        },
+                        function(err, doc){
+                            if(err){
+                                res.send(
+                                    JSON.stringify({
+                                        status: STATUS.FAILURE,
+                                        message: MESSAGES.FAILURE_UPDATE,
+                                    })
+                                );;
+                            }
+                            else{
+                            var newDoc = { ...doc._doc, storeName : newstoreName}
+                            console.log(newDoc);
+                            
+                            res.status(200).send(
+                                JSON.stringify({
+                                    token : res.locals.newToken,
+                                    email : res.locals.decoded.email,
+                                    data : newDoc,  
+                                })
+                            )}})
+                    }}
                 
             )   
 
-        Manager.findOneAndUpdate(
-            {
-                _id : email,
-            },
-            {$set:{
-                lastName:newlastName,
-                firstName:newfirstName,
-                phoneNumber:newphoneNumber,
-                address:newAddress,
-                province:newProvince,
-                district:newDistrict,
-                storeID: email,
-                gender:newgender,
-                old:old,
-            }},
-            {
-                returnOriginal: false,
-            },
-            function(err, doc){
-                if(err){
-                    res.send(
-                        JSON.stringify({
-                            status: STATUS.FAILURE,
-                            message: MESSAGES.FAILURE_UPDATE,
-                        })
-                    );;
-                }
-                else{
-                console.log(doc);
-                res.status(200).send(
-                    JSON.stringify({
-                        token : res.locals.newToken,
-                        email : res.locals.decoded.email,
-                        data : doc
-                    })
-                )}})}
+}
         
     addShift = async (req, res) => {
         const idUserJwt = req.body.email;
@@ -206,8 +210,10 @@ class meProfile {
         const email = req.body.email;
         const newPassword = req.body.newPass;
         const curPass = req.body.curPass;
-        const curPassJWT = res.locals.decoded.password
-        if (curPass === curPassJWT) {
+        Manager.findOne({ _id: email })
+            .exec()
+            .then((data) => {
+        if (bcrypt.compareSync(curPass, data.password)) {
         Manager.findOneAndUpdate(
             {
                 email: email,
@@ -246,7 +252,15 @@ class meProfile {
             );;
         }
 
-    };
+    })  
+        .catch((err) => {
+            res.send(
+                JSON.stringify({
+                    status: STATUS.FAILURE,
+                    message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
+                 })  
+            );
+        });};
     updateImage = async (req, res) => {
         const email = req.body.email;
         const image = req.body.avatar

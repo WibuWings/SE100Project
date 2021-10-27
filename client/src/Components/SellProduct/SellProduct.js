@@ -122,7 +122,6 @@ class SellProduct extends Component {
                         </Grid>
                         <Grid item md={4} sm={4} >
                             <div style={{ borderRadius: '8px', marginTop: '20px', backgroundColor: 'beige', height: 'calc(100vh - 40px)', overflow: 'hidden', overflowX: 'hidden' }}>
-                                avasc
                                 <div id="choses-product" style={{ height: '70%', backgroundColor: 'red', margin: '10px', overflowY: 'scroll' }} >
                                     <Grid sty container spacing={0}>
                                         <Grid item md={12} sm={12}>

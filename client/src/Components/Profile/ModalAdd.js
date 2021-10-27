@@ -12,19 +12,34 @@ import axios from 'axios';
 class ModalAdd extends Component {
     constructor(props) {
         super(props);
+
+        if (this.props.editShiftStatus) {
+            var _timeFrom = new Date();
+            var fromHour = parseInt(this.props.objectEditShift.from.slice(0, this.props.objectEditShift.from.indexOf(':')));
+            var fromMin = parseInt(this.props.objectEditShift.from.slice(this.props.objectEditShift.from.indexOf(':') + 1));
+            _timeFrom.setHours(fromHour, fromMin);
+
+            var _timeTo = new Date();
+            var toHour = parseInt(this.props.objectEditShift.to.slice(0, this.props.objectEditShift.from.indexOf(':')));
+            var toMin = parseInt(this.props.objectEditShift.to.slice(this.props.objectEditShift.from.indexOf(':') + 1));
+            _timeTo.setHours(toHour, toMin);
+        }
+
+
         this.state = {
-            timeFrom: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.from} GMT+0700 (Giờ Đông Dương)` : Date.now(),
-            timeTo: this.props.editShiftStatus ? `Mon Oct 11 2021 ${this.props.objectEditShift.to} GMT+0700 (Giờ Đông Dương)` : Date.now(),
+            timeFrom: this.props.editShiftStatus ? _timeFrom : Date.now(),
+            timeTo: this.props.editShiftStatus ? _timeTo : Date.now(),
             isSalary: false,
             isDescription: false,
             isTimeTo: false,
+            valueTime: this.props.editShiftStatus ? 1 : null,
         }
     }
 
-    descriptionShift = "Example : abc"
-    timeFrom = "00:00 AM"
-    timeTo = "00:00 PM"
-    salary = 10000
+    descriptionShift = this.props.editShiftStatus ? this.props.objectEditShift.description : "Ex : abc"
+    timeFrom = this.props.editShiftStatus ? this.props.objectEditShift.from : "00:00 AM"
+    timeTo = this.props.editShiftStatus ? this.props.objectEditShift.to : "00:00 AM"
+    salary = this.props.editShiftStatus ? this.props.objectEditShift.salary : 10000
 
     // Handle user
     hanhleCancel = (e) => {
@@ -90,21 +105,19 @@ class ModalAdd extends Component {
         return result;
     }
 
-    editShift = () => {
+    editShift = async () => {
         if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
             var data = {
                 token: localStorage.getItem('token'),
                 idUser: this.props.infoUser.email,
-                id: this.props.objectEditShift._id,
+                id: this.props.objectEditShift.id,
                 salary: this.salary,
                 description: this.descriptionShift,
                 from: this.timeFrom,
                 to: this.timeTo,
             }
-            this.props.updateShift(data);
-            this.props.changeEditShiftStatus();
-            this.props.changeAddStatus();
-            axios.post(`http://localhost:5000/api/profile/update-shift`, data)
+
+            await axios.post(`http://localhost:5000/api/profile/update-shift`, data)
                 .then(res => {
                     localStorage.setItem('token', res.data.token);
                     console.log('thành công');
@@ -112,21 +125,13 @@ class ModalAdd extends Component {
                 .catch(err => {
                     console.log("lỗi");
                 })
+            this.props.updateShift(data);
+            this.props.changeEditShiftStatus();
+            this.props.changeAddStatus();
         }
-        this.props.updateShift(data);
-        this.props.changeEditShiftStatus();
-        this.props.changeAddStatus();
-        axios.post(`http://localhost:5000/api/profile/update-shift`, data)
-        .then(res => {
-            console.log('thành công');
-        })
-        .catch(err => {
-            console.log("lỗi");
-        })
     }
 
     blurSalary = (e) => {
-        console.log(e.target.value);
         if (e.target.value <= -1) {
             this.setState({
                 isSalary: true,
@@ -142,17 +147,24 @@ class ModalAdd extends Component {
     // Call API
     addShift = () => {
         if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
-            var data = {
-                
+            const code = this.makeCode(6);
+            const data = {
                 idUser: this.props.infoUser.email,
-                id: this.makeCode(6),
+                id: code,
                 salary: this.salary,
                 description: this.descriptionShift,
                 from: this.timeFrom,
                 to: this.timeTo,
             }
+            const data1 = {
+                name: this.descriptionShift,
+                salary: this.salary,
+                timeFrom: this.timeFrom,
+                timeEnd: this.timeTo,
+                _id: { shiftID: code }
+            }
             if (data) {
-                this.props.addShift(data);
+                this.props.addShift(data1);
                 axios.post(`http://localhost:5000/api/profile/add-shift`, {
                     email: this.props.infoUser.email,
                     token: localStorage.getItem('token'),
@@ -213,6 +225,7 @@ class ModalAdd extends Component {
                                         <TimePicker
                                             label="Time From"
                                             value={this.state.timeFrom}
+                                            className="timeFrom"
                                             onChange={(newValue) => this.changeTimeFrom(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
                                         />

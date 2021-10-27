@@ -75,16 +75,18 @@ class Authentication {
                                 })
                                 newStore.save();
 
-                                res.send(
-                                    JSON.stringify({
-                                        status: STATUS.SUCCESS,
-                                        message: MESSAGES.SIGN_IN_SUCCESS,
-                                        token: JWTAuthToken({email:result.email}),
-                                        email: result.email,
-                                        _id: result._id,
-                                        data: {},
-                                    })
-                                );
+                                getAllData(result.email).then((data) => {
+                                    res.send(
+                                        JSON.stringify({
+                                            status: STATUS.SUCCESS,
+                                            message: MESSAGES.SIGN_IN_SUCCESS,
+                                            token: JWTAuthToken({email:result.email}),
+                                            email: req.body.email,
+                                            _id: req.body.email,
+                                            data,
+                                        })
+                                    );
+                                });
                             })
                         }
                     });
@@ -114,8 +116,9 @@ class Authentication {
                             JSON.stringify({
                                 status: STATUS.SUCCESS,
                                 message: MESSAGES.SIGN_IN_SUCCESS,
-                                token: JWTAuthToken(req.body),
+                                token: JWTAuthToken({email: req.body.email}),
                                 email: req.body.email,
+                                _id: req.body.email,
                                 data,
                             })
                         );
@@ -167,15 +170,18 @@ class Authentication {
 
                             newStore.save();
 
-                            res.send(
-                                JSON.stringify({
-                                    status: STATUS.SUCCESS,
-                                    message: MESSAGES.REGISTER_SUCCESS,
-                                    token: JWTAuthToken({email: data.email}),
-                                    email: req.body.email,
-                                    _id: data._id,
-                                })
-                            );
+                            getAllData(data.email).then((result) => {
+                                res.send(
+                                    JSON.stringify({
+                                        status: STATUS.SUCCESS,
+                                        message: MESSAGES.SIGN_IN_SUCCESS,
+                                        token: JWTAuthToken({email: data.email}),
+                                        email: data.email,
+                                        _id: data.email,
+                                        data: result,
+                                    })
+                                );
+                            });
                         })
                         .catch((err) => {
                             res.send(
@@ -298,16 +304,16 @@ async function getAllData(email) {
         shiftAssigns,
         shiftTypes,
     ] = await Promise.all([
-        Coupon.find({ storeID: store._id }).exec(),
+        Coupon.find({ "_id.storeID": store._id }).exec(),
         Employee.find({ managerID: store._id }).exec(),
-        Product.find({ storeID: store._id }).exec(),
-        ProductType.find({ storeID: store._id }).exec(),
-        ProductJoinType.find({ storeID: store._id }).exec(),
-        Revenue.find({ storeID: store._id }).exec(),
-        Receipt.find({ storeID: store._id }).exec(),
-        ReturnProduct.find({ storeID: store._id }).exec(),
-        ShiftAssign.find({ storeID: store._id }).exec(),
-        ShiftType.find({ storeID: store._id }).exec(),
+        Product.find({ "_id.storeID": store._id }).exec(),
+        ProductType.find({ "_id.storeID": store._id }).exec(),
+        ProductJoinType.find({ "_id.storeID": store._id }).exec(),
+        Revenue.find({ "_id.storeID": store._id }).exec(),
+        Receipt.find({ "_id.storeID": store._id }).exec(),
+        ReturnProduct.find({ "_id.storeID": store._id }).exec(),
+        ShiftAssign.find({ "_id.storeID": store._id }).exec(),
+        ShiftType.find({  "_id.storeID": store._id }).exec(),
     ]);
 
     return {

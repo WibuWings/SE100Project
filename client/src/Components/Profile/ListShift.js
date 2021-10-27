@@ -54,12 +54,7 @@ class ListShift extends Component {
         this.props.changeAddStatus();
     }
 
-    handleDelete = (e) => {
-        var elementShift = e.target.parentElement;
-        var idShift = elementShift.name;
-        if (!idShift) {
-            idShift = elementShift.parentElement.name;
-        }
+    handleDelete = (idShift) => {
 
         if (idShift) {
             this.props.deleteShift(idShift);
@@ -101,17 +96,17 @@ class ListShift extends Component {
                                 return (
                                     <TableBody>
                                         <StyledTableRow key="abc">
-                                            <StyledTableCell component="th" scope="row">{item.description}</StyledTableCell>
+                                            <StyledTableCell component="th" scope="row">{item.name}</StyledTableCell>
                                             <StyledTableCell align="center">{item.salary}</StyledTableCell>
-                                            <StyledTableCell align="center">{item.from}</StyledTableCell>
-                                            <StyledTableCell align="center">{item.to}</StyledTableCell>
+                                            <StyledTableCell align="center">{item.timeFrom}</StyledTableCell>
+                                            <StyledTableCell align="center">{item.timeEnd}</StyledTableCell>
                                             <StyledTableCell align="center">
-                                                <IconButton name={item.id} onClick={(e) => this.handleEdit(e, item.id, item.description, item.from, item.to, item.salary)} color="secondary" aria-label="fingerprint">
+                                                <IconButton name={item._id.shiftID} onClick={(e) => this.handleEdit(e, item._id.shiftID, item.name, item.timeFrom, item.timeEnd, item.salary)} color="secondary" aria-label="fingerprint">
                                                     <FiEdit />
                                                 </IconButton>
                                             </StyledTableCell>
                                             <StyledTableCell align="center">
-                                                <IconButton name={item.id} onClick={(e) => this.handleDelete(e)} style={{ color: 'red' }} aria-label="fingerprint">
+                                                <IconButton name={item._id.shiftID} onClick={(e) => this.handleDelete(item._id.shiftID)} style={{ color: 'red' }} aria-label="fingerprint">
                                                     <FiTrash2 />
                                                 </IconButton>
                                             </StyledTableCell>
