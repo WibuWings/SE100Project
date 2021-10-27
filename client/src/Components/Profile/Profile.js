@@ -19,7 +19,9 @@ class Profile extends Component {
         }
     }
 
-
+    componentWillMount() {
+        document.title = 'Profile'
+    }
     render() {
         return (
             <div className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>

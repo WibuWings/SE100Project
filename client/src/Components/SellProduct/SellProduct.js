@@ -41,13 +41,17 @@ class SellProduct extends Component {
         console.log("click");
     }
 
+    componentWillMount() {
+        document.title = 'Sell Product'
+    }
+
     render() {
         return (
             <div className="sell-product" >
                 <Container maxWidth="xl">
                     <Grid container spacing={2}>
                         <Grid item md={8} sm={4}  >
-                            <div style={{ borderRadius: '8px', marginTop: '20px', backgroundColor: 'beige', height: 'calc(100vh - 40px)', overflow: 'scroll', overflow: 'hidden' }}>
+                            <div style={{ borderRadius: '8px', marginTop: '20px', backgroundColor: 'beige', height: 'calc(100vh - 40px)', overflow: 'hidden' }}>
                                 <div style={{ overflow: 'hidden', marginBottom: '5px' }}>
                                     <Tabs></Tabs>
                                 </div>
@@ -57,7 +61,7 @@ class SellProduct extends Component {
                                             if (this.props.chooseTypeProduct === 'all') {
                                                 return value;
                                             }
-                                            if (value.type == this.props.chooseTypeProduct) {
+                                            if (value.type === this.props.chooseTypeProduct) {
                                                 return value
                                             }
                                         }).map(value => (

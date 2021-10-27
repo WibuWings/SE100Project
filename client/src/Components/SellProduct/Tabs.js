@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { useSelector , useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function IconLabelTabs() {
     const [value, setValue] = React.useState(0);
@@ -12,13 +12,14 @@ export default function IconLabelTabs() {
         setValue(newValue);
         console.log(newValue);
         var index;
-        if ( newValue === 0 ) {
+        if (newValue === 0) {
             index = 'all'
         } else {
-            typeProduct.map((value ,key) => {
-                 if (key === newValue - 1) {
+            typeProduct.map((value, key) => {
+                if (key === newValue - 1) {
                     index = value.type
                 }
+                return true;
             })
         }
 
@@ -35,9 +36,9 @@ export default function IconLabelTabs() {
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
         >
-            <Tab  label="Tất cả" />
+            <Tab label="Tất cả" />
             {typeProduct.map(value => (
-                <Tab  label={value.name} />
+                <Tab label={value.name} />
             ))}
         </Tabs>
     );

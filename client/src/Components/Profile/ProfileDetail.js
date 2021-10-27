@@ -16,7 +16,7 @@ class ProfileDetail extends Component {
         }
     }
 
-    SaveDetails = () => {
+    SaveDetails = async () => {
         if (this.state.isTel && this.state.isOld) {
             const data = {
                 token: localStorage.getItem('token'),
@@ -32,22 +32,31 @@ class ProfileDetail extends Component {
                 address: document.querySelector('input[name="address"]').value,
             }
 
-            axios.post(`http://localhost:5000/api/profile/update-profile`, data)
+            await axios.post(`http://localhost:5000/api/profile/update-profile`, data)
                 .then(res => {
-                    localStorage.setItem('token', res.data.token);
-                    console.log("Save success");
+                    console.log(res);
+                    if (res.status === 200) {
+                        localStorage.setItem('token', res.data.token);
+                        this.props.updateProfile(data);
+                        this.props.hideAlert();
+                        this.props.showAlert("Save profile success", "success");
+                    } else {
+                        this.props.showAlert("Login timeout", "error");
+                    }
                 })
                 .catch(err => {
-                    console.log("Save faile");
+                    this.props.changeLoginStatus();
+                    this.props.hideAlert();
+                    this.props.showAlert("Login timeout, signin again", "warning");
                 })
-
-            this.props.updateProfile(data);
         }
     }
 
     changeCountry = (e) => {
         console.log(this.state.listProvince);
-        this.props.updateDistrict(this.state.listProvince.filter(word => word.codename === e.target.value)[0].districts)
+        if (e.target.value !== '0') {
+            this.props.updateDistrict(this.state.listProvince.filter(word => word.codename === e.target.value)[0].districts)
+        }
         this.setState({
             nameProvince: e.target.value,
         })
@@ -69,6 +78,7 @@ class ProfileDetail extends Component {
     changeDistrict = (e) => {
         this.setState({
             nameDistrict: e.target.value,
+            isSave: true,
         })
     }
 
@@ -138,7 +148,6 @@ class ProfileDetail extends Component {
 
 
     componentWillMount() {
-
         axios.get(`https://provinces.open-api.vn/api/?depth=2`)
             .then(res => {
                 this.props.updateProvince(res.data);
@@ -354,6 +363,23 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "UPDATA_PROFILE_DATA_USER",
                 data: data,
+            })
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        changeLoginStatus: () => {
+            dispatch({
+                type: "CHANGE_LOGIN_STATUS",
+            });
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
             })
         }
     }
