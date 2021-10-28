@@ -1,12 +1,8 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-<<<<<<< HEAD
 import { useSelector , useDispatch} from 'react-redux';
 import { Table } from '@material-ui/core';
-=======
-import { useSelector, useDispatch } from 'react-redux';
->>>>>>> origin/front-end-phuoc-dashboard
 
 export default function IconLabelTabs() {
     const [value, setValue] = React.useState(0);
