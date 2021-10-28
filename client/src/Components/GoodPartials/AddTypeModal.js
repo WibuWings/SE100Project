@@ -52,13 +52,16 @@ class AddTypeModal extends Component {
     addType = () => {
         var newTypeName = document.querySelector('input[name="typeName"]').value.trim();
         if(this.checkConstraint(newTypeName)==false)  return;
-        // var typeID = 0;
-        // if(listTypeInfor) 
+        var genTypeID = 0;
+        if(listTypeInfor.length>0)
+        {
+            genTypeID = parseInt(listTypeInfor[listTypeInfor.length-1]._id.typeID) + 1;
+        } 
         const data = {
             token: localStorage.getItem('token'),
             productType: {
                 _id:{
-                    typeID: listTypeInfor.length,
+                    typeID: genTypeID,
                     storeID: this.props.infoUser.email,
                 },
                 name: newTypeName,
