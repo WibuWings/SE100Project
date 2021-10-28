@@ -1,69 +1,73 @@
 
 const listProductInitialState = [
     {
-        description: "Rau củ cải",
+        name: "Rau củ cải",
         type: "rau",
-        price: "30 000 VNĐ"
+        sellPrice: "30 000 VNĐ"
     },
     {
-        description: "Chôm Chôm",
+        name: "Chôm Chôm",
         type: "trai_cay",
-        price: "50 000 VNĐ"
+        sellPrice: "50 000 VNĐ"
     }, 
     {
-        description: "Sầu riêng",
+        name: "Sầu riêng",
         type: "trai_cay",
-        price: "80 000 VNĐ"
+        sellPrice: "80 000 VNĐ"
     },
     {
-        description: "Rau củ cải",
+        name: "Rau củ cải",
         type: "rau",
-        price: "30 000 VNĐ"
+        sellPrice: "30 000 VNĐ"
     },
     {
-        description: "Chôm Chôm",
+        name: "Chôm Chôm",
         type: "trai_cay",
-        price: "50 000 VNĐ"
+        sellPrice: "50 000 VNĐ"
     }, 
     {
-        description: "Sầu riêng",
+        name: "Sầu riêng",
         type: "trai_cay",
-        price: "80 000 VNĐ"
+        sellPrice: "80 000 VNĐ"
     },
     {
-        description: "Rau củ cải",
+        name: "Rau củ cải",
         type: "rau",
-        price: "30 000 VNĐ"
+        sellPrice: "30 000 VNĐ"
     },
     {
-        description: "Chôm Chôm",
+        name: "Chôm Chôm",
         type: "trai_cay",
-        price: "50 000 VNĐ"
+        sellPrice: "50 000 VNĐ"
     }, 
     {
-        description: "Sầu riêng",
+        name: "Sầu riêng",
         type: "trai_cay",
-        price: "80 000 VNĐ"
+        sellPrice: "80 000 VNĐ"
     },
     {
-        description: "Rau củ cải",
+        name: "Rau củ cải",
         type: "rau",
-        price: "30 000 VNĐ"
+        sellPrice: "30 000 VNĐ"
     },
     {
-        description: "Chôm Chôm",
+        name: "Chôm Chôm",
         type: "trai_cay",
-        price: "50 000 VNĐ"
+        sellPrice: "50 000 VNĐ"
     }, 
     {
-        description: "Sầu riêng",
+        name: "Sầu riêng",
         type: "trai_cay",
-        price: "80 000 VNĐ"
+        sellPrice: "80 000 VNĐ"
     },
 ],
 
     listProductReducer = (state = listProductInitialState, action) => {
         switch (action.type) {
+            case "GET_PRODUCT_AND_TYPE":
+                return{
+                    state: action.data
+                }
             default:
                 return state
         }

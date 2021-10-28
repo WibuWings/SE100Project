@@ -73,6 +73,59 @@ class SellProduct extends Component {
         this.setState({change: true});
     }
 
+    // async loadAllGood() {
+    //     var result = [];
+    //     const data = {
+    //         token: localStorage.getItem('token'),
+    //         filter: {
+    //             storeID: this.props.infoUser.email,
+    //         }   
+    //     }
+    //     await axios.get(`http://localhost:5000/api/product/`, {
+    //         params: {...data}
+    //     })
+    //         .then(res => {
+    //             // alert("Lấy hết đc product ròi anh chai");
+    //             result = res.data.data;
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //             alert(err)
+    //         })
+    //     var listProductInfor=[];
+    //     for(var i=0; i < result.length ; i++)
+    //     {
+    //         listProductInfor.push(result[i]);
+    //     }
+    //     // Get hết từ cái productjoinType
+    //     const data1 = {
+    //         token: localStorage.getItem('token'),
+    //         filter: {
+    //             storeID: this.props.infoUser.email,
+    //         }   
+    //     }
+    //     await axios.get(`http://localhost:5000/api/product/join`, {
+    //         params: {...data}
+    //     })
+    //         .then(res => {
+    //             result = res.data.data;
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //             alert(err)
+    //         })  
+    //     // Lấy các cái jointype
+    //     var joinTypeInfor = [];
+    //     for(var i = 0 ; i < result.length; i++)
+    //     {
+    //         joinTypeInfor.push(result[i]);
+    //     }
+        
+        
+    //     this.setState({change: !this.state.change});
+    // }
+
+
     render() {
         return (
             <div className="sell-product" >
@@ -104,13 +157,13 @@ class SellProduct extends Component {
                                                         />
                                                         <CardContent style={{ padding: '5px' }}>
                                                             <Typography style={{ textAlign: 'center' }} gutterBottom variant="h6" component="div">
-                                                                {value.description}
+                                                                {value.name}
                                                             </Typography>
                                                         </CardContent>
                                                     </CardActionArea>
                                                     <CardActions style={{ justifyContent: 'center' }}>
                                                         <Button style={{ color: 'green', fontWeight: '700' }} endIcon={<BiPlusMedical></BiPlusMedical>} size="medium" color="primary">
-                                                            {value.price}
+                                                            {value.sellPrice}
                                                         </Button>
                                                     </CardActions>
                                                 </Card>
@@ -134,7 +187,7 @@ class SellProduct extends Component {
                                 </div>
                                 <ReactToPrint
                                     trigger={() => {
-                                        return <a href="#">Print this out!</a>;
+                                        return <a>Print this out!</a>;
                                     }}
                                     content={() => this.componentRef}
                                 />
@@ -168,6 +221,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         getTypeToReducer: (data) => {
             dispatch({
                 type: "GET_PRODUCT_TYPE",
+                data: data
+            });
+        },
+        getProductToReducer: (data) => {
+            dispatch({
+                type: "GET_PRODUCT_AND_TYPE",
                 data: data
             });
         }
