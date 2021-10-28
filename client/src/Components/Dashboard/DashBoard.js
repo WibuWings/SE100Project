@@ -22,6 +22,10 @@ class DashBoard extends Component {
         )
     }
 
+    componentWillMount() {
+        document.title = 'DashBoard'
+    }
+
     render() {
         return (
             <div className="dashboard" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>

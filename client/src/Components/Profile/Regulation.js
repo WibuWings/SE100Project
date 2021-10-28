@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import TimePicker from '@mui/lab/TimePicker';
+import axios from 'axios'
 
 class Regulation extends Component {
     constructor(props) {
@@ -48,6 +49,22 @@ class Regulation extends Component {
         }
     }
 
+    SaveRegulations = async () => {
+        const data = {
+            email: this.props.infoUser.email,
+            token: localStorage.getItem('token'),
+            currency:document.querySelector('select[name="currency"]').value, 
+            timeStart: this.state.timeStart,
+            timeEnd: this.state.timeEnd,
+        }
+        if (!this.state.isNumberEmployees && this.state.isSaveRegulations) {
+              console.log("save");  
+              console.log(data);
+            //   axios.post(`https://provinces.open-api.vn/api/?depth=2`, )
+        }
+
+    }
+
 
     render() {
         return (
@@ -64,15 +81,15 @@ class Regulation extends Component {
                                     name="currency"
                                     onBlur={(e) => this.blurNumberEmployees(e)}
                                     required
-                                    defaultValue={this.props.infoUser.gender}
+                                    defaultValue="vnd"
                                     variant="outlined"
                                     select
                                     SelectProps={{ native: true }}
                                 >
-                                    <option value="male">
+                                    <option value="vnd">
                                         VNĐ
                                     </option>
-                                    <option value="female">
+                                    <option value="dollar">
                                         $
                                     </option>
                                 </TextField>
@@ -82,7 +99,7 @@ class Regulation extends Component {
                                     required
                                     fullWidth
                                     label="Number of employees"
-                                    defaultValue={this.state.numberEmployees}
+                                    defaultValue='10'
                                     name="numberEmployees"
                                     variant="outlined"
                                     error={this.state.isNumberEmployees}
@@ -120,7 +137,7 @@ class Regulation extends Component {
                     </CardContent>
                     <Divider />
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
-                        <Button onClick={() => this.SaveDetails()} disabled={!this.state.isSaveRegulations} color="primary" variant="contained">Save details</Button>
+                        <Button onClick={() => this.SaveRegulations()} disabled={!this.state.isSaveRegulations} color="primary" variant="contained">Save</Button>
                     </Box>
                 </Card>
             </div>
@@ -130,26 +147,12 @@ class Regulation extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        country: state.country,
-        district: state.district,
         infoUser: state.infoUser,
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        updateProvince: (data) => {
-            dispatch({
-                type: "UPDATE_DATA_PROVINCE",
-                data: data,
-            })
-        },
-        updateDistrict: (data) => {
-            dispatch({
-                type: "UPDATE_DATA_DISTRICT",
-                data: data,
-            })
-        },
         updateProfile: (data) => {
             dispatch({
                 type: "UPDATA_DATA_USER",

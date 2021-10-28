@@ -33,9 +33,19 @@ class ChangePassword extends Component {
         axios.post(`http://localhost:5000/api/profile/change-password`,data)
         .then(res => {
             console.log("thành công");
+            if (res.status === 1) {
+                localStorage.setItem('token', res.token);
+                this.props.hideAlert();
+                this.props.showAlert("Change password success", "success");
+            } else {
+                this.props.hideAlert();
+                this.props.showAlert("Inccorect password", "error");
+            }
         })
         .catch(err => {
-            console.log("thất bại");
+            this.props.changeLoginStatus();
+            this.props.hideAlert();
+            this.props.showAlert("Login timeout, signin again", "warning");
         })
     }
 
@@ -187,4 +197,26 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps)(ChangePassword);
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        changeLoginStatus: () => {
+            dispatch({
+                type: "CHANGE_LOGIN_STATUS",
+            });
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword);

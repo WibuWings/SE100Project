@@ -26,6 +26,7 @@ import typeProductReducer from './typeProductReducer';
 import chooseTypeProductReducer from './chooseTypeProduct';
 import typeProductValueReducer from './TypeProductValueReducer';
 import infoGoodReducer from './InfoUpdateProduct';
+import alertReducer from './AlertReducer';
 
 var redux = require('redux');
 
@@ -58,6 +59,7 @@ const allReducers = redux.combineReducers({
     listProduct: listProductReducer,
     typeProduct: typeProductReducer,
     chooseTypeProduct: chooseTypeProductReducer,
+    alert: alertReducer,
 })
 
 

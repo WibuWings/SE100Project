@@ -116,18 +116,23 @@ class ModalAdd extends Component {
                 from: this.timeFrom,
                 to: this.timeTo,
             }
-
             await axios.post(`http://localhost:5000/api/profile/update-shift`, data)
                 .then(res => {
-                    localStorage.setItem('token', res.data.token);
-                    console.log('thành công');
+                    if (res.data.token) {
+                        localStorage.setItem('token', res.data.token);
+                        this.props.hideAlert();
+                        this.props.showAlert("Edit shift success", "success");
+                        this.props.updateShift(data);
+                    }
+                    this.props.changeEditShiftStatus();
+                    this.props.changeAddStatus();
                 })
                 .catch(err => {
-                    console.log("lỗi");
+                    this.props.changeLoginStatus();
+                    this.props.hideAlert();
+                    this.props.showAlert("Login timeout, signin again", "warning");
                 })
-            this.props.updateShift(data);
-            this.props.changeEditShiftStatus();
-            this.props.changeAddStatus();
+
         }
     }
 
@@ -164,20 +169,25 @@ class ModalAdd extends Component {
                 _id: { shiftID: code }
             }
             if (data) {
-                this.props.addShift(data1);
                 axios.post(`http://localhost:5000/api/profile/add-shift`, {
                     email: this.props.infoUser.email,
                     token: localStorage.getItem('token'),
                     data: data,
                 })
                     .then(res => {
-                        localStorage.setItem('token', res.data.token);
-                        console.log('Thành Công');
+                        if (res.data.token) {
+                            this.props.addShift(data1);
+                            localStorage.setItem('token', res.data.token);
+                            this.props.hideAlert();
+                            this.props.showAlert("Add shift success", "success");
+                        }
+                        this.props.changeAddStatus();
                     })
                     .catch(err => {
-                        console.log('thất bại');
+                        this.props.changeLoginStatus();
+                        this.props.hideAlert();
+                        this.props.showAlert("Login timeout, signin again", "warning");
                     })
-                this.props.changeAddStatus();
             }
         }
     }
@@ -291,6 +301,23 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "OBJECT_UPDATE_SHIFT",
                 data: data,
+            })
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        changeLoginStatus: () => {
+            dispatch({
+                type: "CHANGE_LOGIN_STATUS",
+            });
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
             })
         }
     }

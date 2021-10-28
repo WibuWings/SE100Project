@@ -34,7 +34,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 class ListShift extends Component {
 
-    handleEdit = (e, id, description, from, to , salary) => {
+    handleEdit = (e, id, description, from, to, salary) => {
         const data = {
             description: description,
             from: from,
@@ -55,20 +55,24 @@ class ListShift extends Component {
     }
 
     handleDelete = (idShift) => {
-
         if (idShift) {
-            this.props.deleteShift(idShift);
             axios.post(`http://localhost:5000/api/profile/delete-shift`, {
                 token: localStorage.getItem('token'),
                 email: this.props.infoUser.email,
                 idShift: idShift
             })
                 .then(res => {
-                    localStorage.setItem('token', res.data.token);
-                    console.log("Thành công");
+                    if (res.data.token) {
+                        localStorage.setItem('token', res.data.token);
+                        this.props.deleteShift(idShift);
+                        this.props.hideAlert();
+                        this.props.showAlert("Delete shift success", "success");
+                    }
                 })
                 .catch(err => {
-                    console.log("thất bại");
+                    this.props.changeLoginStatus();
+                    this.props.hideAlert();
+                    this.props.showAlert("Login timeout, signin again", "warning");
                 })
         }
 
@@ -158,6 +162,23 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "OBJECT_EDIT_SHIFT",
                 data: data
+            })
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        changeLoginStatus: () => {
+            dispatch({
+                type: "CHANGE_LOGIN_STATUS",
+            });
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
             })
         }
     }

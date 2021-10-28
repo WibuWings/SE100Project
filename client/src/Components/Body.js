@@ -29,8 +29,6 @@ class Body extends Component {
                         <ModalConfirmPassword></ModalConfirmPassword>
                     </div> : null
                 }
-                 {/* <Alert onClick={} className="message-error" severity="success">Hello — check it out! <FiXSquare></FiXSquare></Alert> */}
-                {/* {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null} */}
             </div>
         );
     }
@@ -50,7 +48,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_LOGIN_STATUS",
             })
-        }
+        },
     }
 }
 
