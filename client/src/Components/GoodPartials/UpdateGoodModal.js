@@ -50,9 +50,7 @@ class UpdateGoodModal extends Component {
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         }; 
-        this.loadInitialData = this.loadInitialData.bind(this);
-        // this.loadInitialData();
-        // alert(this.state.goodID)
+        this.loadInitialData();
     }
     imgUrl='none';
     goodID='';
@@ -62,6 +60,7 @@ class UpdateGoodModal extends Component {
     quantity = 0;
     remain = 0;
     unit = "";
+    importPrice = "";
     sellPrice = "";
     expire ="";
     
@@ -143,9 +142,10 @@ class UpdateGoodModal extends Component {
 
     loadInitialData = () => {
         // Load các dữ liệu ban đầu của form ở đây để mà update nhưng mà bị lỗi 401 mẹ
-        var data = this.sampleData;
         //Xử lý sampleData
-        var productInfo = data.data[0];
+        var productInfo = this.props.infoUpdate;
+        console.log(this.props.infoUpdate);
+
         this.goodID = productInfo._id.productID;
         this.importDate = productInfo._id.importDate;
         this.name = productInfo.name;
@@ -153,12 +153,15 @@ class UpdateGoodModal extends Component {
         this.quantity = productInfo.quantity;
         // this.remain = productInfo.remain;
         this.unit = productInfo.unit;
+        this.importPrice = productInfo.importPrice;
         this.sellPrice = productInfo.sellPrice;
         this.expire = productInfo.expires;
+        console.log("expire", this.expire);
+        this.setState({change: !this.state.change});
     }
 
     render() {
-        this.loadInitialData();
+        
         return (
             <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
@@ -339,7 +342,7 @@ class UpdateGoodModal extends Component {
                                         className='input-item'
                                     >
                                         <div className="input-label" style={{width: 132}}>Expired Date</div>
-                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                                             <DatePicker
                                                 renderInput={(params) => <StyledTextField 
                                                                             {...params} 
@@ -354,8 +357,16 @@ class UpdateGoodModal extends Component {
                                                     this.changeTimeFrom(newValue);
                                                 }}
                                             />
-                                        </LocalizationProvider>
-                                        
+                                        </LocalizationProvider> */}
+                                        <StyledTextField
+                                            classname='input-box'
+                                            style = {{width: '80%', marginLeft: '4px',marginRight:'8px'}} 
+                                            fullWidth
+                                            name="sellPrice" 
+                                            variant="outlined"
+                                            type="number" 
+                                            value={this.expire}
+                                        />
                                     </Grid>
                                     <Grid item md={10}
                                         className='input-item'
@@ -470,6 +481,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         updateGoodStatus: state.updateGoodStatus,
         confirmStatus: state.confirmStatus,
+        infoUpdate: state.infoUpdate,
     }
 }
 

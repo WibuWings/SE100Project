@@ -25,7 +25,7 @@ import listProductReducer from './ListProductReducer';
 import typeProductReducer from './typeProductReducer';
 import chooseTypeProductReducer from './chooseTypeProduct';
 import typeProductValueReducer from './TypeProductValueReducer';
-import alertReducer from './AlertReducer';
+import infoGoodReducer from './InfoUpdateProduct';
 
 var redux = require('redux');
 
@@ -41,6 +41,7 @@ const allReducers = redux.combineReducers({
     addTypeStatus: statusAddTypeReducer,
     isAddTypeStatus: statusIsAddTypeReducer,
     updateGoodStatus: statusUpdateGoodReducer,
+    infoUpdate: infoGoodReducer,
     infoUser: infoUserReducer,
     listShift: listShiftReducer,
     role: roleReducer,

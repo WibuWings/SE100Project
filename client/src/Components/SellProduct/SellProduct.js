@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import exampleImg from '../../img/good-example.jpg'
 import { BiPlusMedical } from 'react-icons/bi';
 import { connect } from 'react-redux'
+import axios from 'axios';
 
 class SellProduct extends Component {
 
@@ -19,6 +20,7 @@ class SellProduct extends Component {
         this.state = {
             value: 0,
         }
+        this.loadAllType();
     }
 
 
@@ -41,9 +43,88 @@ class SellProduct extends Component {
         console.log("click");
     }
 
-    componentWillMount() {
-        document.title = 'Sell Product'
+    async loadAllType() {
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+
+        await axios.get(`http://localhost:5000/api/product/type`, 
+        {
+            params: {...data}
+        })
+            .then(res => {
+                result = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        //Get data và lưu các tên Type vào bảng
+        var listTypeInfor=[];
+        for(var i=0; i < result.length ; i++)
+        {
+            listTypeInfor.push(result[i]);
+        }
+        this.props.getTypeToReducer(listTypeInfor);
+        this.setState({change: true});
     }
+
+    // async loadAllGood() {
+    //     var result = [];
+    //     const data = {
+    //         token: localStorage.getItem('token'),
+    //         filter: {
+    //             storeID: this.props.infoUser.email,
+    //         }   
+    //     }
+    //     await axios.get(`http://localhost:5000/api/product/`, {
+    //         params: {...data}
+    //     })
+    //         .then(res => {
+    //             // alert("Lấy hết đc product ròi anh chai");
+    //             result = res.data.data;
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //             alert(err)
+    //         })
+    //     var listProductInfor=[];
+    //     for(var i=0; i < result.length ; i++)
+    //     {
+    //         listProductInfor.push(result[i]);
+    //     }
+    //     // Get hết từ cái productjoinType
+    //     const data1 = {
+    //         token: localStorage.getItem('token'),
+    //         filter: {
+    //             storeID: this.props.infoUser.email,
+    //         }   
+    //     }
+    //     await axios.get(`http://localhost:5000/api/product/join`, {
+    //         params: {...data}
+    //     })
+    //         .then(res => {
+    //             result = res.data.data;
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //             alert(err)
+    //         })  
+    //     // Lấy các cái jointype
+    //     var joinTypeInfor = [];
+    //     for(var i = 0 ; i < result.length; i++)
+    //     {
+    //         joinTypeInfor.push(result[i]);
+    //     }
+        
+        
+    //     this.setState({change: !this.state.change});
+    // }
+
 
     render() {
         return (
@@ -76,13 +157,13 @@ class SellProduct extends Component {
                                                         />
                                                         <CardContent style={{ padding: '5px' }}>
                                                             <Typography style={{ textAlign: 'center' }} gutterBottom variant="h6" component="div">
-                                                                {value.description}
+                                                                {value.name}
                                                             </Typography>
                                                         </CardContent>
                                                     </CardActionArea>
                                                     <CardActions style={{ justifyContent: 'center' }}>
                                                         <Button style={{ color: 'green', fontWeight: '700' }} endIcon={<BiPlusMedical></BiPlusMedical>} size="medium" color="primary">
-                                                            {value.price}
+                                                            {value.sellPrice}
                                                         </Button>
                                                     </CardActions>
                                                 </Card>
@@ -106,7 +187,7 @@ class SellProduct extends Component {
                                 </div>
                                 <ReactToPrint
                                     trigger={() => {
-                                        return <a href="#">Print this out!</a>;
+                                        return <a>Print this out!</a>;
                                     }}
                                     content={() => this.componentRef}
                                 />
@@ -126,6 +207,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         listProduct: state.listProduct,
         chooseTypeProduct: state.chooseTypeProduct,
+        infoUser: state.infoUser,
     }
 }
 
@@ -136,6 +218,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_ADD_STATUS",
             });
         },
+        getTypeToReducer: (data) => {
+            dispatch({
+                type: "GET_PRODUCT_TYPE",
+                data: data
+            });
+        },
+        getProductToReducer: (data) => {
+            dispatch({
+                type: "GET_PRODUCT_AND_TYPE",
+                data: data
+            });
+        }
     }
 }
 

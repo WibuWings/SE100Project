@@ -14,14 +14,15 @@ class DashboardURL extends Component {
     render() {
         return ( 
             <div>      
+                
                 <Route exact path="/dashboard" component={DashBoard}></Route>
-                <Route path="/goodmanager/import" component={GoodImport}></Route>
+                <Route exact path="/goodmanager/import" component={GoodImport}></Route>
                 <Route exact path="/goodmanager" component={GoodManager}></Route>
                 <Route exact path="/employeemanager" component={EmployeeManager}></Route>
                 <Route exact path="/receiptmanager" component={ReceiptManager}></Route> 
                 <Route exact path="/profile" component={Profile}></Route>
-                <Route exact path="/sellproduct" component={SellProduct}></Route>         
-                <Route path="/" component={DashBoard}></Route>
+                <Route exact path="/sellproduct" component={SellProduct}></Route>
+                <Route path="/" component={DashBoard}></Route>         
             </div>
         );
     }
