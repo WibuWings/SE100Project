@@ -133,7 +133,6 @@ class SellProduct extends Component {
                     resultProduct[i]._id.productID == joinTypeInfor[j]._id.productID)
                 {
                     typeIDList.push(joinTypeInfor[j]._id.typeID);
-                    console.log("Trùng");
                 }
             }
 
@@ -170,8 +169,6 @@ class SellProduct extends Component {
                                             if (this.props.chooseTypeProductID === 'all') {
                                                 return value;
                                             }
-                                            console.log(value.typeIDList);
-                                            console.log(this.props.chooseTypeProductID);
                                             if (value.typeIDList.includes(this.props.chooseTypeProductID)) {
                                                 return value;
                                             }

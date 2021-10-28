@@ -35,7 +35,7 @@ class GoodManager extends Component {
         return (
             <div>
                 Good Manager
-                <div style={{ height: 600, width: '100%', overflowX: 'scroll' }}>
+                <div style={{ height: '800px', width: '100%', overflowX: 'scroll' }}>
                     <div style={{display: 'flex'}}>
                         <Button variant="contained">
                             <NavLink style={{color: '#fff', textDecoration: 'none'}} to="/goodmanager/import">Import</NavLink>
