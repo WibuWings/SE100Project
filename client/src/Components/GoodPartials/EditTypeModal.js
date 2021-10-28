@@ -53,7 +53,9 @@ class EditTypeModal extends Component {
                 alert(err);
                 // alert("Lỗi gì cmnr")
             })
-        // 
+        // Ở đây mình phải cập nhật join nữa
+        
+
         this.loadAllType();
         
     }
