@@ -62,7 +62,6 @@ class Regulation extends Component {
               console.log(data);
             //   axios.post(`https://provinces.open-api.vn/api/?depth=2`, )
         }
-
     }
 
 
