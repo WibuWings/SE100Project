@@ -61,6 +61,7 @@ class SellProduct extends Component {
         })
             .then(res => {
                 result = res.data.data;
+                localStorage.getItem('token',res.data.token);
             })
             .catch(err => {
                 console.log(err);
@@ -108,6 +109,7 @@ class SellProduct extends Component {
         })
             .then(res => {
                 result = res.data.data;
+                localStorage.getItem('token',res.data.token);
             })
             .catch(err => {
                 console.log(err);
