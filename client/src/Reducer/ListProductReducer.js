@@ -1,65 +1,22 @@
 
 const listProductInitialState = [
     {
-        name: "Rau củ cải",
-        type: "rau",
-        sellPrice: "30 000 VNĐ"
+        _id: {
+            productID: "", 
+            importDate: "", 
+            storeID: "",
+        },
+        name: "", 
+        imgUrl: "", 
+        quantity: "", 
+        remain: "", 
+        unit: "",
+        importPrice: "", 
+        sellPrice: "", 
+        expires: "",
+        typeIDList: [],
     },
-    {
-        name: "Chôm Chôm",
-        type: "trai_cay",
-        sellPrice: "50 000 VNĐ"
-    }, 
-    {
-        name: "Sầu riêng",
-        type: "trai_cay",
-        sellPrice: "80 000 VNĐ"
-    },
-    {
-        name: "Rau củ cải",
-        type: "rau",
-        sellPrice: "30 000 VNĐ"
-    },
-    {
-        name: "Chôm Chôm",
-        type: "trai_cay",
-        sellPrice: "50 000 VNĐ"
-    }, 
-    {
-        name: "Sầu riêng",
-        type: "trai_cay",
-        sellPrice: "80 000 VNĐ"
-    },
-    {
-        name: "Rau củ cải",
-        type: "rau",
-        sellPrice: "30 000 VNĐ"
-    },
-    {
-        name: "Chôm Chôm",
-        type: "trai_cay",
-        sellPrice: "50 000 VNĐ"
-    }, 
-    {
-        name: "Sầu riêng",
-        type: "trai_cay",
-        sellPrice: "80 000 VNĐ"
-    },
-    {
-        name: "Rau củ cải",
-        type: "rau",
-        sellPrice: "30 000 VNĐ"
-    },
-    {
-        name: "Chôm Chôm",
-        type: "trai_cay",
-        sellPrice: "50 000 VNĐ"
-    }, 
-    {
-        name: "Sầu riêng",
-        type: "trai_cay",
-        sellPrice: "80 000 VNĐ"
-    },
+    
 ],
 
     listProductReducer = (state = listProductInitialState, action) => {

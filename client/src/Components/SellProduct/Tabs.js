@@ -18,7 +18,7 @@ export default function IconLabelTabs() {
         } else {
             typeProduct.state.map((value ,key) => {
                  if (key === newValue - 1) {
-                    index = value.name
+                    index = value._id.typeID
                 }
             })
         }
@@ -33,7 +33,7 @@ export default function IconLabelTabs() {
         // };
         dispatch({
             type: "UPDATE_TYPE_CHOOSE",
-            typeProduct: index,
+            typeProductID: index,
         })
     };
     return (

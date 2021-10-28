@@ -52,6 +52,8 @@ class AddTypeModal extends Component {
     addType = () => {
         var newTypeName = document.querySelector('input[name="typeName"]').value.trim();
         if(this.checkConstraint(newTypeName)==false)  return;
+        // var typeID = 0;
+        // if(listTypeInfor) 
         const data = {
             token: localStorage.getItem('token'),
             productType: {

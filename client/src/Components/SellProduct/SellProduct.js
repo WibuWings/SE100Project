@@ -12,6 +12,7 @@ import exampleImg from '../../img/good-example.jpg'
 import { BiPlusMedical } from 'react-icons/bi';
 import { connect } from 'react-redux'
 import axios from 'axios';
+import { Image } from 'cloudinary-react';
 
 class SellProduct extends Component {
 
@@ -19,8 +20,10 @@ class SellProduct extends Component {
         super(props);
         this.state = {
             value: 0,
+            change: false
         }
         this.loadAllType();
+        this.loadAllGood();
     }
 
 
@@ -70,60 +73,80 @@ class SellProduct extends Component {
             listTypeInfor.push(result[i]);
         }
         this.props.getTypeToReducer(listTypeInfor);
-        this.setState({change: true});
+        this.setState({change: !this.state.change});
     }
 
-    // async loadAllGood() {
-    //     var result = [];
-    //     const data = {
-    //         token: localStorage.getItem('token'),
-    //         filter: {
-    //             storeID: this.props.infoUser.email,
-    //         }   
-    //     }
-    //     await axios.get(`http://localhost:5000/api/product/`, {
-    //         params: {...data}
-    //     })
-    //         .then(res => {
-    //             // alert("Lấy hết đc product ròi anh chai");
-    //             result = res.data.data;
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //             alert(err)
-    //         })
-    //     var listProductInfor=[];
-    //     for(var i=0; i < result.length ; i++)
-    //     {
-    //         listProductInfor.push(result[i]);
-    //     }
-    //     // Get hết từ cái productjoinType
-    //     const data1 = {
-    //         token: localStorage.getItem('token'),
-    //         filter: {
-    //             storeID: this.props.infoUser.email,
-    //         }   
-    //     }
-    //     await axios.get(`http://localhost:5000/api/product/join`, {
-    //         params: {...data}
-    //     })
-    //         .then(res => {
-    //             result = res.data.data;
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //             alert(err)
-    //         })  
-    //     // Lấy các cái jointype
-    //     var joinTypeInfor = [];
-    //     for(var i = 0 ; i < result.length; i++)
-    //     {
-    //         joinTypeInfor.push(result[i]);
-    //     }
-        
-        
-    //     this.setState({change: !this.state.change});
-    // }
+    async loadAllGood() {
+        var resultProduct = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/`, {
+            params: {...data}
+        })
+            .then(res => {
+                // alert("Lấy hết đc product ròi anh chai");
+                resultProduct = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+        // Get hết từ cái productjoinType
+        var result = [];
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                storeID: this.props.infoUser.email,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, {
+            params: {...data1}
+        })
+            .then(res => {
+                result = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })  
+        // Lấy các cái jointype
+        var joinTypeInfor = [];
+        for(var i = 0 ; i < result.length; i++)
+        {
+            joinTypeInfor.push(result[i]);
+        }
+        console.log("joinTypeInfor",joinTypeInfor);
+
+        var listProductInfor=[];
+        for(var i=0; i < resultProduct.length ; i++)
+        {
+            var typeIDList = []; 
+            for(var j = 0 ; j < joinTypeInfor.length; j++)
+            {
+                if( resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID && 
+                    resultProduct[i]._id.productID == joinTypeInfor[j]._id.productID)
+                {
+                    typeIDList.push(joinTypeInfor[j]._id.typeID);
+                    console.log("Trùng");
+                }
+            }
+
+            listProductInfor.push(
+            {
+                ...resultProduct[i],
+                typeIDList: typeIDList
+            });
+        }
+
+        console.log("listProductInfor: ", listProductInfor);
+        this.props.getProductToReducer(listProductInfor);
+        // console.log("this.props.listProduct.state: ", this.props.listProduct.state);
+        this.setState({change: !this.state.change});
+    }
 
 
     render() {
@@ -138,23 +161,28 @@ class SellProduct extends Component {
                                 </div>
                                 <Container id="choses-product" style={{ height: '94%', overflowY: 'scroll' }} maxWidth="xl">
                                     <Grid container spacing={2}>
-                                        {this.props.listProduct.filter(value => {
-                                            if (this.props.chooseTypeProduct === 'all') {
+                                        
+                                        { this.props.listProduct.state
+                                        ? this.props.listProduct.state.filter(value => {
+                                            
+                                            if (this.props.chooseTypeProductID === 'all') {
                                                 return value;
                                             }
-                                            if (value.type == this.props.chooseTypeProduct) {
-                                                return value
+                                            console.log(value.typeIDList);
+                                            console.log(this.props.chooseTypeProductID);
+                                            if (value.typeIDList.includes(this.props.chooseTypeProductID)) {
+                                                return value;
                                             }
                                         }).map(value => (
                                             <Grid item md={3} sm={3}>
                                                 <Card onClick={() => this.AddProduct()}>
                                                     <CardActionArea>
-                                                        <CardMedia
-                                                            component="img"
-                                                            height="140"
-                                                            image={exampleImg}
-                                                            alt="green iguana"
-                                                        />
+                                                        {  
+                                                            value.imgUrl == "none"
+                                                            ? <div style={{width: '140px', height: '140px', objectFit:'cover'}}><img src={exampleImg} style={{width: '140px', height: '140px', objectFit:'cover'}}/></div>
+                                                            
+                                                            : <div style={{width: '140px', height: '140px', objectFit:'cover'}}><Image style={{width: '140px', height: '140px', objectFit:'cover'}} cloudName="databaseimg" publicId={value.imgUrl}>{value.imgUrl}</Image></div>
+                                                        }
                                                         <CardContent style={{ padding: '5px' }}>
                                                             <Typography style={{ textAlign: 'center' }} gutterBottom variant="h6" component="div">
                                                                 {value.name}
@@ -168,7 +196,7 @@ class SellProduct extends Component {
                                                     </CardActions>
                                                 </Card>
                                             </Grid>
-                                        ))}
+                                        )): (null)}
                                     </Grid>
                                 </Container>
                             </div>
@@ -206,7 +234,7 @@ class SellProduct extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         listProduct: state.listProduct,
-        chooseTypeProduct: state.chooseTypeProduct,
+        chooseTypeProductID: state.chooseTypeProduct,
         infoUser: state.infoUser,
     }
 }

@@ -13,8 +13,7 @@ import SellProduct from '../Components/SellProduct/SellProduct';
 class DashboardURL extends Component {
     render() {
         return ( 
-            <div>      
-                
+            <div>  
                 <Route exact path="/dashboard" component={DashBoard}></Route>
                 <Route exact path="/goodmanager/import" component={GoodImport}></Route>
                 <Route exact path="/goodmanager" component={GoodManager}></Route>
