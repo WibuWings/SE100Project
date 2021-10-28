@@ -2,34 +2,57 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const Receipt = new Schema({
-  _id: {
-    storeID: String,
-    receiptID: String,
-  },
-  employeeID: {
-    type: Schema.Types.ObjectId,
-    ref: "Employee",
-  } ,
-  listItem: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Product",
+    _id: {
+        storeID: String,
+        receiptID: String,
     },
-  ],
-  totalMoney: Number,
-  totalProducts: Number,
-  coupon: {
-    type: Schema.Types.ObjectId,
-    ref: "Coupon",
-  },
-  createAt: Date,
-  editAt: Date,
-  deleteAt: Date,
-  restoreAt: Date,
-  oldReceipt: {
-    type: Schema.Types.ObjectId,
-    ref: "Receipt",
-  }
+    employeeID: {
+        _id: {
+            employeeID: String,
+            storeID: String,
+        },
+        managerID: String,
+        password: String,
+        firstName: String,
+        lastName: String,
+        phoneNumber: String,
+        dateOfBirth: Date,
+        email: String,
+        address: String,
+        cardID: String,
+        startDate: Date,
+        endDate: Date,
+    },
+    listItem: [
+        {
+            _id: {
+                productID: String,
+                importDate: Date,
+                storeID: String,
+            },
+            name: String,
+            quantity: Number,
+            unit: String,
+            sellPrice: Number,
+            expires: Date,
+        },
+    ],
+    totalMoney: Number,
+    totalProducts: Number,
+    coupon: {
+        _id: {
+            storeID: String,
+            couponID: String,
+        },
+        percent: Number,
+        from: Date,
+        expire: Date,
+        createdAt: Date,
+    },
+    createAt: Date,
+    editAt: Date,
+    deleteAt: Date,
+    restoreAt: Date,
 });
 
 module.exports = mongoose.model("Receipt", Receipt);
