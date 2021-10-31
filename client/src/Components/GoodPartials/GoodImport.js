@@ -157,7 +157,7 @@ class GoodImport extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                storeID: this.props.infoUser.email,
+                "_id.storeID": this.props.infoUser.email,
             }   
         }
 
@@ -191,7 +191,7 @@ class GoodImport extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                storeID: this.props.infoUser.email,
+                "_id.storeID": this.props.infoUser.email,
             }   
         }
         await axios.get(`http://localhost:5000/api/product/`, {
