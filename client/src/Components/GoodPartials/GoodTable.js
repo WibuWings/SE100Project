@@ -143,7 +143,6 @@ class GoodTable extends Component {
                 createData((i+1), obj._id.productID, obj.name, obj.quantity, 
                     obj.importPrice, obj.sellPrice, obj._id.importDate, joinType, obj.imgUrl, obj.unit)
             );
-            console.log("obj.imgUrl",obj.imgUrl);
         }
         
         this.setState({change: !this.state.change});
@@ -194,7 +193,7 @@ class GoodTable extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div>
+            <div style={{height: '550px', width: '100%', overflowY: 'scroll'}}>
                 <TableContainer component={Paper}>
                     <Table className={classes.goodTable} aria-label="collapsible table">
                         <TableHead>

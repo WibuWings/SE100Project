@@ -78,9 +78,10 @@ class UpdateGoodModal extends Component {
             product: {
                 _id: {
                     productID: document.querySelector('input[name="goodID"]').value,
-                    importDate: Date(this.dateTime),
+                    importDate: this.importDate,
+                    storeID: this.props.infoUser.email,
                 },
-                name: document.querySelector('input[name="goodName"]').value,
+                name: this.name,
                 quantity: document.querySelector('input[name="goodQuantity"]').value,
                 // remain: document.querySelector('input[name="goodQuantity"]').value,
                 importPrice: document.querySelector('input[name="originalPrice"]').value,
@@ -90,6 +91,7 @@ class UpdateGoodModal extends Component {
                 unit: document.querySelector('input[name="unit"]').value,
             }
         }
+        console.log("Updategood",data);
         axios.put(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Update success");
@@ -98,46 +100,11 @@ class UpdateGoodModal extends Component {
             .catch(err => {
                 console.log(err);
             })
-        console.log(data);
+        
     }
 
     cancel = () => {
         this.props.changeUpdateGoodStatus();
-    }
-
-    sampleData = {
-        email:"19522006@gm.uit.edu.vn",
-        token:"this is token",
-        data: [
-            {
-                _id:{
-                    productID:"1212121",
-                    importDate:"2021-10-08T00:00:00.000Z"
-                },
-                name:"SHIIijjjiI",
-                imgUrl:"none",
-                quantity:4,
-                remain:4,
-                unit:"12",
-                importPrice:7,
-                sellPrice:7,
-                expires:"2000-11-10T00:00:00.000Z",
-            },
-            {
-                _id:{
-                    productID:"121212aa1",
-                    importDate:"2021-10-08T00:00:00.000Z"
-                }, 
-                name:"q",
-                imgUrl:"none",
-                quantity:11,
-                remain:11,
-                unit:"11",
-                importPrice:212,
-                sellPrice:120,
-                expires:"2021-10-28"
-            }
-        ]
     }
 
     loadInitialData = () => {
@@ -156,8 +123,12 @@ class UpdateGoodModal extends Component {
         this.importPrice = productInfo.importPrice;
         this.sellPrice = productInfo.sellPrice;
         this.expire = productInfo.expires;
-        console.log("expire", this.expire);
+        console.log("Impoprt date", this.importDate);
         this.setState({change: !this.state.change});
+    }
+
+    changeName = (e) => {
+        this.name = e.target.value;
     }
 
     render() {
@@ -255,7 +226,8 @@ class UpdateGoodModal extends Component {
                                             size="small"
                                             name="goodName" 
                                             variant="outlined"
-                                            defaultValue={this.name} 
+                                            defaultValue={this.name}
+                                            onChange={(e) => this.changeName(e)} 
                                         />
                                     </Grid>
                                     <Grid item md={3}
@@ -342,31 +314,24 @@ class UpdateGoodModal extends Component {
                                         className='input-item'
                                     >
                                         <div className="input-label" style={{width: 132}}>Expired Date</div>
-                                        {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                            <DatePicker
-                                                renderInput={(params) => <StyledTextField 
-                                                                            {...params} 
-                                                                            classname='input-box'
-                                                                            name="expiredDate"
-                                                                            style = {{width: '70%', marginRight: 20}} 
-                                                                            fullWidth 
-                                                                            value={this.expire}
-                                                                        />}
-                                                defaultvalue={this.expire}
-                                                onChange={(newValue) => {
-                                                    this.changeTimeFrom(newValue);
-                                                }}
-                                            />
-                                        </LocalizationProvider> */}
                                         <StyledTextField
+                                            classname='input-box'   
+                                            type="date" 
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            name="expiredDate" 
+                                            variant="outlined"
+                                            defaultValue={this.expire} 
+                                        />
+                                        {/* <StyledTextField
                                             classname='input-box'
                                             style = {{width: '80%', marginLeft: '4px',marginRight:'8px'}} 
                                             fullWidth
                                             name="sellPrice" 
                                             variant="outlined"
-                                            type="number" 
                                             value={this.expire}
-                                        />
+                                        /> */}
                                     </Grid>
                                     <Grid item md={10}
                                         className='input-item'
@@ -482,6 +447,7 @@ const mapStateToProps = (state, ownProps) => {
         updateGoodStatus: state.updateGoodStatus,
         confirmStatus: state.confirmStatus,
         infoUpdate: state.infoUpdate,
+        infoUser: state.infoUser,
     }
 }
 

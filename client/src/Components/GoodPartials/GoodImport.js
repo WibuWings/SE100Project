@@ -100,11 +100,13 @@ class GoodImport extends Component {
                 remain: document.querySelector('input[name="goodQuantity"]').value,
                 importPrice: document.querySelector('input[name="originalPrice"]').value,
                 sellPrice: document.querySelector('input[name="sellPrice"]').value,
-                expires: document.querySelector('input[name="expiredDate"]').value,
+                expires: Date(document.querySelector('input[name="expiredDate"]').value),
                 imgUrl: this.imgUrl,
                 unit: document.querySelector('input[name="unit"]').value,
             }
         }
+        console.log(data);
+
         axios.post(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Save success");

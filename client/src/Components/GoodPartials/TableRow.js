@@ -89,11 +89,11 @@ function GoodRow(props) {
                                             // Truyền cái data vào trong hàm đây luôn
                                             dispatch({type: "UPDATE_GOOD_DATA", 
                                                 _id: {
-                                                    productID: row.productID,
-                                                    importDate: row.importDate,
+                                                    productID: row.id,
+                                                    importDate: row.importTime,
                                                 },
                                                 name: row.name,
-                                                imgUrl: row.imgUrl,
+                                                imgUrl: row.imgLink,
                                                 quantity: row.quantity,
                                                 remain: row.quantity,
                                                 unit: row.unit,
@@ -102,8 +102,7 @@ function GoodRow(props) {
                                                 expires: row.hidden.expires,  
                                                 unit: row.hidden.unit
                                             });
-                                            console.log("đã thêm row vào cái redux", row);
-                                            console.log("Giá gốc",  row.hidden.originalPrice);
+                                            console.log("Truyen link", row.imgLink);
                                             dispatch({ type: "CHANGE_UPDATE_GOOD_STATUS", });
                                         }}
                                         variant="contained"
