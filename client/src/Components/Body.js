@@ -19,7 +19,7 @@ class Body extends Component {
                     className="body-content"
                     style={{
                         width: 'calc(100% - 224px)',
-                        position: 'fixed', top: 0, right: 0, backgroundColor: this.props.statusDarkmode ? 'rgb(221,235,255)' : 'rgba(20,20,20,0.4)', borderLeft: '2px solid #99999975',
+                        position: 'fixed', top: 0, right: 0, backgroundColor: this.props.statusDarkmode ? '#ebebeb' : 'rgba(20,20,20,0.4)', borderLeft: '2px solid #99999975',
                     }}
                 >
                     <DashboardURL></DashboardURL>

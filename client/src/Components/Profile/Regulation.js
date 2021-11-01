@@ -5,13 +5,14 @@ import Stack from '@mui/material/Stack';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import TimePicker from '@mui/lab/TimePicker';
+import axios from 'axios'
 
 class Regulation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            timeStart: Date.now(),
-            timeEnd: Date.now(),
+            timeStart: new Date(2018, 5, 35, 7, 0, 0),
+            timeEnd: new Date(2018, 5, 35, 18, 0, 0),
             numberEmployees: 10,
             isNumberEmployees: false,
             isSaveRegulations: false,
@@ -48,6 +49,35 @@ class Regulation extends Component {
         }
     }
 
+    SaveRegulations = async () => {
+        const data = {
+            email: this.props.infoUser.email,
+            token: localStorage.getItem('token'),
+            currency:document.querySelector('select[name="currency"]').value, 
+            timeStart: {
+                hours: this.state.timeStart.getHours(),
+                minutes: this.state.timeStart.getMinutes(),
+            },
+            timeEnd: {
+                hours: this.state.timeEnd.getHours(),
+                minutes: this.state.timeEnd.getMinutes(),
+            },
+        }
+        if (!this.state.isNumberEmployees && this.state.isSaveRegulations) {
+              console.log("save");  
+              console.log(data);
+            await axios.post(`http://localhost:5000/api/profile/regulation`, data)
+            .then(res => {
+                this.props.hideAlert();
+                this.props.showAlert("Login timeout, signin again", "success");
+            })
+            .catch(err => {
+                this.props.hideAlert();
+                this.props.showAlert("Login timeout, signin again", "warning");
+            });
+        }
+    }
+
 
     render() {
         return (
@@ -64,15 +94,15 @@ class Regulation extends Component {
                                     name="currency"
                                     onBlur={(e) => this.blurNumberEmployees(e)}
                                     required
-                                    defaultValue={this.props.infoUser.gender}
+                                    defaultValue="vnd"
                                     variant="outlined"
                                     select
                                     SelectProps={{ native: true }}
                                 >
-                                    <option value="male">
+                                    <option value="vnd">
                                         VNĐ
                                     </option>
-                                    <option value="female">
+                                    <option value="dollar">
                                         $
                                     </option>
                                 </TextField>
@@ -82,7 +112,7 @@ class Regulation extends Component {
                                     required
                                     fullWidth
                                     label="Number of employees"
-                                    defaultValue={this.state.numberEmployees}
+                                    defaultValue='10'
                                     name="numberEmployees"
                                     variant="outlined"
                                     error={this.state.isNumberEmployees}
@@ -120,7 +150,7 @@ class Regulation extends Component {
                     </CardContent>
                     <Divider />
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
-                        <Button onClick={() => this.SaveDetails()} disabled={!this.state.isSaveRegulations} color="primary" variant="contained">Save details</Button>
+                        <Button onClick={() => this.SaveRegulations()} disabled={!this.state.isSaveRegulations} color="primary" variant="contained">Save</Button>
                     </Box>
                 </Card>
             </div>
@@ -130,41 +160,24 @@ class Regulation extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        country: state.country,
-        district: state.district,
         infoUser: state.infoUser,
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        updateProvince: (data) => {
+        hideAlert: () => {
             dispatch({
-                type: "UPDATE_DATA_PROVINCE",
-                data: data,
+                type: "HIDE_ALERT",
             })
         },
-        updateDistrict: (data) => {
+        showAlert: (message, typeMessage) => {
             dispatch({
-                type: "UPDATE_DATA_DISTRICT",
-                data: data,
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
             })
         },
-        updateProfile: (data) => {
-            dispatch({
-                type: "UPDATA_DATA_USER",
-                email: data.email,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                old: data.old,
-                gender: data.gender,
-                storeName: data.storeName,
-                tel: data.tel,
-                province: data.province,
-                district: data.district,
-                address: data.address,
-            })
-        }
     }
 }
 

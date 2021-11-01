@@ -213,8 +213,11 @@ class GoodImport extends Component {
         {
             listProductInfor.push(result[i]);
         }
-        this.generatedID = listProductInfor.length;
-        alert(this.generatedID);
+        if(listProductInfor.length>0)
+        {
+            this.generatedID = parseInt(listProductInfor[listProductInfor.length-1]._id.productID) + 1;
+        } 
+        else this.generatedID = 0;
         this.setState({change: false});
     }
 
@@ -238,7 +241,7 @@ class GoodImport extends Component {
         return(
             <div 
                 style={{ 
-                    height: 600, width: '100%', overflowY: 'scroll', backgroundColor: 'rgb(221,235,255)'   
+                    height: "800px", width: '100%', overflowY: 'scroll', backgroundColor: 'rgb(221,235,255)'   
                 }}
             >   
                 <div className="good-import-header"></div>

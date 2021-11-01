@@ -1,12 +1,18 @@
 
 const typeProductInitialState = [
     {
-        type: "rau",
-        name: "Rau"
+        _id: {
+            typeID: "",
+            storeID: "",
+        },
+        name: "",
     },
     {
-        type: "trai_cay",
-        name: "Trái cây"
+        _id: {
+            typeID: "",
+            storeID: "",
+        },
+        name: "",
     }, 
 ],
 
