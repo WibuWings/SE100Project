@@ -32,14 +32,13 @@ class ChangePassword extends Component {
         }
         axios.post(`http://localhost:5000/api/profile/change-password`,data)
         .then(res => {
-            console.log("thành công");
-            if (res.status === 1) {
-                localStorage.setItem('token', res.token);
+            if (res.data.status === -1) {
+                this.props.hideAlert();
+                this.props.showAlert(res.data.message, "error");
+            } else {
+                localStorage.setItem('token', res.data.token);
                 this.props.hideAlert();
                 this.props.showAlert("Change password success", "success");
-            } else {
-                this.props.hideAlert();
-                this.props.showAlert("Inccorect password", "error");
             }
         })
         .catch(err => {

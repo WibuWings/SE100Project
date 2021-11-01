@@ -20,8 +20,8 @@ class ModalAdd extends Component {
             _timeFrom.setHours(fromHour, fromMin);
 
             var _timeTo = new Date();
-            var toHour = parseInt(this.props.objectEditShift.to.slice(0, this.props.objectEditShift.from.indexOf(':')));
-            var toMin = parseInt(this.props.objectEditShift.to.slice(this.props.objectEditShift.from.indexOf(':') + 1));
+            var toHour = parseInt(this.props.objectEditShift.to.slice(0, this.props.objectEditShift.to.indexOf(':')));
+            var toMin = parseInt(this.props.objectEditShift.to.slice(this.props.objectEditShift.to.indexOf(':') + 1));
             _timeTo.setHours(toHour, toMin);
         }
 
@@ -235,7 +235,6 @@ class ModalAdd extends Component {
                                         <TimePicker
                                             label="Time From"
                                             value={this.state.timeFrom}
-                                            className="timeFrom"
                                             onChange={(newValue) => this.changeTimeFrom(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
                                         />
@@ -243,7 +242,7 @@ class ModalAdd extends Component {
                                             label="Time To"
                                             value={this.state.timeTo}
                                             onChange={(newValue) => this.changeTimeTo(newValue)}
-                                            renderInput={(params) => <TextField onChange={(e) => this.changeTime(e)} {...params} />}
+                                            renderInput={(params) => <TextField {...params} />}
                                         />
                                     </Stack>
                                 </LocalizationProvider>
@@ -254,7 +253,7 @@ class ModalAdd extends Component {
                     <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2 }}>
                         {this.props.editShiftStatus ? (
                             <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.editShift()} variant="contained" startIcon={<BiEdit />}>
-                                Edit
+                                Save
                             </Button>) : (
                             <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.addShift()} variant="contained" startIcon={<BiPlusMedical />}>
                                 Xác nhận
