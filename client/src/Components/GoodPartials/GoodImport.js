@@ -17,6 +17,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ConfirmModal from './ConfirmModal';
+import { GiConsoleController } from 'react-icons/gi';
 
 // Use for save type
 var productTypes =[];
@@ -46,19 +47,37 @@ class GoodImport extends Component {
             imageSelect: "null",
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
-            currentDateTime: new Date('2014-08-18T21:11:54'),
             change: false,
         }; 
         this.loadAllType(); 
         this.loadAllGood();
+
+        this.currentDateTime = this.getCurrentDateTime();
+        console.log("this.currentDateTime",this.currentDateTime);
     }
+    
+    getCurrentDateTime()
+    {
+        var day = new Date().getDay().toString();
+        if(day.length<2)
+        {
+            day = '0' + day;
+        }
+        var month = (new Date().getMonth() + 1).toString();
+        if(month.length<2)
+        {
+            month = '0' + month;
+        }
+        return new Date().getFullYear() + '-' + month + '-' + day;
+    }
+
     handleAdd(){
         this.props.changeAddTypeStatus();
         this.props.setAddTypeStatus();
     }
     imgUrl= 'none';
     dateTime= Date.now();
-
+    currentDateTime = '2021-01-02';
     profileImageChange = (fileChangeEvent) => {
         this.setState({
             imageSelect: fileChangeEvent.target.files[0],
@@ -105,6 +124,8 @@ class GoodImport extends Component {
                 unit: document.querySelector('input[name="unit"]').value,
             }
         }
+        console.log(data);
+
         axios.post(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Save success");
@@ -157,7 +178,7 @@ class GoodImport extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                storeID: this.props.infoUser.email,
+                "_id.storeID": this.props.infoUser.email,
             }   
         }
 
@@ -191,7 +212,7 @@ class GoodImport extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                storeID: this.props.infoUser.email,
+                "_id.storeID": this.props.infoUser.email,
             }   
         }
         await axios.get(`http://localhost:5000/api/product/`, {
@@ -423,7 +444,8 @@ class GoodImport extends Component {
                                         fullWidth
                                         size="small"
                                         name="expiredDate" 
-                                        variant="outlined" 
+                                        variant="outlined"
+                                        defaultValue={this.currentDateTime}
                                     />
                                 </Grid>
                                 <Grid item md={10}

@@ -127,6 +127,7 @@
 .nav-item.active {
     border-right: 4px solid var(--primary-color);
     background-color: #ebf0f8;
+    display: flex;
 }
 
 .nav-footer .nav-item .nav-item-icon {

@@ -78,10 +78,11 @@ class UpdateGoodModal extends Component {
             product: {
                 _id: {
                     productID: document.querySelector('input[name="goodID"]').value,
-                    importDate: Date(this.dateTime),
+                    importDate: this.importDate,
+                    storeID: this.props.infoUser.email,
                 },
-                name: document.querySelector('input[name="goodName"]').value,
-                quantity: document.querySelector('input[name="goodQuantity"]').value,
+                name: this.name,
+                quantity: this.quantity,
                 // remain: document.querySelector('input[name="goodQuantity"]').value,
                 importPrice: document.querySelector('input[name="originalPrice"]').value,
                 sellPrice: document.querySelector('input[name="sellPrice"]').value,
@@ -90,6 +91,7 @@ class UpdateGoodModal extends Component {
                 unit: document.querySelector('input[name="unit"]').value,
             }
         }
+        console.log("Updategood",data);
         axios.put(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Update success");
@@ -98,46 +100,11 @@ class UpdateGoodModal extends Component {
             .catch(err => {
                 console.log(err);
             })
-        console.log(data);
+        
     }
 
     cancel = () => {
         this.props.changeUpdateGoodStatus();
-    }
-
-    sampleData = {
-        email:"19522006@gm.uit.edu.vn",
-        token:"this is token",
-        data: [
-            {
-                _id:{
-                    productID:"1212121",
-                    importDate:"2021-10-08T00:00:00.000Z"
-                },
-                name:"SHIIijjjiI",
-                imgUrl:"none",
-                quantity:4,
-                remain:4,
-                unit:"12",
-                importPrice:7,
-                sellPrice:7,
-                expires:"2000-11-10T00:00:00.000Z",
-            },
-            {
-                _id:{
-                    productID:"121212aa1",
-                    importDate:"2021-10-08T00:00:00.000Z"
-                }, 
-                name:"q",
-                imgUrl:"none",
-                quantity:11,
-                remain:11,
-                unit:"11",
-                importPrice:212,
-                sellPrice:120,
-                expires:"2021-10-28"
-            }
-        ]
     }
 
     loadInitialData = () => {
@@ -146,20 +113,58 @@ class UpdateGoodModal extends Component {
         var productInfo = this.props.infoUpdate;
         console.log(this.props.infoUpdate);
 
-        this.goodID = productInfo._id.productID;
-        this.importDate = productInfo._id.importDate;
-        this.name = productInfo.name;
-        this.imgUrl = productInfo.imgUrl;
-        this.quantity = productInfo.quantity;
+        this.goodID = (productInfo._id.productID == null) ? '' : productInfo._id.productID;
+        this.importDate = productInfo._id.importDate == null ? '' : productInfo._id.importDate;
+        this.name = productInfo.name == null ? '' : productInfo.name;
+        this.imgUrl = productInfo.imgUrl == null ? '' : productInfo.imgUrl;
+        this.quantity = productInfo.quantity == null ? '' : productInfo.quantity;
         // this.remain = productInfo.remain;
-        this.unit = productInfo.unit;
-        this.importPrice = productInfo.importPrice;
-        this.sellPrice = productInfo.sellPrice;
-        this.expire = productInfo.expires;
-        console.log("expire", this.expire);
+        this.unit = productInfo.unit == null ? '' : productInfo.unit;
+        this.importPrice = productInfo.importPrice == null ? '' : productInfo.importPrice;
+        this.sellPrice = productInfo.sellPrice == null ? '' : productInfo.sellPrice;
+        this.expire = productInfo.expires == null ? '' : productInfo.expries;
+        this.expire = this.expire == null ? '':this.expire.substring(0,this.expire.indexOf('T'));
+        console.log("this.expire", this.expire);
         this.setState({change: !this.state.change});
     }
 
+    profileImageChange = (fileChangeEvent) => {
+        this.setState({
+            imageSelect: fileChangeEvent.target.files[0],
+        })
+        const file = fileChangeEvent.target.files[0];
+        const { type } = file;
+        if (!(type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg') || type.endsWith('gif'))) {
+        } else {
+            const formData = new FormData();
+            formData.append("file", fileChangeEvent.target.files[0])
+            formData.append("upload_preset", "qqqhcaa3");
+            axios.post(`https://api.cloudinary.com/v1_1/databaseimg/image/upload`, formData)
+                .then(res => {
+                    this.imgUrl=res.data.url;
+                    this.setState({
+                        change: 'true'
+                    });
+                })
+                .catch(err => {
+                    console.log("Thất bại");
+                })
+
+        }
+
+    }
+
+    changeName = (e) => {
+        this.name = e.target.value;
+    }
+
+    changeValue = (e, variable) =>
+    {
+        if(variable=='quantity')
+        {
+            this.quantity = e.target.value;
+        }
+    }
     render() {
         
         return (
@@ -255,7 +260,8 @@ class UpdateGoodModal extends Component {
                                             size="small"
                                             name="goodName" 
                                             variant="outlined"
-                                            defaultValue={this.name} 
+                                            defaultValue={this.name}
+                                            onChange={(e) => this.changeName(e)} 
                                         />
                                     </Grid>
                                     <Grid item md={3}
@@ -275,6 +281,7 @@ class UpdateGoodModal extends Component {
                                             variant="outlined"
                                             type="number" 
                                             defaultValue={this.quantity}
+                                            onChange={(e) => this.changeValue(e, 'quantity')}
                                         />
                                     </Grid>
                                     <Grid item md={3}
@@ -342,31 +349,24 @@ class UpdateGoodModal extends Component {
                                         className='input-item'
                                     >
                                         <div className="input-label" style={{width: 132}}>Expired Date</div>
-                                        {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                            <DatePicker
-                                                renderInput={(params) => <StyledTextField 
-                                                                            {...params} 
-                                                                            classname='input-box'
-                                                                            name="expiredDate"
-                                                                            style = {{width: '70%', marginRight: 20}} 
-                                                                            fullWidth 
-                                                                            value={this.expire}
-                                                                        />}
-                                                defaultvalue={this.expire}
-                                                onChange={(newValue) => {
-                                                    this.changeTimeFrom(newValue);
-                                                }}
-                                            />
-                                        </LocalizationProvider> */}
                                         <StyledTextField
+                                            classname='input-box'   
+                                            type="date" 
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            name="expiredDate" 
+                                            variant="outlined"
+                                            defaultValue={this.expire} 
+                                        />
+                                        {/* <StyledTextField
                                             classname='input-box'
                                             style = {{width: '80%', marginLeft: '4px',marginRight:'8px'}} 
                                             fullWidth
                                             name="sellPrice" 
                                             variant="outlined"
-                                            type="number" 
                                             value={this.expire}
-                                        />
+                                        /> */}
                                     </Grid>
                                     <Grid item md={10}
                                         className='input-item'
@@ -482,6 +482,7 @@ const mapStateToProps = (state, ownProps) => {
         updateGoodStatus: state.updateGoodStatus,
         confirmStatus: state.confirmStatus,
         infoUpdate: state.infoUpdate,
+        infoUser: state.infoUser,
     }
 }
 

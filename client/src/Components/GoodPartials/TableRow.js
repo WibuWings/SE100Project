@@ -16,6 +16,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useDispatch } from 'react-redux'
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
     goodTable_Cell:{
@@ -61,7 +62,7 @@ function GoodRow(props) {
                                 }
                                 
                                 
-                                <Table size="small" aria-label="purchases">
+                                <Table>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell className={classes.goodTable_Cell}>Expired Day</TableCell>
@@ -89,11 +90,11 @@ function GoodRow(props) {
                                             // Truyền cái data vào trong hàm đây luôn
                                             dispatch({type: "UPDATE_GOOD_DATA", 
                                                 _id: {
-                                                    productID: row.productID,
-                                                    importDate: row.importDate,
+                                                    productID: row.id,
+                                                    importDate: row.importTime,
                                                 },
                                                 name: row.name,
-                                                imgUrl: row.imgUrl,
+                                                imgUrl: row.imgLink,
                                                 quantity: row.quantity,
                                                 remain: row.quantity,
                                                 unit: row.unit,
@@ -102,15 +103,41 @@ function GoodRow(props) {
                                                 expires: row.hidden.expires,  
                                                 unit: row.hidden.unit
                                             });
-                                            console.log("đã thêm row vào cái redux", row);
-                                            console.log("Giá gốc",  row.hidden.originalPrice);
+                                            console.log("Truyen link", row.imgLink);
                                             dispatch({ type: "CHANGE_UPDATE_GOOD_STATUS", });
                                         }}
                                         variant="contained"
                                     >
                                         Update
                                     </Button>
-                                    <Button variant="contained">Delete</Button>
+                                    <Button 
+                                        variant="contained"
+                                        onClick={() => {
+                                            alert("Delete")
+                                            const data = {
+                                                token: localStorage.getItem('token'),
+                                                products:
+                                                [
+                                                    {
+                                                        productID: row.id,
+                                                        importDate: row.importTime,
+                                                        storeID: row.storeID,
+                                                    }
+                                                ]
+                                                 
+                                            }
+                                            axios.delete(`http://localhost:5000/api/product`,{data: data})
+                                                .then(res => {
+                                                    alert("delete product success");
+                                                })
+                                                .catch(err => {
+                                                    alert(err);
+                                                })
+                                        }}
+                                    >
+                                        Delete
+                                        
+                                    </Button>
                                 </div>
                             </div>  
                         </Box>
