@@ -16,6 +16,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useDispatch } from 'react-redux'
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
     goodTable_Cell:{
@@ -61,7 +62,7 @@ function GoodRow(props) {
                                 }
                                 
                                 
-                                <Table size="small" aria-label="purchases">
+                                <Table>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell className={classes.goodTable_Cell}>Expired Day</TableCell>
@@ -109,7 +110,35 @@ function GoodRow(props) {
                                     >
                                         Update
                                     </Button>
-                                    <Button variant="contained">Delete</Button>
+                                    <Button 
+                                        variant="contained"
+                                        onClick={() => {
+                                            alert("Delete")
+                                            const data = {
+                                                token: localStorage.getItem('token'),
+                                                products:
+                                                [
+                                                    {
+                                                        productID: row.id,
+                                                        importDate: row.importTime,
+                                                        storeID: row.storeID,
+                                                    }
+                                                ]
+                                                 
+                                            }
+                                            axios.delete(`http://localhost:5000/api/product`,{data: data})
+                                                .then(res => {
+                                                    alert("delete product success");
+                                                })
+                                                .catch(err => {
+                                                    alert(err);
+                                                    // alert("Lỗi gì cmnr")
+                                                })
+                                        }}
+                                    >
+                                        Delete
+                                        
+                                    </Button>
                                 </div>
                             </div>  
                         </Box>

@@ -128,6 +128,31 @@ class UpdateGoodModal extends Component {
         this.setState({change: !this.state.change});
     }
 
+    profileImageChange = (fileChangeEvent) => {
+        this.setState({
+            imageSelect: fileChangeEvent.target.files[0],
+        })
+        const file = fileChangeEvent.target.files[0];
+        const { type } = file;
+        if (!(type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg') || type.endsWith('gif'))) {
+        } else {
+            const formData = new FormData();
+            formData.append("file", fileChangeEvent.target.files[0])
+            formData.append("upload_preset", "qqqhcaa3");
+            axios.post(`https://api.cloudinary.com/v1_1/databaseimg/image/upload`, formData)
+                .then(res => {
+                    this.imgUrl=res.data.url;
+                    this.setState({
+                        change: 'true'
+                    });
+                })
+                .catch(err => {
+                    console.log("Thất bại");
+                })
+
+        }
+
+    }
 
     changeName = (e) => {
         this.name = e.target.value;
