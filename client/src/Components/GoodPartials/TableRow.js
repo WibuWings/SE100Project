@@ -132,7 +132,6 @@ function GoodRow(props) {
                                                 })
                                                 .catch(err => {
                                                     alert(err);
-                                                    // alert("Lỗi gì cmnr")
                                                 })
                                         }}
                                     >
