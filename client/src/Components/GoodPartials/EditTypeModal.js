@@ -74,14 +74,16 @@ class EditTypeModal extends Component {
                 console.log(err);
                 alert(err);
             })
+
         var allProductJoin = [];
         for(var i = 0 ; i < allJoinMatch.length; i++)
         {
             allProductJoin.push({
                 productID: allJoinMatch[i]._id.productID,
                 typeID: type._id.typeID,
+                importDate: allJoinMatch[i]._id.importDate,
                 storeID: this.props.infoUser.email,
-                importDate: allJoinMatch[i]._id.importDate
+                
             });
         }
         
@@ -89,6 +91,7 @@ class EditTypeModal extends Component {
             token: localStorage.getItem('token'),
             productJoinTypes: allProductJoin,      
         }
+
         console.log(dataJoin);
 
         await axios.delete(`http://localhost:5000/api/product/join`,{data: dataJoin})
