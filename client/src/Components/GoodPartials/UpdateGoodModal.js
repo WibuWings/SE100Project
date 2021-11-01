@@ -82,7 +82,7 @@ class UpdateGoodModal extends Component {
                     storeID: this.props.infoUser.email,
                 },
                 name: this.name,
-                quantity: document.querySelector('input[name="goodQuantity"]').value,
+                quantity: this.quantity,
                 // remain: document.querySelector('input[name="goodQuantity"]').value,
                 importPrice: document.querySelector('input[name="originalPrice"]').value,
                 sellPrice: document.querySelector('input[name="sellPrice"]').value,
@@ -113,24 +113,33 @@ class UpdateGoodModal extends Component {
         var productInfo = this.props.infoUpdate;
         console.log(this.props.infoUpdate);
 
-        this.goodID = productInfo._id.productID;
-        this.importDate = productInfo._id.importDate;
-        this.name = productInfo.name;
-        this.imgUrl = productInfo.imgUrl;
-        this.quantity = productInfo.quantity;
+        this.goodID = (productInfo._id.productID == null) ? '' : productInfo._id.productID;
+        this.importDate = productInfo._id.importDate == null ? '' : productInfo._id.importDate;
+        this.name = productInfo.name == null ? '' : productInfo.name;
+        this.imgUrl = productInfo.imgUrl == null ? '' : productInfo.imgUrl;
+        this.quantity = productInfo.quantity == null ? '' : productInfo.quantity;
         // this.remain = productInfo.remain;
-        this.unit = productInfo.unit;
-        this.importPrice = productInfo.importPrice;
-        this.sellPrice = productInfo.sellPrice;
-        this.expire = productInfo.expires;
+        this.unit = productInfo.unit == null ? '' : productInfo.unit;
+        this.importPrice = productInfo.importPrice == null ? '' : productInfo.importPrice;
+        this.sellPrice = productInfo.sellPrice == null ? '' : productInfo.sellPrice;
+        this.expire = productInfo.expires == null ? '' : productInfo.expries;
+        this.expire = this.expire == null ? '':this.expire.substring(0,this.expire.indexOf('T'));
         console.log("this.expire", this.expire);
         this.setState({change: !this.state.change});
     }
+
 
     changeName = (e) => {
         this.name = e.target.value;
     }
 
+    changeValue = (e, variable) =>
+    {
+        if(variable=='quantity')
+        {
+            this.quantity = e.target.value;
+        }
+    }
     render() {
         
         return (
@@ -247,6 +256,7 @@ class UpdateGoodModal extends Component {
                                             variant="outlined"
                                             type="number" 
                                             defaultValue={this.quantity}
+                                            onChange={(e) => this.changeValue(e, 'quantity')}
                                         />
                                     </Grid>
                                     <Grid item md={3}
