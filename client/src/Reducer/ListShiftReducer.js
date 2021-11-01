@@ -37,12 +37,15 @@ const listShiftInitialState = [
             case "ADD_SHIFT":
                 return [...state, action.newShift]
             case "OBJECT_UPDATE_SHIFT":
+                
                 state.forEach(item => {
+                    console.log(action.data)
+                    console.log(state)
                     if(item._id.shiftID === action.data.id) {
                         item.name = action.data.description;
                         item.salary = action.data.salary;
                         item.timeFrom = action.data.from;
-                        item.timeTo = action.data.to;
+                        item.timeEnd = action.data.to;
                     }
                 })
                 return state
