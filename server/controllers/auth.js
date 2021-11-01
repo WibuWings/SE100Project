@@ -12,7 +12,7 @@ const Receipt = require("../models/receipt");
 const Product = require("../models/product");
 const Employee = require("../models/employee");
 const Coupon = require("../models/coupon");
-
+const Regulation = require("../models/regulation");
 const {JWTAuthToken} = require("../helper/JWT");
 
 const MESSAGES = {
@@ -169,6 +169,11 @@ class Authentication {
                             });
 
                             newStore.save();
+                            const newRegulation = new Regulation({
+                                _id: newManager.storeID,
+                            });
+
+                            newRegulation.save();
 
                             getAllData(data.email).then((result) => {
                                 res.send(
@@ -303,6 +308,7 @@ async function getAllData(email) {
         returnProducts,
         shiftAssigns,
         shiftTypes,
+        regulation,
     ] = await Promise.all([
         Coupon.find({ "_id.storeID": store._id }).exec(),
         Employee.find({ managerID: store._id }).exec(),
@@ -314,6 +320,7 @@ async function getAllData(email) {
         ReturnProduct.find({ "_id.storeID": store._id }).exec(),
         ShiftAssign.find({ "_id.storeID": store._id }).exec(),
         ShiftType.find({  "_id.storeID": store._id }).exec(),
+        Regulation.find({ _id: store._id }).exec(),
     ]);
 
     return {
@@ -329,6 +336,7 @@ async function getAllData(email) {
         shiftAssigns,
         shiftTypes,
         revenues,
+        regulation,
     };
 }
 module.exports = new Authentication();

@@ -261,6 +261,8 @@ class meProfile {
                  })  
             );
         });};
+
+
     updateImage = async (req, res) => {
         const email = req.body.email;
         const image = req.body.avatar
@@ -293,6 +295,74 @@ class meProfile {
                 )}
             })
     }
+    updateProfileData = async (req, res) =>{
+        const idcheck = req.body._id
+        const email = req.body.email;   
+        const newfirstName = req.body.firstName;
+        const newlastName = req.body.lastName;
+        const newphoneNumber = req.body.phoneNumber;
+        const newgender = req.body.gender
+        const newAddress = req.body.address;
+        const newProvince = req.body.province;
+        const newDistrict = req.body.district;
+        const newstoreName = req.body.storeName;
+        const old = req.body.old                  
+        Store.findOneAndUpdate(
+                {
+                    _id: email
+                },
+                {$set:{
+                    storeName: newstoreName,
+                }},
+                {
+                    returnOriginal: false,
+                },
+                function(err, doc){
+                    if(err){
+                        console.log("Something wrong when updating data!");
+                    }
+                    else{
+                        Manager.findOneAndUpdate(
+                        {
+                            email : email,
+                        },
+                        {$set:{
+                            lastName:newlastName,
+                            firstName:newfirstName,
+                            phoneNumber:newphoneNumber,
+                            address:newAddress,
+                            province:newProvince,
+                            district:newDistrict,
+                            storeID: email,
+                            gender:newgender,
+                            old:old,
+                        }},
+                        {
+                            returnOriginal: false,
+                        },
+                        function(err, doc){
+                            if(err){
+                                res.send(
+                                    JSON.stringify({
+                                        status: STATUS.FAILURE,
+                                        message: MESSAGES.FAILURE_UPDATE,
+                                    })
+                                );;
+                            }
+                            else{
+                            
+                            res.status(200).send(
+                                JSON.stringify({
+                                    token : res.locals.newToken,
+                                    email : res.locals.decoded.email,
+                                    data : newDoc,  
+                                })
+                            )}})
+                    }}
+                
+            )   
+
+}
     
 }
 module.exports = new meProfile();
