@@ -123,7 +123,7 @@ class UpdateGoodModal extends Component {
         this.importPrice = productInfo.importPrice;
         this.sellPrice = productInfo.sellPrice;
         this.expire = productInfo.expires;
-        console.log("Impoprt date", this.importDate);
+        console.log("this.expire", this.expire);
         this.setState({change: !this.state.change});
     }
 

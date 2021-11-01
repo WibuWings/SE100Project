@@ -12,7 +12,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import GoodRow from './TableRow';
 
-function createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType, imgUrl, unit) {
+function createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType, imgUrl, unit, expires) {
     return {
         index,
         id,
@@ -23,7 +23,7 @@ function createData(index, id, name, quantity, originalPrice, sellPrice, importT
         imgLink: imgUrl,
         hidden:
         {
-            expires: '2020-01-05',
+            expires: expires,
             remaining: quantity,
             originalPrice: originalPrice,
             productType: productType,
@@ -141,7 +141,8 @@ class GoodTable extends Component {
 
             rows.push(
                 createData((i+1), obj._id.productID, obj.name, obj.quantity, 
-                    obj.importPrice, obj.sellPrice, obj._id.importDate, joinType, obj.imgUrl, obj.unit)
+                    obj.importPrice, obj.sellPrice, obj._id.importDate, joinType, 
+                    obj.imgUrl, obj.unit, obj.expires)
             );
         }
         
