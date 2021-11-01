@@ -6,13 +6,12 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../css/Login.css'
 import { BsFillEnvelopeFill, BsLockFill } from "react-icons/bs";
-import { FiChevronRight, FiXSquare } from "react-icons/fi";
+import { FiChevronRight } from "react-icons/fi";
 import { BiUser } from "react-icons/bi";
 import { Avatar } from '@mui/material'
 import { IconContext } from "react-icons";
 import { GoogleLogin } from 'react-google-login';
 import axios from 'axios';
-import Alert from '@mui/material/Alert';
 
 
 class Login extends Component {
@@ -21,16 +20,11 @@ class Login extends Component {
         this.state = {
             appId: "543752153590340",
             clientId: "826925109796-mi95l41fi57bdlolpvnfdg5bpt9oc81h.apps.googleusercontent.com",
-            statusFailed: false,
-            statusSucces: false,
         }
     }
 
-    message = "";
-
     // Login with google
     onLoginSuccess = async (res) => {
-        this.OutAlert();
         this.props.setRole();
         await axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
@@ -40,82 +34,60 @@ class Login extends Component {
                     case 1:
                         localStorage.setItem('token', res.data.token);
                         this.props.updateProfile(res.data.data);
-                        this.props.updateAvatar(res.data.data.imgUrl);
+                        this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                         this.props.updateShiftTypes(res.data.data.shiftTypes);
                         this.props.changeLoginStatus();
+                        this.props.hideAlert();
+                        this.props.showAlert(res.data.message, "success");
                         break;
                     case -1:
-                        this.message = res.data.message;
-                        this.setState({
-                            statusFailed: true,
-                        })
+                        this.props.hideAlert();
+                        this.props.showAlert(res.data.message, "error");
                         break;
                     default:
                         break;
                 }
             })
             .catch(err => {
-                this.message = "Error, server don't active";
-                this.setState({
-                    statusFailed: true,
-                })
+                this.props.hideAlert();
+                this.props.showAlert("Error, server don't active", "error");
             })
     }
 
-    onFailureSuccess = (res) => {
-        this.setState({
-            statusFailed: true,
-            statusSucces: false,
-        })
-    }
-
-    // Out Alert
-    OutAlert = () => {
-        this.setState({
-            statusFailed: false,
-            statusSucces: false,
-        })
-    }
-
     // Check để thay đổi trạng thái đã login hay chưa
-    isLoginCheck = (e) => {
-        this.OutAlert();
+    isLoginCheck = async (e) => {
         this.props.setRole();
         if (this.blurEmail() && this.blurPassword()) {
-            axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
+            await axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
                 email: document.querySelector('#email').value,
                 password: document.getElementById('password').value,
             })
                 .then(res => {
                     console.log(res.data);
-                    // console.log(res.data.email);
                     switch (res.data.status) {
                         case 1:
                             localStorage.setItem('token', res.data.token);
-                            this.props.updateAvatar(res.data.data.manager.imgUrl);
                             this.props.updateProfile(res.data.data);
+                            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                             this.props.updateShiftTypes(res.data.data.shiftTypes);
                             this.props.changeLoginStatus();
+                            this.props.hideAlert();
+                            this.props.showAlert(res.data.message, "success");
                             break;
                         case -1:
-                            this.message = res.data.message;
-                            this.setState({
-                                statusFailed: true,
-                            })
+                            this.props.hideAlert();
+                            this.props.showAlert(res.data.message, "error");
                             break;
                         default:
                             break;
                     }
                 })
                 .catch(err => {
-                    this.message = "Enter again";
-                    this.setState({
-                        statusFailed: true,
-                    })
+                    this.props.hideAlert();
+                    this.props.showAlert("Error system", "error");
                 })
         }
     }
-
 
     // Handle user : blur , change in input
     blurEmail = () => {
@@ -138,7 +110,6 @@ class Login extends Component {
             return true;
         }
     }
-
 
     blurPassword = () => {
         const e = document.getElementById('password');
@@ -165,12 +136,9 @@ class Login extends Component {
         formGroup.querySelector('.form-message').innerText = "";
     }
 
-
     componentWillMount() {
         document.title = 'Login'
     }
-
-
 
     render() {
         const enterPress = this.isLoginCheck;
@@ -249,8 +217,6 @@ class Login extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.statusSucces ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
-                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
             </div>
         );
     }
@@ -291,6 +257,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "UPDATE_DATA_SHIFT_USER",
                 shiftTypes: shiftTypes,
+            })
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
             })
         }
     }

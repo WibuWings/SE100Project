@@ -25,7 +25,9 @@ import listProductReducer from './ListProductReducer';
 import typeProductReducer from './typeProductReducer';
 import chooseTypeProductReducer from './chooseTypeProduct';
 import typeProductValueReducer from './TypeProductValueReducer';
-
+import infoGoodReducer from './InfoUpdateProduct';
+import alertReducer from './AlertReducer';
+import shoppingBagsReducer from './SellProduct/ShoppingBagsReducer';
 
 var redux = require('redux');
 
@@ -41,6 +43,7 @@ const allReducers = redux.combineReducers({
     addTypeStatus: statusAddTypeReducer,
     isAddTypeStatus: statusIsAddTypeReducer,
     updateGoodStatus: statusUpdateGoodReducer,
+    infoUpdate: infoGoodReducer,
     infoUser: infoUserReducer,
     listShift: listShiftReducer,
     role: roleReducer,
@@ -57,6 +60,8 @@ const allReducers = redux.combineReducers({
     listProduct: listProductReducer,
     typeProduct: typeProductReducer,
     chooseTypeProduct: chooseTypeProductReducer,
+    alert: alertReducer,
+    shoppingBags: shoppingBagsReducer,
 })
 
 

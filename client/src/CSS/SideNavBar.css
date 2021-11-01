@@ -156,3 +156,8 @@
 .nav-item .nav-item-lable {
     /* display: none; */
 }
+
+.nav-item .nav-item-lable:hover {
+    /* display: none; */
+    cursor: pointer;
+}

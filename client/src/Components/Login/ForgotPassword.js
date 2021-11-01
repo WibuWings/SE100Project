@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Avatar from '@mui/material/Avatar'
 import { IconContext } from "react-icons";
-import { FiSend, FiXSquare } from "react-icons/fi";
+import { FiSend } from "react-icons/fi";
 import { BsFillEnvelopeFill, BsLockFill, BsBoxArrowInLeft, BsCodeSlash } from "react-icons/bs";
 import emailjs from 'emailjs-com';
-import Alert from '@mui/material/Alert';
 import axios from 'axios';
 import {
     NavLink
 } from "react-router-dom";
+import { connect } from 'react-redux';
 var bcrypt = require('bcryptjs');
 
 
@@ -18,12 +18,9 @@ class ForgotPassword extends Component {
         this.state = {
             code: "",
             statusSendCode: true,
-            statusFailed: false,
-            statusSuccess: false,
         }
     }
 
-    message = ""
 
     // Send code tới người dùng
     sendCode = (a = this.makeCode(6)) => {
@@ -63,18 +60,8 @@ class ForgotPassword extends Component {
         return hash;
     }
 
-
-    // Out Alert
-    OutAlert = () => {
-        this.setState({
-            statusFailed: false,
-            statusSuccess: false,
-        })
-    }
-
     //Check tìm lại mật khẩu
     findPassword = (e) => {
-        this.OutAlert();
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword()) {
             const form = document.getElementById('findpass-form');
             axios.post(`http://localhost:5000/find-password`, {
@@ -86,26 +73,20 @@ class ForgotPassword extends Component {
                     console.log(res.data.status);
                     switch (res.data.status) {
                         case 1:
-                            this.message = res.data.message;
-                            this.setState({
-                                statusSuccess: true,
-                            })
+                            this.props.hideAlert();
+                            this.props.showAlert(res.data.message, "success");
                             break;
                         case -1:
-                            this.message = res.data.message;
-                            this.setState({
-                                statusFailed: true,
-                            })
+                            this.props.hideAlert();
+                            this.props.showAlert(res.data.message, "error");
                             break;
                         default:
                             break;
                     }
                 })
                 .catch(err => {
-                    this.message = "Error system";
-                    this.setState({
-                        statusFailed: true,
-                    })
+                    this.props.hideAlert();
+                    this.props.showAlert("Error system", "error");
                 })
         }
     }
@@ -286,14 +267,29 @@ class ForgotPassword extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.statusSuccess ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
-                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
             </div>
         );
     }
 }
 
 
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        }
+    }
+}
 
 
-export default ForgotPassword;
+
+export default connect(mapDispatchToProps)(ForgotPassword);

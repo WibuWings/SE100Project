@@ -13,6 +13,7 @@ const Receipt = require("../models/receipt");
 const Product = require("../models/product");
 const Employee = require("../models/employee");
 const Coupon = require("../models/coupon");
+const Regulation = require("../models/regulation");
 const {JWTVerify} = require("../helper/JWT");
 const MESSAGES = {
     SIGN_IN_SUCCESS: "Sign-in successfully.",
@@ -261,6 +262,8 @@ class meProfile {
                  })  
             );
         });};
+
+
     updateImage = async (req, res) => {
         const email = req.body.email;
         const image = req.body.avatar
@@ -293,6 +296,53 @@ class meProfile {
                 )}
             })
     }
+    updateRegulation = async (req, res) =>{
+        const idcheck = req.body.email;
+        const current = req.body.currency;
+        const hourFrom = req.body.timeStart.hours;
+        const minuteFrom = req.body.timeStart.minutes;
+        const hourEnd = req.body.timeEnd.hours;
+        const minuteEnd = req.body.timeEnd.minutes;  
+        const numEmployees = req.body.numberEmployees      
+                Regulation.findOneAndUpdate(
+                {
+                    _id : idcheck,
+                },
+                {$set:{
+                    currency : current,
+                    numberEmployees :numEmployees,
+                    from : { 
+                        hour : hourFrom,
+                        minutes : minuteFrom
+                    },
+                    to :{
+                        hour : hourEnd,
+                        minutes : minuteEnd,
+                    }
+                }},
+                {
+                    returnOriginal: false,
+                },
+                function(err, doc){
+                    if(err){
+                        res.send(
+                            JSON.stringify({
+                                status: STATUS.FAILURE,
+                                message: MESSAGES.FAILURE_UPDATE,
+                            })
+                        );;
+                    }
+                    else{
+                    
+                res.status(200).send(
+                        JSON.stringify({
+                            token : res.locals.newToken,
+                            email : res.locals.decoded.email,
+                            data : doc ,  
+                        })
+                    )}})
+            }
+        
     
 }
 module.exports = new meProfile();

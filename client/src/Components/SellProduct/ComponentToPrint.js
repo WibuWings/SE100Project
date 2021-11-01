@@ -1,26 +1,45 @@
-import React from "react";
+import { connect } from "react-redux";
+import React from 'react';
 
-export class ComponentToPrint extends React.PureComponent {
+
+
+class ComponentToPrint extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+    }
+
+
+
     render() {
+        
         return (
             <div>
                 <h1>In bill</h1>
                 <table>
                     <thead>
-                        <th>column 1</th>
-                        <th>column 2</th>
-                        <th>column 3</th>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Số lượng</th>
+                        <th>Thành Tiền</th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>data 1</td>
-                            <td>data 2</td>
-                            <td>data 3</td>
-                        </tr>
+                        {this.props.shoppingBags ? this.props.shoppingBags.map((value, key) => (
+                            <tr>
+                                <td>{key + 1}</td>
+                                <td>{value.product.name}</td>
+                                <td>{value.quantity}</td>
+                                <td>{value.quantity * value.product.sellPrice}</td>
+                            </tr>
+                        ))
+                            : 'Không có gì'}
                     </tbody>
                 </table>
             </div>
-
         );
     }
 }
+
+
+
+export default ComponentToPrint;

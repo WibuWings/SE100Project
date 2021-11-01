@@ -47,14 +47,17 @@ class EditTypeModal extends Component {
         }
         await axios.delete(`http://localhost:5000/api/product/type`,{data: data})
             .then(res => {
-                console.log("Update success");
-                alert('delete được rồi anh trai')
+                console.log("delete success");
             })
             .catch(err => {
                 alert(err);
                 // alert("Lỗi gì cmnr")
             })
+        // Ở đây mình phải cập nhật join nữa
+        
+
         this.loadAllType();
+        
     }
     
 

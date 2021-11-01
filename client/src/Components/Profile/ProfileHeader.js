@@ -31,20 +31,24 @@ class ProfileHeader extends Component {
                 .then(res => {
                     console.log(res.data.url);
                     this.props.updateAvatar(res.data.url);
-                    axios.post(`http://localhost:5000/api/profile/update-avatar`,{
+                    axios.post(`http://localhost:5000/api/profile/update-avatar`, {
                         email: this.props.infoUser.email,
                         avatar: res.data.url,
                         token: localStorage.getItem('token'),
                     }).then(res => {
                         localStorage.setItem('token', res.data.token);
                         console.log(res.data);
-                        console.log("Thành công");
+                        this.props.hideAlert();
+                        this.props.showAlert("Update avatar success", "success");
                     }).catch(err => {
-                        console.log("Lỗi");
+                        this.props.changeLoginStatus();
+                        this.props.hideAlert();
+                        this.props.showAlert("Login timeout, signin again", "warning");
                     })
                 })
                 .catch(err => {
-                    console.log("Thất bại");
+                    this.props.hideAlert();
+                    this.props.showAlert("System image faile", "warning");
                 })
 
         }
@@ -86,6 +90,23 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "UPDATE_AVATAR",
                 avatar: avatar
+            })
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        changeLoginStatus: () => {
+            dispatch({
+                type: "CHANGE_LOGIN_STATUS",
+            });
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
             })
         }
     }

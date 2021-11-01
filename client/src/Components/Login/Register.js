@@ -6,11 +6,10 @@ import {
 import { connect } from 'react-redux';
 import Avatar from '@mui/material/Avatar'
 import { IconContext } from "react-icons";
-import { FiChevronLeft, FiUserPlus, FiXSquare } from "react-icons/fi";
+import { FiChevronLeft, FiUserPlus } from "react-icons/fi";
 import { BsFillEnvelopeFill, BsLockFill, BsCodeSlash } from "react-icons/bs";
 import { FaPhoneSquare } from "react-icons/fa";
 import axios from 'axios';
-import Alert from '@mui/material/Alert';
 import emailjs from 'emailjs-com';
 var bcrypt = require('bcryptjs');
 
@@ -22,12 +21,9 @@ class Register extends Component {
         this.state = {
             code: "",
             statusSendCode: true,
-            statusFailed: false,
-            statusSuccess: false,
         }
     }
 
-    message = "";
 
     // Send code tới người dùng
     sendCode = (a = this.makeCode(6)) => {
@@ -51,7 +47,6 @@ class Register extends Component {
 
     // status SignUp 
     SignUp = (e) => {
-        this.OutAlert();
         if (this.blurEmail() && this.blurCode() && this.blurPassword() && this.blurRePassword() && this.blurTel()) {
             axios.post(`http://localhost:5000/register-with-email`, {
                 email: document.getElementById('email').value,
@@ -62,53 +57,30 @@ class Register extends Component {
                     console.log(res.data);
                     switch (res.data.status) {
                         case 1:
-                            this.message = res.data.message;
-                            this.setState({
-                                statusSuccess: true,
-                            })
                             localStorage.setItem('token', res.data.token);
-                            const data = {
-                                email: res.data.email,
-                                firstName: "",
-                                lastName:  "",
-                                old:  "",
-                                gender: "0",
-                                storeName: "",
-                                tel: document.getElementById('tel').value,
-                                province: "0",
-                                district:  "0",
-                                address:  "",
-                            }
-                            this.props.updateProfile(data);
+                            this.props.updateProfile(res.data.data);
+                            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                             this.props.changeLoginStatus();
+                            this.props.hideAlert();
+                            this.props.showAlert(res.data.message, "success");
+
                             break;
                         case -1:
-                            this.message = res.data.message;;
-                            this.setState({
-                                statusFailed: true,
-                            })
+                            this.props.hideAlert();
+                            this.props.showAlert(res.data.message, "error");
                             break;
                         default:
                             break;
                     }
                 })
                 .catch(err => {
-                    this.message = "Error system";
-                    this.setState({
-                        statusFailed: true,
-                    })
+                    this.props.hideAlert();
+                    this.props.showAlert("Error system", "error");
                 })
 
         }
     }
 
-    // Out Alert
-    OutAlert = () => {
-        this.setState({
-            statusFailed: false,
-            statusSuccess: false,
-        })
-    }
 
     // Tạo mã code cho người dùng xác nhận
     makeCode = (length) => {
@@ -335,8 +307,6 @@ class Register extends Component {
                         </div>
                     </div>
                 </div >
-                {this.state.statusSuccess ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
-                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
             </div >
         );
     }
@@ -358,16 +328,25 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         updateProfile: (data) => {
             dispatch({
                 type: "UPDATA_DATA_USER",
-                email: data.email,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                old: data.old,
-                gender: data.gender,
-                storeName: data.storeName,
-                tel: data.tel,
-                province: data.province,
-                district: data.district,
-                address: data.address,
+                data: data,
+            })
+        },
+        updateAvatar: (avatar) => {
+            dispatch({
+                type: "UPDATE_AVATAR",
+                avatar: avatar,
+            })
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
             })
         }
     }

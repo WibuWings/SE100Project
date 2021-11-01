@@ -6,7 +6,8 @@ import DirectionURL from './Router/DirectionURL';
 import './css/App.css'
 import { connect } from 'react-redux'
 import axios from 'axios';
-
+import Alert from '@mui/material/Alert';
+import { FiChevronRight, FiXSquare } from "react-icons/fi";
 
 class App extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class App extends Component {
           if (res.status === 200) {
             localStorage.setItem('token', res.data.token);
             this.props.updateProfile(res.data.data);
-            this.props.updateAvatar(res.data.data.manager.imgUrl)
+            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
             this.props.updateShiftTypes(res.data.data.shiftTypes)
             this.props.changeLoginStatus();
           }
@@ -39,6 +40,7 @@ class App extends Component {
     return (
       <Router>
         <DirectionURL></DirectionURL>
+        {this.props.alertReducer.status ? <Alert onClick={() => this.props.hideAlert()} className="message-error" severity={this.props.alertReducer.typeMessage}>{this.props.alertReducer.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
       </Router>
     );
   }
@@ -47,6 +49,7 @@ class App extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     isLogin: state.loginStatus,
+    alertReducer: state.alert,
   }
 }
 
@@ -79,6 +82,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "UPDATE_DATA_SHIFT_USER",
         shiftTypes: shiftTypes,
+      })
+    },
+    hideAlert: () => {
+      dispatch({
+        type: "HIDE_ALERT",
       })
     }
   }

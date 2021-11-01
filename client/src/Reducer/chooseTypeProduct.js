@@ -3,7 +3,7 @@ const chooseTypeProductInitialState = 'all',
 chooseTypeProductReducer = (state = chooseTypeProductInitialState, action) => {
         switch (action.type) {
             case "UPDATE_TYPE_CHOOSE":
-                return action.typeProduct;
+                return action.typeProductID;
             default:
                 return state;
         }
