@@ -27,6 +27,7 @@ import chooseTypeProductReducer from './chooseTypeProduct';
 import typeProductValueReducer from './TypeProductValueReducer';
 import infoGoodReducer from './InfoUpdateProduct';
 import alertReducer from './AlertReducer';
+import shoppingBagsReducer from './SellProduct/ShoppingBagsReducer';
 
 var redux = require('redux');
 
@@ -60,6 +61,7 @@ const allReducers = redux.combineReducers({
     typeProduct: typeProductReducer,
     chooseTypeProduct: chooseTypeProductReducer,
     alert: alertReducer,
+    shoppingBags: shoppingBagsReducer,
 })
 
 

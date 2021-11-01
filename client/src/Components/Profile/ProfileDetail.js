@@ -32,7 +32,8 @@ class ProfileDetail extends Component {
                 address: document.querySelector('input[name="address"]').value,
             }
 
-            await axios.post(`http://localhost:5000/api/profile/update-profile`, data)
+            await axios.post(`
+            update-profile`, data)
                 .then(res => {
                     console.log(res);
                     if (res.status === 200) {

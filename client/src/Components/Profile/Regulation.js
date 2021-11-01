@@ -11,8 +11,8 @@ class Regulation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            timeStart: Date.now(),
-            timeEnd: Date.now(),
+            timeStart: new Date(2018, 5, 35, 7, 0, 0),
+            timeEnd: new Date(2018, 5, 35, 18, 0, 0),
             numberEmployees: 10,
             isNumberEmployees: false,
             isSaveRegulations: false,
@@ -54,13 +54,27 @@ class Regulation extends Component {
             email: this.props.infoUser.email,
             token: localStorage.getItem('token'),
             currency:document.querySelector('select[name="currency"]').value, 
-            timeStart: this.state.timeStart,
-            timeEnd: this.state.timeEnd,
+            timeStart: {
+                hours: this.state.timeStart.getHours(),
+                minutes: this.state.timeStart.getMinutes(),
+            },
+            timeEnd: {
+                hours: this.state.timeEnd.getHours(),
+                minutes: this.state.timeEnd.getMinutes(),
+            },
         }
         if (!this.state.isNumberEmployees && this.state.isSaveRegulations) {
               console.log("save");  
               console.log(data);
-            //   axios.post(`https://provinces.open-api.vn/api/?depth=2`, )
+            await axios.post(`http://localhost:5000/api/profile/regulation`, data)
+            .then(res => {
+                this.props.hideAlert();
+                this.props.showAlert("Login timeout, signin again", "success");
+            })
+            .catch(err => {
+                this.props.hideAlert();
+                this.props.showAlert("Login timeout, signin again", "warning");
+            });
         }
     }
 
@@ -152,21 +166,18 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        updateProfile: (data) => {
+        hideAlert: () => {
             dispatch({
-                type: "UPDATA_DATA_USER",
-                email: data.email,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                old: data.old,
-                gender: data.gender,
-                storeName: data.storeName,
-                tel: data.tel,
-                province: data.province,
-                district: data.district,
-                address: data.address,
+                type: "HIDE_ALERT",
             })
-        }
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
     }
 }
 

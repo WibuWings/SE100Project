@@ -26,3 +26,11 @@
     background-color: #d47a7a;
     border-radius: 8px;
 }
+
+.customizeTable{
+    border-bottom: 3px solid black;
+}
+
+.customize-list-table {
+    border-bottom: 1px solid black;
+}
