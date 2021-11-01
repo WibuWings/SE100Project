@@ -13,6 +13,7 @@ const Receipt = require("../models/receipt");
 const Product = require("../models/product");
 const Employee = require("../models/employee");
 const Coupon = require("../models/coupon");
+const Regulation = require("../models/regulation");
 const {JWTVerify} = require("../helper/JWT");
 const MESSAGES = {
     SIGN_IN_SUCCESS: "Sign-in successfully.",
@@ -295,74 +296,53 @@ class meProfile {
                 )}
             })
     }
-    updateProfileData = async (req, res) =>{
-        const idcheck = req.body._id
-        const email = req.body.email;   
-        const newfirstName = req.body.firstName;
-        const newlastName = req.body.lastName;
-        const newphoneNumber = req.body.phoneNumber;
-        const newgender = req.body.gender
-        const newAddress = req.body.address;
-        const newProvince = req.body.province;
-        const newDistrict = req.body.district;
-        const newstoreName = req.body.storeName;
-        const old = req.body.old                  
-        Store.findOneAndUpdate(
+    updateRegulation = async (req, res) =>{
+        const idcheck = req.body.email;
+        const current = req.body.currency;
+        const hourFrom = req.body.timeStart.hours;
+        const minuteFrom = req.body.timeStart.minutes;
+        const hourEnd = req.body.timeEnd.hours;
+        const minuteEnd = req.body.timeEnd.minutes;  
+        const numEmployees = req.body.numberEmployees      
+                Regulation.findOneAndUpdate(
                 {
-                    _id: email
+                    _id : idcheck,
                 },
                 {$set:{
-                    storeName: newstoreName,
+                    currency : current,
+                    numberEmployees :numEmployees,
+                    from : { 
+                        hour : hourFrom,
+                        minutes : minuteFrom
+                    },
+                    to :{
+                        hour : hourEnd,
+                        minutes : minuteEnd,
+                    }
                 }},
                 {
                     returnOriginal: false,
                 },
                 function(err, doc){
                     if(err){
-                        console.log("Something wrong when updating data!");
+                        res.send(
+                            JSON.stringify({
+                                status: STATUS.FAILURE,
+                                message: MESSAGES.FAILURE_UPDATE,
+                            })
+                        );;
                     }
                     else{
-                        Manager.findOneAndUpdate(
-                        {
-                            email : email,
-                        },
-                        {$set:{
-                            lastName:newlastName,
-                            firstName:newfirstName,
-                            phoneNumber:newphoneNumber,
-                            address:newAddress,
-                            province:newProvince,
-                            district:newDistrict,
-                            storeID: email,
-                            gender:newgender,
-                            old:old,
-                        }},
-                        {
-                            returnOriginal: false,
-                        },
-                        function(err, doc){
-                            if(err){
-                                res.send(
-                                    JSON.stringify({
-                                        status: STATUS.FAILURE,
-                                        message: MESSAGES.FAILURE_UPDATE,
-                                    })
-                                );;
-                            }
-                            else{
-                            
-                            res.status(200).send(
-                                JSON.stringify({
-                                    token : res.locals.newToken,
-                                    email : res.locals.decoded.email,
-                                    data : newDoc,  
-                                })
-                            )}})
-                    }}
-                
-            )   
-
-}
+                    
+                res.status(200).send(
+                        JSON.stringify({
+                            token : res.locals.newToken,
+                            email : res.locals.decoded.email,
+                            data : doc ,  
+                        })
+                    )}})
+            }
+        
     
 }
 module.exports = new meProfile();

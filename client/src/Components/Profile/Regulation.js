@@ -54,6 +54,7 @@ class Regulation extends Component {
             email: this.props.infoUser.email,
             token: localStorage.getItem('token'),
             currency:document.querySelector('select[name="currency"]').value, 
+            numberEmployees: this.state.numberEmployees,
             timeStart: {
                 hours: this.state.timeStart.getHours(),
                 minutes: this.state.timeStart.getMinutes(),
