@@ -101,7 +101,7 @@ class GoodTable extends Component {
         const data1 = {
             token: localStorage.getItem('token'),
             filter: {
-                storeID: this.props.infoUser.email,
+                "_id.storeID": this.props.infoUser.email,
             }   
         }
         await axios.get(`http://localhost:5000/api/product/join`, {
@@ -134,7 +134,7 @@ class GoodTable extends Component {
             {
 
                 // console.log("joinTypeInfor[]", j ,joinTypeInfor[j])
-                if(joinTypeInfor[j]._id.productID == obj._id.productID)
+                if(joinTypeInfor[j]._id.productID == obj._id.productID && joinTypeInfor[j]._id.storeID == obj._id.storeID)
                 {
                     joinType = joinType + ' ' + this.getTypeNamebyTypeID(joinTypeInfor[j]._id.typeID);
                 }
@@ -155,7 +155,7 @@ class GoodTable extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                storeID: this.props.infoUser.email,
+                "_id.storeID": this.props.infoUser.email,
             }   
         }
 

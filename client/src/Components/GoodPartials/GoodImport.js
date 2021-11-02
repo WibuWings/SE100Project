@@ -18,7 +18,9 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ConfirmModal from './ConfirmModal';
 import { GiConsoleController } from 'react-icons/gi';
-
+import {
+    Link
+} from "react-router-dom";
 // Use for save type
 var productTypes =[];
 var listTypeInfor = [];
@@ -526,9 +528,9 @@ class GoodImport extends Component {
                                 <Grid item md={2}
                                     className='input-item'
                                 >
-                                    <Button variant="contained" onClick={() => this.importGood()}>
-                                        Import
-                                    </Button>
+                                    <Link to="/goodmanager" className="btn btn-primary" onClick={() => this.importGood()}>
+                                        IMPORT
+                                    </Link>
                                 </Grid>
                             </Grid>
                         </Card>

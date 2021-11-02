@@ -34,25 +34,25 @@ class EditTypeModal extends Component {
         this.props.changeEditTypeStatus();
     }
     async delete(type){
-        // const data = {
-        //     token: localStorage.getItem('token'),
-        //     productTypes:
-        //     [
-        //         {
-        //             typeID: type._id.typeID,
-        //             storeID: type._id.storeID
-        //         }
-        //     ]
+        const data = {
+            token: localStorage.getItem('token'),
+            productTypes:
+            [
+                {
+                    typeID: type._id.typeID,
+                    storeID: type._id.storeID
+                }
+            ]
                 
-        // }
-        // await axios.delete(`http://localhost:5000/api/product/type`,{data: data})
-        //     .then(res => {
-        //         console.log("delete success");
-        //     })
-        //     .catch(err => {
-        //         alert(err);
-        //         // alert("Lỗi gì cmnr")
-        //     })
+        }
+        await axios.delete(`http://localhost:5000/api/product/type`,{data: data})
+            .then(res => {
+                console.log("delete success");
+            })
+            .catch(err => {
+                alert(err);
+                // alert("Lỗi gì cmnr")
+            })
         // Ở đây mình phải cập nhật join nữa
         // Phải get tất cả cái join mà có cái type là type hiện tại
         var allJoinMatch = [];
