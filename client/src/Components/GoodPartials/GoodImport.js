@@ -224,17 +224,33 @@ class GoodImport extends Component {
             return false;
         }
         // Constraint 6: Ngày nhập phải nhỏ  hơn ngày hết hạn
-        if ((new Date(document.querySelector('input[name="importDate"]').value).getTime() - new Date(document.querySelector('input[name="expiredDate"]').value).getTime()) >= 0)
+        if (
+            (
+                new Date(document.querySelector('input[name="importDate"]').value).getTime()
+                - 
+                new Date(document.querySelector('input[name="expiredDate"]').value).getTime()
+            ) >= 0)
         {
             alert('Không thể nhập hàng hết hạn');
             return false;
         }
-        // Constraint 7: check xem đã  up ảnh lên xong chưa
+        // Constraint 7: Check giá gốc nhỏ hơn giá bán
+        if(
+            parseInt(document.querySelector('input[name="sellPrice"]').value) 
+            - 
+            parseInt(document.querySelector('input[name="originalPrice"]').value) <=0
+            ) 
+        {
+            alert('Giá bán phải lớn hơn giá gốc');
+            return false;
+        }
+        // Constraint 8: check xem đã  up ảnh lên xong chưa
         if(this.finishUpImage == false)
         {
             alert('Ảnh chưa được upload xong');
             return false;
         }
+        
         alert('Constraint đã check đầy đủ');
         return true;
     }
@@ -378,9 +394,8 @@ class GoodImport extends Component {
                                         name="goodID" 
                                         variant="outlined"
                                         value={this.generatedID}
-                                        inputProps={
-                                            { readOnly: true, }
-                                        } 
+                                        readOnly={true}
+                                        disabled={true}
                                     />
                                 </Grid>
                                 <Grid item md={6} 

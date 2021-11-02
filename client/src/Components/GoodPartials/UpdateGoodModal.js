@@ -133,8 +133,17 @@ class UpdateGoodModal extends Component {
             alert('Không thể nhập hàng hết hạn');
             return false;
         }
-        
-        // Constraint 7: check xem đã  up ảnh lên xong chưa
+        // Constraint 7: Check giá gốc nhỏ hơn giá bán
+        if(
+            parseInt(document.querySelector('input[name="sellPrice"]').value) 
+            - 
+            parseInt(document.querySelector('input[name="originalPrice"]').value) <=0
+            ) 
+        {
+            alert('Giá bán phải lớn hơn giá gốc');
+            return false;
+        }
+        // Constraint 8: check xem đã  up ảnh lên xong chưa
         if(this.finishUpImage == false)
         {
             alert('Ảnh chưa được upload xong');
@@ -321,6 +330,8 @@ class UpdateGoodModal extends Component {
                                             size="small"
                                             variant="outlined"
                                             defaultValue={this.importDate}
+                                            readOnly={true}
+                                            disabled={true}
                                         />
                                     </Grid>
                                     
