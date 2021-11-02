@@ -148,8 +148,8 @@ class meProfile {
         
  
     updateShift = async (req, res) => {
-        const idUser = req.body.idUser
-        const idShift = req.body.id
+        const idUser = req.body.email
+        const idShift = req.body.idShift
         const newSalary = req.body.salary
         const name = req.body.description
         const from = req.body.from
