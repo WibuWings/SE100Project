@@ -21,10 +21,9 @@ import { AiFillPlusCircle} from "react-icons/ai";
 import CancelIcon from '@mui/icons-material/Cancel';
 import ConfirmModal from './ConfirmModal';
 
-var productTypes =[
-    'food', 'detergent', 'cuisine'
-];
-
+var productTypes =[];
+var listTypeInfor=[];
+// typeSet chứa id của các cái type
 var typeSet = [];
 
 const StyledTextField = withStyles((theme) => ({
@@ -50,8 +49,11 @@ class UpdateGoodModal extends Component {
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         }; 
-        this.loadInitialData();
         typeSet = [];
+        this.loadInitialData();
+        this.loadAllType();
+        this.loadCurrentTypes();
+        
     }
     imgUrl='none';
     goodID='';
@@ -66,11 +68,80 @@ class UpdateGoodModal extends Component {
     expire ="";
     finishUpImage = true;
 
-    blurDiscription = (e) => {
-        this.descriptionShift = e.target.value;
+    async loadAllType() {
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+            }   
+        }
+
+        await axios.get(`http://localhost:5000/api/product/type`, 
+        {
+            params: {...data}
+        })
+            .then(res => {
+                result = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        //Get data và lưu các tên Type vào bảng
+        listTypeInfor=[];
+        for(var i=0; i < result.length ; i++)
+        {
+            listTypeInfor.push(result[i]);
+        }
+        productTypes=[];
+        for(var i=0 ; i< listTypeInfor.length ; i ++)
+        {
+            productTypes.push(listTypeInfor[i].name);
+        }
+        this.setState({change: true});
     }
-    blurSalary = (e) => {
-        this.salary = e.target.value;
+
+    async loadCurrentTypes() {
+        // Get hết các cái join của sản phẩm
+        var allJoinMatch = [];
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+                "_id.productID": this.goodID,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, 
+        {
+            params: {...data1}
+        })
+            .then(res => {
+                allJoinMatch = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        console.log("Các join",allJoinMatch);
+        // Thêm vào trên cái bảng typeSet
+        for(var i = 0 ; i < allJoinMatch.length ; i ++)
+        {
+            typeSet.push(allJoinMatch[i]._id.typeID);
+        }
+        this.setState({change: !this.state.change});
+    }
+    getTypeNamebyTypeID (typeID) {
+        var typeName='';
+        for(var i = 0; i<listTypeInfor.length;i++)
+        {   
+            if(listTypeInfor[i]._id.typeID == typeID)
+            {
+                typeName = listTypeInfor[i].name;
+                break;
+            }
+        }
+        return typeName;
     }
 
     checkConstraint = () => {
@@ -152,7 +223,7 @@ class UpdateGoodModal extends Component {
         alert('Constraint đã check đầy đủ');
         return true;
     }
-    updateGood = () => {
+    async updateGood() {
         var isContinue = this.checkConstraint();
         if(!isContinue)
         {
@@ -187,7 +258,75 @@ class UpdateGoodModal extends Component {
             .catch(err => {
                 console.log(err);
             })
-        // Lấy các typejoin để update nữa
+        // Get hết các cái join của sản phẩm
+        var allJoinMatch = [];
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+                "_id.productID": this.goodID,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, 
+        {
+            params: {...data1}
+        })
+            .then(res => {
+                allJoinMatch = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        console.log(allJoinMatch);
+        // Xoá các join liên quan đến sản phẩm
+        var allProductJoin = [];
+        for(var i = 0 ; i < allJoinMatch.length; i++)
+        {
+            allProductJoin.push({
+                productID: this.goodID,
+                typeID: allJoinMatch[i]._id.typeID,
+                importDate: allJoinMatch[i]._id.importDate,
+                storeID: this.props.infoUser.email,
+            });
+        }
+        const dataJoin = {
+            token: localStorage.getItem('token'),
+            productJoinTypes: allProductJoin,      
+        }
+
+        console.log(dataJoin);
+
+        await axios.delete(`http://localhost:5000/api/product/join`,{data: dataJoin})
+            .then(res => {
+                console.log("delete join success");
+            })
+            .catch(err => {
+                alert(err);
+            })
+        // Thêm các cái hiện tại
+        // Giờ thêm nhiều type thì phải làm cái này nhiều lần
+        for(var i = 0 ; i < typeSet.length ; i++)
+        {
+            const data1 = {
+                token: localStorage.getItem('token'),
+                productJoinType: {
+                    _id : {
+                        productID: this.goodID,
+                        typeID: typeSet[i], 
+                        importDate: productInfo._id.importDate,
+                        storeID: this.props.infoUser.email,
+                    }
+                }
+            }
+            axios.post(`http://localhost:5000/api/product/join`, data1)
+                .then(res => {
+                    console.log("lưu vô bảng join thành công");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
     }
 
 
@@ -239,7 +378,6 @@ class UpdateGoodModal extends Component {
                 .catch(err => {
                     console.log("Thất bại");
                 })
-
         }
         this.finishUpImage = true;
     }
@@ -466,28 +604,28 @@ class UpdateGoodModal extends Component {
                                             Product Type
                                         </div>
                                         <FormControl sx={{ minWidth: 120 }}>
-                                            {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
-                                            <Select
-                                                value={this.state.type}
-                                                onChange={(event) => {
-                                                    this.setState({type: event.target.value});
-                                                    if(!typeSet.includes(event.target.value))
-                                                    {
-                                                        typeSet.push(event.target.value);
-                                                    }
-                                                }}
-                                                style={{
-                                                    height: 36,
-                                                }}
-                                            >
+                                        {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
+                                        <Select
+                                            value={this.state.type}
+                                            onChange={(event) => {
+                                                this.setState({type: event.target.value});
+                                                if(!typeSet.includes(event.target.value))
                                                 {
-                                                    productTypes.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
-                                                    : productTypes.map((type) =>
-                                                        <MenuItem value={type}>{type}</MenuItem>
-                                                    )
-                                                }   
-                                            </Select> 
-                                        </FormControl>
+                                                    typeSet.push(event.target.value);
+                                                }
+                                            }}
+                                            style={{
+                                                height: 36,
+                                            }}
+                                        >
+                                            {
+                                                listTypeInfor.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
+                                                : listTypeInfor.map((type) =>
+                                                    <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
+                                                )
+                                            }   
+                                        </Select> 
+                                    </FormControl>
                                         <Button onClick={() => this.handleAdd()}>
                                             <AiFillPlusCircle
                                                 size={28}
@@ -501,30 +639,29 @@ class UpdateGoodModal extends Component {
                                             />
                                         </Button>
                                         <div className='all-type-container'>
-                                                {
-                                                    Array.from(typeSet).map((type) =>
-                                                        <div className='type-container'>
-                                                            
-                                                            <CancelIcon
-                                                                className='close-icon'
-                                                                size={10}
-                                                                onClick={() => {
-                                                                    typeSet = typeSet.filter(function(item) {
-                                                                        return item != type;
-                                                                    })
-                                                                    console.log(typeSet);
-                                                                    this.setState({type: 'none'});
-                                                                }}
+                                            {
+                                                Array.from(typeSet).map((type) =>
+                                                    <div item md={7} className='type-container'>
+                                                        <CancelIcon
+                                                            className='close-icon'
+                                                            size={10}
+                                                            onClick={() => {
+                                                                typeSet = typeSet.filter(function(item) {
+                                                                    return item != type;
+                                                                })
+                                                                console.log(typeSet);
+                                                                this.setState({type: 'none'});
+                                                            }}
+                                                
+                                                        />
+                                                        <span className='type-title'>
+                                                            {this.getTypeNamebyTypeID(type)}
+                                                        </span>
+                                                    </div>
                                                     
-                                                            />
-                                                            <span className='type-title'>
-                                                                {type}
-                                                            </span>
-                                                        </div>
-                                                        
-                                                    )
-                                                }
-                                            </div>
+                                                )
+                                            }
+                                        </div>
                                     </Grid>
                                     {/* <Grid item md={10}
                                         className='input-item'
