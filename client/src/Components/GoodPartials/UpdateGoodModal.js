@@ -64,7 +64,8 @@ class UpdateGoodModal extends Component {
     importPrice = "";
     sellPrice = "";
     expire ="";
-    
+    finishUpImage = true;
+
     blurDiscription = (e) => {
         this.descriptionShift = e.target.value;
     }
@@ -72,14 +73,90 @@ class UpdateGoodModal extends Component {
         this.salary = e.target.value;
     }
 
+    checkConstraint = () => {
+        // Kiểm tra các constraint ở đây coi thử ổn chưa
+        // Constraint 1: Check name
+        var productName =  document.querySelector('input[name="goodName"]').value;
+        if(productName.length == 0)
+        {
+            alert("Tên sản phẩm không được trống");
+            return false;
+        }
+        // Constraint 2: Check quantity
+        if(document.querySelector('input[name="goodQuantity"]').value.length == 0)
+        {
+            alert("Số lượng sản phẩm không được trống");
+            return false;
+        }
+        else if(parseInt(document.querySelector('input[name="goodQuantity"]').value) <= 0) 
+        {
+            alert('Số lượng sản phẩm phải lớn hơn 0');
+            return false;
+        }
+        // Constraint 3: check Unit
+        if(document.querySelector('input[name="unit"]').value.length == 0)
+        {
+            alert('Đơn vị của sản phẩm không được trống');
+            return false;
+        }
+        // Constraint 4: Check import Price
+        if(document.querySelector('input[name="originalPrice"]').value.length == 0)
+        {
+            alert("Giá nhập không được trống");
+            return false;
+        }
+        else if(parseInt(document.querySelector('input[name="originalPrice"]').value) <= 0) 
+        {
+            alert('Giá nhập phải lớn hơn 0');
+            return false;
+        }
+        // Constraint 5: check sell Price
+        if(document.querySelector('input[name="sellPrice"]').value.length == 0)
+        {
+            alert("Giá bán không được trống");
+            return false;
+        }
+        else if(parseInt(document.querySelector('input[name="sellPrice"]').value) <= 0) 
+        {
+            alert('Giá bán phải lớn hơn 0');
+            return false;
+        }
+        // Constraint 6: Ngày nhập phải nhỏ  hơn ngày hết hạn và ngày hết hạn, ngày nhập phải khác null
+        if (
+            (
+                new Date(document.querySelector('input[name="importDate"]').value).getTime()
+                - 
+                new Date(document.querySelector('input[name="expiredDate"]').value).getTime()
+            ) >= 0
+        )
+        {
+            alert('Không thể nhập hàng hết hạn');
+            return false;
+        }
+        
+        // Constraint 7: check xem đã  up ảnh lên xong chưa
+        if(this.finishUpImage == false)
+        {
+            alert('Ảnh chưa được upload xong');
+            return false;
+        }
+        alert('Constraint đã check đầy đủ');
+        return true;
+    }
     updateGood = () => {
+        var isContinue = this.checkConstraint();
+        if(!isContinue)
+        {
+            return;
+        }
         this.props.changeUpdateGoodStatus();
+        var productInfo = this.props.infoUpdate;
         const data = {
             token: localStorage.getItem('token'),
             product: {
                 _id: {
                     productID: document.querySelector('input[name="goodID"]').value,
-                    importDate: this.importDate,
+                    importDate: productInfo._id.importDate,
                     storeID: this.props.infoUser.email,
                 },
                 name: this.name,
@@ -96,13 +173,14 @@ class UpdateGoodModal extends Component {
         axios.put(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Update success");
-                alert('update được rồi anh trai')
+                alert('Đã update thành công sản phẩm')
             })
             .catch(err => {
                 console.log(err);
             })
-        // Lấy các typr
+        // Lấy các typejoin để update nữa
     }
+
 
     cancel = () => {
         this.props.changeUpdateGoodStatus();
@@ -115,7 +193,8 @@ class UpdateGoodModal extends Component {
         console.log(this.props.infoUpdate);
 
         this.goodID = (productInfo._id.productID == null) ? '' : productInfo._id.productID;
-        this.importDate = productInfo._id.importDate == null ? '' : productInfo._id.importDate;
+        this.importDate = productInfo._id.importDate;
+        this.importDate = this.importDate == null ? '' :this.importDate.substring(0, this.importDate.indexOf('T'));
         this.name = productInfo.name == null ? '' : productInfo.name;
         this.imgUrl = productInfo.imgUrl == null ? '' : productInfo.imgUrl;
         this.quantity = productInfo.quantity == null ? '' : productInfo.quantity;
@@ -124,7 +203,7 @@ class UpdateGoodModal extends Component {
         this.importPrice = productInfo.importPrice == null ? '' : productInfo.importPrice;
         this.sellPrice = productInfo.sellPrice == null ? '' : productInfo.sellPrice;
         this.expire = productInfo.expires; //substring(0,productInfo.expire.indexOf('T'));
-        this.expire = this.expire.substring(0, this.expire.indexOf('T'));
+        this.expire = this.expire == null ? '' :this.expire.substring(0, this.expire.indexOf('T'));
         console.log("this.expire",this.expire );
         this.setState({change: !this.state.change});
     }
@@ -133,6 +212,7 @@ class UpdateGoodModal extends Component {
         this.setState({
             imageSelect: fileChangeEvent.target.files[0],
         })
+        this.finishUpImage = false;
         const file = fileChangeEvent.target.files[0];
         const { type } = file;
         if (!(type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg') || type.endsWith('gif'))) {
@@ -152,7 +232,7 @@ class UpdateGoodModal extends Component {
                 })
 
         }
-
+        this.finishUpImage = true;
     }
 
     changeName = (e) => {
@@ -232,20 +312,16 @@ class UpdateGoodModal extends Component {
                                         }}
                                     >
                                         <div className="input-label" style={{width: 128}}>Import Date</div>
-                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                            <DateTimePicker
-                                                renderInput={(params) => <StyledTextField 
-                                                                            {...params} 
-                                                                            classname='input-box'
-                                                                            name="importDateTime"
-                                                                            style = {{width: '70%', marginRight: 20}} 
-                                                                            fullWidth 
-                                                                        />}
-                                                value={this.importDate}
-                                                readOnly={true}
-                                                disabled={true}
-                                            />
-                                        </LocalizationProvider>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="date" 
+                                            style = {{width: '68%'}} 
+                                            fullWidth
+                                            name="importDate"
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.importDate}
+                                        />
                                     </Grid>
                                     
                                     <Grid item md={6} 
