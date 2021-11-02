@@ -51,6 +51,7 @@ class UpdateGoodModal extends Component {
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         }; 
         this.loadInitialData();
+        typeSet = [];
     }
     imgUrl='none';
     goodID='';
@@ -100,7 +101,7 @@ class UpdateGoodModal extends Component {
             .catch(err => {
                 console.log(err);
             })
-        
+        // Lấy các typr
     }
 
     cancel = () => {
@@ -122,9 +123,9 @@ class UpdateGoodModal extends Component {
         this.unit = productInfo.unit == null ? '' : productInfo.unit;
         this.importPrice = productInfo.importPrice == null ? '' : productInfo.importPrice;
         this.sellPrice = productInfo.sellPrice == null ? '' : productInfo.sellPrice;
-        this.expire = productInfo.expires == null ? '' : productInfo.expries;
-        this.expire = this.expire == null ? '':this.expire.substring(0,this.expire.indexOf('T'));
-        console.log("this.expire", this.expire);
+        this.expire = productInfo.expires; //substring(0,productInfo.expire.indexOf('T'));
+        this.expire = this.expire.substring(0, this.expire.indexOf('T'));
+        console.log("this.expire",this.expire );
         this.setState({change: !this.state.change});
     }
 
