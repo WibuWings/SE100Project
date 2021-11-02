@@ -155,7 +155,7 @@ class meProfile {
         const from = req.body.from
         const to = req.body.to
         ShiftType.findOneAndUpdate(
-            {shiftID : idShift,storeID : idUser,},
+            {"_id.shiftID" : idShift,"_id.storeID" : idUser,},
             {$set:{
                 name: name,
                 timeFrom : from,
@@ -184,10 +184,10 @@ class meProfile {
             });
     }
     deleteShift = async (req, res) => {
-        const idUser = req.body.idUser
-        const idShift = req.body.id
-        ShiftType.findOneAndDelete(
-            {shiftID : idShift,storeID : idUser,},
+        const idUser = req.body.email
+        const idShift = req.body.idShift
+         ShiftType.findOneAndDelete(
+            {"_id.shiftID" : idShift,"_id.storeID" : idUser,},
             function(err, doc){
                 if(err){
                     res.send(
