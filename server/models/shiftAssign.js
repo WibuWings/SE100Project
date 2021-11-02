@@ -8,12 +8,16 @@ const ShiftAssign = new Schema({
         dateInWeek: String,
         storeID: String,
         shiftType: {
-            type: Schema.Types.ObjectId,
-            ref: "ShiftType",
+            _id: {
+                shiftID: String,
+                storeID: String,
+            },
         },
         employee: {
-            type: Schema.Types.ObjectId,
-            ref: "Employee",
+            _id: {
+                employeeID: String,
+                storeID: String,
+            },
         },
     },
     createdAt: Date,

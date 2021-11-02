@@ -1,24 +1,29 @@
-
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const NextWeekTimeKeeping = new Schema ({
+const NextWeekTimeKeeping = new Schema({
     _id: {
         dateInWeek: String,
         storeID: String,
         shiftType: {
-            type: Schema.Types.ObjectId,
-            ref: "ShiftType",
+            _id: {
+                shiftID: String,
+                storeID: String,
+            },
         },
         employee: {
-            type: Schema.Types.ObjectId,
-            ref: "Employee",
+            _id: {
+                employeeID: String,
+                storeID: String,
+            },
         },
     },
     isAttending: Boolean,
     alternativeEmployee: {
-        type: Schema.Types.ObjectId,
-        ref: "Employee",
+        _id: {
+            employeeID: String,
+            storeID: String,
+        },
     },
     realDate: Date,
 });
