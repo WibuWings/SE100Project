@@ -106,6 +106,10 @@ class ModalAdd extends Component {
     }
 
     editShift = async () => {
+        if (this.state.timeTo - this.state.timeFrom < 1) {
+            this.props.hideAlert();
+            this.props.showAlert('TimeTo must be greater than TimeFrom', 'error')
+        }
         if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
             var data = {
                 token: localStorage.getItem('token'),
@@ -151,6 +155,10 @@ class ModalAdd extends Component {
 
     // Call API
     addShift = () => {
+        if (this.state.timeTo - this.state.timeFrom < 1) {
+            this.props.hideAlert();
+            this.props.showAlert('TimeTo must be greater than TimeFrom', 'error')
+        }
         if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
             const code = this.makeCode(6);
             const data = {

@@ -22,14 +22,14 @@ const shoppingBagsInitialState = [],
                 }
                 return state;
             case "RAISE_QUANTITY_SHOPPING_BAGS":
-                state.map(value => {
+                state.forEach(value => {
                     if (value.product.name === action.name) {
                         value.quantity += 1;
                     }
                 })
                 return state;
             case "REDUCE_QUANTITY_SHOPPING_BAGS":
-                state.map(value => {
+                state.forEach(value => {
                     if (value.product.name === action.name) {
                         value.quantity -= 1;
                     }
