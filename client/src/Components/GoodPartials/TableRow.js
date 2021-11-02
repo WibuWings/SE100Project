@@ -22,7 +22,8 @@ const useStyles = makeStyles(theme => ({
     goodTable_Cell:{
         borderWidth: '1px',
         borderColor: '#ccc',
-        borderStyle: 'solid'
+        borderStyle: 'solid',
+        height: 4
     }
 }));
 
@@ -39,7 +40,10 @@ function GoodRow(props) {
                 <TableCell className={classes.goodTable_Cell} component="th" scope="row">{row.name}</TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">{row.quantity}</TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">{row.sellPrice}</TableCell>
-                <TableCell className={classes.goodTable_Cell} align="right">{row.importTime}</TableCell>
+                <TableCell className={classes.goodTable_Cell} align="right">
+                    {/* {row.importTime == null ? '' : row.importTime.substring(0,row.importTime.indexOf('T'))} */}
+                    {row.importTime == null ? '': row.importTime.substring(0,row.importTime.indexOf('T'))}
+                </TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? (<KeyboardArrowUpIcon />) : (<KeyboardArrowDownIcon />)}
@@ -75,7 +79,8 @@ function GoodRow(props) {
                                     <TableBody>
                                         <TableRow>
                                             <TableCell className={classes.goodTable_Cell} component="th" scope="row">
-                                                {row.hidden.expires}
+                                                {/* {row.hidden.expires == null ? '': row.hidden.expires.substring(0,row.hidden.expires.indexOf('T'))} */}
+                                                {row.hidden.expires == null ? '': row.hidden.expires.substring(0,row.hidden.expires.indexOf('T'))}
                                             </TableCell>
                                             <TableCell className={classes.goodTable_Cell}>{row.hidden.originalPrice}</TableCell>
                                             <TableCell className={classes.goodTable_Cell}>{row.hidden.remaining}</TableCell>
@@ -103,7 +108,6 @@ function GoodRow(props) {
                                                 expires: row.hidden.expires,  
                                                 unit: row.hidden.unit
                                             });
-                                            console.log("Truyen link", row.imgLink);
                                             dispatch({ type: "CHANGE_UPDATE_GOOD_STATUS", });
                                         }}
                                         variant="contained"
