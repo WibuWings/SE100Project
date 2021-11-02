@@ -62,6 +62,9 @@ class SideNavBar extends Component {
             case "goodmanager":
                 this.active[3] = 'active';
                 break;
+            case "import":
+                this.active[3] = 'active';
+                break;    
             case "receiptmanager":
                 this.active[4] = 'active';
                 break;

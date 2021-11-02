@@ -21,10 +21,9 @@ import { AiFillPlusCircle} from "react-icons/ai";
 import CancelIcon from '@mui/icons-material/Cancel';
 import ConfirmModal from './ConfirmModal';
 
-var productTypes =[
-    'food', 'detergent', 'cuisine'
-];
-
+var productTypes =[];
+var listTypeInfor=[];
+// typeSet chứa id của các cái type
 var typeSet = [];
 
 const StyledTextField = withStyles((theme) => ({
@@ -50,7 +49,11 @@ class UpdateGoodModal extends Component {
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         }; 
+        typeSet = [];
         this.loadInitialData();
+        this.loadAllType();
+        this.loadCurrentTypes();
+        
     }
     imgUrl='none';
     goodID='';
@@ -63,22 +66,177 @@ class UpdateGoodModal extends Component {
     importPrice = "";
     sellPrice = "";
     expire ="";
-    
-    blurDiscription = (e) => {
-        this.descriptionShift = e.target.value;
-    }
-    blurSalary = (e) => {
-        this.salary = e.target.value;
+    finishUpImage = true;
+
+    async loadAllType() {
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+            }   
+        }
+
+        await axios.get(`http://localhost:5000/api/product/type`, 
+        {
+            params: {...data}
+        })
+            .then(res => {
+                result = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        //Get data và lưu các tên Type vào bảng
+        listTypeInfor=[];
+        for(var i=0; i < result.length ; i++)
+        {
+            listTypeInfor.push(result[i]);
+        }
+        productTypes=[];
+        for(var i=0 ; i< listTypeInfor.length ; i ++)
+        {
+            productTypes.push(listTypeInfor[i].name);
+        }
+        this.setState({change: true});
     }
 
-    updateGood = () => {
+    async loadCurrentTypes() {
+        // Get hết các cái join của sản phẩm
+        var allJoinMatch = [];
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+                "_id.productID": this.goodID,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, 
+        {
+            params: {...data1}
+        })
+            .then(res => {
+                allJoinMatch = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        console.log("Các join",allJoinMatch);
+        // Thêm vào trên cái bảng typeSet
+        for(var i = 0 ; i < allJoinMatch.length ; i ++)
+        {
+            typeSet.push(allJoinMatch[i]._id.typeID);
+        }
+        this.setState({change: !this.state.change});
+    }
+    getTypeNamebyTypeID (typeID) {
+        var typeName='';
+        for(var i = 0; i<listTypeInfor.length;i++)
+        {   
+            if(listTypeInfor[i]._id.typeID == typeID)
+            {
+                typeName = listTypeInfor[i].name;
+                break;
+            }
+        }
+        return typeName;
+    }
+
+    checkConstraint = () => {
+        // Kiểm tra các constraint ở đây coi thử ổn chưa
+        // Constraint 1: Check name
+        var productName =  document.querySelector('input[name="goodName"]').value;
+        if(productName.length == 0)
+        {
+            alert("Tên sản phẩm không được trống");
+            return false;
+        }
+        // Constraint 2: Check quantity
+        if(document.querySelector('input[name="goodQuantity"]').value.length == 0)
+        {
+            alert("Số lượng sản phẩm không được trống");
+            return false;
+        }
+        else if(parseInt(document.querySelector('input[name="goodQuantity"]').value) <= 0) 
+        {
+            alert('Số lượng sản phẩm phải lớn hơn 0');
+            return false;
+        }
+        // Constraint 3: check Unit
+        if(document.querySelector('input[name="unit"]').value.length == 0)
+        {
+            alert('Đơn vị của sản phẩm không được trống');
+            return false;
+        }
+        // Constraint 4: Check import Price
+        if(document.querySelector('input[name="originalPrice"]').value.length == 0)
+        {
+            alert("Giá nhập không được trống");
+            return false;
+        }
+        else if(parseInt(document.querySelector('input[name="originalPrice"]').value) <= 0) 
+        {
+            alert('Giá nhập phải lớn hơn 0');
+            return false;
+        }
+        // Constraint 5: check sell Price
+        if(document.querySelector('input[name="sellPrice"]').value.length == 0)
+        {
+            alert("Giá bán không được trống");
+            return false;
+        }
+        else if(parseInt(document.querySelector('input[name="sellPrice"]').value) <= 0) 
+        {
+            alert('Giá bán phải lớn hơn 0');
+            return false;
+        }
+        // Constraint 6: Ngày nhập phải nhỏ  hơn ngày hết hạn và ngày hết hạn, ngày nhập phải khác null
+        if (
+            (
+                new Date(document.querySelector('input[name="importDate"]').value).getTime()
+                - 
+                new Date(document.querySelector('input[name="expiredDate"]').value).getTime()
+            ) >= 0
+        )
+        {
+            alert('Không thể nhập hàng hết hạn');
+            return false;
+        }
+        // Constraint 7: Check giá gốc nhỏ hơn giá bán
+        if(
+            parseInt(document.querySelector('input[name="sellPrice"]').value) 
+            - 
+            parseInt(document.querySelector('input[name="originalPrice"]').value) <=0
+            ) 
+        {
+            alert('Giá bán phải lớn hơn giá gốc');
+            return false;
+        }
+        // Constraint 8: check xem đã  up ảnh lên xong chưa
+        if(this.finishUpImage == false)
+        {
+            alert('Ảnh chưa được upload xong');
+            return false;
+        }
+        alert('Constraint đã check đầy đủ');
+        return true;
+    }
+    async updateGood() {
+        var isContinue = this.checkConstraint();
+        if(!isContinue)
+        {
+            return;
+        }
         this.props.changeUpdateGoodStatus();
+        var productInfo = this.props.infoUpdate;
         const data = {
             token: localStorage.getItem('token'),
             product: {
                 _id: {
                     productID: document.querySelector('input[name="goodID"]').value,
-                    importDate: this.importDate,
+                    importDate: productInfo._id.importDate,
                     storeID: this.props.infoUser.email,
                 },
                 name: this.name,
@@ -95,13 +253,82 @@ class UpdateGoodModal extends Component {
         axios.put(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Update success");
-                alert('update được rồi anh trai')
+                alert('Đã update thành công sản phẩm')
             })
             .catch(err => {
                 console.log(err);
             })
-        
+        // Get hết các cái join của sản phẩm
+        var allJoinMatch = [];
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+                "_id.productID": this.goodID,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, 
+        {
+            params: {...data1}
+        })
+            .then(res => {
+                allJoinMatch = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        console.log(allJoinMatch);
+        // Xoá các join liên quan đến sản phẩm
+        var allProductJoin = [];
+        for(var i = 0 ; i < allJoinMatch.length; i++)
+        {
+            allProductJoin.push({
+                productID: this.goodID,
+                typeID: allJoinMatch[i]._id.typeID,
+                importDate: allJoinMatch[i]._id.importDate,
+                storeID: this.props.infoUser.email,
+            });
+        }
+        const dataJoin = {
+            token: localStorage.getItem('token'),
+            productJoinTypes: allProductJoin,      
+        }
+
+        console.log(dataJoin);
+
+        await axios.delete(`http://localhost:5000/api/product/join`,{data: dataJoin})
+            .then(res => {
+                console.log("delete join success");
+            })
+            .catch(err => {
+                alert(err);
+            })
+        // Thêm các cái hiện tại
+        // Giờ thêm nhiều type thì phải làm cái này nhiều lần
+        for(var i = 0 ; i < typeSet.length ; i++)
+        {
+            const data1 = {
+                token: localStorage.getItem('token'),
+                productJoinType: {
+                    _id : {
+                        productID: this.goodID,
+                        typeID: typeSet[i], 
+                        importDate: productInfo._id.importDate,
+                        storeID: this.props.infoUser.email,
+                    }
+                }
+            }
+            axios.post(`http://localhost:5000/api/product/join`, data1)
+                .then(res => {
+                    console.log("lưu vô bảng join thành công");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
     }
+
 
     cancel = () => {
         this.props.changeUpdateGoodStatus();
@@ -114,7 +341,8 @@ class UpdateGoodModal extends Component {
         console.log(this.props.infoUpdate);
 
         this.goodID = (productInfo._id.productID == null) ? '' : productInfo._id.productID;
-        this.importDate = productInfo._id.importDate == null ? '' : productInfo._id.importDate;
+        this.importDate = productInfo._id.importDate;
+        this.importDate = this.importDate == null ? '' :this.importDate.substring(0, this.importDate.indexOf('T'));
         this.name = productInfo.name == null ? '' : productInfo.name;
         this.imgUrl = productInfo.imgUrl == null ? '' : productInfo.imgUrl;
         this.quantity = productInfo.quantity == null ? '' : productInfo.quantity;
@@ -122,9 +350,9 @@ class UpdateGoodModal extends Component {
         this.unit = productInfo.unit == null ? '' : productInfo.unit;
         this.importPrice = productInfo.importPrice == null ? '' : productInfo.importPrice;
         this.sellPrice = productInfo.sellPrice == null ? '' : productInfo.sellPrice;
-        this.expire = productInfo.expires == null ? '' : productInfo.expries;
-        this.expire = this.expire == null ? '':this.expire.substring(0,this.expire.indexOf('T'));
-        console.log("this.expire", this.expire);
+        this.expire = productInfo.expires; //substring(0,productInfo.expire.indexOf('T'));
+        this.expire = this.expire == null ? '' :this.expire.substring(0, this.expire.indexOf('T'));
+        console.log("this.expire",this.expire );
         this.setState({change: !this.state.change});
     }
 
@@ -132,6 +360,7 @@ class UpdateGoodModal extends Component {
         this.setState({
             imageSelect: fileChangeEvent.target.files[0],
         })
+        this.finishUpImage = false;
         const file = fileChangeEvent.target.files[0];
         const { type } = file;
         if (!(type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg') || type.endsWith('gif'))) {
@@ -149,9 +378,8 @@ class UpdateGoodModal extends Component {
                 .catch(err => {
                     console.log("Thất bại");
                 })
-
         }
-
+        this.finishUpImage = true;
     }
 
     changeName = (e) => {
@@ -231,20 +459,18 @@ class UpdateGoodModal extends Component {
                                         }}
                                     >
                                         <div className="input-label" style={{width: 128}}>Import Date</div>
-                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                            <DateTimePicker
-                                                renderInput={(params) => <StyledTextField 
-                                                                            {...params} 
-                                                                            classname='input-box'
-                                                                            name="importDateTime"
-                                                                            style = {{width: '70%', marginRight: 20}} 
-                                                                            fullWidth 
-                                                                        />}
-                                                value={this.importDate}
-                                                readOnly={true}
-                                                disabled={true}
-                                            />
-                                        </LocalizationProvider>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="date" 
+                                            style = {{width: '68%'}} 
+                                            fullWidth
+                                            name="importDate"
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.importDate}
+                                            readOnly={true}
+                                            disabled={true}
+                                        />
                                     </Grid>
                                     
                                     <Grid item md={6} 
@@ -378,28 +604,28 @@ class UpdateGoodModal extends Component {
                                             Product Type
                                         </div>
                                         <FormControl sx={{ minWidth: 120 }}>
-                                            {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
-                                            <Select
-                                                value={this.state.type}
-                                                onChange={(event) => {
-                                                    this.setState({type: event.target.value});
-                                                    if(!typeSet.includes(event.target.value))
-                                                    {
-                                                        typeSet.push(event.target.value);
-                                                    }
-                                                }}
-                                                style={{
-                                                    height: 36,
-                                                }}
-                                            >
+                                        {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
+                                        <Select
+                                            value={this.state.type}
+                                            onChange={(event) => {
+                                                this.setState({type: event.target.value});
+                                                if(!typeSet.includes(event.target.value))
                                                 {
-                                                    productTypes.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
-                                                    : productTypes.map((type) =>
-                                                        <MenuItem value={type}>{type}</MenuItem>
-                                                    )
-                                                }   
-                                            </Select> 
-                                        </FormControl>
+                                                    typeSet.push(event.target.value);
+                                                }
+                                            }}
+                                            style={{
+                                                height: 36,
+                                            }}
+                                        >
+                                            {
+                                                listTypeInfor.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
+                                                : listTypeInfor.map((type) =>
+                                                    <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
+                                                )
+                                            }   
+                                        </Select> 
+                                    </FormControl>
                                         <Button onClick={() => this.handleAdd()}>
                                             <AiFillPlusCircle
                                                 size={28}
@@ -413,30 +639,29 @@ class UpdateGoodModal extends Component {
                                             />
                                         </Button>
                                         <div className='all-type-container'>
-                                                {
-                                                    Array.from(typeSet).map((type) =>
-                                                        <div className='type-container'>
-                                                            
-                                                            <CancelIcon
-                                                                className='close-icon'
-                                                                size={10}
-                                                                onClick={() => {
-                                                                    typeSet = typeSet.filter(function(item) {
-                                                                        return item != type;
-                                                                    })
-                                                                    console.log(typeSet);
-                                                                    this.setState({type: 'none'});
-                                                                }}
+                                            {
+                                                Array.from(typeSet).map((type) =>
+                                                    <div item md={7} className='type-container'>
+                                                        <CancelIcon
+                                                            className='close-icon'
+                                                            size={10}
+                                                            onClick={() => {
+                                                                typeSet = typeSet.filter(function(item) {
+                                                                    return item != type;
+                                                                })
+                                                                console.log(typeSet);
+                                                                this.setState({type: 'none'});
+                                                            }}
+                                                
+                                                        />
+                                                        <span className='type-title'>
+                                                            {this.getTypeNamebyTypeID(type)}
+                                                        </span>
+                                                    </div>
                                                     
-                                                            />
-                                                            <span className='type-title'>
-                                                                {type}
-                                                            </span>
-                                                        </div>
-                                                        
-                                                    )
-                                                }
-                                            </div>
+                                                )
+                                            }
+                                        </div>
                                     </Grid>
                                     {/* <Grid item md={10}
                                         className='input-item'

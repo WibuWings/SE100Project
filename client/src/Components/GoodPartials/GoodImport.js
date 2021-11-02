@@ -18,7 +18,9 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ConfirmModal from './ConfirmModal';
 import { GiConsoleController } from 'react-icons/gi';
-
+import {
+    Link
+} from "react-router-dom";
 // Use for save type
 var productTypes =[];
 var listTypeInfor = [];
@@ -54,6 +56,7 @@ class GoodImport extends Component {
 
         this.currentDateTime = this.getCurrentDateTime();
         console.log("this.currentDateTime",this.currentDateTime);
+        typeSet = [];
     }
     
     getCurrentDateTime()
@@ -78,10 +81,13 @@ class GoodImport extends Component {
     imgUrl= 'none';
     dateTime= Date.now();
     currentDateTime = '2021-01-02';
-    profileImageChange = (fileChangeEvent) => {
+    finishUpImage = true;
+
+    async profileImageChange(fileChangeEvent) {
         this.setState({
             imageSelect: fileChangeEvent.target.files[0],
         })
+        this.finishUpImage = false;
         const file = fileChangeEvent.target.files[0];
         const { type } = file;
         if (!(type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg') || type.endsWith('gif'))) {
@@ -89,7 +95,7 @@ class GoodImport extends Component {
             const formData = new FormData();
             formData.append("file", fileChangeEvent.target.files[0])
             formData.append("upload_preset", "qqqhcaa3");
-            axios.post(`https://api.cloudinary.com/v1_1/databaseimg/image/upload`, formData)
+            await axios.post(`https://api.cloudinary.com/v1_1/databaseimg/image/upload`, formData)
                 .then(res => {
                     this.imgUrl=res.data.url;
                     this.setState({
@@ -99,19 +105,25 @@ class GoodImport extends Component {
                 .catch(err => {
                     console.log("Thất bại");
                 })
-
         }
-
+        this.finishUpImage = true;
     }
 
-    async importGood() {
+    async importGood(e) {
+        // Ngăn chuyển trang
+        var isContinue = this.checkConstraint();
+        if(!isContinue)
+        {
+            e.preventDefault();
+            return;
+        }
         // Thêm hàng hoá
         const data = {
             token: localStorage.getItem('token'),
             product: {
                 _id: {
                     productID: this.generatedID,
-                    importDate: Date(this.dateTime),
+                    importDate: document.querySelector('input[name="importDate"]').value,
                     storeID: this.props.infoUser.email,
                 },
                 name: document.querySelector('input[name="goodName"]').value,
@@ -122,15 +134,14 @@ class GoodImport extends Component {
                 expires: document.querySelector('input[name="expiredDate"]').value,
                 imgUrl: this.imgUrl,
                 unit: document.querySelector('input[name="unit"]').value,
-            }
+            }   
         }
         console.log(data);
 
         axios.post(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Save success");
-                alert("Lưu được rồi anh chai")
-                console.log(data._id.importDate)
+                alert("Lưu thành công")
             })
             .catch(err => {
                 alert(err);
@@ -147,13 +158,11 @@ class GoodImport extends Component {
                     _id : {
                         productID: this.generatedID,
                         typeID: typeSet[i], 
-                        importDate: Date.now(),
+                        importDate: document.querySelector('input[name="importDate"]').value,
                         storeID: this.props.infoUser.email,
                     }
                 }
             }
-            console.log(data1);
-            console.log("Đang thêm vô bảng join")
             axios.post(`http://localhost:5000/api/product/join`, data1)
                 .then(res => {
                     console.log("lưu vô bảng join thành công");
@@ -168,9 +177,82 @@ class GoodImport extends Component {
     }
     checkConstraint = () => {
         // Kiểm tra các constraint ở đây coi thử ổn chưa
-        // Kiểm tra thử form ok ko
-        this.props.changeConfirmStatus();
-        this.props.setConfirm();
+        // Constraint 1: Check name
+        var productName =  document.querySelector('input[name="goodName"]').value;
+        if(productName.length == 0)
+        {
+            alert("Tên sản phẩm không được trống");
+            return false;
+        }
+        // Constraint 2: Check quantity
+        if(document.querySelector('input[name="goodQuantity"]').value.length == 0)
+        {
+            alert("Số lượng sản phẩm không được trống");
+            return false;
+        }
+        else if(parseInt(document.querySelector('input[name="goodQuantity"]').value) <= 0) 
+        {
+            alert('Số lượng sản phẩm phải lớn hơn 0');
+            return false;
+        }
+        // Constraint 3: check Unit
+        if(document.querySelector('input[name="unit"]').value.length == 0)
+        {
+            alert('Đơn vị của sản phẩm không được trống');
+            return false;
+        }
+        // Constraint 4: Check import Price
+        if(document.querySelector('input[name="originalPrice"]').value.length == 0)
+        {
+            alert("Giá nhập không được trống");
+            return false;
+        }
+        else if(parseInt(document.querySelector('input[name="originalPrice"]').value) <= 0) 
+        {
+            alert('Giá nhập phải lớn hơn 0');
+            return false;
+        }
+        // Constraint 5: check sell Price
+        if(document.querySelector('input[name="sellPrice"]').value.length == 0)
+        {
+            alert("Giá bán không được trống");
+            return false;
+        }
+        else if(parseInt(document.querySelector('input[name="sellPrice"]').value) <= 0) 
+        {
+            alert('Giá bán phải lớn hơn 0');
+            return false;
+        }
+        // Constraint 6: Ngày nhập phải nhỏ  hơn ngày hết hạn
+        if (
+            (
+                new Date(document.querySelector('input[name="importDate"]').value).getTime()
+                - 
+                new Date(document.querySelector('input[name="expiredDate"]').value).getTime()
+            ) >= 0)
+        {
+            alert('Không thể nhập hàng hết hạn');
+            return false;
+        }
+        // Constraint 7: Check giá gốc nhỏ hơn giá bán
+        if(
+            parseInt(document.querySelector('input[name="sellPrice"]').value) 
+            - 
+            parseInt(document.querySelector('input[name="originalPrice"]').value) <=0
+            ) 
+        {
+            alert('Giá bán phải lớn hơn giá gốc');
+            return false;
+        }
+        // Constraint 8: check xem đã  up ảnh lên xong chưa
+        if(this.finishUpImage == false)
+        {
+            alert('Ảnh chưa được upload xong');
+            return false;
+        }
+        
+        alert('Constraint đã check đầy đủ');
+        return true;
     }
 
     async loadAllType() {
@@ -219,7 +301,7 @@ class GoodImport extends Component {
             params: {...data}
         })
             .then(res => {
-                alert("Lấy hết đc product ròi anh chai");
+                // alert("Lấy hết đc product ròi anh chai");
                 result = res.data.data;
                 console.log(res.data.data);
             })
@@ -297,7 +379,7 @@ class GoodImport extends Component {
                                     <div 
                                         className="input-label"
                                         style={{
-                                            width: '116px'
+                                            width: '130px'
                                         }}
                                     >
                                         ID
@@ -306,64 +388,58 @@ class GoodImport extends Component {
                                         classname='input-box' 
                                         type="text" 
                                         // class="input-val" 
-                                        style = {{width: '100%'}} 
+                                        style = {{width: '60%'}} 
                                         fullWidth 
                                         size="small" 
                                         name="goodID" 
                                         variant="outlined"
                                         value={this.generatedID}
-                                        inputProps={
-                                            { readOnly: true, }
-                                        } 
+                                        readOnly={true}
+                                        disabled={true}
                                     />
                                 </Grid>
                                 <Grid item md={6} 
                                     className='input-item'
                                     style={{
                                         marginLeft: 0,
-                                        paddingLeft: 0
+                                        paddingLeft: 0,
                                     }}
                                 >
-                                    <div className="input-label" style={{width: 128}}>Import Date</div>
-                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                        <DateTimePicker
-                                            renderInput={(params) => <StyledTextField 
-                                                                        {...params} 
-                                                                        classname='input-box'
-                                                                        name="importDateTime"
-                                                                        style = {{width: '70%', marginRight: 20}} 
-                                                                        fullWidth 
-                                                                    />}
-                                            value={this.dateTime}
-                                            onChange={(newValue) => {
-                                                this.changeTimeFrom(newValue);
-                                            }}
-                                        />
-                                    </LocalizationProvider>
+                                    <div className="input-label" style={{width: 110}}>Import Date</div>
+                                    <StyledTextField
+                                        classname='input-box'   
+                                        type="date" 
+                                        style = {{width: '68%'}} 
+                                        fullWidth
+                                        name="importDate"
+                                        size="small"
+                                        variant="outlined"
+                                        defaultValue={this.currentDateTime}
+                                    />
                                 </Grid>
                                 
                                 <Grid item md={6} 
                                     className='input-item'
                                 >
-                                    <div className="input-label"style={{width: '114px'}}>Name</div>
+                                    <div className="input-label"style={{width: '130px'}}>Name</div>
                                     <StyledTextField
                                         classname='input-box'   
                                         type="text" 
                                         // class="input-val" 
-                                        style = {{width: '100%'}} 
+                                        style = {{width: '60%'}} 
                                         fullWidth
                                         size="small"
                                         name="goodName" 
                                         variant="outlined" 
                                     />
                                 </Grid>
-                                <Grid item md={3}
+                                <Grid item md={4}
                                     className='input-item'
                                     style={{padding: '0px', marginLeft: '0px'}}
                                 >
                                     <div 
                                         className="input-label" 
-                                        style={{width: '100px'}}
+                                        style={{width: '120px'}}
                                     >
                                         Quantity
                                     </div>
@@ -372,20 +448,21 @@ class GoodImport extends Component {
                                         fullWidth
                                         name="goodQuantity" 
                                         variant="outlined"
-                                        type="number" 
+                                        type="number"
                                     />
                                 </Grid>
-                                <Grid item md={3}
+                                <Grid item md={2}
                                     className='input-item'
                                     style={{
-                                        paddingRight: 24
+                                        paddingRight: 12
                                     }}
                                 >
                                     <div 
                                         className="input-label"
                                         style={{
                                             marginLeft: 0,
-                                            paddingLeft: 4
+                                            paddingLeft: 4,
+                                            width: 40
                                         }}
                                     >
                                         Unit
@@ -419,7 +496,7 @@ class GoodImport extends Component {
                                 >
                                     <div 
                                         className="input-label"
-                                        style={{width: '96px'}}
+                                        style={{width: '130px'}}
                                     >
                                         Sell Price
                                     </div>
@@ -526,9 +603,9 @@ class GoodImport extends Component {
                                 <Grid item md={2}
                                     className='input-item'
                                 >
-                                    <Button variant="contained" onClick={() => this.importGood()}>
-                                        Import
-                                    </Button>
+                                    <Link to="/goodmanager" className="btn btn-primary" onClick={(e) => this.importGood(e)}>
+                                        IMPORT
+                                    </Link>
                                 </Grid>
                             </Grid>
                         </Card>
