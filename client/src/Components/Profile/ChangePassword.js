@@ -23,23 +23,24 @@ class ChangePassword extends Component {
     rePass = ""
 
     // Gọi api change password
-    changePassword = () => {
+    changePassword = async () => {
+        const form = document.getElementById('form-change-password');
         const data = {
             token: localStorage.getItem('token'),
             email: this.props.infoUser.email,
             curPass: this.curPass,
             newPass: this.hash(this.newPass),
         }
-        axios.post(`http://localhost:5000/api/profile/change-password`,data)
+        await axios.post(`http://localhost:5000/api/profile/change-password`,data)
         .then(res => {
-            console.log("thành công");
-            if (res.status === 1) {
-                localStorage.setItem('token', res.token);
+            if (res.data.status === -1) {
+                this.props.hideAlert();
+                this.props.showAlert(res.data.message, "error");
+            } else {
+                form.reset();
+                localStorage.setItem('token', res.data.token);
                 this.props.hideAlert();
                 this.props.showAlert("Change password success", "success");
-            } else {
-                this.props.hideAlert();
-                this.props.showAlert("Inccorect password", "error");
             }
         })
         .catch(err => {
@@ -134,7 +135,7 @@ class ChangePassword extends Component {
 
     render() {
         return (
-            <form style={{marginBottom: '15px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
+            <form id="form-change-password" style={{marginBottom: '15px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Change Password" />
                     <Divider />

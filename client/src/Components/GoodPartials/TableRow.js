@@ -22,15 +22,91 @@ const useStyles = makeStyles(theme => ({
     goodTable_Cell:{
         borderWidth: '1px',
         borderColor: '#ccc',
-        borderStyle: 'solid'
+        borderStyle: 'solid',
+        height: 4
     }
 }));
+
+
 
 function GoodRow(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
     const dispatch = useDispatch();
+    const deleteProduct = async () =>
+    {
+        // Xoá sản phẩm
+        const data = {
+            token: localStorage.getItem('token'),
+            products:
+            [
+                {
+                    productID: row.id,
+                    importDate: row.importTime,
+                    storeID: row.storeID,
+                }
+            ]
+            
+        }
+        axios.delete(`http://localhost:5000/api/product`,{data: data})
+            .then(res => {
+                alert("delete product success");
+            })
+            .catch(err => {
+                alert(err);
+            })
+        
+        // Get hết các cái join của sản phẩm
+        var allJoinMatch = [];
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": row.storeID,
+                "_id.productID": row.id,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, 
+        {
+            params: {...data1}
+        })
+            .then(res => {
+                allJoinMatch = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        console.log(allJoinMatch);
+        // Xoá các join liên quan đến sản phẩm
+        var allProductJoin = [];
+        for(var i = 0 ; i < allJoinMatch.length; i++)
+        {
+            allProductJoin.push({
+                productID: row.id,
+                typeID: allJoinMatch[i]._id.typeID,
+                importDate: allJoinMatch[i]._id.importDate,
+                storeID: row.storeID,
+            });
+        }
+        const dataJoin = {
+            token: localStorage.getItem('token'),
+            productJoinTypes: allProductJoin,      
+        }
+
+        console.log(dataJoin);
+
+        await axios.delete(`http://localhost:5000/api/product/join`,{data: dataJoin})
+            .then(res => {
+                console.log("delete join success");
+            })
+            .catch(err => {
+                alert(err);
+            })
+
+        // Tạm thời
+        // window.location.reload();
+    }
     return (
         <React.Fragment>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -39,7 +115,10 @@ function GoodRow(props) {
                 <TableCell className={classes.goodTable_Cell} component="th" scope="row">{row.name}</TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">{row.quantity}</TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">{row.sellPrice}</TableCell>
-                <TableCell className={classes.goodTable_Cell} align="right">{row.importTime}</TableCell>
+                <TableCell className={classes.goodTable_Cell} align="right">
+                    {/* {row.importTime == null ? '' : row.importTime.substring(0,row.importTime.indexOf('T'))} */}
+                    {row.importTime == null ? '': row.importTime.substring(0,row.importTime.indexOf('T'))}
+                </TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? (<KeyboardArrowUpIcon />) : (<KeyboardArrowDownIcon />)}
@@ -75,7 +154,8 @@ function GoodRow(props) {
                                     <TableBody>
                                         <TableRow>
                                             <TableCell className={classes.goodTable_Cell} component="th" scope="row">
-                                                {row.hidden.expires}
+                                                {/* {row.hidden.expires == null ? '': row.hidden.expires.substring(0,row.hidden.expires.indexOf('T'))} */}
+                                                {row.hidden.expires == null ? '': row.hidden.expires.substring(0,row.hidden.expires.indexOf('T'))}
                                             </TableCell>
                                             <TableCell className={classes.goodTable_Cell}>{row.hidden.originalPrice}</TableCell>
                                             <TableCell className={classes.goodTable_Cell}>{row.hidden.remaining}</TableCell>
@@ -103,7 +183,6 @@ function GoodRow(props) {
                                                 expires: row.hidden.expires,  
                                                 unit: row.hidden.unit
                                             });
-                                            console.log("Truyen link", row.imgLink);
                                             dispatch({ type: "CHANGE_UPDATE_GOOD_STATUS", });
                                         }}
                                         variant="contained"
@@ -112,28 +191,7 @@ function GoodRow(props) {
                                     </Button>
                                     <Button 
                                         variant="contained"
-                                        onClick={() => {
-                                            alert("Delete")
-                                            const data = {
-                                                token: localStorage.getItem('token'),
-                                                products:
-                                                [
-                                                    {
-                                                        productID: row.id,
-                                                        importDate: row.importTime,
-                                                        storeID: row.storeID,
-                                                    }
-                                                ]
-                                                 
-                                            }
-                                            axios.delete(`http://localhost:5000/api/product`,{data: data})
-                                                .then(res => {
-                                                    alert("delete product success");
-                                                })
-                                                .catch(err => {
-                                                    alert(err);
-                                                })
-                                        }}
+                                        onClick={deleteProduct}
                                     >
                                         Delete
                                         
