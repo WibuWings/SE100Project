@@ -25,7 +25,7 @@ class AddTypeModal extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                storeID: this.props.infoUser.email,
+                "_id.storeID": this.props.infoUser.email,
             }   
         }
         console.log(data.token);
@@ -36,12 +36,10 @@ class AddTypeModal extends Component {
             params: {...data}
         })
             .then(res => {
-                alert("Get success");
                 result = res.data.data;
             })
             .catch(err => {
-                console.log(err);
-                alert(err); // 401 ở đây
+                alert(err);
             })
         //Get data và lưu các tên Type vào bảng
         for(var i=0; i < result.length ; i++)

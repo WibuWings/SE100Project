@@ -34,30 +34,76 @@ class EditTypeModal extends Component {
         this.props.changeEditTypeStatus();
     }
     async delete(type){
-        const data = {
-            token: localStorage.getItem('token'),
-            productTypes:
-            [
-                {
-                    typeID: type._id.typeID,
-                    storeID: type._id.storeID
-                }
-            ]
+        // const data = {
+        //     token: localStorage.getItem('token'),
+        //     productTypes:
+        //     [
+        //         {
+        //             typeID: type._id.typeID,
+        //             storeID: type._id.storeID
+        //         }
+        //     ]
                 
+        // }
+        // await axios.delete(`http://localhost:5000/api/product/type`,{data: data})
+        //     .then(res => {
+        //         console.log("delete success");
+        //     })
+        //     .catch(err => {
+        //         alert(err);
+        //         // alert("Lỗi gì cmnr")
+        //     })
+        // Ở đây mình phải cập nhật join nữa
+        // Phải get tất cả cái join mà có cái type là type hiện tại
+        var allJoinMatch = [];
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+                "_id.typeID": type._id.typeID,
+            }   
         }
-        await axios.delete(`http://localhost:5000/api/product/type`,{data: data})
+        await axios.get(`http://localhost:5000/api/product/join`, 
+        {
+            params: {...data1}
+        })
             .then(res => {
-                console.log("delete success");
+                allJoinMatch = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+
+        var allProductJoin = [];
+        for(var i = 0 ; i < allJoinMatch.length; i++)
+        {
+            allProductJoin.push({
+                productID: allJoinMatch[i]._id.productID,
+                typeID: type._id.typeID,
+                importDate: allJoinMatch[i]._id.importDate,
+                storeID: this.props.infoUser.email,
+                
+            });
+        }
+        
+        const dataJoin = {
+            token: localStorage.getItem('token'),
+            productJoinTypes: allProductJoin,      
+        }
+
+        console.log(dataJoin);
+
+        await axios.delete(`http://localhost:5000/api/product/join`,{data: dataJoin})
+            .then(res => {
+                console.log("delete join success");
             })
             .catch(err => {
                 alert(err);
-                // alert("Lỗi gì cmnr")
             })
-        // Ở đây mình phải cập nhật join nữa
-        
 
         this.loadAllType();
-        
+        this.setState({change: !this.state.change})
     }
     
 
@@ -67,12 +113,9 @@ class EditTypeModal extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                storeID: this.props.infoUser.email,
+                "_id.storeID": this.props.infoUser.email,
             }   
         }
-        console.log(data.token);
-        // alert(data.token);
-        console.log(data.filter);
         await axios.get(`http://localhost:5000/api/product/type`, 
         {
             params: {...data}

@@ -12,8 +12,9 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import GoodRow from './TableRow';
 
-function createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType, imgUrl, unit) {
+function createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType, imgUrl, unit, expires, storeID) {
     return {
+        storeID,
         index,
         id,
         name,
@@ -23,7 +24,7 @@ function createData(index, id, name, quantity, originalPrice, sellPrice, importT
         imgLink: imgUrl,
         hidden:
         {
-            expires: '2020-01-05',
+            expires: expires,
             remaining: quantity,
             originalPrice: originalPrice,
             productType: productType,
@@ -141,9 +142,9 @@ class GoodTable extends Component {
 
             rows.push(
                 createData((i+1), obj._id.productID, obj.name, obj.quantity, 
-                    obj.importPrice, obj.sellPrice, obj._id.importDate, joinType, obj.imgUrl, obj.unit)
+                    obj.importPrice, obj.sellPrice, obj._id.importDate, joinType, 
+                    obj.imgUrl, obj.unit, obj.expires, obj._id.storeID)
             );
-            console.log("obj.imgUrl",obj.imgUrl);
         }
         
         this.setState({change: !this.state.change});
@@ -194,7 +195,7 @@ class GoodTable extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div>
+            <div style={{height: '550px', width: '100%', overflowY: 'scroll'}}>
                 <TableContainer component={Paper}>
                     <Table className={classes.goodTable} aria-label="collapsible table">
                         <TableHead>
