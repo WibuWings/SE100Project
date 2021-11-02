@@ -42,7 +42,7 @@ const listShiftInitialState = [
                         item.name = action.data.description;
                         item.salary = action.data.salary;
                         item.timeFrom = action.data.from;
-                        item.timeTo = action.data.to;
+                        item.timeEnd = action.data.to;
                     }
                 })
                 return state
