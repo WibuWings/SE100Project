@@ -154,6 +154,23 @@ class EmployeeTab {
             res.status(404).send(err);
         });
     }
+    deleteEmployeeforever = async (req, res) => {
+        var employee = req.body.employee;
+        
+        Employee.deleteOne({storeID:employee.storeID , employeeID:employee.employeeID})
+        .then((data) => {
+            res.status(200).send(
+                JSON.stringify({
+                    email: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                    data,
+                })
+            );
+        })
+        .catch((err) => {
+            res.status(404).send(err);
+        });;     
+    }
 
 
 

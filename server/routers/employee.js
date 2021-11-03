@@ -11,6 +11,7 @@ router.put('/', AuthMiddleware, employeeController.updateEmployee);
 router.delete('/', AuthMiddleware, employeeController.deleteEmployee);
 router.get('/delete', AuthMiddleware, employeeController.getEmployeeDelete);
 router.patch('/delete', AuthMiddleware, employeeController.restoreEmployee);
+router.delete('/delete', AuthMiddleware, employeeController.deleteEmployeeforever);
 // Thắng
 
 ////////////////////////////////
