@@ -101,9 +101,7 @@ class EmployeeTab {
     deleteEmployee = async (req, res) => {
         var employee = req.body.employee;
 
-        employee.forEach(element => {
-            element.importDate= new Date(element.importDate);
-        });
+
         Employee.delete ({storeID:employee.storeID , employeeID:employee.employeeID})
         .then((data) => {
             res.status(200).send(
@@ -155,9 +153,11 @@ class EmployeeTab {
         });
     }
     deleteEmployeeforever = async (req, res) => {
-        var employee = req.body.employee;
+        const employee = req.body.employee;
 
-        Employee.deleteOnefindOneAndDelete({storeID:employee.storeID , employeeID:employee.employeeID})
+        Employee.findOneAndDelete(
+            {"_id.storeID":employee.storeID , 
+            "_id.employeeID":employee.employeeID})
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
