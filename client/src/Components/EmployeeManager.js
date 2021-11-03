@@ -74,9 +74,9 @@ class EmployeeManager extends Component {
             {
                 _id: {
                     employeeID: "0",
-                    storeID: "19522006@gm.uit.edu.com",
+                    storeID: "19522006@gm.uit.edu.vn",
                 },
-                managerID: "19522006@gm.uit.edu.com",
+                managerID: "19522006@gm.uit.edu.vn",
                 password: "abc123",
                 firstName: "Antonio",
                 lastName: "Rudiger",
@@ -91,9 +91,9 @@ class EmployeeManager extends Component {
             {
                 _id: {
                     employeeID: "1",
-                    storeID: "19522006@gm.uit.edu.com",
+                    storeID: "19522006@gm.uit.edu.vn",
                 },
-                managerID: "19522006@gm.uit.edu.com",
+                managerID: "19522006@gm.uit.edu.vn",
                 password: "abc123",
                 firstName: "Antonio",
                 lastName: "Rudiger",
@@ -138,9 +138,9 @@ class EmployeeManager extends Component {
             employee: {
                 _id: {
                     employeeID: "1",
-                    storeID: "19522006@gm.uit.edu.com",
+                    storeID: "19522006@gm.uit.edu.vn",
                 },
-                managerID: "19522006@gm.uit.edu.com",
+                managerID: "19522006@gm.uit.edu.vn",
                 password: "abc123",
                 firstName: "Antonio",
                 lastName: "Rudiger",
@@ -172,7 +172,7 @@ class EmployeeManager extends Component {
             [
                 {
                     employeeID: "1",
-                    storeID: "19522006@gm.uit.edu.com",
+                    storeID: "19522006@gm.uit.edu.vn", 
                 },
             ]
             
@@ -193,12 +193,12 @@ class EmployeeManager extends Component {
             employee: {
                 _id: {
                     employeeID: "1",
-                    storeID: "19522006@gm.uit.edu.com",
+                    storeID: "19522006@gm.uit.edu.vn",
                 },
-                managerID: "19522006@gm.uit.edu.com",
+                managerID: "19522006@gm.uit.edu.vn",
                 password: "abc123",
                 firstName: "Antonio",
-                lastName: "Rudiger",
+                lastName: "Rudiger Christensen",
                 phoneNumber: "03232323232",
                 dateOfBirth: "2021-11-02T00:00:00.000Z",
                 email: "1911@gmail.com",
@@ -214,6 +214,49 @@ class EmployeeManager extends Component {
             })
             .catch(err => {
                 console.log(err);
+            })
+    }
+
+    getSackedEmployee () {
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+            }   
+        }
+        axios.get(`http://localhost:5000/api/employee/sacked`, {
+            params: {...data}
+        })
+            .then(res => {
+                // alert("Lấy hết đc product ròi anh chai");
+                result = res.data.data;
+                console.log(res.data.data);
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+    }
+
+    backToWork() {
+        const data = {
+            token: localStorage.getItem('token'),
+            employee:
+            [
+                {
+                    employeeID: "1",
+                    storeID: "19522006@gm.uit.edu.vn", 
+                },
+            ]
+            
+        }
+        axios.delete(`http://localhost:5000/api/employee/backtowork`,{data: data})
+            .then(res => {
+                alert("back to work success");
+            })
+            .catch(err => {
+                alert(err);
             })
     }
 
@@ -245,6 +288,18 @@ class EmployeeManager extends Component {
                     variant="contained"
                 >
                     Delete Employee
+                </Button>
+                <Button
+                    onClick={() => this.getSackedEmployee()}
+                    variant="contained"
+                >
+                    Get Sacked Employee
+                </Button>
+                <Button
+                    onClick={() => this.backToWork()}
+                    variant="contained"
+                >
+                    Back To Work
                 </Button>
                 <Container
                     style={{marginTop: 20}}
