@@ -44,7 +44,6 @@ class EmployeeTab {
             address: employee.address,
             cardID: employee.cardID,
             startDate: employee.startDate,
-            endDate: employee.endDate,
         });
         employees.save()
         .then((data) => {        
@@ -79,7 +78,6 @@ class EmployeeTab {
             address: employee.address,
             cardID: employee.cardID,
             startDate: employee.startDate,
-            endDate: employee.endDate,
         }}
         ,{
             returnOriginal: false,
