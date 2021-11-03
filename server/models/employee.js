@@ -20,5 +20,5 @@ const Employee = new Schema({
     endDate: Date,
 });
 Employee.plugin(mongooseDelete,
-    {overrideMethods: true});
+    {overrideMethods: true, deletedAt : true});
 module.exports = mongoose.model('Employee',Employee);
