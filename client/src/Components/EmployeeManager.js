@@ -178,7 +178,7 @@ class EmployeeManager extends Component {
         }
         axios.delete(`http://localhost:5000/api/employee`,{data: data})
             .then(res => {
-                alert("delete employee success");
+                alert("delete employee(s) success");
             })
             .catch(err => {
                 alert(err);
@@ -189,7 +189,7 @@ class EmployeeManager extends Component {
     {
         const data = {
             token: localStorage.getItem('token'),
-            product: {
+            employee: {
                 _id: {
                     employeeID: "1",
                     storeID: "19522006@gm.uit.edu.com",
