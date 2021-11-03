@@ -36,10 +36,15 @@ class App extends Component {
     }
   }
 
+  autoHideAlert = () => {
+    setTimeout(() => this.props.hideAlert(), 3000);
+  }
+
   render() {
     return (
       <Router>
         <DirectionURL></DirectionURL>
+        {this.props.alertReducer.status ? this.autoHideAlert() : null}
         {this.props.alertReducer.status ? <Alert onClick={() => this.props.hideAlert()} className="message-error" severity={this.props.alertReducer.typeMessage}>{this.props.alertReducer.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
       </Router>
     );

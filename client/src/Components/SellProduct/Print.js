@@ -7,22 +7,112 @@ class Printf extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      change: true,
+      percentDiscount: 0,
     }
   }
 
+  blurDiscount = (e) => {
+    if (e.target.value <= 100 && e.target.value >= 0) {
+      this.setState({
+        percentDiscount: e.target.value,
+      })
+    } else if (e.target.value < 0) {
+      this.setState({
+        percentDiscount: 0,
+      })
+    } else {
+      this.setState({
+        percentDiscount: 100,
+      })
+    }
+  }
+
+  changeDiscount = (e) => {
+    this.setState({
+      percentDiscount: e.target.value,
+    })
+  }
+
+  totalMoney = () => {
+    let total = 0;
+    this.props.shoppingBags.map(value => {
+      total += value.quantity * value.product.sellPrice;
+    })
+    return total.toLocaleString();
+  }
+
+  reduceMoney = () => {
+    let total = 0;
+    this.props.shoppingBags.map(value => {
+      total += value.quantity * value.product.sellPrice;
+    })
+    if (total !== 0) {
+      total = total*this.state.percentDiscount/100
+      return total.toLocaleString();
+    } 
+    return total.toLocaleString();
+  }
+
+  totalFinalMoney = () => {
+    let total = 0;
+    this.props.shoppingBags.map(value => {
+      total += value.quantity * value.product.sellPrice;
+    })
+    if (total !== 0) {
+      total -= total*this.state.percentDiscount/100
+      return total.toLocaleString();
+    } 
+    return total.toLocaleString();
+  }
 
   render() {
-    console.log("Printf");
     return (
-      <div onClick={() => {this.setState({change: !this.state.change})}}>
-        <ReactToPrint
-          trigger={() => {
-            return <a href="#">Print Hóa đơn</a>;
-          }}
-          content={() => this.componentRef}
-        />
-        <ComponentToPrint infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
+      <div>
+        <div style={{ margin: '0px' }} className="row">
+          <div className="col-10 offset-1">
+            <div className="row">
+              <div style={{ fontSize: '1.2rem' }} className="col-7">
+                <p style={{}}>Total</p>
+              </div>
+              <div className="col-5">
+                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>{this.totalMoney()}</p>
+              </div>
+              <div style={{ fontSize: '1.2rem' }} className="col-7">
+                <p>Discount (%)</p>
+              </div>
+              <div style={{ marginBottom: '10px' }} className="col-5">
+                <input value={this.state.percentDiscount} onChange={(e) => this.changeDiscount(e)} onBlur={(e) => this.blurDiscount(e)} style={{ fontSize: '1.2rem', border: 'none', outline: 'none', textAlign: 'end', width: '100%', borderBottom: '1px solid black' }} min={0} max={100} type="number"></input>
+              </div>
+              <div style={{ fontSize: '1.2rem' }} className="col-7">
+                <p style={{}}>Reduce</p>
+              </div>
+              <div className="col-5">
+                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>-{this.reduceMoney()}</p>
+              </div>
+              <div className="col-7">
+                <p style={{ margin: '0', fontSize: '1.2rem', fontWeight: '700' }}>TOTAL FINAL</p>
+              </div>
+              <div className="col-5">
+                <p style={{ margin: '0', fontSize: '1.2rem', textAlign: 'end', color: 'green', fontWeight: '700' }}>{this.totalFinalMoney()}</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-12">
+            <ReactToPrint
+              trigger={() => {
+                return <div style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
+                  PAY (F9)
+                </div>;
+              }}
+              content={() => this.componentRef}
+            />
+          </div>
+        </div>
+
+        {/* Ẩn đi */}
+        <div style={{ display: 'none' }}>
+          <ComponentToPrint percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
+        </div>
       </div>
     );
   }

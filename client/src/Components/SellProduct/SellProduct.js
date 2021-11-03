@@ -40,14 +40,20 @@ class SellProduct extends Component {
 
     AddProduct = (value) => {
         var isCheck = false;
+        var currentQuantity;
+        var maxQuantity;
         this.props.shoppingBags.map(value1 => {
             if (value1.product.name === value.name) {
                 isCheck = true;
+                currentQuantity = value1.quantity
+                maxQuantity = value.quantity
             } else {
             }
         })
         if (isCheck) {
-            this.props.raiseQuantity(value.name);
+            if (currentQuantity < maxQuantity) {
+                this.props.raiseQuantity(value.name);
+            }
         } else {
             const newProduct = {
                 product: value,
@@ -57,7 +63,7 @@ class SellProduct extends Component {
         }
 
     }
-
+    
 
     async loadAllType() {
         var result = [];
@@ -167,7 +173,7 @@ class SellProduct extends Component {
             <div className="sell-product" >
                 <Container maxWidth="xl">
                     <Grid container spacing={2}>
-                        <Grid item md={8} sm={4}  >
+                        <Grid item md={8} sm={12}  >
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden' }}>
                                 <div style={{ overflow: 'hidden', marginBottom: '5px' }}>
                                     <Tabs></Tabs>
@@ -222,7 +228,7 @@ class SellProduct extends Component {
                         </Grid>
                         <Grid item md={4} lg={4} >
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden', overflowX: 'hidden' }}>
-                                <div id="choses-product" style={{ backgroundColor: '#ebebeb', height: '60%', margin: '10px', overflowY: 'scroll' }} >
+                                <div id="choses-product" style={{ backgroundColor: '#ebebeb', height: '60%', margin: '10px', overflowY: 'scroll', overflowX: 'hidden' }} >
                                     <Grid sty container spacing={0}>
                                         {/* Table */}
                                         <Grid item className="customizeTable" style={{ backgroundColor: 'rgba(20,20,20,0.4)', alignContent: 'center', justifyContent: 'center', borderBottom: '2px solic black' }} md={12} sm={12}>
@@ -231,6 +237,7 @@ class SellProduct extends Component {
                                                     #
                                                 </Grid>
                                                 <Grid item md={1} sm={1}>
+
                                                 </Grid>
                                                 <Grid item md={4} sm={4}>
                                                     Name

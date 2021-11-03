@@ -10,11 +10,13 @@ function ShoppingBags(props) {
     const infoUser = useSelector(state => state.infoUser)
     const dispatch = useDispatch();
 
-    function raiseQuantity (name, quantity) {
-        dispatch({
-            type: "RAISE_QUANTITY_SHOPPING_BAGS",
-            name: name,
-        })
+    function raiseQuantity (name, currentQuantity, maxQuantity) {
+        if (currentQuantity < maxQuantity) {
+            dispatch({
+                type: "RAISE_QUANTITY_SHOPPING_BAGS",
+                name: name,
+            })
+        }
     }
 
     function reduceQuantity (name, quantity) {
@@ -34,8 +36,7 @@ function ShoppingBags(props) {
     }
 
     return (
-        
-        <div>
+        <div style={{width: '100%'}}>
             {console.log(shoppingBags)}
             {
                 (shoppingBags === []) ?
@@ -60,7 +61,7 @@ function ShoppingBags(props) {
                                         <FiChevronLeft></FiChevronLeft>
                                     </IconButton>
                                     <input style={{ width: '35%', textAlign: 'center' }} value={value.quantity} type="text" />
-                                    <IconButton onClick={() => raiseQuantity(value.product.name, value.quantity)} aria-label="delete" size="small">
+                                    <IconButton onClick={() => raiseQuantity(value.product.name, value.quantity, value.product.quantity)} aria-label="delete" size="small">
                                         <FiChevronRight></FiChevronRight>
                                     </IconButton>
                                 </Grid>
@@ -72,7 +73,6 @@ function ShoppingBags(props) {
                     ))
             }
         </div>
-
     );
 }
 

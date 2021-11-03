@@ -29,17 +29,34 @@ class ComponentToPrint extends React.PureComponent {
     }
 
     totalMoney = () => {
-        var total = 0;
+        let total = 0;
         this.props.shoppingBags.map(value => {
             total += value.quantity * value.product.sellPrice;
         })
         return total.toLocaleString();
     }
 
-    render() {
+    reduceTotalMoney = () => {
+        let total = 0;
+        this.props.shoppingBags.map(value => {
+            total += value.quantity * value.product.sellPrice;
+        })
+        if (total !== 0) {
+            total = total*this.props.percentDiscount/100
+        }
+        return total.toLocaleString()
+    }
 
+    finalTotalMoney = () => {
+        let total = this.totalMoney - this.reduceTotalMoney();
+        return total.toLocaleString()
+    }
+
+    render() {
+        
         return (
             <div className="row">
+                {this.reduceTotalMoney()}
                 <div className="col-12">
                     <h1 style={{ textAlign: 'center' }}>{this.props.infoUser.storeName}</h1>
                 </div>
@@ -116,7 +133,7 @@ class ComponentToPrint extends React.PureComponent {
                             <h6 style={{ textAlign: 'end' }}>Discount :</h6>
                         </div>
                         <div className="col-6">
-                            <h6 style={{ textAlign: 'start' }}>0đ</h6>
+                            <h6 style={{ textAlign: 'start' }}>-{this.reduceTotalMoney()}đ</h6>
                         </div>
                     </div>
                 </div>
@@ -126,7 +143,7 @@ class ComponentToPrint extends React.PureComponent {
                             <h5 style={{ textAlign: 'end' }}>TOTAL FINAL :</h5>
                         </div>
                         <div className="col-6">
-                            <h5 style={{ textAlign: 'start' }}>{this.totalMoney()}đ</h5>
+                            <h5 style={{ textAlign: 'start' }}>{this.finalTotalMoney()}đ</h5>
                         </div>
                     </div>
                 </div>
@@ -138,7 +155,5 @@ class ComponentToPrint extends React.PureComponent {
         );
     }
 }
-
-
 
 export default ComponentToPrint;
