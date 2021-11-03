@@ -9,7 +9,8 @@ router.get('/', AuthMiddleware, employeeController.getEmployee);
 router.post('/', AuthMiddleware, employeeController.createEmployee);
 router.put('/', AuthMiddleware, employeeController.updateEmployee);
 router.delete('/', AuthMiddleware, employeeController.deleteEmployee);
-
+router.get('/delete', AuthMiddleware, employeeController.getEmployeeDelete);
+router.post('/delete', AuthMiddleware, employeeController.restoreEmployee);
 // Thắng
 
 ////////////////////////////////

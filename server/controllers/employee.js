@@ -118,7 +118,40 @@ class EmployeeTab {
         });;     
     }
 
-
+    getEmployeeDelete = async (req, res) => {
+        var filter = typeof req.body.filter === 'object' ? req.body.filter : JSON.parse(req.body.filter);
+        Employee.findDeleted(filter)
+            .exec()
+            .then((data) => {
+                console.log(data)
+                res.status(200).send(
+                    JSON.stringify({
+                        email: res.locals.decoded.email,
+                        token: res.locals.newToken,
+                        data,
+                    })
+                );
+            })
+            .catch((err) => {
+                res.status(404).send(err);
+            });
+    }
+    restoreEmployee = async (req, res) => {
+        var employee = req.body.employee;
+        Employee.restore ({storeID:employee.storeID , employeeID:employee.employeeID})
+        .then((data) => {
+            res.status(200).send(
+                JSON.stringify({
+                    email: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                    data,
+                })
+            );
+        })
+        .catch((err) => {
+            res.status(404).send(err);
+        });
+    }
 
 
 
