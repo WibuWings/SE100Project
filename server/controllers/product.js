@@ -93,7 +93,7 @@ class ProductTab {
                 JSON.stringify({
                     email: res.locals.decoded.email,
                     token: res.locals.newToken,
-                })
+                })  
             );
         })
         .catch((err) => {

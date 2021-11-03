@@ -10,10 +10,10 @@ class EmployeeTab {
     //shift Assign
     getEmployee = async (req, res) => {
         var filter = typeof req.body.filter === 'object' ? req.body.filter : JSON.parse(req.body.filter);
-        
         Employee.find(filter)
             .exec()
             .then((data) => {
+                console.log(data)
                 res.status(200).send(
                     JSON.stringify({
                         email: res.locals.decoded.email,
@@ -44,7 +44,6 @@ class EmployeeTab {
             address: employee.address,
             cardID: employee.cardID,
             startDate: employee.startDate,
-            endDate: employee.endDate,
         });
         employees.save()
         .then((data) => {        
@@ -79,7 +78,6 @@ class EmployeeTab {
             address: employee.address,
             cardID: employee.cardID,
             startDate: employee.startDate,
-            endDate: employee.endDate,
         }}
         ,{
             returnOriginal: false,
@@ -105,7 +103,7 @@ class EmployeeTab {
         employee.forEach(element => {
             element.importDate= new Date(element.importDate);
         });
-        Employee.deleteMany({_id : { $in: [...employee]}})
+        Employee.delete ({storeID:employee.storeID , employeeID:employee.employeeID})
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
