@@ -121,7 +121,7 @@ class EmployeeTab {
 
     getEmployeeDelete = async (req, res) => {
         var filter = typeof req.body.filter === 'object' ? req.body.filter : JSON.parse(req.body.filter);
-        filter = { '_id.storeID': "19522006@gm.uit.edu.vn" }
+        
         Employee.findDeleted(filter)
             .exec()
             .then((data) => {
@@ -153,6 +153,23 @@ class EmployeeTab {
         .catch((err) => {
             res.status(404).send(err);
         });
+    }
+    deleteEmployeeforever = async (req, res) => {
+        var employee = req.body.employee;
+
+        Employee.deleteOnefindOneAndDelete({storeID:employee.storeID , employeeID:employee.employeeID})
+        .then((data) => {
+            res.status(200).send(
+                JSON.stringify({
+                    email: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                    data,
+                })
+            );
+        })
+        .catch((err) => {
+            res.status(404).send(err);
+        });;     
     }
 
 
