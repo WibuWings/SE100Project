@@ -7,14 +7,14 @@ import { Grid} from '@mui/material';
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 function ShoppingBags(props) {
     const shoppingBags = useSelector(state => state.shoppingBags)
+    const infoUser = useSelector(state => state.infoUser)
     const dispatch = useDispatch();
-    const [reset, setReset] = useState(true);
+
     function raiseQuantity (name, quantity) {
         dispatch({
             type: "RAISE_QUANTITY_SHOPPING_BAGS",
             name: name,
         })
-        setReset(!reset);
     }
 
     function reduceQuantity (name, quantity) {
@@ -23,7 +23,6 @@ function ShoppingBags(props) {
                 type: "REDUCE_QUANTITY_SHOPPING_BAGS",
                 name: name,
             })
-            setReset(!reset);
         }
     }
 
@@ -35,7 +34,9 @@ function ShoppingBags(props) {
     }
 
     return (
+        
         <div>
+            {console.log(shoppingBags)}
             {
                 (shoppingBags === []) ?
                     (<div style={{ width: '100%', height: '100%', textAlign: 'center', marginTop: '100px' }}>

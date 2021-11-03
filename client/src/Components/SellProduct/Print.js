@@ -22,7 +22,7 @@ class Printf extends React.PureComponent {
           }}
           content={() => this.componentRef}
         />
-        <ComponentToPrint shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
+        <ComponentToPrint infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactToPrint from 'react-to-print';
 import { Container, Grid, Button, CardActionArea, CardActions, CardMedia } from '@mui/material';
-import ComponentToPrint  from './ComponentToPrint';
+import ComponentToPrint from './ComponentToPrint';
 import '../../css/SellProduct.css'
 import Tabs from './Tabs'
 import Box from '@mui/material/Box';
@@ -39,12 +39,23 @@ class SellProduct extends Component {
     );
 
     AddProduct = (value) => {
-        const is = this.state.test1;
-        this.setState({
-            test1: !is
+        var isCheck = false;
+        this.props.shoppingBags.map(value1 => {
+            if (value1.product.name === value.name) {
+                isCheck = true;
+            } else {
+            }
         })
-        this.props.addProductToShoppingBags(value);
-        console.log(this.props.shoppingBags);
+        if (isCheck) {
+            this.props.raiseQuantity(value.name);
+        } else {
+            const newProduct = {
+                product: value,
+                quantity: 1,
+            }
+            this.props.addNewProductToShoppingBags(newProduct);
+        }
+
     }
 
 
@@ -54,7 +65,7 @@ class SellProduct extends Component {
             token: localStorage.getItem('token'),
             filter: {
                 "_id.storeID": this.props.infoUser.email,
-            }   
+            }
         }
 
         await axios.get(`http://localhost:5000/api/product/type`,
@@ -84,7 +95,7 @@ class SellProduct extends Component {
             token: localStorage.getItem('token'),
             filter: {
                 "_id.storeID": this.props.infoUser.email,
-            }   
+            }
         }
         await axios.get(`http://localhost:5000/api/product/`, {
             params: { ...data }
@@ -145,10 +156,10 @@ class SellProduct extends Component {
         this.setState({ change: !this.state.change });
     }
 
-    
 
-    
-    
+
+
+
 
     render() {
         console.log("ĐÃ reset");
@@ -276,10 +287,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 data: data
             });
         },
-        addProductToShoppingBags: (product) => {
+        addNewProductToShoppingBags: (newProduct) => {
             dispatch({
-                type: "ADD_PRODUCT_SHOPPING_BAGS",
-                product: product,
+                type: "ADD_NEW_PRODUCT_SHOPPING_BAGS",
+                newProduct: newProduct,
+            })
+        },
+        raiseQuantity: (name) => {
+            dispatch({
+                type: "RAISE_QUANTITY_SHOPPING_BAGS",
+                name: name,
             })
         }
     }
