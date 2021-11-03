@@ -108,7 +108,8 @@ class EmployeeManager extends Component {
         ]
     }
     // Lấy danh sách các nhân viên
-    async getAllEmployee () {
+    getAllEmployee () {
+        alert("Đã nhấn vào get")
         var result = [];
         const data = {
             token: localStorage.getItem('token'),
@@ -116,7 +117,7 @@ class EmployeeManager extends Component {
                 "_id.storeID": this.props.infoUser.email,
             }   
         }
-        await axios.get(`http://localhost:5000/api/employee/`, {
+        axios.get(`http://localhost:5000/api/employee/`, {
             params: {...data}
         })
             .then(res => {
@@ -221,6 +222,30 @@ class EmployeeManager extends Component {
             <div
                 style={{height:'800px', overflowY: 'auto'}}
             >
+                <Button
+                    onClick={() => {this.getAllEmployee()}}
+                    variant="contained"
+                >
+                    Get Employee
+                </Button>
+                <Button
+                    onClick={() => this.addEmployeeToDatabase()}
+                    variant="contained"
+                >
+                    Add Employee
+                </Button>
+                <Button
+                    onClick={() => this.updateEmployee()}
+                    variant="contained"
+                >
+                    Update Employee
+                </Button>
+                <Button
+                    onClick={() => this.deleteEmployeeFromDatabase()}
+                    variant="contained"
+                >
+                    Delete Employee
+                </Button>
                 <Container
                     style={{marginTop: 20}}
                 >
@@ -470,6 +495,7 @@ const mapStateToProps = (state, ownProps) => {
         addEmployeeStatus: state.addEmployeeStatus,
         updateEmployeeStatus: state.updateEmpoyeeStatus,
         payEmployeeStatus: state.payEmployeeStatus,
+        infoUser: state.infoUser,
     }
 }
 
