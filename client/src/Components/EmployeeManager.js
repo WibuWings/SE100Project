@@ -260,6 +260,29 @@ class EmployeeManager extends Component {
             })
     }
 
+    // Xoá nhân viên hoàn toàn
+    deleteEmployeePermantlyFromDatabase()
+    {
+        const data = {
+            token: localStorage.getItem('token'),
+            employee:
+            [
+                {
+                    employeeID: "1",
+                    storeID: "19522006@gm.uit.edu.vn", 
+                },
+            ]
+            
+        }
+        axios.delete(`http://localhost:5000/api/employee/delete`,{data: data})
+            .then(res => {
+                alert("delete permantly employee(s) success");
+            })
+            .catch(err => {
+                alert(err);
+            })
+    }
+
     render() {
         return (
             <div
@@ -301,6 +324,13 @@ class EmployeeManager extends Component {
                 >
                     Back To Work
                 </Button>
+                <Button
+                    onClick={() => this.deleteEmployeePermantlyFromDatabase()}
+                    variant="contained"
+                >
+                    Delete Permantly
+                </Button>
+                
                 <Container
                     style={{marginTop: 20}}
                 >
