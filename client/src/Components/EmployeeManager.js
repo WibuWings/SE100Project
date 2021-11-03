@@ -117,7 +117,7 @@ class EmployeeManager extends Component {
                 "_id.storeID": this.props.infoUser.email,
             }   
         }
-        axios.get(`http://localhost:5000/api/employee/`, {
+       axios.get(`http://localhost:5000/api/employee/`, {
             params: {...data}
         })
             .then(res => {

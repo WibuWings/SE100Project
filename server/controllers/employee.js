@@ -10,10 +10,11 @@ class EmployeeTab {
     //shift Assign
     getEmployee = async (req, res) => {
         var filter = typeof req.body.filter === 'object' ? req.body.filter : JSON.parse(req.body.filter);
-        
+        filter = {'_id.storeID': '19522006@gm.uit.edu.com'  }
         Employee.find(filter)
             .exec()
             .then((data) => {
+                console.log(data)
                 res.status(200).send(
                     JSON.stringify({
                         email: res.locals.decoded.email,
@@ -105,7 +106,7 @@ class EmployeeTab {
         employee.forEach(element => {
             element.importDate= new Date(element.importDate);
         });
-        Employee.deleteMany({_id : { $in: [...employee]}})
+        Employee.findOneAndDelete ({"_id.storeID":employee.storeID , "_id.employeeID":employee.employeeID})
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
