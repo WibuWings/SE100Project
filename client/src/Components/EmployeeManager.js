@@ -29,7 +29,7 @@ import USERLIST from './EmployeePartials/fakeData'
 import AddEmployeeModal from './EmployeePartials/AddEmployeeModal';
 import UpdateEmployeeModal from './EmployeePartials/UpdateEmployeeModal';
 import PayMoneyModal from './EmployeePartials/PayMoneyModal';
-
+import axios from 'axios';
 
 const TABLE_HEAD = [
     { id: 'ID', label: 'ID', alignRight: false },
@@ -50,25 +50,210 @@ var filteredUsers = USERLIST;
 var page = 5;
 var rowsPerPage = 5;
 class EmployeeManager extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            change: false,
+        }; 
+        //this.getAllEmployee();
+    }
+
     handleFilterByName(event){
         filterName = event.target.value;
     }
     addEmployee () {
         this.props.changeAddEmployeeStatus();
     }
+
+    // Dữ liệu mà Tài sẽ trả về khi get, còn khi post, delete, put thì chỉ trả về email với token thôi
+
+    sampleData = {
+        email: "",
+        token: "",
+        employees: [
+            {
+                _id: {
+                    employeeID: "0",
+                    storeID: "19522006@gm.uit.edu.com",
+                },
+                managerID: "19522006@gm.uit.edu.com",
+                password: "abc123",
+                firstName: "Antonio",
+                lastName: "Rudiger",
+                phoneNumber: "03232323232",
+                dateOfBirth: "2021-11-02T00:00:00.000Z",
+                email: "1912@gmail.com",
+                address: "Wherever",
+                cardID: "2511098589",
+                startDate: "2021-11-02T00:00:00.000Z",
+                endDate: "",
+            },
+            {
+                _id: {
+                    employeeID: "1",
+                    storeID: "19522006@gm.uit.edu.com",
+                },
+                managerID: "19522006@gm.uit.edu.com",
+                password: "abc123",
+                firstName: "Antonio",
+                lastName: "Rudiger",
+                phoneNumber: "03232323232",
+                dateOfBirth: "2021-11-02T00:00:00.000Z",
+                email: "1911@gmail.com",
+                address: "Wherever",
+                cardID: "25110985819",
+                startDate: "2021-11-02T00:00:00.000Z",
+                endDate: "2021-11-31T00:00:00.000Z",
+            }
+        ]
+    }
+    // Lấy danh sách các nhân viên
+    getAllEmployee () {
+        alert("Đã nhấn vào get")
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+            }   
+        }
+        axios.get(`http://localhost:5000/api/employee/`, {
+            params: {...data}
+        })
+            .then(res => {
+                // alert("Lấy hết đc product ròi anh chai");
+                result = res.data.data;
+                console.log(res.data.data);
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+    }
+    // Thêm nhân viên
+    addEmployeeToDatabase()
+    {
+        const data = {
+            token: localStorage.getItem('token'),
+            employee: {
+                _id: {
+                    employeeID: "1",
+                    storeID: "19522006@gm.uit.edu.com",
+                },
+                managerID: "19522006@gm.uit.edu.com",
+                password: "abc123",
+                firstName: "Antonio",
+                lastName: "Rudiger",
+                phoneNumber: "03232323232",
+                dateOfBirth: "2021-11-02T00:00:00.000Z",
+                email: "1911@gmail.com",
+                address: "Wherever",
+                cardID: "25110985819",
+                startDate: "2021-11-02T00:00:00.000Z",
+                endDate: "2021-11-31T00:00:00.000Z",
+            }   
+        }
+        axios.post(`http://localhost:5000/api/employee`, data)
+            .then(res => {
+                console.log("Save success");
+                alert("Lưu thành công")
+            })
+            .catch(err => {
+                alert(err);
+                console.log(err);
+            })
+    }
+    // Xoá nhân viên
+    deleteEmployeeFromDatabase()
+    {
+        const data = {
+            token: localStorage.getItem('token'),
+            employee:
+            [
+                {
+                    employeeID: "1",
+                    storeID: "19522006@gm.uit.edu.com",
+                },
+            ]
+            
+        }
+        axios.delete(`http://localhost:5000/api/employee`,{data: data})
+            .then(res => {
+                alert("delete employee(s) success");
+            })
+            .catch(err => {
+                alert(err);
+            })
+    }
+    // Sửa nhân viên
+    updateEmployee()
+    {
+        const data = {
+            token: localStorage.getItem('token'),
+            employee: {
+                _id: {
+                    employeeID: "1",
+                    storeID: "19522006@gm.uit.edu.com",
+                },
+                managerID: "19522006@gm.uit.edu.com",
+                password: "abc123",
+                firstName: "Antonio",
+                lastName: "Rudiger",
+                phoneNumber: "03232323232",
+                dateOfBirth: "2021-11-02T00:00:00.000Z",
+                email: "1911@gmail.com",
+                address: "Wherever",
+                cardID: "25110985819",
+                startDate: "2021-11-02T00:00:00.000Z",
+                endDate: "2021-11-31T00:00:00.000Z",
+            }
+        }
+        axios.put(`http://localhost:5000/api/employee`, data)
+            .then(res => {
+                console.log("Update success");
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
     render() {
         return (
             <div
                 style={{height:'800px', overflowY: 'auto'}}
             >
+                <Button
+                    onClick={() => {this.getAllEmployee()}}
+                    variant="contained"
+                >
+                    Get Employee
+                </Button>
+                <Button
+                    onClick={() => this.addEmployeeToDatabase()}
+                    variant="contained"
+                >
+                    Add Employee
+                </Button>
+                <Button
+                    onClick={() => this.updateEmployee()}
+                    variant="contained"
+                >
+                    Update Employee
+                </Button>
+                <Button
+                    onClick={() => this.deleteEmployeeFromDatabase()}
+                    variant="contained"
+                >
+                    Delete Employee
+                </Button>
                 <Container
-                    style={{marginTop: 60}}
+                    style={{marginTop: 20}}
                 >
                     <span
                         style = {{
                             color: "#fff",
-                            border: '1px solid cyan',
                             padding: 12,
+                            border: '1px solid cyan',
                             backgroundColor: '#222'
                         }}
                     >
@@ -150,7 +335,7 @@ class EmployeeManager extends Component {
                         </Table>
                     </TableContainer>
 
-                    <TablePagination
+                    {/* <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
                         count={USERLIST.length}
@@ -158,14 +343,14 @@ class EmployeeManager extends Component {
                         // page={page}
                         // onPageChange={handleChangePage}
                         // onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
+                    /> */}
                     </Card>
                 </Container>
                 <Container
-                    style={{marginTop: 60}}
+                    style={{marginTop: 20}}
                     style={{
                         marginBottom: 220,
-                        marginTop: 40
+                        marginTop: 20
                     }}
                 >
                     <span
@@ -173,7 +358,6 @@ class EmployeeManager extends Component {
                             color: "#fff",
                             border: '1px solid cyan',
                             padding: 12,
-                            margin: 12,
                             height: 40,
                             backgroundColor: '#222'
                         }}
@@ -248,7 +432,7 @@ class EmployeeManager extends Component {
                     </Table>
                     </TableContainer>
 
-                    <TablePagination
+                    {/* <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
                         count={USERLIST.length}
@@ -257,7 +441,7 @@ class EmployeeManager extends Component {
                         // onPageChange={handleChangePage}
                         // onRowsPerPageChange={handleChangeRowsPerPage}
                         
-                    />
+                    /> */}
                     </Card>
                 </Container>
                 {/* Đây là phần modal */}
@@ -311,6 +495,7 @@ const mapStateToProps = (state, ownProps) => {
         addEmployeeStatus: state.addEmployeeStatus,
         updateEmployeeStatus: state.updateEmpoyeeStatus,
         payEmployeeStatus: state.payEmployeeStatus,
+        infoUser: state.infoUser,
     }
 }
 
