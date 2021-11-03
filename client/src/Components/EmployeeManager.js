@@ -225,7 +225,7 @@ class EmployeeManager extends Component {
                 "_id.storeID": this.props.infoUser.email,
             }   
         }
-        axios.get(`http://localhost:5000/api/employee/sacked`, {
+        axios.get(`http://localhost:5000/api/employee/delete`, {
             params: {...data}
         })
             .then(res => {
@@ -251,7 +251,7 @@ class EmployeeManager extends Component {
             ]
             
         }
-        axios.delete(`http://localhost:5000/api/employee/backtowork`,{data: data})
+        axios.patch(`http://localhost:5000/api/employee/delete`, data)
             .then(res => {
                 alert("back to work success");
             })
