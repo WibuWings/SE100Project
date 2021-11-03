@@ -46,7 +46,7 @@ class GoodManager extends Component {
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleEditType()} variant="contained">
                             edit type
                         </Button>
-                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirmDelete()} variant="contained">
+                        {/* <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirmDelete()} variant="contained">
                             Delete
                         </Button>
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirm()} variant="contained">
@@ -54,7 +54,7 @@ class GoodManager extends Component {
                         </Button>
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleUpdateGood()} variant="contained">
                             Update Good
-                        </Button>
+                        </Button> */}
 
                      </div>
 
