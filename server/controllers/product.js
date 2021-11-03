@@ -26,40 +26,40 @@ class ProductTab {
             });
     };
 
-    createProduct = async (req, res) => {
-        var reqProduct = req.body.product;
+        createProduct = async (req, res) => {
+            var reqProduct = req.body.product;
 
-        var newProduct = new Product({
-            _id: {
-                productID: reqProduct._id.productID,
-                importDate: reqProduct._id.importDate,
-                storeID: reqProduct._id.storeID,
-            },
-            name: reqProduct.name,
-            imgUrl: reqProduct.imgUrl,
-            quantity: reqProduct.quantity,
-            remain: reqProduct.remain,
-            unit: reqProduct.unit,
-            importPrice: reqProduct.importPrice,
-            sellPrice: reqProduct.sellPrice,
-            expires: reqProduct.expires,
-        });
-
-        newProduct
-            .save()
-            .then((data) => {
-                res.status(200).send(
-                    JSON.stringify({
-                        email: res.locals.decoded.email,
-                        token: res.locals.newToken,
-                        data,
-                    })
-                );
-            })
-            .catch((err) => {
-                res.status(404).send(err);
+            var newProduct = new Product({
+                _id: {
+                    productID: reqProduct._id.productID,
+                    importDate: reqProduct._id.importDate,
+                    storeID: reqProduct._id.storeID,
+                },
+                name: reqProduct.name,
+                imgUrl: reqProduct.imgUrl,
+                quantity: reqProduct.quantity,
+                remain: reqProduct.remain,
+                unit: reqProduct.unit,
+                importPrice: reqProduct.importPrice,
+                sellPrice: reqProduct.sellPrice,
+                expires: reqProduct.expires,
             });
-    };
+
+            newProduct
+                .save()
+                .then((data) => {
+                    res.status(200).send(
+                        JSON.stringify({
+                            email: res.locals.decoded.email,
+                            token: res.locals.newToken,
+                            data,
+                        })
+                    );
+                })
+                .catch((err) => {
+                    res.status(404).send(err);
+                });
+        };
 
     updateProduct = async (req, res) => {
         var reqProduct = req.body.product;

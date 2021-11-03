@@ -9,22 +9,18 @@ const NextWeekTimeKeeping = require('../models/nextWeekTimeKeeping');
 
 class EmployeeTab {
     //shift Assign
+    createEmployee = async (req, res) => {
+        
+    }
+
+
+
+
+
+
+
+
     getShiftAssign = async (req, res) => {
-        var filter = typeof req.body.filter === 'object' ? req.body.filter : JSON.parse(req.body.filter);
-        Employee.find(filter)
-        .exec()
-        .then((data) => {
-            res.status(200).send(
-                JSON.stringify({
-                    email: res.locals.decoded.email,
-                    token: res.locals.newToken,
-                    data,
-                })
-            );
-        })
-        .catch((err) => {
-            res.status(404).send(err);
-        });
     };
 
     createShiftAssign = async (req, res) => {
