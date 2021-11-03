@@ -156,8 +156,8 @@ class EmployeeTab {
         const employee = req.body.employee;
 
         Employee.findOneAndDelete(
-            {"_id.storeID":employee.storeID , 
-            "_id.employeeID":employee.employeeID})
+            {storeID:employee.storeID , 
+            employeeID:employee.employeeID})
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
