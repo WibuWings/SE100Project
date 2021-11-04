@@ -8,6 +8,7 @@ class Printf extends React.PureComponent {
     super(props);
     this.state = {
       percentDiscount: 0,
+      date: new Date()
     }
   }
 
@@ -47,9 +48,9 @@ class Printf extends React.PureComponent {
       total += value.quantity * value.product.sellPrice;
     })
     if (total !== 0) {
-      total = total*this.state.percentDiscount/100
+      total = total * this.state.percentDiscount / 100
       return total.toLocaleString();
-    } 
+    }
     return total.toLocaleString();
   }
 
@@ -59,10 +60,34 @@ class Printf extends React.PureComponent {
       total += value.quantity * value.product.sellPrice;
     })
     if (total !== 0) {
-      total -= total*this.state.percentDiscount/100
+      total -= total * this.state.percentDiscount / 100
       return total.toLocaleString();
-    } 
+    }
     return total.toLocaleString();
+  }
+
+  makeCode = (length) => {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() *
+        charactersLength));
+    }
+    return result;
+  }
+
+  addReciept = async () => {
+    const data = {
+      MAHD: "HD" + this.makeCode(6),
+      name: this.props.infoUser.lastName + " " + this.props.infoUser.firstName,
+      date: this.state.date.getDate() + " / " + this.state.date.getMonth() + " / " + this.state.date.getFullYear(),
+      discount: this.state.percentDiscount,
+      totalMoney: this.totalFinalMoney(),
+    }
+    console.log(data);
+    this.props.showAlert("In bill success", "success")
+    this.props.addRecieptToHistory(data);
   }
 
   render() {
@@ -97,7 +122,7 @@ class Printf extends React.PureComponent {
               </div>
             </div>
           </div>
-          <div className="col-12">
+          <div onClick={() => this.addReciept()} className="col-12">
             <ReactToPrint
               trigger={() => {
                 return <div style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
@@ -108,7 +133,7 @@ class Printf extends React.PureComponent {
             />
           </div>
           <div className="col-12">
-            <p onClick={() => this.props.changeStatusHistoryReciept()} style={{ cursor: 'pointer'}}>(*) Receipt history</p>
+            <p onClick={() => this.props.changeStatusHistoryReciept()} style={{ cursor: 'pointer' }}>(*) Receipt history</p>
           </div>
         </div>
 
@@ -130,12 +155,25 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-      changeStatusHistoryReciept: () => {
-          dispatch({
-              type: "CHANGE_HISTORY_RECIEPT_STATUS",
-          });
-      }
+    changeStatusHistoryReciept: () => {
+      dispatch({
+        type: "CHANGE_HISTORY_RECIEPT_STATUS",
+      });
+    },
+    addRecieptToHistory: (data) => {
+      dispatch({
+        type: "ADD_RECIEPT",
+        newReciept: data,
+      });
+    },
+    showAlert: (message, typeMessage) => {
+      dispatch({
+        type: "SHOW_ALERT",
+        message: message,
+        typeMessage: typeMessage,
+      })
+    },
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(Printf)
+export default connect(mapStateToProps, mapDispatchToProps)(Printf)

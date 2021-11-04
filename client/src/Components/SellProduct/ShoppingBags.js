@@ -1,13 +1,11 @@
-import {React, useState} from 'react';
+import {React} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { Grid} from '@mui/material';
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 function ShoppingBags(props) {
     const shoppingBags = useSelector(state => state.shoppingBags)
-    const infoUser = useSelector(state => state.infoUser)
     const dispatch = useDispatch();
 
     function raiseQuantity (name, currentQuantity, maxQuantity) {

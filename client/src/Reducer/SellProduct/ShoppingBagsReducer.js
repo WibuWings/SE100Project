@@ -1,4 +1,3 @@
-
 const shoppingBagsInitialState = [],
     shoppingBagsReducer = (state = shoppingBagsInitialState, action) => {
         switch (action.type) {
@@ -19,7 +18,7 @@ const shoppingBagsInitialState = [],
                     return value
                 })
             case "DELETE_PRODUCT_SHOPPING_BAGS":
-                return state.filter(value => {
+                return state.filter((value) => {
                     if (value.product.name !== action.name) {
                         return value
                     }

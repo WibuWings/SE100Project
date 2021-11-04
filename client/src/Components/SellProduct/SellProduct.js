@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import ReactToPrint from 'react-to-print';
 import { Container, Grid, Button, CardActionArea, CardActions, CardMedia } from '@mui/material';
-import ComponentToPrint from './ComponentToPrint';
 import '../../css/SellProduct.css'
 import Tabs from './Tabs'
 import Box from '@mui/material/Box';
@@ -15,6 +13,7 @@ import axios from 'axios';
 import { Image } from 'cloudinary-react';
 import ShoppingBags from './ShoppingBags';
 import Printf from './Print'
+import HistoryReciept from './HistoryReciept';
 
 class SellProduct extends Component {
 
@@ -27,7 +26,6 @@ class SellProduct extends Component {
         this.loadAllType();
         this.loadAllGood();
     }
-
 
     bull = (
         <Box
@@ -258,12 +256,7 @@ class SellProduct extends Component {
                     </Grid>
                 </Container>
                 {this.props.statusShowHistoryReciept ? (
-                    <div  className="modal-history-reciept">
-                        <div onClick={() => this.props.changeStatusHistoryReciept()} className="modal-overlay"></div>
-                        <div className="history-list-receipt">
-                            History
-                        </div>
-                    </div>
+                    <HistoryReciept></HistoryReciept>
                 ) : null}
             </div>
         );
@@ -310,11 +303,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "RAISE_QUANTITY_SHOPPING_BAGS",
                 name: name,
             })
-        },
-        changeStatusHistoryReciept: () => {
-            dispatch({
-                type: "CHANGE_HISTORY_RECIEPT_STATUS",
-            });
         }
     }
 }
