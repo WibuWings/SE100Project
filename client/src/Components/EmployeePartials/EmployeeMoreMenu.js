@@ -21,6 +21,7 @@ class EmployeeMoreMenu extends Component {
     this.state= {
       change: 'false'
     }
+    this.myRef = React.createRef();
   }
   setIsOpen(val) {
     this.isOpen = val;
@@ -32,29 +33,27 @@ class EmployeeMoreMenu extends Component {
   }
 
   isOpen=false;
+
   render() {
     return (
-      <div
-        style={{
-          position:'relative'
-        }}
-      >
-        <IconButton onClick={() => this.setIsOpen(true)}>
+      <>
+        <IconButton ref={this.myRef} onClick={() => this.setIsOpen(true)}>
           <Icon icon={moreVerticalFill} width={20} height={20} />
         </IconButton>
   
         <Menu
-          open={this.isOpen}
           style={{
-            position:'absolute',
-            top: 0,
-            right: 0,
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
           }}
+          open={this.isOpen}
           onClose={() => this.setIsOpen(false)}
-          PaperProps={{
-            sx: { width: 200, maxWidth: '100%' }
-          }}
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          anchorEl={this.myRef.current}
+          // PaperProps={{
+          //   sx: { width: 200, maxWidth: '100%' }
+          // }}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
           <MenuItem sx={{ color: 'text.secondary' }}>
@@ -81,7 +80,7 @@ class EmployeeMoreMenu extends Component {
             <ListItemText primary="Pay money" primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
         </Menu>
-      </div>
+      </>
     );
   }
   
