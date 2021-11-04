@@ -107,6 +107,9 @@ class Printf extends React.PureComponent {
               content={() => this.componentRef}
             />
           </div>
+          <div className="col-12">
+            <p onClick={() => this.props.changeStatusHistoryReciept()} style={{ cursor: 'pointer'}}>(*) Receipt history</p>
+          </div>
         </div>
 
         {/* Ẩn đi */}
@@ -125,5 +128,14 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+      changeStatusHistoryReciept: () => {
+          dispatch({
+              type: "CHANGE_HISTORY_RECIEPT_STATUS",
+          });
+      }
+  }
+}
 
-export default connect(mapStateToProps)(Printf)
+export default connect(mapStateToProps,mapDispatchToProps)(Printf)

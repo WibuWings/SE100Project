@@ -63,7 +63,7 @@ class SellProduct extends Component {
         }
 
     }
-    
+
 
     async loadAllType() {
         var result = [];
@@ -158,14 +158,10 @@ class SellProduct extends Component {
 
         console.log("listProductInfor: ", listProductInfor);
         this.props.getProductToReducer(listProductInfor);
-        // console.log("this.props.listProduct.state: ", this.props.listProduct.state);
         this.setState({ change: !this.state.change });
     }
 
-
-
-
-
+    
 
     render() {
         console.log("ĐÃ reset");
@@ -261,6 +257,14 @@ class SellProduct extends Component {
                         </Grid>
                     </Grid>
                 </Container>
+                {this.props.statusShowHistoryReciept ? (
+                    <div  className="modal-history-reciept">
+                        <div onClick={() => this.props.changeStatusHistoryReciept()} className="modal-overlay"></div>
+                        <div className="history-list-receipt">
+                            History
+                        </div>
+                    </div>
+                ) : null}
             </div>
         );
     }
@@ -272,6 +276,7 @@ const mapStateToProps = (state, ownProps) => {
         chooseTypeProductID: state.chooseTypeProduct,
         infoUser: state.infoUser,
         shoppingBags: state.shoppingBags,
+        statusShowHistoryReciept: state.statusShowHistoryReciept,
     }
 }
 
@@ -305,6 +310,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "RAISE_QUANTITY_SHOPPING_BAGS",
                 name: name,
             })
+        },
+        changeStatusHistoryReciept: () => {
+            dispatch({
+                type: "CHANGE_HISTORY_RECIEPT_STATUS",
+            });
         }
     }
 }

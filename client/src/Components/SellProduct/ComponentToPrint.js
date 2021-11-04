@@ -48,8 +48,14 @@ class ComponentToPrint extends React.PureComponent {
     }
 
     finalTotalMoney = () => {
-        let total = this.totalMoney - this.reduceTotalMoney();
-        return total.toLocaleString()
+        let total = 0;
+        this.props.shoppingBags.map(value => {
+            total += value.quantity * value.product.sellPrice;
+        })
+        if (total !== 0 && this.props.percentDiscount !== 0) {
+            total -= total*this.props.percentDiscount/100
+        }
+        return total.toLocaleString();
     }
 
     render() {
