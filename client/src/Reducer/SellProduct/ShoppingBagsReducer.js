@@ -23,6 +23,9 @@ const shoppingBagsInitialState = [],
                         return value
                     }
                 })
+            case "RESET_SHOPPING_BAGS":
+                return state = [];
+            
             default:
                 return state
         }

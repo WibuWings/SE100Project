@@ -8,6 +8,7 @@ class Printf extends React.PureComponent {
     super(props);
     this.state = {
       percentDiscount: 0,
+      infoReciept: [],
       date: new Date()
     }
   }
@@ -84,9 +85,15 @@ class Printf extends React.PureComponent {
       date: this.state.date.getDate() + " / " + this.state.date.getMonth() + " / " + this.state.date.getFullYear(),
       discount: this.state.percentDiscount,
       totalMoney: this.totalFinalMoney(),
+      listProduct: this.props.shoppingBags,
+      isEdit: false,
     }
     console.log(data);
+    this.setState({
+      infoReciept: this.props.shoppingBags,
+    })
     this.props.showAlert("In bill success", "success")
+    this.props.resetShoppingBag();
     this.props.addRecieptToHistory(data);
   }
 
@@ -139,7 +146,7 @@ class Printf extends React.PureComponent {
 
         {/* Ẩn đi */}
         <div style={{ display: 'none' }}>
-          <ComponentToPrint percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
+          <ComponentToPrint percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.state.infoReciept} ref={el => (this.componentRef = el)} />
         </div>
       </div>
     );
@@ -173,6 +180,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         typeMessage: typeMessage,
       })
     },
+    resetShoppingBag: () => {
+      dispatch({
+        type: "RESET_SHOPPING_BAGS"
+      })
+    }
   }
 }
 

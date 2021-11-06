@@ -13,16 +13,31 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { FiEdit } from 'react-icons/fi'
 
 
 function Row(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
+    const dispatch = useDispatch();
+    console.log(row);
+
+    const editReciept = (MAHD) => {
+        console.log(MAHD);
+        dispatch({
+            type: "EDIT_SHOPPING_BAGS",
+            MAHD: MAHD,
+        })
+
+        dispatch({
+            type: "CHANGE_HISTORY_RECIEPT_STATUS"
+        })
+    }
 
     return (
         <React.Fragment>
-            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: !row.isEdit ? '#a6ffa6' : '#f4f492' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -39,6 +54,13 @@ function Row(props) {
                 <TableCell align="right">{row.date}</TableCell>
                 <TableCell align="right">{row.discount}</TableCell>
                 <TableCell align="right">{row.totalMoney}</TableCell>
+                <TableCell>
+                    {!row.isEdit ? (
+                        <IconButton onClick={() => editReciept(row.MAHD)} color="secondary" aria-label="fingerprint">
+                            <FiEdit />
+                        </IconButton>
+                    ) : null}
+                </TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -106,11 +128,12 @@ export default function CollapsibleTable() {
                 <TableHead>
                     <TableRow style={{ backgroundColor: 'black', color: 'white' }}>
                         <TableCell />
-                        <TableCell>Mã hóa đơn</TableCell>
+                        <TableCell >Mã HĐ</TableCell>
                         <TableCell align="right">Người bán</TableCell>
                         <TableCell align="right">Ngày hóa đơn</TableCell>
                         <TableCell align="right">Giảm giá</TableCell>
                         <TableCell align="right">Tổng tiền</TableCell>
+                        <TableCell />
                     </TableRow>
                 </TableHead>
                 <TableBody>
