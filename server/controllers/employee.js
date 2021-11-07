@@ -10,7 +10,6 @@ class EmployeeTab {
     //shift Assign
     getEmployee = async (req, res) => {
         var filter = typeof req.body.filter === 'object' ? req.body.filter : JSON.parse(req.body.filter);
-        filter = { '_id.storeID': "19522006@gm.uit.edu.vn" }
         Employee.find(filter)
             .exec()
             .then((data) => {
