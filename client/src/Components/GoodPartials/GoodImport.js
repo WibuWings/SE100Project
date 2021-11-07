@@ -43,6 +43,11 @@ const StyledTextField = withStyles((theme) => ({
   }))(TextField);
 
 class GoodImport extends Component {
+    imgUrl= 'none';
+    dateTime= Date.now();
+    currentDateTime = '2021-01-02';
+    finishUpImage = true;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -78,11 +83,7 @@ class GoodImport extends Component {
         this.props.changeAddTypeStatus();
         this.props.setAddTypeStatus();
     }
-    imgUrl= 'none';
-    dateTime= Date.now();
-    currentDateTime = '2021-01-02';
-    finishUpImage = true;
-
+    
     async profileImageChange(fileChangeEvent) {
         this.setState({
             imageSelect: fileChangeEvent.target.files[0],
@@ -176,6 +177,7 @@ class GoodImport extends Component {
 
         // console.log(data);
     }
+    
     checkConstraint = () => {
         // Kiểm tra các constraint ở đây coi thử ổn chưa
         // Constraint 1: Check name
@@ -335,8 +337,6 @@ class GoodImport extends Component {
         else this.generatedID = 0;
         this.setState({change: false});
     }
-
-    
 
     generatedID = 0;
 

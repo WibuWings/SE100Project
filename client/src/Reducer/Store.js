@@ -28,7 +28,7 @@ import typeProductValueReducer from './TypeProductValueReducer';
 import infoGoodReducer from './InfoUpdateProduct';
 import alertReducer from './AlertReducer';
 import shoppingBagsReducer from './SellProduct/ShoppingBagsReducer';
-
+import listEmployeeReducer from './Employee/employeeListReducer';
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -49,6 +49,7 @@ const allReducers = redux.combineReducers({
     role: roleReducer,
     confirmCode: confirmModalReducer,
     yesConfirm: statusYesConfirmReducer,
+    listEmployee: listEmployeeReducer, 
     addEmployeeStatus: statusAddEmployeeReducer,
     payEmployeeStatus: statusPayEmployeeReducer,
     updateEmpoyeeStatus: statusUpdateEmployeeReducer,
