@@ -46,7 +46,7 @@ class EmployeeMoreMenu extends Component {
     }
     console.log(data);
 
-    axios.delete(`http://localhost:5000/api/employee/delete`,{data: data})
+    axios.delete(`http://localhost:5000/api/employee`,{data: data})
         .then(res => {
             alert("delete permantly employee(s) success");
         })

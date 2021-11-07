@@ -99,9 +99,7 @@ class EmployeeTab {
 
     deleteEmployee = async (req, res) => {
         var employee = req.body.employee;
-
-
-        Employee.delete({storeID:employee.storeID , employeeID:employee.employeeID})
+        Employee.delete({_id : { $in: [...employee]}})
         .then((data) => {
             console.log(data);
             res.status(200).send(
@@ -138,7 +136,7 @@ class EmployeeTab {
     }
     restoreEmployee = async (req, res) => {
         var employee = req.body.employee;
-        Employee.restore ({storeID:employee.storeID , employeeID:employee.employeeID})
+        Employee.restore ({_id : { $in: [...employee]}})
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
@@ -156,8 +154,7 @@ class EmployeeTab {
         const employee = req.body.employee;
 
         Employee.findOneAndDelete(
-            {storeID:employee.storeID , 
-            employeeID:employee.employeeID})
+            {_id : { $in: [...employee]}})
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
