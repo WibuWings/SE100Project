@@ -101,8 +101,9 @@ class EmployeeTab {
         var employee = req.body.employee;
 
 
-        Employee.delete ({storeID:employee.storeID , employeeID:employee.employeeID})
+        Employee.delete({storeID:employee.storeID , employeeID:employee.employeeID})
         .then((data) => {
+            console.log(data);
             res.status(200).send(
                 JSON.stringify({
                     email: res.locals.decoded.email,
