@@ -29,9 +29,10 @@ class EmployeeMoreMenu extends Component {
   }
 
   edit() {
-    this.props.changeUpdateEmployeeStatus();
     this.getEmployeeByID(this.props.data);
+    // console.log("send nude", this.currentEmployee);
     this.props.setUpdateEmployee(this.currentEmployee);
+    this.props.changeUpdateEmployeeStatus();
   }
 
   delete() {

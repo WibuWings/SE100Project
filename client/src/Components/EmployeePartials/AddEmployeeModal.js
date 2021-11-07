@@ -105,8 +105,6 @@ class AddEmployeeModal extends Component {
                 alert(err);
                 console.log(err);
             })
-        await this.getAllEmployee();
-        alert("Xem thử hot reload đc chưa")
     }
 
     cancel = () => {

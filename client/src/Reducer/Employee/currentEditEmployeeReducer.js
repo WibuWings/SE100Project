@@ -21,7 +21,7 @@ const currentEditEmployeeInitialState =
 
     currentEditEmployeeReducer = (state = currentEditEmployeeInitialState, action) => {
         switch (action.type) {
-            case "GET_PRODUCT_AND_TYPE":
+            case "SET_UPDATE_EMPLOYEE":
                 return{
                     state: action.data
                 }
