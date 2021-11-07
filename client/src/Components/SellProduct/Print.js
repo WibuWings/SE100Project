@@ -2,6 +2,8 @@ import React from 'react';
 import ReactToPrint from 'react-to-print';
 import { connect } from 'react-redux';
 import ComponentToPrint from './ComponentToPrint';
+import axios from 'axios';
+
 
 class Printf extends React.PureComponent {
   constructor(props) {
@@ -9,7 +11,8 @@ class Printf extends React.PureComponent {
     this.state = {
       percentDiscount: 0,
       infoReciept: [],
-      date: new Date()
+      date: new Date(),
+      MAHD: "HD" + this.makeCode(6),
     }
   }
 
@@ -78,18 +81,31 @@ class Printf extends React.PureComponent {
     return result;
   }
 
+  code = ''
+
   addReciept = async () => {
+    this.code = this.makeCode(8)
     const data = {
-      MAHD: "HD" + this.makeCode(6),
+      MAHD: this.code,
       name: this.props.infoUser.lastName + " " + this.props.infoUser.firstName,
       date: this.state.date.getDate() + " / " + this.state.date.getMonth() + " / " + this.state.date.getFullYear(),
       discount: this.state.percentDiscount,
       totalMoney: this.totalFinalMoney(),
       listProduct: this.props.shoppingBags,
       isEdit: false,
-      oldBill: this.props.statusEditInfoBill? this.props.InfomationBillEdit : null,
+      oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
     }
-    console.log(data);
+    // axios('http://localhost:5000/api/sell-product/add-reciept', {
+    //   email: this.props.infoUser.email,
+    //   token: localStorage.getItem('token'),
+    //   data: data,
+    // })
+    //   .then(res => {
+
+    //   })
+    //   .catch(err => {
+
+    //   })
     if (this.props.statusEditInfoBill) {
       this.props.changeStatusEditRecipt()
     }
@@ -99,6 +115,7 @@ class Printf extends React.PureComponent {
     this.props.showAlert("In bill success", "success")
     this.props.resetShoppingBag();
     this.props.addRecieptToHistory(data);
+
   }
 
   render() {
@@ -150,7 +167,7 @@ class Printf extends React.PureComponent {
 
         {/* Ẩn đi */}
         <div style={{ display: 'none' }}>
-          <ComponentToPrint percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.state.infoReciept} ref={el => (this.componentRef = el)} />
+          <ComponentToPrint MAHD={this.code} percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.state.infoReciept} ref={el => (this.componentRef = el)} />
         </div>
       </div>
     );
@@ -193,7 +210,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     changeStatusEditRecipt: () => {
       dispatch({
-        type :"CHANGE_EDIT_INFOMATION_STATUS"
+        type: "CHANGE_EDIT_INFOMATION_STATUS"
       })
     }
   }

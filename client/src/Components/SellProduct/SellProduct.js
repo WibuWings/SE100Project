@@ -10,7 +10,6 @@ import exampleImg from '../../img/good-example.jpg'
 import { BiPlusMedical } from 'react-icons/bi';
 import { connect } from 'react-redux'
 import axios from 'axios';
-import { Image } from 'cloudinary-react';
 import ShoppingBags from './ShoppingBags';
 import Printf from './Print'
 import HistoryReciept from './HistoryReciept';
@@ -45,8 +44,8 @@ class SellProduct extends Component {
                 isCheck = true;
                 currentQuantity = value1.quantity
                 maxQuantity = value.quantity
-            } else {
-            }
+            } 
+            return value;
         })
         if (isCheck) {
             if (currentQuantity < maxQuantity) {
@@ -132,17 +131,17 @@ class SellProduct extends Component {
             })
         // Lấy các cái jointype
         var joinTypeInfor = [];
-        for (var i = 0; i < result.length; i++) {
+        for (let i = 0; i < result.length; i++) {
             joinTypeInfor.push(result[i]);
         }
         console.log("joinTypeInfor", joinTypeInfor);
 
         var listProductInfor = [];
-        for (var i = 0; i < resultProduct.length; i++) {
+        for (let i = 0; i < resultProduct.length; i++) {
             var typeIDList = [];
             for (var j = 0; j < joinTypeInfor.length; j++) {
                 if (resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID &&
-                    resultProduct[i]._id.productID == joinTypeInfor[j]._id.productID) {
+                    resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) {
                     typeIDList.push(joinTypeInfor[j]._id.typeID);
                 }
             }
@@ -187,7 +186,7 @@ class SellProduct extends Component {
                                                     <Card onClick={() => this.AddProduct(value)}>
                                                         <CardActionArea>
                                                             {
-                                                                value.imgUrl == "none"
+                                                                value.imgUrl === "none"
                                                                     ? <CardMedia
                                                                         component="img"
                                                                         height="140"

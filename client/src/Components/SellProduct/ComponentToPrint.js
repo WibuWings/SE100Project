@@ -1,6 +1,4 @@
-import { connect } from "react-redux";
 import React from 'react';
-import { borderBottom } from "@mui/system";
 
 
 
@@ -75,7 +73,7 @@ class ComponentToPrint extends React.PureComponent {
                     <h4 style={{ textAlign: 'center' }}>HÓA ĐƠN THANH TOÁN</h4>
                 </div>
                 <div className="col-12">
-                    <p style={{ textAlign: 'center', fontWeight: '400' }}>Số HĐ: {this.makeCode(10)}</p>
+                    <p style={{ textAlign: 'center', fontWeight: '400' }}>Số HĐ: {this.props.MAHD}</p>
                     <div style={{ margin: '0 5px' }} className="row">
                         <div className="col-6">
                             <p style={{ fontWeight: '700' }}>Date:

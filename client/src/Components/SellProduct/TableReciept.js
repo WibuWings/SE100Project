@@ -22,32 +22,45 @@ function Row(props) {
     const [open, setOpen] = React.useState(false);
     const dispatch = useDispatch();
     const listReciept = useSelector(state => state.listReciept)
-
+    const statusEditInfoBill = useSelector(state => state.statusEditInfoBill)
     const editReciept = (MAHD) => {
         let objectInfoBill = [];
         listReciept.map(value => {
             if (value.MAHD === MAHD) {
                 objectInfoBill = value
             }
+            return value;
         })
-        dispatch({
-            type: "EDIT_SHOPPING_BAGS",
-            MAHD: MAHD,
-        })
-        dispatch({
-            type: "INFO_SHOPPING_BAGS_EDIT",
-            listProduct: objectInfoBill.listProduct,
-        })
-        dispatch({
-            type:"ADD_INFO_BILL_EDIT",
-            InfoBill: objectInfoBill,
-        })
-        dispatch({
-            type: "CHANGE_EDIT_INFOMATION_STATUS",
-        })
-        dispatch({
-            type: "CHANGE_HISTORY_RECIEPT_STATUS"
-        })
+        if (!statusEditInfoBill) {
+            dispatch({
+                type: "EDIT_SHOPPING_BAGS",
+                MAHD: MAHD,
+            })
+            dispatch({
+                type: "INFO_SHOPPING_BAGS_EDIT",
+                listProduct: objectInfoBill.listProduct,
+            })
+            dispatch({
+                type:"ADD_INFO_BILL_EDIT",
+                InfoBill: objectInfoBill,
+            })
+            dispatch({
+                type: "CHANGE_EDIT_INFOMATION_STATUS",
+            })
+            dispatch({
+                type: "CHANGE_HISTORY_RECIEPT_STATUS"
+            })
+        } else {
+            dispatch({
+                type:"HIDE_ALERT",
+            })
+            dispatch({
+                type: "SHOW_ALERT",
+                message: "Con` don hang` cho` !",
+                typeMessage: "warning"
+            })
+        }
+        
     }
 
     return (
@@ -82,7 +95,7 @@ function Row(props) {
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div">
-                                History
+                                Detail
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>

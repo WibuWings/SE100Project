@@ -37,7 +37,7 @@ class App extends Component {
   }
 
   autoHideAlert = () => {
-    setTimeout(() => this.props.hideAlert(), 3000);
+    setTimeout(() => this.props.hideAlert(), 4000);
   }
 
   render() {
