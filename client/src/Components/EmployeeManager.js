@@ -152,6 +152,8 @@ class EmployeeManager extends Component {
         {
             listUsers.push(result[i]);
         }
+        // Thêm vào cái redux
+        this.props.getEmployee(listUsers);
         console.log("listUsers", listUsers);
         this.setState({change: !this.state.change});
     }
@@ -358,7 +360,7 @@ class EmployeeManager extends Component {
                     </Button>
                 </div>
                 <Container
-                    style={{marginTop: 20}}
+                    style={{marginTop: 20, }}
                 >
                     <span
                         style = {{
@@ -384,7 +386,7 @@ class EmployeeManager extends Component {
                         filterName={filterName}
                         // onFilterName={this.handleFilterByName(event)}
                     /> */}
-                    <TableContainer>
+                    <TableContainer style ={{maxHeight:'500px',overflowY: 'scroll'}}>
                         <Table>
                             <EmployeeTableHeader
                                 // order={order}
@@ -399,7 +401,7 @@ class EmployeeManager extends Component {
                                 style={{height: '100%', width: '100%'}}
                             >
                             {
-                                listUsers.map((row) => {
+                                this.props.listEmployee.employees.map((row) => {
                                     
                                 // const { id, firstName, lastName, gender, province,email, adress, old, phone, avatarUrl, isVerified } = row;
                                 // const isItemSelected = selected.indexOf(firstName) !== -1;
@@ -451,7 +453,10 @@ class EmployeeManager extends Component {
                                         <TableCell align="left">{row.email}</TableCell>
                                         <TableCell align="left">{row.address}</TableCell>
                                         <TableCell align="right">
-                                            <EmployeeMoreMenu />
+                                            <EmployeeMoreMenu
+                                                data={row._id.employeeID}    
+                                            >
+                                            </EmployeeMoreMenu>
                                         </TableCell>
                                     </TableRow>
                                 );
@@ -621,6 +626,7 @@ const mapStateToProps = (state, ownProps) => {
         updateEmployeeStatus: state.updateEmpoyeeStatus,
         payEmployeeStatus: state.payEmployeeStatus,
         infoUser: state.infoUser,
+        listEmployee: state.listEmployee,
     }
 }
 
@@ -640,7 +646,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_PAY_EMPLOYEE_STATUS",
             });
+        },
+        getEmployee: (data) => {
+            dispatch({
+                type: "GET_EMPLOYEE",
+                employees: data,
+            });
         }
+
     }
 }
 export default connect(mapStateToProps , mapDispatchToProps)(EmployeeManager);

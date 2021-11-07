@@ -1,22 +1,10 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button, InputLabel } from '@mui/material';
 import { connect } from 'react-redux'
-import { BiPlusMedical, BiEdit } from 'react-icons/bi';
-import Stack from '@mui/material/Stack';
-import { GiCancel } from 'react-icons/gi'
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import { Image } from 'cloudinary-react';
 import axios from 'axios';
 import '../../css/GoodManager.css';
 import { withStyles } from '@material-ui/styles';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DatePicker from '@mui/lab/DatePicker';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import { AiFillPlusCircle} from "react-icons/ai";
-import CancelIcon from '@mui/icons-material/Cancel';
 
 var productTypes =[
     'food', 'detergent', 'cuisine'
@@ -75,7 +63,7 @@ class AddEmployeeModal extends Component {
         {
             listUsers.push(result[i]);
         }
-        console.log("listUsers", listUsers);
+        this.props.getEmployee(listUsers);
         if(listUsers.length > 0)
         {
             this.genID = parseInt(listUsers[listUsers.length - 1]._id.employeeID) + 1;
@@ -85,7 +73,7 @@ class AddEmployeeModal extends Component {
     }
 
     // Thêm nhân viên
-    addEmployeeToDatabase()
+    async addEmployeeToDatabase()
     {
         const data = {
             token: localStorage.getItem('token'),
@@ -108,7 +96,7 @@ class AddEmployeeModal extends Component {
             }   
         }
         console.log(data);
-        axios.post(`http://localhost:5000/api/employee`, data)
+        await axios.post(`http://localhost:5000/api/employee`, data)
             .then(res => {
                 console.log("Save success");
                 alert("Lưu thành công")
@@ -117,6 +105,8 @@ class AddEmployeeModal extends Component {
                 alert(err);
                 console.log(err);
             })
+        await this.getAllEmployee();
+        alert("Xem thử hot reload đc chưa")
     }
 
     cancel = () => {
@@ -348,6 +338,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_ADD_EMPLOYEE_STATUS",
             });
         },
+        getEmployee: (data) => {
+            dispatch({
+                type: "GET_EMPLOYEE",
+                employees: data,
+            });
+        }
     }
 }
 
