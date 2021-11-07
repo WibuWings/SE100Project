@@ -30,10 +30,11 @@ class EmployeeMoreMenu extends Component {
 
   edit() {
     this.props.changeUpdateEmployeeStatus();
+    this.getEmployeeByID(this.props.data);
+    this.props.setUpdateEmployee(this.currentEmployee);
   }
 
   delete() {
-    this.getEmployeeByID();
     const data = {
       token: localStorage.getItem('token'),
       employee:
@@ -46,9 +47,9 @@ class EmployeeMoreMenu extends Component {
     }
     console.log(data);
 
-    axios.delete(`http://localhost:5000/api/employee/delete`,{data: data})
+    axios.delete(`http://localhost:5000/api/employee`,{data: data})
         .then(res => {
-            alert("delete permantly employee(s) success");
+            alert("delete employee(s) success");
         })
         .catch(err => {
             alert(err);
@@ -142,7 +143,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch({
             type: "CHANGE_PAY_EMPLOYEE_STATUS",
         });
-    },
+      },
+      setUpdateEmployee: (currentEmployee) => {
+        dispatch({
+          type: "SET_UPDATE_EMPLOYEE",
+          data: currentEmployee
+        });
+      }
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeMoreMenu);
