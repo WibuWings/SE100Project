@@ -1,28 +1,10 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button, InputLabel } from '@mui/material';
 import { connect } from 'react-redux'
-import { BiPlusMedical, BiEdit } from 'react-icons/bi';
-import Stack from '@mui/material/Stack';
-import { GiCancel } from 'react-icons/gi'
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import { Image } from 'cloudinary-react';
 import axios from 'axios';
 import '../../css/GoodManager.css';
 import { withStyles } from '@material-ui/styles';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DatePicker from '@mui/lab/DatePicker';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import { AiFillPlusCircle} from "react-icons/ai";
-import CancelIcon from '@mui/icons-material/Cancel';
-
-var productTypes =[
-    'food', 'detergent', 'cuisine'
-];
-
-var typeSet = [];
 
 const StyledTextField = withStyles((theme) => ({
     root: {

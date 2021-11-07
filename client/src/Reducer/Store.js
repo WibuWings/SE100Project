@@ -30,7 +30,7 @@ import alertReducer from './AlertReducer';
 import shoppingBagsReducer from './SellProduct/ShoppingBagsReducer';
 import listEmployeeReducer from './Employee/employeeListReducer';
 import currentEditEmployeeReducer from './Employee/currentEditEmployeeReducer';
-
+import listSackedEmployeeReducer from './Employee/employeeSackedListReducer';
 
 
 
@@ -55,6 +55,7 @@ const allReducers = redux.combineReducers({
     confirmCode: confirmModalReducer,
     yesConfirm: statusYesConfirmReducer,
     listEmployee: listEmployeeReducer,
+    listSackedEmployee: listSackedEmployeeReducer,
     currentEditEmployee: currentEditEmployeeReducer, 
     addEmployeeStatus: statusAddEmployeeReducer,
     payEmployeeStatus: statusPayEmployeeReducer,
