@@ -87,8 +87,12 @@ class Printf extends React.PureComponent {
       totalMoney: this.totalFinalMoney(),
       listProduct: this.props.shoppingBags,
       isEdit: false,
+      oldBill: this.props.statusEditInfoBill? this.props.InfomationBillEdit : null,
     }
     console.log(data);
+    if (this.props.statusEditInfoBill) {
+      this.props.changeStatusEditRecipt()
+    }
     this.setState({
       infoReciept: this.props.shoppingBags,
     })
@@ -157,6 +161,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     infoUser: state.infoUser,
     shoppingBags: state.shoppingBags,
+    statusEditInfoBill: state.statusEditInfoBill,
+    InfomationBillEdit: state.InfomationBillEdit,
   }
 }
 
@@ -183,6 +189,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     resetShoppingBag: () => {
       dispatch({
         type: "RESET_SHOPPING_BAGS"
+      })
+    },
+    changeStatusEditRecipt: () => {
+      dispatch({
+        type :"CHANGE_EDIT_INFOMATION_STATUS"
       })
     }
   }

@@ -21,15 +21,30 @@ function Row(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
     const dispatch = useDispatch();
-    console.log(row);
+    const listReciept = useSelector(state => state.listReciept)
 
     const editReciept = (MAHD) => {
-        console.log(MAHD);
+        let objectInfoBill = [];
+        listReciept.map(value => {
+            if (value.MAHD === MAHD) {
+                objectInfoBill = value
+            }
+        })
         dispatch({
             type: "EDIT_SHOPPING_BAGS",
             MAHD: MAHD,
         })
-
+        dispatch({
+            type: "INFO_SHOPPING_BAGS_EDIT",
+            listProduct: objectInfoBill.listProduct,
+        })
+        dispatch({
+            type:"ADD_INFO_BILL_EDIT",
+            InfoBill: objectInfoBill,
+        })
+        dispatch({
+            type: "CHANGE_EDIT_INFOMATION_STATUS",
+        })
         dispatch({
             type: "CHANGE_HISTORY_RECIEPT_STATUS"
         })

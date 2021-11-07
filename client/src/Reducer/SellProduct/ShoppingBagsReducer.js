@@ -25,7 +25,8 @@ const shoppingBagsInitialState = [],
                 })
             case "RESET_SHOPPING_BAGS":
                 return state = [];
-            
+            case "INFO_SHOPPING_BAGS_EDIT":
+                return action.listProduct
             default:
                 return state
         }

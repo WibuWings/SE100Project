@@ -30,7 +30,8 @@ import alertReducer from './AlertReducer';
 import shoppingBagsReducer from './SellProduct/ShoppingBagsReducer';
 import statusShowHistoryReciept from './SellProduct/StatusShowHistoryRecieptReducer';
 import listRecieptReducer from './SellProduct/ListRecieptReducer';
-
+import statusEditInfomationBill from './SellProduct/StatusEditInfomationBill';
+import InfomationBillEditReducer from './SellProduct/InfomationBillEdit';
 
 var redux = require('redux');
 
@@ -67,6 +68,8 @@ const allReducers = redux.combineReducers({
     shoppingBags: shoppingBagsReducer,
     statusShowHistoryReciept: statusShowHistoryReciept,
     listReciept: listRecieptReducer,
+    statusEditInfoBill :statusEditInfomationBill,
+    InfomationBillEdit : InfomationBillEditReducer,
 })
 
 
