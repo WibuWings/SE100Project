@@ -4,6 +4,7 @@ import axios from 'axios';
 import { withStyles } from '@material-ui/styles';
 // material
 import { Paper, TableContainer, Table, TableHead, TableCell, TableRow } from '@mui/material';
+import FixedTableCell from './FixedCalendarCell';
 
 // ----------------------------------------------------------------------
 const styles = theme =>  ({
@@ -77,13 +78,13 @@ class FixedCalendar extends Component {
                             this.listShift.map((shift) => (
                                 <TableRow>
                                     <TableCell className={classes.goodTable_Cell}>{shift.timeFrom + '-' + shift.timeTo}</TableCell>
-                                    <TableCell className={classes.goodTable_Cell}></TableCell>
-                                    <TableCell className={classes.goodTable_Cell}></TableCell>
-                                    <TableCell className={classes.goodTable_Cell}></TableCell>
-                                    <TableCell className={classes.goodTable_Cell}></TableCell>
-                                    <TableCell className={classes.goodTable_Cell}></TableCell>
-                                    <TableCell className={classes.goodTable_Cell}></TableCell>
-                                    <TableCell className={classes.goodTable_Cell}></TableCell>
+                                    <FixedTableCell></FixedTableCell>
+                                    <FixedTableCell></FixedTableCell>
+                                    <FixedTableCell></FixedTableCell>
+                                    <FixedTableCell></FixedTableCell>
+                                    <FixedTableCell></FixedTableCell>
+                                    <FixedTableCell></FixedTableCell>
+                                    <FixedTableCell></FixedTableCell>
                                 </TableRow>
                             ))
                         }

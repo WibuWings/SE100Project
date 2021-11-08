@@ -3,21 +3,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withStyles } from '@material-ui/styles';
 // material
-import { Paper, TableContainer, Table, TableHead, TableCell, TableRow } from '@mui/material';
+import { TableCell} from '@mui/material';
+
+
+//icon
+import { IoIosAdd } from "react-icons/io";
 
 // ----------------------------------------------------------------------
 const styles = theme =>  ({
-    goodTable: {                                     
-        borderWidth: '1px',
-        borderColor: '#ccc',
-        borderStyle: 'solid'
-    },
-    goodTable_Cell_Header: {                                     
-        borderWidth: '1px',
-        borderColor: '#ccc',
-        borderStyle: 'solid',
-        height: '40px',
-    },
     goodTable_Cell: {                                     
         borderWidth: '1px',
         borderColor: '#ccc',
@@ -26,7 +19,7 @@ const styles = theme =>  ({
     } 
 })
 
-class FixedCalendar extends Component {
+class FixedCalendarCell extends Component {
   constructor(props) {
     super(props);
     this.state= {
@@ -36,9 +29,25 @@ class FixedCalendar extends Component {
   render() {
     const { classes } = this.props;
     return (
-        <div style={{marginTop: 10, padding: 24, height: 80, overflowY: 'auto'}}> 
-                <TableCell className={classes.goodTable_Cell_Header} align="center">Shift</TableCell>
-        </div>
+        <TableCell 
+            className={classes.goodTable_Cell} 
+            style={{
+                position: 'relative',
+                backgroundColor: '#ff6057'
+            }}
+            
+        >
+            <IoIosAdd 
+                size={30}
+                style={{
+                    position: 'absolute',
+                    right: 0,
+                    top: 0,
+                }}
+                color='#0096FF'
+            />
+            
+        </TableCell>
     );
   }
   
@@ -56,4 +65,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, {withTheme: true}))(FixedCalendar));
+export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, {withTheme: true}))(FixedCalendarCell));
