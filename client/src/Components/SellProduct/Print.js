@@ -91,7 +91,9 @@ class Printf extends React.PureComponent {
       date: this.state.date.getDate() + " / " + this.state.date.getMonth() + " / " + this.state.date.getFullYear(),
       discount: this.state.percentDiscount,
       totalMoney: this.totalFinalMoney(),
+      totalFinalMoney: this.totalFinalMoney(),
       listProduct: this.props.shoppingBags,
+      time: this.state.date.getHours() + ":" + this.state.date.getMinutes(),
       isEdit: false,
       oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
     }

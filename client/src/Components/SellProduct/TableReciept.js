@@ -1,11 +1,11 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
+import { Card, CardHeader, Divider, Grid, Box, Button, CardContent } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -41,7 +41,7 @@ function Row(props) {
                 listProduct: objectInfoBill.listProduct,
             })
             dispatch({
-                type:"ADD_INFO_BILL_EDIT",
+                type: "ADD_INFO_BILL_EDIT",
                 InfoBill: objectInfoBill,
             })
             dispatch({
@@ -52,7 +52,7 @@ function Row(props) {
             })
         } else {
             dispatch({
-                type:"HIDE_ALERT",
+                type: "HIDE_ALERT",
             })
             dispatch({
                 type: "SHOW_ALERT",
@@ -60,7 +60,15 @@ function Row(props) {
                 typeMessage: "warning"
             })
         }
-        
+
+    }
+
+    const countQuantity = () => {
+        let count = 0;
+        row.listProduct.map(value => {
+            count += value.quantity;
+        })
+        return count;
     }
 
     return (
@@ -78,10 +86,10 @@ function Row(props) {
                 <TableCell component="th" scope="row">
                     {row.MAHD}
                 </TableCell>
-                <TableCell align="right">{row.name}</TableCell>
                 <TableCell align="right">{row.date}</TableCell>
-                <TableCell align="right">{row.discount}</TableCell>
                 <TableCell align="right">{row.totalMoney}</TableCell>
+                <TableCell align="right">{row.discount}</TableCell>
+                <TableCell align="right">{row.totalFinalMoney}</TableCell>
                 <TableCell>
                     {!row.isEdit ? (
                         <IconButton onClick={() => editReciept(row.MAHD)} color="secondary" aria-label="fingerprint">
@@ -91,34 +99,146 @@ function Row(props) {
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
-                            <Typography variant="h6" gutterBottom component="div">
-                                Detail
+                            <Typography style={{ fontWeight: '600' }} variant="h6" gutterBottom component="div">
+                                Detail Recipet
                             </Typography>
-                            <Table size="small" aria-label="purchases">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Date</TableCell>
-                                        <TableCell>Customer</TableCell>
-                                        <TableCell align="right">Amount</TableCell>
-                                        <TableCell align="right">Total price ($)</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    <TableRow key={row.name}>
-                                        <TableCell component="th" scope="row">
-                                            {row.name}
-                                        </TableCell>
-                                        <TableCell>{row.name}</TableCell>
-                                        <TableCell align="right">{row.name}</TableCell>
-                                        <TableCell align="right">
-                                            {row.name}
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
+                            <Grid container spacing={3}>
+                                <Grid item md={6} xs={6}>
+                                    <Table size="small" aria-label="purchases">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>#</TableCell>
+                                                <TableCell>Name</TableCell>
+                                                <TableCell>Quantity</TableCell>
+                                                <TableCell align="right">Price</TableCell>
+                                                <TableCell align="right">Total Price</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {row.listProduct.map((value, key) => (
+                                                <TableRow key={value.name}>
+                                                    <TableCell>
+                                                        {key + 1}
+                                                    </TableCell>
+                                                    <TableCell>{value.product.name}</TableCell>
+                                                    <TableCell>{value.quantity}</TableCell>
+                                                    <TableCell align="right">{value.product.sellPrice.toLocaleString()}</TableCell>
+                                                    <TableCell align="right">
+                                                        {(value.quantity * value.product.sellPrice).toLocaleString()}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </Grid>
+                                <Grid item md={6} xs={6}>
+                                    <Grid container spacing={3}>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Mã hóa đơn:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.MAHD}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Trạng thái:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{!row.isEdit ? "Thành công" : "Đổi trả"}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Thời gian:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.date}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Giờ:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.time}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Mã HD củ:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.oldBill ? row.oldBill.MAHD : "Không có"}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Người bán:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.name}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Tổng số lượng:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{countQuantity()}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Tổng tiền hàng:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.totalMoney.toLocaleString()}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Giảm giá (%):</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.discount}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>TỔNG:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>{row.totalFinalMoney.toLocaleString()}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
                         </Box>
                     </Collapse>
                 </TableCell>
@@ -157,10 +277,10 @@ export default function CollapsibleTable() {
                     <TableRow style={{ backgroundColor: 'black', color: 'white' }}>
                         <TableCell />
                         <TableCell >Mã HĐ</TableCell>
-                        <TableCell align="right">Người bán</TableCell>
                         <TableCell align="right">Ngày hóa đơn</TableCell>
+                        <TableCell align="right">Tổng hóa đơn</TableCell>
                         <TableCell align="right">Giảm giá</TableCell>
-                        <TableCell align="right">Tổng tiền</TableCell>
+                        <TableCell align="right">Khách hàng trả</TableCell>
                         <TableCell />
                     </TableRow>
                 </TableHead>
