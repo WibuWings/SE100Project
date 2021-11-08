@@ -30,6 +30,7 @@ import USERLIST from './EmployeePartials/fakeData'
 import AddEmployeeModal from './EmployeePartials/AddEmployeeModal';
 import UpdateEmployeeModal from './EmployeePartials/UpdateEmployeeModal';
 import PayMoneyModal from './EmployeePartials/PayMoneyModal';
+import FixedCalendar from './EmployeePartials/FixedCalendar';
 import axios from 'axios';
 
 function EmployeeObj(employeeID, managerID, password, firstName, lastName, 
@@ -327,7 +328,7 @@ class EmployeeManager extends Component {
                     >
                         Get Employee
                     </Button>
-                    <Button
+                    {/* <Button
                         onClick={() => this.addEmployeeToDatabase()}
                         variant="contained"
                     >
@@ -344,14 +345,14 @@ class EmployeeManager extends Component {
                         variant="contained"
                     >
                         Delete Employee
-                    </Button>
+                    </Button> */}
                     <Button
                         onClick={() => this.getSackedEmployee()}
                         variant="contained"
                     >
                         Get Sacked Employee
                     </Button>
-                    <Button
+                    {/* <Button
                         onClick={() => this.backToWork()}
                         variant="contained"
                     >
@@ -362,7 +363,7 @@ class EmployeeManager extends Component {
                         variant="contained"
                     >
                         Delete Permantly
-                    </Button>
+                    </Button> */}
                 </div>
                 <Container
                     style={{marginTop: 20, }}
@@ -557,6 +558,7 @@ class EmployeeManager extends Component {
                     /> */}
                     </Card>
                 </Container>
+                <FixedCalendar></FixedCalendar>
                 {/* Đây là phần modal */}
                 {this.props.addEmployeeStatus ? (
                     <div 
@@ -575,7 +577,9 @@ class EmployeeManager extends Component {
                     <div 
                         className="modal-add"
                     >
-                        <div onClick={() => {this.props.changeUpdateEmployeeStatus();}} className="modal-overlay"></div>
+                        <div onClick={() => {this.props.changeUpdateEmployeeStatus();}} 
+                            className="moFixedCalendar"
+                        />
                         <UpdateEmployeeModal
                             style={{
                                 marginTop: 0
@@ -597,6 +601,7 @@ class EmployeeManager extends Component {
                         </PayMoneyModal>
                     </div>
                 ): null}
+
             </div>
             
         );
