@@ -31,8 +31,10 @@ import shoppingBagsReducer from './SellProduct/ShoppingBagsReducer';
 import listEmployeeReducer from './Employee/employeeListReducer';
 import currentEditEmployeeReducer from './Employee/currentEditEmployeeReducer';
 import listSackedEmployeeReducer from './Employee/employeeSackedListReducer';
-
-
+import statusShowHistoryReciept from './SellProduct/StatusShowHistoryRecieptReducer';
+import listRecieptReducer from './SellProduct/ListRecieptReducer';
+import statusEditInfomationBill from './SellProduct/StatusEditInfomationBill';
+import InfomationBillEditReducer from './SellProduct/InfomationBillEdit';
 
 var redux = require('redux');
 
@@ -70,6 +72,10 @@ const allReducers = redux.combineReducers({
     chooseTypeProduct: chooseTypeProductReducer,
     alert: alertReducer,
     shoppingBags: shoppingBagsReducer,
+    statusShowHistoryReciept: statusShowHistoryReciept,
+    listReciept: listRecieptReducer,
+    statusEditInfoBill :statusEditInfomationBill,
+    InfomationBillEdit : InfomationBillEditReducer,
 })
 
 

@@ -16,7 +16,6 @@ const listProductInitialState = [
         expires: "",
         typeIDList: [],
     },
-    
 ],
 
     listProductReducer = (state = listProductInitialState, action) => {

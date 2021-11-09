@@ -1,6 +1,5 @@
-import {React, useState} from 'react';
+import {React} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { Grid} from '@mui/material';
@@ -8,13 +7,14 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 function ShoppingBags(props) {
     const shoppingBags = useSelector(state => state.shoppingBags)
     const dispatch = useDispatch();
-    const [reset, setReset] = useState(true);
-    function raiseQuantity (name, quantity) {
-        dispatch({
-            type: "RAISE_QUANTITY_SHOPPING_BAGS",
-            name: name,
-        })
-        setReset(!reset);
+
+    function raiseQuantity (name, currentQuantity, maxQuantity) {
+        if (currentQuantity < maxQuantity) {
+            dispatch({
+                type: "RAISE_QUANTITY_SHOPPING_BAGS",
+                name: name,
+            })
+        }
     }
 
     function reduceQuantity (name, quantity) {
@@ -23,7 +23,6 @@ function ShoppingBags(props) {
                 type: "REDUCE_QUANTITY_SHOPPING_BAGS",
                 name: name,
             })
-            setReset(!reset);
         }
     }
 
@@ -35,7 +34,8 @@ function ShoppingBags(props) {
     }
 
     return (
-        <div>
+        <div style={{width: '100%'}}>
+            {console.log(shoppingBags)}
             {
                 (shoppingBags === []) ?
                     (<div style={{ width: '100%', height: '100%', textAlign: 'center', marginTop: '100px' }}>
@@ -59,7 +59,7 @@ function ShoppingBags(props) {
                                         <FiChevronLeft></FiChevronLeft>
                                     </IconButton>
                                     <input style={{ width: '35%', textAlign: 'center' }} value={value.quantity} type="text" />
-                                    <IconButton onClick={() => raiseQuantity(value.product.name, value.quantity)} aria-label="delete" size="small">
+                                    <IconButton onClick={() => raiseQuantity(value.product.name, value.quantity, value.product.quantity)} aria-label="delete" size="small">
                                         <FiChevronRight></FiChevronRight>
                                     </IconButton>
                                 </Grid>
@@ -71,7 +71,6 @@ function ShoppingBags(props) {
                     ))
             }
         </div>
-
     );
 }
 

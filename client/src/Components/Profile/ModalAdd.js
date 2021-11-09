@@ -15,20 +15,33 @@ class ModalAdd extends Component {
 
         if (this.props.editShiftStatus) {
             var _timeFrom = new Date();
-            var fromHour = parseInt(this.props.objectEditShift.from.slice(0, this.props.objectEditShift.from.indexOf(':')));
-            var fromMin = parseInt(this.props.objectEditShift.from.slice(this.props.objectEditShift.from.indexOf(':') + 1));
-            _timeFrom.setHours(fromHour, fromMin);
-
+            if (this.props.objectEditShift.from.includes("PM")) {
+                
+                var fromHour =  parseInt(this.props.objectEditShift.from.slice(0, this.props.objectEditShift.from.indexOf(':')));
+                var fromMin = parseInt(this.props.objectEditShift.from.slice(this.props.objectEditShift.from.indexOf(':') + 1));
+                _timeFrom.setHours(fromHour + 12, fromMin);
+            } else {
+                var fromHour =  parseInt(this.props.objectEditShift.from.slice(0, this.props.objectEditShift.from.indexOf(':')));
+                var fromMin = parseInt(this.props.objectEditShift.from.slice(this.props.objectEditShift.from.indexOf(':') + 1));
+                _timeFrom.setHours(fromHour , fromMin);
+            }
+           
             var _timeTo = new Date();
-            var toHour = parseInt(this.props.objectEditShift.to.slice(0, this.props.objectEditShift.to.indexOf(':')));
-            var toMin = parseInt(this.props.objectEditShift.to.slice(this.props.objectEditShift.to.indexOf(':') + 1));
-            _timeTo.setHours(toHour, toMin);
+            if (this.props.objectEditShift.to.includes("PM")) {
+                var toHour = parseInt(this.props.objectEditShift.to.slice(0, this.props.objectEditShift.to.indexOf(':')));
+                var toMin = parseInt(this.props.objectEditShift.to.slice(this.props.objectEditShift.to.indexOf(':') + 1));
+                _timeTo.setHours(toHour + 12, toMin);
+            } else {
+                var toHour = parseInt(this.props.objectEditShift.to.slice(0, this.props.objectEditShift.to.indexOf(':')));
+                var toMin = parseInt(this.props.objectEditShift.to.slice(this.props.objectEditShift.to.indexOf(':') + 1));
+                _timeTo.setHours(toHour, toMin);
+            }
+            
         }
 
-
         this.state = {
-            timeFrom: this.props.editShiftStatus ? _timeFrom : Date.now(),
-            timeTo: this.props.editShiftStatus ? _timeTo : Date.now(),
+            timeFrom: this.props.editShiftStatus ? _timeFrom : new Date(2018, 5, 35, 0, 0, 0),
+            timeTo: this.props.editShiftStatus ? _timeTo : new Date(2018, 5, 35, 0, 0, 0),
             isSalary: false,
             isDescription: false,
             isTimeTo: false,
@@ -108,7 +121,7 @@ class ModalAdd extends Component {
     editShift = async () => {
         if (this.state.timeTo - this.state.timeFrom < 1) {
             this.props.hideAlert();
-            this.props.showAlert('TimeTo must be greater than TimeFrom', 'error')
+            this.props.showAlert('The time end must be greater than the time start', 'error')
         }
         if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
             var data = {
@@ -157,7 +170,7 @@ class ModalAdd extends Component {
     addShift = () => {
         if (this.state.timeTo - this.state.timeFrom < 1) {
             this.props.hideAlert();
-            this.props.showAlert('TimeTo must be greater than TimeFrom', 'error')
+            this.props.showAlert('The time end must be greater than the time start', 'error')
         }
         if (!this.state.isSalary && !this.state.isDescription && (this.state.timeTo - this.state.timeFrom > 0)) {
             const code = this.makeCode(6);
@@ -227,7 +240,7 @@ class ModalAdd extends Component {
                                     required
                                     fullWidth
                                     onBlur={(e) => this.blurSalary(e)}
-                                    label="Salary/1h"
+                                    label="Salary"
                                     defaultValue={this.props.editShiftStatus ? this.props.objectEditShift.salary : this.salary}
                                     error={this.state.isSalary}
                                     helperText={this.state.isSalary ? "Greater than 0" : ""}
@@ -241,13 +254,13 @@ class ModalAdd extends Component {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <Stack spacing={3}>
                                         <TimePicker
-                                            label="Time From"
+                                            label="From"
                                             value={this.state.timeFrom}
                                             onChange={(newValue) => this.changeTimeFrom(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
                                         />
                                         <TimePicker
-                                            label="Time To"
+                                            label="To"
                                             value={this.state.timeTo}
                                             onChange={(newValue) => this.changeTimeTo(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
@@ -264,11 +277,11 @@ class ModalAdd extends Component {
                                 Save
                             </Button>) : (
                             <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.addShift()} variant="contained" startIcon={<BiPlusMedical />}>
-                                Xác nhận
+                                Add
                             </Button>
                         )}
                         <Button style={{ backgroundColor: 'red' }} onClick={(e) => this.hanhleCancel(e)} variant="contained" startIcon={<GiCancel />}>
-                            Hủy
+                            Cancel
                         </Button>
                     </Box>
                 </Card>
