@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withStyles } from '@material-ui/styles';
 // material
-import { Paper, TableContainer, Table, TableHead, TableCell, TableRow } from '@mui/material';
+import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, Button } from '@mui/material';
 import FixedTableCell from './FixedCalendarCell';
 
 // ----------------------------------------------------------------------
@@ -91,6 +91,7 @@ class FixedCalendar extends Component {
                   </TableHead>
               </Table>
           </TableContainer>
+          <Button variant="contained">Save</Button>
       </div>
     );
   }

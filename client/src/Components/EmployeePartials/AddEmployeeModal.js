@@ -79,7 +79,7 @@ class AddEmployeeModal extends Component {
             token: localStorage.getItem('token'),
             employee: {
                 _id: {
-                    employeeID: this.genID,
+                    employeeID: document.querySelector('input[name="ID"]').value,
                     storeID: this.props.infoUser.email,
                 },
                 managerID: this.props.infoUser.email,
@@ -161,13 +161,12 @@ class AddEmployeeModal extends Component {
                                             classname='input-box' 
                                             type="text" 
                                             // class="input-val" 
+                                            name='ID'
                                             style = {{width: '70%'}} 
                                             fullWidth 
                                             size="small" 
                                             variant="outlined"
-                                            value={this.genID}
-                                            readOnly={true}
-                                            disabled={true}
+                                            defaultValue={"None"}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
