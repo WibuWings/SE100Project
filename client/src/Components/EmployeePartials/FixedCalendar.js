@@ -65,7 +65,7 @@ class FixedCalendar extends Component {
                 <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Shift</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Shift</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">Mon</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">Tue</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">Wed</TableCell>
