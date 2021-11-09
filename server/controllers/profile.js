@@ -164,23 +164,6 @@ class meProfile {
         const from = req.body.from
         const to = req.body.to
         ShiftType.findOneAndUpdate(
-<<<<<<< HEAD
-            {"_id.shiftID" : idShift,"_id.storeID" : idUser,},
-            {$set:{
-                name: name,
-                timeFrom : from,
-                timeEnd : to,
-                salary: newSalary,
-            }} );
-    }
-    deleteShift = async (req, res) => {
-        const idUser = req.body.email
-        const idShift = req.body.idShift
-         ShiftType.findOneAndDelete(
-            {"_id.shiftID" : idShift,"_id.storeID" : idUser,},
-            function(err, doc){
-                if(err){
-=======
             { shiftID: idShift, storeID: idUser, },
             {
                 $set: {
@@ -219,7 +202,6 @@ class meProfile {
             { shiftID: idShift, storeID: idUser, },
             function (err, doc) {
                 if (err) {
->>>>>>> origin/front-end-phuoc-dashboard
                     res.send(
                         JSON.stringify({
                             status: STATUS.FAILURE,
@@ -295,35 +277,9 @@ class meProfile {
                         status: STATUS.FAILURE,
                         message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
                     })
-<<<<<<< HEAD
-                )}
-            }
-        ) }
-        else{
-            res.send(
-                JSON.stringify({
-                    status: STATUS.FAILURE,
-                    message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
-                })
-            );;
-        }
-
-    })  
-        .catch((err) => {
-            res.send(
-                JSON.stringify({
-                    status: STATUS.FAILURE,
-                    message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
-                 })  
-            );
-        });};
-
-
-=======
                 );
             });
     };
->>>>>>> origin/front-end-phuoc-dashboard
     updateImage = async (req, res) => {
         const email = req.body.email;
         const image = req.body.avatar
@@ -359,57 +315,6 @@ class meProfile {
                 }
             })
     }
-<<<<<<< HEAD
-    updateRegulation = async (req, res) =>{
-        const idcheck = req.body.email;
-        const current = req.body.currency;
-        const hourFrom = req.body.timeStart.hours;
-        const minuteFrom = req.body.timeStart.minutes;
-        const hourEnd = req.body.timeEnd.hours;
-        const minuteEnd = req.body.timeEnd.minutes;  
-        const numEmployees = req.body.numberEmployees      
-                Regulation.findOneAndUpdate(
-                {
-                    _id : idcheck,
-                },
-                {$set:{
-                    currency : current,
-                    numberEmployees :numEmployees,
-                    from : { 
-                        hour : hourFrom,
-                        minutes : minuteFrom
-                    },
-                    to :{
-                        hour : hourEnd,
-                        minutes : minuteEnd,
-                    }
-                }},
-                {
-                    returnOriginal: false,
-                },
-                function(err, doc){
-                    if(err){
-                        res.send(
-                            JSON.stringify({
-                                status: STATUS.FAILURE,
-                                message: MESSAGES.FAILURE_UPDATE,
-                            })
-                        );;
-                    }
-                    else{
-                    
-                res.status(200).send(
-                        JSON.stringify({
-                            token : res.locals.newToken,
-                            email : res.locals.decoded.email,
-                            data : doc ,  
-                        })
-                    )}})
-            }
-        
-    
-=======
->>>>>>> origin/front-end-phuoc-dashboard
 }
 
 module.exports = new meProfile();
