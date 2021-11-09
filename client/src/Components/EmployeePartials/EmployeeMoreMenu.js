@@ -1,63 +1,99 @@
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
 import editFill from '@iconify/icons-eva/edit-fill';
-import { Link as RouterLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import {GiPayMoney} from "react-icons/gi";
 import {connect} from 'react-redux';
 import React, { Component } from 'react';
+import axios from 'axios';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 class EmployeeMoreMenu extends Component {
-  // const ref = useRef(null);
-  // const [isOpen, setIsOpen] = useState(false);
-  
+  currentEmployee = {};
+
+
   constructor(props) {
     super(props);
     this.state= {
       change: 'false'
     }
+    this.myRef = React.createRef();
   }
   setIsOpen(val) {
     this.isOpen = val;
     this.setState({change: val});
+    
   }
 
   edit() {
     this.props.changeUpdateEmployeeStatus();
   }
 
+  delete() {
+    this.getEmployeeByID();
+    const data = {
+      token: localStorage.getItem('token'),
+      employee:
+      [
+          {
+              employeeID: this.props.data,
+              storeID: this.props.infoUser.email, 
+          },
+      ] 
+    }
+    console.log(data);
+
+    axios.delete(`http://localhost:5000/api/employee`,{data: data})
+        .then(res => {
+            alert("delete permantly employee(s) success");
+        })
+        .catch(err => {
+            alert(err);
+        })
+  }
+
+  getEmployeeByID(employeeID) {
+    var listEmployee = this.props.listEmployee.employees;
+    console.log(listEmployee);
+    for(var i = 0; i < listEmployee.length ; i++)
+    {
+      if(employeeID == listEmployee[i]._id.employeeID)
+      {
+        this.currentEmployee = listEmployee[i];
+        return;
+      }
+    }
+  }
+
   isOpen=false;
   render() {
     return (
-      <div
-        style={{
-          position:'relative'
-        }}
-      >
-        <IconButton onClick={() => this.setIsOpen(true)}>
+      <>
+        <IconButton ref={this.myRef} onClick={() => this.setIsOpen(true)}>
           <Icon icon={moreVerticalFill} width={20} height={20} />
         </IconButton>
   
         <Menu
-          open={this.isOpen}
           style={{
-            position:'absolute',
-            top: 0,
-            right: 0,
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
           }}
+          open={this.isOpen}
           onClose={() => this.setIsOpen(false)}
-          PaperProps={{
-            sx: { width: 200, maxWidth: '100%' }
-          }}
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          anchorEl={this.myRef.current}
+          // PaperProps={{
+          //   sx: { width: 200, maxWidth: '100%' }
+          // }}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-          <MenuItem sx={{ color: 'text.secondary' }}>
+          <MenuItem sx={{ color: 'text.secondary' }}
+            onClick={() => this.delete()}
+          >
             <ListItemIcon>
               <Icon icon={trash2Outline} width={24} height={24} />
             </ListItemIcon>
@@ -81,7 +117,7 @@ class EmployeeMoreMenu extends Component {
             <ListItemText primary="Pay money" primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
         </Menu>
-      </div>
+      </>
     );
   }
   
@@ -90,6 +126,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     updateEmployeeStatus: state.updateEmpoyeeStatus,
     payEmployeeStatus: state.payEmployeeStatus,
+    listEmployee: state.listEmployee,
+    infoUser: state.infoUser,
   }
 }
 

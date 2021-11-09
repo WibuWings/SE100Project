@@ -148,8 +148,8 @@ class meProfile {
         
  
     updateShift = async (req, res) => {
-        const idUser = req.body.idUser
-        const idShift = req.body.id
+        const idUser = req.body.email
+        const idShift = req.body.idShift
         const newSalary = req.body.salary
         const name = req.body.description
         const from = req.body.from
@@ -161,27 +161,7 @@ class meProfile {
                 timeFrom : from,
                 timeEnd : to,
                 salary: newSalary,
-            }},{
-                returnOriginal: false,
-            },
-            function(err, doc){
-                if(err){
-                    res.send(
-                        JSON.stringify({
-                            status: STATUS.FAILURE,
-                            message: MESSAGES.FAILURE_UPDATE,
-                        })
-                    );
-                }
-                else{
-            res.status(200).send(
-                    JSON.stringify({
-                        token : res.locals.newToken,
-                        email : res.locals.decoded.email,
-                        data : doc,
-                    })
-                )}
-            });
+            }} );
     }
     deleteShift = async (req, res) => {
         const idUser = req.body.email

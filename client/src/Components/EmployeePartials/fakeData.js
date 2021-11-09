@@ -15,18 +15,6 @@ const users = [...Array(5)].map((_, index) => ({
   province: sample(['Cobham', 'London','German']),
   email: sample(['kancute@gmail.com', 'mount@gmail.com']),
   adress: sample(['Cobham', 'London','German']),
-  role: sample([
-    'Leader',
-    'Hr Manager',
-    'UI Designer',
-    'UX Designer',
-    'UI/UX Designer',
-    'Project Manager',
-    'Backend Developer',
-    'Full Stack Designer',
-    'Front End Developer',
-    'Full Stack Developer'
-  ])
 }));
 
 export default users;

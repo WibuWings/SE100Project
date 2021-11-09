@@ -17,8 +17,7 @@ const Employee = new Schema({
     address: String,
     cardID: String,
     startDate: Date,
-    endDate: Date,
 });
 Employee.plugin(mongooseDelete,
-    {overrideMethods: true});
+    {overrideMethods: 'all', deletedAt : true});
 module.exports = mongoose.model('Employee',Employee);

@@ -5,10 +5,13 @@ const router = express.Router();
 const employeeController = require('../controllers/employee');
 const {AuthMiddleware} = require('../helper/JWT');
 
-// Tài code chỗ này
-
-////////////////////////////////
-
+router.get('/', AuthMiddleware, employeeController.getEmployee);
+router.post('/', AuthMiddleware, employeeController.createEmployee);
+router.put('/', AuthMiddleware, employeeController.updateEmployee);
+router.delete('/', AuthMiddleware, employeeController.deleteEmployee);
+router.get('/delete', AuthMiddleware, employeeController.getEmployeeDelete);
+router.patch('/delete', AuthMiddleware, employeeController.restoreEmployee);
+router.delete('/delete', AuthMiddleware, employeeController.deleteEmployeeforever);
 // Thắng
 
 ////////////////////////////////

@@ -43,6 +43,11 @@ const StyledTextField = withStyles((theme) => ({
   }))(TextField);
 
 class GoodImport extends Component {
+    imgUrl= 'none';
+    dateTime= Date.now();
+    currentDateTime = '2021-01-02';
+    finishUpImage = true;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -78,11 +83,7 @@ class GoodImport extends Component {
         this.props.changeAddTypeStatus();
         this.props.setAddTypeStatus();
     }
-    imgUrl= 'none';
-    dateTime= Date.now();
-    currentDateTime = '2021-01-02';
-    finishUpImage = true;
-
+    
     async profileImageChange(fileChangeEvent) {
         this.setState({
             imageSelect: fileChangeEvent.target.files[0],
@@ -149,6 +150,7 @@ class GoodImport extends Component {
             })
 
         //Thêm vào bảng joinType nữa
+
         // Giờ thêm nhiều type thì phải làm cái này nhiều lần
         for(var i = 0 ; i < typeSet.length ; i++)
         {
@@ -175,52 +177,63 @@ class GoodImport extends Component {
 
         // console.log(data);
     }
+    
     checkConstraint = () => {
         // Kiểm tra các constraint ở đây coi thử ổn chưa
         // Constraint 1: Check name
         var productName =  document.querySelector('input[name="goodName"]').value;
         if(productName.length == 0)
         {
-            alert("Tên sản phẩm không được trống");
+            this.props.hideAlert();
+            this.props.showAlert("Tên sản phẩm không được trống","warning");
             return false;
         }
         // Constraint 2: Check quantity
         if(document.querySelector('input[name="goodQuantity"]').value.length == 0)
         {
-            alert("Số lượng sản phẩm không được trống");
+            this.props.hideAlert();
+            this.props.showAlert("Số lượng sản phẩm không được trống","warning");
             return false;
         }
         else if(parseInt(document.querySelector('input[name="goodQuantity"]').value) <= 0) 
         {
+            this.props.hideAlert();
+            this.props.showAlert("Số lượng sản phẩm không được trống","warning");
             alert('Số lượng sản phẩm phải lớn hơn 0');
             return false;
         }
         // Constraint 3: check Unit
         if(document.querySelector('input[name="unit"]').value.length == 0)
         {
+            this.props.hideAlert();
+            this.props.showAlert("Số lượng sản phẩm không được trống","warning");
             alert('Đơn vị của sản phẩm không được trống');
             return false;
         }
         // Constraint 4: Check import Price
         if(document.querySelector('input[name="originalPrice"]').value.length == 0)
         {
-            alert("Giá nhập không được trống");
+            this.props.hideAlert();
+            this.props.showAlert("Giá nhập không được trống","warning");
             return false;
         }
         else if(parseInt(document.querySelector('input[name="originalPrice"]').value) <= 0) 
         {
-            alert('Giá nhập phải lớn hơn 0');
+            this.props.hideAlert();
+            this.props.showAlert('Giá nhập phải lớn hơn 0',"warning");
             return false;
         }
         // Constraint 5: check sell Price
         if(document.querySelector('input[name="sellPrice"]').value.length == 0)
         {
-            alert("Giá bán không được trống");
+            this.props.hideAlert();
+            this.props.showAlert("Giá bán không được trống","warning");
             return false;
         }
         else if(parseInt(document.querySelector('input[name="sellPrice"]').value) <= 0) 
         {
-            alert('Giá bán phải lớn hơn 0');
+            this.props.hideAlert();
+            this.props.showAlert('Giá bán phải lớn hơn 0',"warning");
             return false;
         }
         // Constraint 6: Ngày nhập phải nhỏ  hơn ngày hết hạn
@@ -231,7 +244,8 @@ class GoodImport extends Component {
                 new Date(document.querySelector('input[name="expiredDate"]').value).getTime()
             ) >= 0)
         {
-            alert('Không thể nhập hàng hết hạn');
+            this.props.hideAlert();
+            this.props.showAlert('Không thể nhập hàng hết hạn',"warning");
             return false;
         }
         // Constraint 7: Check giá gốc nhỏ hơn giá bán
@@ -241,17 +255,17 @@ class GoodImport extends Component {
             parseInt(document.querySelector('input[name="originalPrice"]').value) <=0
             ) 
         {
-            alert('Giá bán phải lớn hơn giá gốc');
+            this.props.hideAlert();
+            this.props.showAlert('Giá bán phải lớn hơn giá gốc',"warning");
             return false;
         }
         // Constraint 8: check xem đã  up ảnh lên xong chưa
         if(this.finishUpImage == false)
         {
-            alert('Ảnh chưa được upload xong');
+            this.props.hideAlert();
+            this.props.showAlert('Ảnh chưa được upload xong',"warning");
             return false;
         }
-        
-        alert('Constraint đã check đầy đủ');
         return true;
     }
 
@@ -570,30 +584,30 @@ class GoodImport extends Component {
                                         />
                                     </Button>
                                     <div className='all-type-container'>
-                                            {
-                                                Array.from(typeSet).map((type) =>
-                                                    <div className='type-container'>
-                                                        
-                                                        <CancelIcon
-                                                            className='close-icon'
-                                                            size={10}
-                                                            onClick={() => {
-                                                                typeSet = typeSet.filter(function(item) {
-                                                                    return item != type;
-                                                                })
-                                                                console.log(typeSet);
-                                                                this.setState({type: 'none'});
-                                                            }}
-                                                
-                                                        />
-                                                        <span className='type-title'>
-                                                            {this.getTypeNamebyTypeID(type)}
-                                                        </span>
-                                                    </div>
+                                        {
+                                            Array.from(typeSet).map((type) =>
+                                                <div className='type-container'>
                                                     
-                                                )
-                                            }
-                                        </div>
+                                                    <CancelIcon
+                                                        className='close-icon'
+                                                        size={10}
+                                                        onClick={() => {
+                                                            typeSet = typeSet.filter(function(item) {
+                                                                return item != type;
+                                                            })
+                                                            console.log(typeSet);
+                                                            this.setState({type: 'none'});
+                                                        }}
+                                            
+                                                    />
+                                                    <span className='type-title'>
+                                                        {this.getTypeNamebyTypeID(type)}
+                                                    </span>
+                                                </div>
+                                                
+                                            )
+                                        }
+                                    </div>
                                 </Grid>
                                 {/* <Grid item md={10}
                                     className='input-item'
@@ -667,7 +681,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "SET_CONFIRM_IMPORT_GOOD",
             });
-        }
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 
