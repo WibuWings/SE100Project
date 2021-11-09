@@ -29,6 +29,11 @@ import infoGoodReducer from './InfoUpdateProduct';
 import alertReducer from './AlertReducer';
 import shoppingBagsReducer from './SellProduct/ShoppingBagsReducer';
 import listEmployeeReducer from './Employee/employeeListReducer';
+import currentEditEmployeeReducer from './Employee/currentEditEmployeeReducer';
+import listSackedEmployeeReducer from './Employee/employeeSackedListReducer';
+
+
+
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -49,7 +54,9 @@ const allReducers = redux.combineReducers({
     role: roleReducer,
     confirmCode: confirmModalReducer,
     yesConfirm: statusYesConfirmReducer,
-    listEmployee: listEmployeeReducer, 
+    listEmployee: listEmployeeReducer,
+    listSackedEmployee: listSackedEmployeeReducer,
+    currentEditEmployee: currentEditEmployeeReducer, 
     addEmployeeStatus: statusAddEmployeeReducer,
     payEmployeeStatus: statusPayEmployeeReducer,
     updateEmpoyeeStatus: statusUpdateEmployeeReducer,

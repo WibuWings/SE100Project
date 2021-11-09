@@ -24,11 +24,13 @@ import {
 } from '@mui/material';
 import EmployeeToolbar from './EmployeePartials/EmployeeToolbar';
 import EmployeeMoreMenu from './EmployeePartials/EmployeeMoreMenu';
+import SackedEmployeeMenu from './EmployeePartials/SackedEmployeeMenu';
 import EmployeeTableHeader from './EmployeePartials/EmployeeTableHeader';
 import USERLIST from './EmployeePartials/fakeData'
 import AddEmployeeModal from './EmployeePartials/AddEmployeeModal';
 import UpdateEmployeeModal from './EmployeePartials/UpdateEmployeeModal';
 import PayMoneyModal from './EmployeePartials/PayMoneyModal';
+import FixedCalendar from './EmployeePartials/FixedCalendar';
 import axios from 'axios';
 
 function EmployeeObj(employeeID, managerID, password, firstName, lastName, 
@@ -76,6 +78,7 @@ class EmployeeManager extends Component {
         }; 
         //this.getAllEmployee();
         this.getAllEmployee();
+        this.getSackedEmployee();
     }
 
     handleFilterByName(event){
@@ -244,7 +247,7 @@ class EmployeeManager extends Component {
             })
     }
 
-    getSackedEmployee () {
+    async getSackedEmployee () {
         var result = [];
         const data = {
             token: localStorage.getItem('token'),
@@ -252,7 +255,7 @@ class EmployeeManager extends Component {
                 "_id.storeID": this.props.infoUser.email,
             }   
         }
-        axios.get(`http://localhost:5000/api/employee/delete`, {
+        await axios.get(`http://localhost:5000/api/employee/delete`, {
             params: {...data}
         })
             .then(res => {
@@ -264,6 +267,9 @@ class EmployeeManager extends Component {
                 console.log(err);
                 alert(err)
             })
+        this.props.getSackedEmployee(result);
+        console.log("sacked reducer", this.props.listSackedEmployee)
+        this.setState({change: !this.state.change});
     }
 
     backToWork() {
@@ -322,7 +328,7 @@ class EmployeeManager extends Component {
                     >
                         Get Employee
                     </Button>
-                    <Button
+                    {/* <Button
                         onClick={() => this.addEmployeeToDatabase()}
                         variant="contained"
                     >
@@ -339,14 +345,14 @@ class EmployeeManager extends Component {
                         variant="contained"
                     >
                         Delete Employee
-                    </Button>
+                    </Button> */}
                     <Button
                         onClick={() => this.getSackedEmployee()}
                         variant="contained"
                     >
                         Get Sacked Employee
                     </Button>
-                    <Button
+                    {/* <Button
                         onClick={() => this.backToWork()}
                         variant="contained"
                     >
@@ -357,7 +363,7 @@ class EmployeeManager extends Component {
                         variant="contained"
                     >
                         Delete Permantly
-                    </Button>
+                    </Button> */}
                 </div>
                 <Container
                     style={{marginTop: 20, }}
@@ -402,23 +408,6 @@ class EmployeeManager extends Component {
                             >
                             {
                                 this.props.listEmployee.employees.map((row) => {
-                                    
-                                // const { id, firstName, lastName, gender, province,email, adress, old, phone, avatarUrl, isVerified } = row;
-                                // const isItemSelected = selected.indexOf(firstName) !== -1;
-                                // _id: {
-                                //     employeeID: String,
-                                //     storeID: String,
-                                // },
-                                // managerID: String,
-                                // password: String,
-                                // firstName: String,
-                                // lastName: String,
-                                // phoneNumber: String,
-                                // dateOfBirth: Date,
-                                // email: String,
-                                // address: String,
-                                // cardID: String,
-                                // startDate: Date,
                                 return (
                                     <TableRow
                                         hover
@@ -476,55 +465,46 @@ class EmployeeManager extends Component {
                     /> */}
                     </Card>
                 </Container>
-                {/* <Container
-                    style={{marginTop: 20}}
-                    style={{
-                        marginBottom: 220,
-                        marginTop: 20
-                    }}
+                <Container
+                    style={{marginTop: 20, }}
                 >
                     <span
                         style = {{
                             color: "#fff",
-                            border: '1px solid cyan',
                             padding: 12,
-                            height: 40,
+                            border: '1px solid cyan',
                             backgroundColor: '#222'
                         }}
                     >
                         Sacked Employee
                     </span>
-                    <Card> */}
+
+                    <Card>
                     {/* <EmployeeToolbar
                         numSelected={selected.length}
                         filterName={filterName}
                         // onFilterName={this.handleFilterByName(event)}
                     /> */}
-                    {/* <TableContainer>
-                    <Table>
-                        <EmployeeTableHeader
-                            // order={order}
-                            // orderBy={orderBy}
-                            headLabel={TABLE_HEAD}
-                            // rowCount={USERLIST.length}
-                            // numSelected={selected.length}
-                            // onRequestSort={handleRequestSort}
-                            // onSelectAllClick={handleSelectAllClick}
-                        />
-                        <TableBody
-                            style={{height: '400px'}}
-                        >
-                        {
-                                filteredUsers
-                                .map((row) => {
-                                    
-                                const { id, firstName, lastName, gender, province,email, adress, old, phone, avatarUrl, isVerified } = row;
-                                const isItemSelected = selected.indexOf(firstName) !== -1;
-
+                    <TableContainer style ={{maxHeight:'500px',overflowY: 'scroll'}}>
+                        <Table>
+                            <EmployeeTableHeader
+                                // order={order}
+                                // orderBy={orderBy}
+                                headLabel={TABLE_HEAD}
+                                rowCount={USERLIST.length}
+                                numSelected={selected.length}
+                                // onRequestSort={handleRequestSort}
+                                // onSelectAllClick={handleSelectAllClick}
+                            />
+                            <TableBody
+                                style={{height: '100%', width: '100%'}}
+                            >
+                            {
+                                this.props.listSackedEmployee.employees.map((row) => {
                                 return (
                                     <TableRow
                                         hover
-                                        key={id}
+                                        // key={id}
                                         tabIndex={-1}
                                         role="checkbox"
                                         // selected={isItemSelected}
@@ -532,48 +512,53 @@ class EmployeeManager extends Component {
                                     >
                                         <TableCell padding="checkbox">
                                             <Checkbox
-                                            checked={isItemSelected}
+                                            // checked={isItemSelected}
                                             // onChange={(event) => handleClick(event, name)}
                                             />
                                         </TableCell>
-                                        <TableCell align="left">{id}</TableCell>
+                                        <TableCell align="left">
+                                            {row._id.employeeID}
+                                        </TableCell>
                                         <TableCell component="th" scope="row" padding="none">
                                             <Stack direction="row" alignItems="center" spacing={2}>
-                                            <Avatar alt={firstName} src={avatarUrl} />
+                                            {/* <Avatar alt={row.firstName} src={avatarUrl} /> */}
                                             <Typography variant="subtitle2" noWrap>
-                                                {firstName}
+                                                {row.firstName}
                                             </Typography>
                                             </Stack>
                                         </TableCell>
-                                        <TableCell align="left">{lastName}</TableCell>   */}
-                                        {/* <TableCell align="left">{old}</TableCell>
-                                        <TableCell align="left">{gender}</TableCell>
-                                        <TableCell align="left">{province}</TableCell>
-                                        <TableCell align="left">{phone}</TableCell>
-                                        <TableCell align="left">{email}</TableCell>
-                                        <TableCell align="left">{adress}</TableCell>
+                                        <TableCell align="left">{row.lastName}</TableCell>  
+                                        <TableCell align="left">{row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T'))}</TableCell>
+                                        <TableCell align="left">{"gender"}</TableCell>
+                                        <TableCell align="left">{"province"}</TableCell>
+                                        <TableCell align="left">{row.phoneNumber}</TableCell>
+                                        <TableCell align="left">{row.email}</TableCell>
+                                        <TableCell align="left">{row.address}</TableCell>
                                         <TableCell align="right">
-                                            <EmployeeMoreMenu />
+                                            <SackedEmployeeMenu
+                                                data={row._id.employeeID}    
+                                            >
+                                            </SackedEmployeeMenu>
                                         </TableCell>
                                     </TableRow>
                                 );
                                 })}
-                        </TableBody>
-                    </Table>
+                            </TableBody>
+                        </Table>
                     </TableContainer>
 
                     {/* <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
                         count={USERLIST.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
+                        // rowsPerPage={rowsPerPage}
+                        // page={page}
                         // onPageChange={handleChangePage}
                         // onRowsPerPageChange={handleChangeRowsPerPage}
-                        
                     /> */}
-                    {/* </Card>
-                </Container> */}
+                    </Card>
+                </Container>
+                <FixedCalendar></FixedCalendar>
                 {/* Đây là phần modal */}
                 {this.props.addEmployeeStatus ? (
                     <div 
@@ -592,7 +577,9 @@ class EmployeeManager extends Component {
                     <div 
                         className="modal-add"
                     >
-                        <div onClick={() => {this.props.changeUpdateEmployeeStatus();}} className="modal-overlay"></div>
+                        <div onClick={() => {this.props.changeUpdateEmployeeStatus();}} 
+                            className="moFixedCalendar"
+                        />
                         <UpdateEmployeeModal
                             style={{
                                 marginTop: 0
@@ -614,6 +601,7 @@ class EmployeeManager extends Component {
                         </PayMoneyModal>
                     </div>
                 ): null}
+
             </div>
             
         );
@@ -627,6 +615,7 @@ const mapStateToProps = (state, ownProps) => {
         payEmployeeStatus: state.payEmployeeStatus,
         infoUser: state.infoUser,
         listEmployee: state.listEmployee,
+        listSackedEmployee: state.listSackedEmployee,
     }
 }
 
@@ -650,6 +639,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         getEmployee: (data) => {
             dispatch({
                 type: "GET_EMPLOYEE",
+                employees: data,
+            });
+        },
+        getSackedEmployee: (data) => {
+            dispatch({
+                type: "GET_EMPLOYEE_SACKED",
                 employees: data,
             });
         }
