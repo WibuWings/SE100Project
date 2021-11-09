@@ -61,7 +61,7 @@ class UpdateEmployeeModal extends Component {
             .catch(err => {
                 console.log(err);
             })
-        
+        this.props.changeUpdateEmployeeStatus();
     }
 
     id = "";
