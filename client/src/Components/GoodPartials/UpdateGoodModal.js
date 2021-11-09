@@ -393,6 +393,14 @@ class UpdateGoodModal extends Component {
             this.quantity = e.target.value;
         }
     }
+
+    foundTypeInSet(typeID) {
+        for(var i = 0 ; i < typeSet.length; i++)
+        {
+            if(typeSet[i]==typeID._id.typeID) return true;
+        }
+        return false;
+    }
     render() {
         
         return (
@@ -621,7 +629,9 @@ class UpdateGoodModal extends Component {
                                             {
                                                 listTypeInfor.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
                                                 : listTypeInfor.map((type) =>
-                                                    <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
+                                                    ! this.foundTypeInSet(type) 
+                                                    ? <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
+                                                    : null
                                                 )
                                             }   
                                         </Select> 
