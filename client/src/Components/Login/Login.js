@@ -270,7 +270,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "HIDE_ALERT",
             })
-        }
+        },
+        updateShiftTypes: (shiftTypes) => {
+            dispatch({
+                type: "UPDATE_DATA_SHIFT_USER",
+                shiftTypes: shiftTypes,
+            })
+        },
     }
 }
 
