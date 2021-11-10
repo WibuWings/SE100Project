@@ -153,8 +153,7 @@ class EmployeeTab {
     deleteEmployeeforever = async (req, res) => {
         const employee = req.body.employee;
 
-        Employee.findOneAndDelete(
-            {_id : { $in: [...employee]}})
+        Employee.findOneAndDelete({_id : { $in: [...employee]}})
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
