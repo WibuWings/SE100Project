@@ -35,7 +35,7 @@ class LoginWithEmployee extends Component {
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = async (e) => {
         this.props.setRole()
-        await axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
+        await axios.post(`http://localhost:5000/sign-in-with-gmail-password-employee`, {
                 email: document.querySelector('#username').value,
                 password: document.getElementById('password').value,
             })

@@ -4,7 +4,7 @@ const router = express.Router();
 const myReceipt = require('../controllers/receipt');
 const {AuthMiddleware} = require('../helper/JWT');
 
-router.post("/add-reciept", AuthMiddleware ,myReceipt.addReciept)
+router.post("/add-reciept", AuthMiddleware ,myReceipt.addReceipt)
 router.post("/edit-reciept",AuthMiddleware ,myReceipt.updateReciept)
 
 module.exports = router;

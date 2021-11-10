@@ -4,27 +4,66 @@ const bcrypt = require("bcryptjs");
 
 
 const mongoose = require("mongoose");
-const Manager = require("../models/manager"); // db model
-const Store = require("../models/store"); //
-const ShiftType = require("../models/shiftType");
-const ShiftAssign = require("../models/shiftAssign");
-const ReturnProduct = require("../models/returnProduct");
 const Receipt = require("../models/receipt");
-const Product = require("../models/product");
-const Employee = require("../models/employee");
-const Coupon = require("../models/coupon");
-const Regulation = require("../models/regulation");
+const Store = require("../models/store"); //
 const {JWTVerify} = require("../helper/JWT");
 
 class myReceipt {
-    addReciept= async (req, res) => {
-        const receipt = req.body.
-        newReciept = new Receipt({
+    addReceipt= async (req, res) => {
+       const receipt = req.body.data;
+       var newReceipt = new Receipt({
+        _id: {
+            storeID:req.body.email ,
+            receiptID: receipt.MAHD,
+        },
+        employeeID: {
+            name : receipt.name
+        },
+        listItem : [...receipt.listProduct], 
+        isEdit: receipt.isEdit,
+        oldBill : receipt.oldBill,
+        createAt: receipt.date,
+        timeCreate : receipt.time,
+       })
+       console.log(newReceipt)
+       newReceipt
+       .save()
+       .then((data) => {
+           console.log(data)
+           res.status(200).send(
+               JSON.stringify({
+                   email: res.locals.decoded.email,
+                   token: res.locals.newToken,
+                   data,
+               })
+           );              
+       })
+       .catch((err) => {
+           res.status(404).send(err);
+       });
 
-        })
     };
     updateReciept= async (req, res) => {
-
+        Receipt.findOneAndUpdate(
+            {'_id.receiptID': req.body.MAHD}, 
+            {
+            $set :{
+                isEdit: true  
+            }
+            },
+            { returnOriginal: false })
+        .then((data) => {
+            res.status(200).send(
+                JSON.stringify({
+                    email: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                    data,
+                })
+            );
+        })
+        .catch((err) => {
+            res.status(404).send(err);
+        });
     };
 }
 module.exports = new myReceipt();
