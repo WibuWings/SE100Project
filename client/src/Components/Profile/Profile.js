@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ProfileHeader from './ProfileHeader';
 import '../../css/Profile.css';
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, Button } from '@mui/material';
 import ProfileDetail from './ProfileDetail';
 import ChangePassword from './ChangePassword';
 import ListShift from './ListShift';
@@ -9,6 +9,7 @@ import ProfileSetting from './ProfileSetting';
 import ModalAdd from './ModalAdd';
 import Regulation from './Regulation';
 import { connect } from 'react-redux'
+import axios from 'axios';
 
 class Profile extends Component {
 
@@ -18,6 +19,19 @@ class Profile extends Component {
             isFindPassword: this.props.infoUser._id.includes("_Google") ? true : false,
         }
     }
+
+    deleteDataAccout = async () => {
+        axios.post('http://localhost:5000/api/profile/delete-account', {
+            email: this.props.infoUser.email,
+        })
+        .then( res => {
+            console.log('Thành công')
+        })
+        .catch(err => {
+            console.log('Thất bại')
+        })
+    }
+
 
     componentWillMount() {
         document.title = 'Profile'
@@ -35,11 +49,20 @@ class Profile extends Component {
                             {this.state.isFindPassword ? null : <ChangePassword></ChangePassword>}
                             <ProfileSetting></ProfileSetting>
                         </Grid>
-                        <Grid item md={12} sm={12}  >
-                            <Regulation></Regulation>
-                        </Grid>
+                        {
+                            !this.props.role ? null : (
+                                <Grid item md={12} sm={12}  >
+                                    <Regulation></Regulation>
+                                </Grid>
+                            )
+                        }
+                        {!this.props.role ? null : (
+                            <Grid item sm={12} md={12} >
+                                <ListShift></ListShift>
+                            </Grid>
+                        )}
                         <Grid item sm={12} md={12} >
-                            <ListShift></ListShift>
+                            <Button onClick={() => this.deleteDataAccout()} style={{backgroundColor: 'red', width: '100%', color: 'white'}}>Delete Data Account</Button>
                         </Grid>
                     </Grid>
                 </Container>
@@ -57,6 +80,7 @@ const mapStateToProps = (state, ownProps) => {
         addStatus: state.addStatus,
         editShiftStatus: state.editShiftStatus,
         infoUser: state.infoUser,
+        role: state.role,
     }
 }
 
