@@ -35,12 +35,19 @@ class Profile extends Component {
                             {this.state.isFindPassword ? null : <ChangePassword></ChangePassword>}
                             <ProfileSetting></ProfileSetting>
                         </Grid>
-                        <Grid item md={12} sm={12}  >
-                            <Regulation></Regulation>
-                        </Grid>
-                        <Grid item sm={12} md={12} >
-                            <ListShift></ListShift>
-                        </Grid>
+                        {
+                            !this.props.role ? null : (
+                                <Grid item md={12} sm={12}  >
+                                    <Regulation></Regulation>
+                                </Grid>
+                            )
+                        }
+                        {!this.props.role ? null : (
+                            <Grid item sm={12} md={12} >
+                                <ListShift></ListShift>
+                            </Grid>
+                        )}
+
                     </Grid>
                 </Container>
                 {this.props.addStatus ? (<div className="modal-add">
@@ -57,6 +64,7 @@ const mapStateToProps = (state, ownProps) => {
         addStatus: state.addStatus,
         editShiftStatus: state.editShiftStatus,
         infoUser: state.infoUser,
+        role: state.role,
     }
 }
 

@@ -6,8 +6,8 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../css/Login.css'
 import { BsFillEnvelopeFill, BsLockFill } from "react-icons/bs";
-import {  FiXSquare,FiChevronLeft } from "react-icons/fi";
-import {FaUserTie} from 'react-icons/fa'
+import { FiXSquare, FiChevronLeft } from "react-icons/fi";
+import { FaUserTie } from 'react-icons/fa'
 import { Avatar } from '@mui/material'
 import { IconContext } from "react-icons";
 import axios from 'axios';
@@ -33,44 +33,36 @@ class LoginWithEmployee extends Component {
     }
 
     // Check để thay đổi trạng thái đã login hay chưa
-    isLoginCheck = (e) => {
-        // this.OutAlert();
-        // if (this.blurEmail() && this.blurPassword()) {
-        //     axios.post(`http://localhost:5000/sign-in-employee`, {
-        //         username: document.querySelector('#username').value,
-        //         password: document.getElementById('password').value,
-        //     })
-        //         .then(res => {
-        //             switch (res.data.status) {
-        //                 case 1:
-        //                     this.message = res.data.message;
-        //                     this.setState({
-        //                         statusSucces: true,
-        //                     })
-        //                     localStorage.setItem('token', res.data.token);
-        //                     this.props.changeLoginStatus();
-        //                     break;
-        //                 case -1:
-        //                     this.message = res.data.message;
-        //                     this.setState({
-        //                         statusFailed: true,
-        //                     })
-        //                     break;
-        //                 default:
-        //                     break;
-        //             }
-        //         })
-        //         .catch(err => {
-        //             this.message = "Enter again";
-        //             this.setState({
-        //                 statusFailed: true,
-        //             })
-        //         })
-        // }
-        this.setState({
-            statusSucces: true,
-        })
+    isLoginCheck = async (e) => {
         this.props.setRole()
+        await axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
+                email: document.querySelector('#username').value,
+                password: document.getElementById('password').value,
+            })
+                .then(res => {
+                    console.log(res.data);
+                    switch (res.data.status) {
+                        case 1:
+                            localStorage.setItem('token', res.data.token);
+                            this.props.changeLoginStatus();
+                            this.props.updateProfile(res.data.data);
+                            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+                            this.props.updateShiftTypes(res.data.data.shiftTypes);
+                            this.props.hideAlert();
+                            this.props.showAlert(res.data.message, "success");
+                            break;
+                        case -1:
+                            this.props.hideAlert();
+                            this.props.showAlert(res.data.message, "error");
+                            break;
+                        default:
+                            break;
+                    }
+                })
+                .catch(err => {
+                    //this.props.hideAlert();
+                    //this.props.showAlert("Error system", "error");
+                })
     }
 
 
@@ -154,7 +146,7 @@ class LoginWithEmployee extends Component {
                                     <label htmlFor="email" className="form-label">Username</label>
                                     <div className="input-custom">
                                         <span><BsFillEnvelopeFill className="input-custom-icon" /></span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="username"  id="username" placeholder="VD: phuoc123" type="text" />
+                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="username" id="username" placeholder="VD: phuoc123" type="text" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -164,7 +156,7 @@ class LoginWithEmployee extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password"  id="password" placeholder="Emter password" type="password" />
+                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password" id="password" placeholder="Emter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -200,9 +192,33 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "EMPLOYEE_ROLE",
             });
             localStorage.setItem('role', 'employee');
-        }
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
+        updateProfile: (data) => {
+            dispatch({
+                type: "UPDATA_DATA_USER",
+                data: data,
+            })
+        },
+        updateAvatar: (avatar) => {
+            dispatch({
+                type: "UPDATE_AVATAR",
+                avatar: avatar,
+            })
+        },
     }
 }
 
 
-export default connect(mapStateToProps , mapDispatchToProps)(LoginWithEmployee);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginWithEmployee);

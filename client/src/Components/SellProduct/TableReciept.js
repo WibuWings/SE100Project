@@ -15,6 +15,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useSelector, useDispatch } from 'react-redux'
 import { FiEdit } from 'react-icons/fi'
+import axios from 'axios';
 
 
 function Row(props) {
@@ -22,6 +23,7 @@ function Row(props) {
     const [open, setOpen] = React.useState(false);
     const dispatch = useDispatch();
     const listReciept = useSelector(state => state.listReciept)
+    const infoUser = useSelector(state => state.infoUser)
     const statusEditInfoBill = useSelector(state => state.statusEditInfoBill)
     const editReciept = (MAHD) => {
         let objectInfoBill = [];
@@ -32,6 +34,11 @@ function Row(props) {
             return value;
         })
         if (!statusEditInfoBill) {
+            axios.post('http://localhost:5000/api/sell-product/edit-reciept',{
+                MAHD: MAHD,
+                token: localStorage.getItem('token'),
+                email: infoUser.email,
+            })
             dispatch({
                 type: "EDIT_SHOPPING_BAGS",
                 MAHD: MAHD,
