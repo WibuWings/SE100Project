@@ -16,7 +16,6 @@ class ModalAdd extends Component {
         if (this.props.editShiftStatus) {
             var _timeFrom = new Date();
             if (this.props.objectEditShift.from.includes("PM")) {
-                
                 var fromHour =  parseInt(this.props.objectEditShift.from.slice(0, this.props.objectEditShift.from.indexOf(':')));
                 var fromMin = parseInt(this.props.objectEditShift.from.slice(this.props.objectEditShift.from.indexOf(':') + 1));
                 _timeFrom.setHours(fromHour + 12, fromMin);

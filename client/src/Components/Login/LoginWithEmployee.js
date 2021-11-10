@@ -35,7 +35,7 @@ class LoginWithEmployee extends Component {
                 .then(res => {
                     console.log(res.data);
                     switch (res.data.status) {
-                        case 1: 
+                        case 1:
                             localStorage.setItem('token', res.data.token);
                             this.props.changeLoginStatus();
                             this.props.updateProfile(res.data.data);

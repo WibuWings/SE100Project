@@ -12,6 +12,13 @@ const listRecieptInitialState = [],
                     }
                     return value;
                 })
+            case "DELETE_RECIEPT":
+                return state.filter((value) => {
+                    if (value.MAHD === action.MAHD) {
+                        value.isDelete = true
+                    }
+                    return value;
+                })
             default:
                 return state
         }
