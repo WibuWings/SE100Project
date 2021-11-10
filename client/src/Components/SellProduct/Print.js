@@ -97,17 +97,17 @@ class Printf extends React.PureComponent {
       isEdit: false,
       oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
     }
-    // axios('http://localhost:5000/api/sell-product/add-reciept', {
-    //   email: this.props.infoUser.email,
-    //   token: localStorage.getItem('token'),
-    //   data: data,
-    // })
-    //   .then(res => {
+     axios.post('http://localhost:5000/api/sell-product/add-reciept', {
+       email: this.props.infoUser.email,
+       token: localStorage.getItem('token'),
+       data: data,
+     })
+       .then(res => {
 
-    //   })
-    //   .catch(err => {
+       })
+       .catch(err => {
 
-    //   })
+       })
     if (this.props.statusEditInfoBill) {
       this.props.changeStatusEditRecipt()
     }
