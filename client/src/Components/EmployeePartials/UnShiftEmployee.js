@@ -36,6 +36,19 @@ class UnShiftEmployee extends Component {
     }
   }
 
+  getShiftNameAndTime(shiftID)
+  {
+      var shifts= this.props.listShift;
+      for(var i = 0 ; i < shifts.length ; i++)
+      {
+          if(shifts[i]._id.shiftID == shiftID)
+          {
+              return shifts[i].name + ' (' + shifts[i].timeFrom + ' - ' + shifts[i].timeEnd +') ';
+          }
+      }
+      return "Can't get shift";
+  }
+
   getEmployeeNameByID(employeeID)
   {
       for(var i = 0 ; i < this.props.listEmployee.employees.length; i++)
@@ -47,6 +60,11 @@ class UnShiftEmployee extends Component {
           }
       }
       return "Can't get name";
+  }
+
+  reload()
+  {
+    this.setState({change: !this.state.change})
   }
 
   render() {
@@ -74,7 +92,7 @@ class UnShiftEmployee extends Component {
                           this.props.nextWeekTimeKeeping.map((item) => 
                           <TableRow>
                               <TableCell className={classes.goodTable_Cell}>{item._id.dateInWeek}</TableCell>
-                              <TableCell className={classes.goodTable_Cell}>{item._id.shiftType._id.shiftID}</TableCell>
+                              <TableCell className={classes.goodTable_Cell}>{this.getShiftNameAndTime(item._id.shiftType._id.shiftID)}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{item.realDate}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{item._id.employee._id.employeeID}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item._id.employee._id.employeeID)}</TableCell>
@@ -102,6 +120,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     nextWeekTimeKeeping: state.nextWeekTimeKeeping,
     listEmployee: state.listEmployee,
+    listShift: state.listShift,
   }
 }
 

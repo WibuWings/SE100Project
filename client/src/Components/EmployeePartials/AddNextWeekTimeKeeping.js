@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button, InputLabel } from '@mui/material';
+import { Card, CardHeader, Divider, Grid, TextField, 
+        Box, CardContent, Button, InputLabel, FormControl, Select, MenuItem } from '@mui/material';
 import { connect } from 'react-redux'
 import { Image } from 'cloudinary-react';
 import axios from 'axios';
@@ -24,8 +25,15 @@ const StyledTextField = withStyles((theme) => ({
     }
   }))(TextField);
 
-var listUsers = [];
-
+var listDayInWeek = [
+    {ID:'T2',name:'Thứ hai'}, 
+    {ID:'T3',name:'Thứ ba'}, 
+    {ID:'T4',name:'Thứ tư'}, 
+    {ID:'T5',name:'Thứ năm'}, 
+    {ID:'T6',name:'Thứ sáu'}, 
+    {ID:'T7',name:'Thứ bảy'}, 
+    {ID:'CN',name:'Chủ nhật'}
+];
 class AddNextWeekTimeKeepingModal extends Component {
 
     genID = 0;
@@ -35,41 +43,11 @@ class AddNextWeekTimeKeepingModal extends Component {
         
         this.state = {
             change: false,
+            withdrawID: '',
+            alterID: '',
+            dayChosed: '',
+            shiftID: '',
         };
-        listUsers = [];
-        this.getAllEmployee(); 
-    }
-
-    async getAllEmployee () {
-        var result = [];
-        const data = {
-            token: localStorage.getItem('token'),
-            filter: {
-                "_id.storeID": this.props.infoUser.email,
-            }   
-        }
-        await axios.get(`http://localhost:5000/api/employee/`, {
-            params: {...data}
-        })
-            .then(res => {
-                result = res.data.data;
-            })
-            .catch(err => {
-                // console.log(err);
-                alert(err)
-            })
-        listUsers = [];
-        for(var i = 0; i < result.length; i++)
-        {
-            listUsers.push(result[i]);
-        }
-        this.props.getEmployee(listUsers);
-        if(listUsers.length > 0)
-        {
-            this.genID = parseInt(listUsers[listUsers.length - 1]._id.employeeID) + 1;
-            console.log(this.genID);
-        }
-        this.setState({change: !this.state.change});
     }
 
     // Thêm nhân viên
@@ -132,6 +110,37 @@ class AddNextWeekTimeKeepingModal extends Component {
         return new Date().getFullYear() + '-' + month + '-' + day;
     }
 
+    addChange() {
+        const data = {
+            _id: {
+                dateInWeek: this.state.dayChosed,
+                storeID: this.props.infoUser.email,
+                shiftType: {
+                    _id: {
+                        shiftID: this.state.shiftID,
+                        storeID: this.props.infoUser.email,
+                    },
+                },
+                employee: {
+                    _id: {
+                        employeeID: this.state.witdrawID,
+                        storeID: this.props.infoUser.email,
+                    },
+                },
+            },
+            alternativeEmployee: {
+                _id: {
+                    employeeID: this.state.alterID,
+                    storeID: this.props.infoUser.email,
+                },
+            },
+            realDate: document.querySelector('input[name="realDate"]').value,
+        };
+        this.props.addNewChange(data);
+        console.log(this.props.nextWeekTimeKeeping)
+        this.props.changeAddNextWeekTimeKeepingStatus();
+    }
+
     render() {
         return (
             <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
@@ -174,138 +183,142 @@ class AddNextWeekTimeKeepingModal extends Component {
                                     <Grid item md={6} 
                                         className='input-item'
                                     >
-                                        <div className="input-label" style={{width: '114px'}}>Password</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            name="password" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
+                                        <div className="input-label" style={{width: '220px'}}>
+                                            Choose Day in week
+                                        </div>
+                                        <FormControl sx={{ minWidth: 120 }}>
+                                            {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
+                                            <Select
+                                                // value={this.state.type}
+                                                onChange={(event) => {
+                                                    this.setState({dayChosed: event.target.value});
+                                                    // if(!typeSet.includes(event.target.value))
+                                                    // {
+                                                    //     typeSet.push(event.target.value);
+                                                    // }
+                                                    // this.setState({change: !this.state.change})
+                                                }}
+                                                style={{
+                                                    height: 36,
+                                                }}
+                                            >
+                                                {
+                                                    listDayInWeek.map((item) =>
+                                                        <MenuItem value={item.ID}>
+                                                            {item.name}
+                                                        </MenuItem>
+                                                    )
+                                                }   
+                                            </Select> 
+                                        </FormControl>
                                     </Grid>
-                                    <Grid item md={6} 
+
+                                    <Grid item md={8} 
                                         className='input-item'
                                     >
-                                        <div className="input-label"style={{width: '114px'}}>First Name</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            name="firstName"
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
+                                        <div className="input-label" style={{width: '114px'}}>
+                                            Choose Shift
+                                        </div>
+                                        <FormControl sx={{ minWidth: 220 }}>
+                                            {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
+                                            <Select
+                                                // value={this.state.type}
+                                                onChange={(event) => {
+                                                    this.setState({shiftID: event.target.value});
+                                                    // if(!typeSet.includes(event.target.value))
+                                                    // {
+                                                    //     typeSet.push(event.target.value);
+                                                    // }
+                                                    // this.setState({change: !this.state.change})
+                                                }}
+                                                style={{
+                                                    height: 36,
+                                                }}
+                                            >
+                                                {
+                                                    this.props.listShift.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
+                                                    : this.props.listShift.map((shift) =>
+                                                        <MenuItem value={shift._id.shiftID}>
+                                                            {shift.name + ' (' + shift.timeFrom + ' - ' + shift.timeEnd + ')'}
+                                                        </MenuItem>
+                                                    )
+                                                }   
+                                            </Select> 
+                                        </FormControl>
+
                                     </Grid>
-                                    <Grid item md={6} 
+                                    <Grid item md={12} 
                                         className='input-item'
                                     >
-                                        <div className="input-label"style={{width: '114px'}}>Last Name</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            name="lastName"
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
+                                        <div className="input-label" style={{width: '220px'}}>
+                                            Widraw Employee
+                                        </div>
+                                        <FormControl sx={{ minWidth: 320 }}>
+                                            {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
+                                            <Select
+                                                // value={this.state.type}
+                                                onChange={(event) => {
+                                                    this.setState({witdrawID: event.target.value});
+                                                    // if(!typeSet.includes(event.target.value))
+                                                    // {
+                                                    //     typeSet.push(event.target.value);
+                                                    // }
+                                                    // this.setState({change: !this.state.change})
+                                                }}
+                                                style={{
+                                                    height: 36,
+                                                }}
+                                            >
+                                                {
+                                                    this.props.listEmployee.employees.map((item) =>
+                                                        <MenuItem value={item._id.employeeID}>
+                                                            {item._id.employeeID + ' - ' + item.firstName + ' ' + item.lastName}
+                                                        </MenuItem>
+                                                    )
+                                                }   
+                                            </Select> 
+                                        </FormControl>
                                     </Grid>
-                                    
-                                    <Grid item md={6} 
+                                    <Grid item md={12} 
                                         className='input-item'
                                     >
-                                        <div className="input-label"style={{width: '114px'}}>ID CARD</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            name="cardID" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>PhoneNumber</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            name="phoneNumber"
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>Adress</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            name="adress" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>StartDate</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="date"
-                                            name="startDate"
-                                            style = {{width: '100%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>Email</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            name="email"
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>BirthDay</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="date" 
-                                            // class="input-val"
-                                            name="birthDay"
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
+                                        <div className="input-label" style={{width: '220px'}}>
+                                            Alter Employee
+                                        </div>
+                                        <FormControl sx={{ minWidth: 320 }}>
+                                            {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
+                                            <Select
+                                                // value={this.state.type}
+                                                onChange={(event) => {
+                                                    this.setState({alterID: event.target.value});
+                                                    // if(!typeSet.includes(event.target.value))
+                                                    // {
+                                                    //     typeSet.push(event.target.value);
+                                                    // }
+                                                    // this.setState({change: !this.state.change})
+                                                }}
+                                                style={{
+                                                    height: 36,
+                                                }}
+                                            >
+                                                {
+                                                    this.props.listEmployee.employees.map((item) =>
+                                                        !(this.state.witdrawID == item._id.employeeID) ?
+                                                        <MenuItem value={item._id.employeeID}>
+                                                            {item._id.employeeID + ' - ' + item.firstName + ' ' + item.lastName}
+                                                        </MenuItem>
+                                                        : null
+                                                    )
+                                                }   
+                                            </Select> 
+                                        </FormControl>
                                     </Grid>
                                     <Grid item md={9}></Grid>
                                     <Grid item md={3}
                                         className='input-item'
                                     >
-                                        <Button variant="contained" onClick={() => this.cancel()}>
-                                            Add
+                                        <Button variant="contained" onClick={() => this.addChange()}>
+                                            Add Change
                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -327,6 +340,9 @@ const mapStateToProps = (state, ownProps) => {
         addEmployeeStatus: state.addEmployeeStatus,
         confirmStatus: state.confirmStatus,
         infoUser: state.infoUser,
+        listShift: state.listShift,
+        listEmployee: state.listEmployee,
+        nextWeekTimeKeeping: state.nextWeekTimeKeeping,
     }
 }
 
@@ -343,6 +359,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 employees: data,
             });
         },
+        addNewChange: (data) => {
+            dispatch({
+                type: "ADD_NEW_NEXT_WEEK_TIMEKEEPER",
+                data: data,
+            });
+        } 
     }
 }
 

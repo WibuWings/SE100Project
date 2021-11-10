@@ -34,6 +34,8 @@ const nextWeekTimeKeepingReducer = (state = nextWeekTimeKeepingInitialState, act
                 return{
                     state: action.data
                 }
+            case "ADD_NEW_NEXT_WEEK_TIMEKEEPER":
+                return [...state, action.data]
             default:
                 return state
         }
