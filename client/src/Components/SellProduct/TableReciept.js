@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import { Card, CardHeader, Divider, Grid, Box, Button, CardContent } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -70,6 +70,32 @@ function Row(props) {
 
     }
 
+    const TypeReciept = (isEdit, isDelete) => {
+        if (isDelete) {
+            return 'red'
+        } else if (isEdit) {
+            return '#f4f492'
+        } else {
+            return '#a6ffa6'
+        }
+    }
+
+    const StatusTypeReciept = (isEdit, isDelete) => {
+        if (isDelete) {
+            return 'Đã xóa'
+        } else if (isEdit) {
+            return 'Đổi trả'
+        } else {
+            return 'Thành công'
+        }
+    }
+
+    const showEdit = (isEdit, isDelete) => {
+        if (isEdit || isDelete) {
+            return true;
+        }
+    }
+
     const countQuantity = () => {
         let count = 0;
         row.listProduct.map(value => {
@@ -80,7 +106,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: !row.isEdit ? '#a6ffa6' : '#f4f492' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.isDelete) }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -98,7 +124,7 @@ function Row(props) {
                 <TableCell align="right">{row.discount}</TableCell>
                 <TableCell align="right">{row.totalFinalMoney}</TableCell>
                 <TableCell>
-                    {!row.isEdit ? (
+                    {!showEdit(row.isEdit, row.isDelete) ? (
                         <IconButton onClick={() => editReciept(row.MAHD)} color="secondary" aria-label="fingerprint">
                             <FiEdit />
                         </IconButton>
@@ -159,7 +185,7 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0' }}>Trạng thái:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{!row.isEdit ? "Thành công" : "Đổi trả"}</p>
+                                                    <p style={{ marginBottom: '0' }}>{StatusTypeReciept(row.isEdit, row.isDelete)}</p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>

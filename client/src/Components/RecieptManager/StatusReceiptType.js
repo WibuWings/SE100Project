@@ -1,12 +1,26 @@
 import React from 'react';
-import { Container, Grid, Button, Card, CardHeader, Divider, CardContent, Checkbox } from '@mui/material';
-import { pink } from '@mui/material/colors';
-import FormGroup from '@mui/material/FormGroup';
+import {  Grid, Card, CardHeader, Divider, CardContent, Checkbox } from '@mui/material';
+import { red, yellow, green } from '@mui/material/colors';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+import { useSelector , useDispatch} from 'react-redux'
 
 function StatusReceiptType(props) {
+    const dispatch = useDispatch()
+
+    const changeCheckbox = (e) => {
+        if (e.target.checked) {
+            dispatch({
+                type: "ADD_NEW_TYPE_RECIEPT",
+                typeReciept: e.target.value,
+            })
+        } else {
+            dispatch({
+                type: "DELETE_TYPE_RECIEPT",
+                typeReciept: e.target.value,
+            })
+        }
+    }
+
     return (
         <Grid container spacing={2}>
             <Grid item md={12} sm={12}  >
@@ -14,20 +28,57 @@ function StatusReceiptType(props) {
                     <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Status" />
                     <Divider></Divider>
                     <CardContent>
-                        <FormControlLabel
-                            value="end"
-                            control={<Checkbox
-                                defaultChecked
-                                label="Thành công"
-                                sx={{
-                                    color: pink[800],
-                                    '&.Mui-checked': {
-                                        color: pink[600],
-                                    },
-                                }} />}
-                            label="End"
-                            labelPlacement="end"
-                        />
+                        <Grid container spacing={2}>
+                            <Grid item md={12} sm={12}  >
+                                <FormControlLabel
+                                    value="success"
+                                    onChange={(e) => changeCheckbox(e)}
+                                    control={<Checkbox
+                                        sx={{
+                                            color: green[800],
+                                            '&.Mui-checked': {
+                                                color: green[600],
+                                            },
+                                        }} />}
+                                    label="Thành công"
+                                    labelPlacement="end"
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item md={12} sm={12}  >
+                                <FormControlLabel
+                                    value="return"
+                                    onChange={(e) => changeCheckbox(e)}
+                                    control={<Checkbox
+                                        sx={{
+                                            color: yellow[800],
+                                            '&.Mui-checked': {
+                                                color: yellow[600],
+                                            },
+                                        }} />}
+                                    label="Đổi trả"
+                                    labelPlacement="end"
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item md={12} sm={12}  >
+                                <FormControlLabel
+                                    value="delete"
+                                    onChange={(e) => changeCheckbox(e)}
+                                    control={<Checkbox
+                                        sx={{
+                                            color: red[800],
+                                            '&.Mui-checked': {
+                                                color: red[600],
+                                            },
+                                        }} />}
+                                    label="Đã xóa"
+                                    labelPlacement="end"
+                                />
+                            </Grid>
+                        </Grid>
                     </CardContent>
                 </Card>
             </Grid>

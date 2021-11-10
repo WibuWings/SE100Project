@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import { Grid, Box, Button, CardContent } from '@mui/material';
+import { Grid, Box, Button } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -266,9 +266,9 @@ function Row(props) {
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                                <Grid style={{marginBottom: '10px'}} item md={12} xs={12}>
-                                    <Grid style={{justifyContent: 'end'}} container>
-                                        <Grid style={{justifyContent: 'end'}} item md={2} xs={2}>
+                                <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
+                                    <Grid style={{ justifyContent: 'end' }} container>
+                                        <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
                                             <Button onClick={() => DeleteReciept(row.MAHD)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: 'red', color: 'white' }}>
                                                 <FiXSquare style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></FiXSquare>
                                                 Xóa bỏ
@@ -305,8 +305,43 @@ Row.propTypes = {
 
 
 export default function CollapsibleTable() {
-
+    const typeReciept = useSelector(state => state.typeReciept)
     const listReciept = useSelector(state => state.listReciept)
+    const typeByDate = useSelector(state => state.typeByDate)
+    const [listRecieptReplace, setListRecieptReplace] = React.useState(listReciept);
+
+    React.useEffect(() => {
+        var list = typeReciept.length === 0 ? listReciept : listReciept.filter(value => {
+            for (var i = 0; i < typeReciept.length; i++) {
+                if (typeReciept[i] === 'delete') {
+                    if (value.isDelete) {
+                        return value;
+                    }
+                } else if (typeReciept[i] === 'return') {
+                    if (!value.isDelete && value.isEdit) {
+                        return value;
+                    }
+                } else {
+                    if (!value.isDelete && !value.isEdit) {
+                        return value;
+                    }
+                }
+            }
+        })
+        // typeReciept.length === 0 ? setListRecieptReplace(listReciept) : setListRecieptReplace(list)
+
+        if (typeByDate.type === 'typeByDate') {
+            list = list.filter(value => {
+                let timeMau = value.date;
+                timeMau = timeMau.replace(/\s/g, "");
+                timeMau = timeMau.split("/");
+                if (typeByDate.day == timeMau[0] && typeByDate.month == timeMau[1] && typeByDate.year == timeMau[2]) {
+                    return value;
+                }
+            })
+        }
+        setListRecieptReplace(list)
+    }, [typeReciept, typeByDate])
 
     return (
         <TableContainer component={Paper}>
@@ -322,9 +357,8 @@ export default function CollapsibleTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {console.log(listReciept)}
-                    {listReciept ?
-                        listReciept.map((row) => (
+                    {listRecieptReplace ?
+                        listRecieptReplace.map((row) => (
                             <Row key={row.MAHD} row={row} />
                         )) : null
                     }

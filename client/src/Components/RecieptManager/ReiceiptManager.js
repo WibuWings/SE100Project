@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Grid, Button } from '@mui/material';
 import CollapsibleTable from './TableReciept'
 import StatusReceiptType from './StatusReceiptType';
+import DateReciept from './DateReciept';
 import '../../css/RecieptManager.css'
 class ReceiptManager extends Component {
     render() {
@@ -9,8 +10,15 @@ class ReceiptManager extends Component {
             <div className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
                 <Container style={{ marginBottom: '20px', marginTop: '20px' }} maxWidth="xl">
                     <Grid className="profile-body" container spacing={2}>
-                        <Grid item md={3} sm={4}  >
-                            <StatusReceiptType></StatusReceiptType>
+                        <Grid item md={3} sm={4}>
+                            <Grid container spacing={2}>
+                                <Grid item md={12} sm={12}>
+                                    <DateReciept></DateReciept>
+                                </Grid>
+                                <Grid item md={12} sm={12}>
+                                    <StatusReceiptType></StatusReceiptType>
+                                </Grid>
+                            </Grid>
                         </Grid>
                         <Grid item md={9} sm={9}  >
                             <CollapsibleTable></CollapsibleTable>

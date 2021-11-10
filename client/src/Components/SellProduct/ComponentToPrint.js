@@ -56,6 +56,11 @@ class ComponentToPrint extends React.PureComponent {
         return total.toLocaleString();
     }
 
+    dateFunction = () => {
+        let month = this.state.date.getMonth()+1;
+        return "  " + this.state.date.getDate() + " / " + month + " / " + this.state.date.getFullYear()
+    }
+
     render() {
         
         return (
@@ -78,7 +83,7 @@ class ComponentToPrint extends React.PureComponent {
                         <div className="col-6">
                             <p style={{ fontWeight: '700' }}>Date:
                                 <span style={{ fontWeight: '400' }}>
-                                    {"  " + this.state.date.getDate() + " / " + this.state.date.getMonth() + " / " + this.state.date.getFullYear()}
+                                    {this.dateFunction()}
                                 </span>
                             </p>
                         </div>

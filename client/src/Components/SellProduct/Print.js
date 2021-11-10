@@ -84,39 +84,51 @@ class Printf extends React.PureComponent {
   code = ''
 
   addReciept = async () => {
-    this.code = this.makeCode(8)
-    const data = {
-      MAHD: this.code,
-      name: this.props.infoUser.lastName + " " + this.props.infoUser.firstName,
-      date: this.state.date.getDate() + " / " + this.state.date.getMonth() + " / " + this.state.date.getFullYear(),
-      discount: this.state.percentDiscount,
-      totalMoney: this.totalFinalMoney(),
-      totalFinalMoney: this.totalFinalMoney(),
-      listProduct: this.props.shoppingBags,
-      time: this.state.date.getHours() + ":" + this.state.date.getMinutes(),
-      isEdit: false,
-      oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
-    }
-    axios.post('http://localhost:5000/api/sell-product/add-reciept', {
-      email: this.props.infoUser.email,
-      token: localStorage.getItem('token'),
-      data: data,
-    })
-      .then(res => {
-        console.log('Thành công!')
+    if (this.props.shoppingBags.length === 0) {
+      this.props.hideAlert()
+      this.props.showAlert("Cart empty ", "warning")
+    } else {
+      this.code = this.makeCode(8)
+      const data = {
+        MAHD: this.code,
+        name: this.props.infoUser.lastName + " " + this.props.infoUser.firstName,
+        date: this.dateFunction(),
+        discount: this.state.percentDiscount,
+        totalMoney: this.totalFinalMoney(),
+        totalFinalMoney: this.totalFinalMoney(),
+        listProduct: this.props.shoppingBags,
+        time: this.state.date.getHours() + ":" + this.state.date.getMinutes(),
+        isEdit: false,
+        oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
+      }
+      axios.post('http://localhost:5000/api/sell-product/add-reciept', {
+        email: this.props.infoUser.email,
+        token: localStorage.getItem('token'),
+        data: data,
       })
-      .catch(err => {
-        console.log('Thất bại!')
+        .then(res => {
+          console.log('Thành công!')
+        })
+        .catch(err => {
+          console.log('Thất bại!')
+        })
+      if (this.props.statusEditInfoBill) {
+        this.props.changeStatusEditRecipt()
+      }
+      this.setState({
+        infoReciept: this.props.shoppingBags,
       })
-    if (this.props.statusEditInfoBill) {
-      this.props.changeStatusEditRecipt()
+      this.props.hideAlert()
+      this.props.showAlert("In bill success", "success")
+      this.props.resetShoppingBag();
+      this.props.addRecieptToHistory(data);
     }
-    this.setState({
-      infoReciept: this.props.shoppingBags,
-    })
-    this.props.showAlert("In bill success", "success")
-    this.props.resetShoppingBag();
-    this.props.addRecieptToHistory(data);
+
+  }
+
+  dateFunction = () => {
+    let month = this.state.date.getMonth() + 1;
+    return "  " + this.state.date.getDate() + " / " + month + " / " + this.state.date.getFullYear()
   }
 
   render() {
@@ -151,14 +163,15 @@ class Printf extends React.PureComponent {
               </div>
             </div>
           </div>
-          <div onClick={() => this.addReciept()} className="col-12">
+          <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-12">
             <ReactToPrint
               trigger={() => {
+
                 return <div style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
                   PAY (F9)
                 </div>;
               }}
-              content={() => this.componentRef}
+              content={this.props.shoppingBags.length !== 0 ? () => this.componentRef : null}
             />
           </div>
           <div className="col-12">
@@ -202,6 +215,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "SHOW_ALERT",
         message: message,
         typeMessage: typeMessage,
+      })
+    },
+    hideAlert: () => {
+      dispatch({
+        type: "HIDE_ALERT",
       })
     },
     resetShoppingBag: () => {

@@ -35,6 +35,8 @@ import statusShowHistoryReciept from './SellProduct/StatusShowHistoryRecieptRedu
 import listRecieptReducer from './SellProduct/ListRecieptReducer';
 import statusEditInfomationBill from './SellProduct/StatusEditInfomationBill';
 import InfomationBillEditReducer from './SellProduct/InfomationBillEdit';
+import typeRecieptReducer from './RecieptManager/TypeReciept';
+import typeByDateReducer from './RecieptManager/TypeByDate';
 
 var redux = require('redux');
 
@@ -76,6 +78,8 @@ const allReducers = redux.combineReducers({
     listReciept: listRecieptReducer,
     statusEditInfoBill :statusEditInfomationBill,
     InfomationBillEdit : InfomationBillEditReducer,
+    typeReciept: typeRecieptReducer,
+    typeByDate: typeByDateReducer,
 })
 
 

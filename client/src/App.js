@@ -45,7 +45,7 @@ class App extends Component {
       <Router>
         <DirectionURL></DirectionURL>
         {this.props.alertReducer.status ? this.autoHideAlert() : null}
-        {this.props.alertReducer.status ? <Alert onClick={() => this.props.hideAlert()} className="message-error" severity={this.props.alertReducer.typeMessage}>{this.props.alertReducer.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
+        {this.props.alertReducer.status ? <Alert style={{cursor: 'pointer'}} onClick={() => this.props.hideAlert()} className="message-error" severity={this.props.alertReducer.typeMessage}>{this.props.alertReducer.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
       </Router>
     );
   }
