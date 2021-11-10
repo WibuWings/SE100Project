@@ -31,4 +31,25 @@ function getDayInWeek(date) {
     return weekday[d.getDay()];
 }
 
-module.exports = { getCurrentDateTimeString };
+function getTimeFromTimeString(timeString) {
+    var date = new Date();
+        var dateString =
+            date.getUTCFullYear() +
+            " " +
+            (date.getUTCMonth() + 1) +
+            " " +
+            date.getUTCDate() +
+            " " +
+            timeString;
+        return Date(dateString);
+}
+function dateEquals(dateClient, dateServer) {
+    if (dateClient.getFullYear() == dateServer.getFullYear() && dateClient.getMonth() == dateServer.getMonth()
+    && dateClient.getDate() == dateServer.getDate()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+module.exports = { getCurrentDateTimeString, getDayInWeek, getTimeFromTimeString, dateEquals};
