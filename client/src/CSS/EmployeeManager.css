@@ -1,0 +1,7 @@
+.add-employee-to-shift-button:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
+.hidden {
+    display: none;
+}

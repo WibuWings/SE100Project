@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import ReactToPrint from 'react-to-print';
 import { Container, Grid, Button, CardActionArea, CardActions, CardMedia } from '@mui/material';
-import ComponentToPrint  from './ComponentToPrint';
 import '../../css/SellProduct.css'
 import Tabs from './Tabs'
 import Box from '@mui/material/Box';
@@ -12,9 +10,9 @@ import exampleImg from '../../img/good-example.jpg'
 import { BiPlusMedical } from 'react-icons/bi';
 import { connect } from 'react-redux'
 import axios from 'axios';
-import { Image } from 'cloudinary-react';
 import ShoppingBags from './ShoppingBags';
 import Printf from './Print'
+import HistoryReciept from './HistoryReciept';
 
 class SellProduct extends Component {
 
@@ -28,7 +26,6 @@ class SellProduct extends Component {
         this.loadAllGood();
     }
 
-
     bull = (
         <Box
             component="span"
@@ -39,12 +36,29 @@ class SellProduct extends Component {
     );
 
     AddProduct = (value) => {
-        const is = this.state.test1;
-        this.setState({
-            test1: !is
+        var isCheck = false;
+        var currentQuantity;
+        var maxQuantity;
+        this.props.shoppingBags.map(value1 => {
+            if (value1.product.name === value.name) {
+                isCheck = true;
+                currentQuantity = value1.quantity
+                maxQuantity = value.quantity
+            } 
+            return value;
         })
-        this.props.addProductToShoppingBags(value);
-        console.log(this.props.shoppingBags);
+        if (isCheck) {
+            if (currentQuantity < maxQuantity) {
+                this.props.raiseQuantity(value.name);
+            }
+        } else {
+            const newProduct = {
+                product: value,
+                quantity: 1,
+            }
+            this.props.addNewProductToShoppingBags(newProduct);
+        }
+
     }
 
     async loadAllType() {
@@ -53,7 +67,7 @@ class SellProduct extends Component {
             token: localStorage.getItem('token'),
             filter: {
                 "_id.storeID": this.props.infoUser.email,
-            }   
+            }
         }
 
         await axios.get(`http://localhost:5000/api/product/type`,
@@ -83,7 +97,7 @@ class SellProduct extends Component {
             token: localStorage.getItem('token'),
             filter: {
                 "_id.storeID": this.props.infoUser.email,
-            }   
+            }
         }
         await axios.get(`http://localhost:5000/api/product/`, {
             params: { ...data }
@@ -116,17 +130,17 @@ class SellProduct extends Component {
             })
         // Lấy các cái jointype
         var joinTypeInfor = [];
-        for (var i = 0; i < result.length; i++) {
+        for (let i = 0; i < result.length; i++) {
             joinTypeInfor.push(result[i]);
         }
         console.log("joinTypeInfor", joinTypeInfor);
 
         var listProductInfor = [];
-        for (var i = 0; i < resultProduct.length; i++) {
+        for (let i = 0; i < resultProduct.length; i++) {
             var typeIDList = [];
             for (var j = 0; j < joinTypeInfor.length; j++) {
                 if (resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID &&
-                    resultProduct[i]._id.productID == joinTypeInfor[j]._id.productID) {
+                    resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) {
                     typeIDList.push(joinTypeInfor[j]._id.typeID);
                 }
             }
@@ -140,13 +154,9 @@ class SellProduct extends Component {
 
         console.log("listProductInfor: ", listProductInfor);
         this.props.getProductToReducer(listProductInfor);
-        // console.log("this.props.listProduct.state: ", this.props.listProduct.state);
         this.setState({ change: !this.state.change });
     }
 
-    
-
-    
     
 
     render() {
@@ -155,7 +165,7 @@ class SellProduct extends Component {
             <div className="sell-product" >
                 <Container maxWidth="xl">
                     <Grid container spacing={2}>
-                        <Grid item md={8} sm={4}  >
+                        <Grid item md={8} sm={12}  >
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden' }}>
                                 <div style={{ overflow: 'hidden', marginBottom: '5px' }}>
                                     <Tabs></Tabs>
@@ -175,7 +185,7 @@ class SellProduct extends Component {
                                                     <Card onClick={() => this.AddProduct(value)}>
                                                         <CardActionArea>
                                                             {
-                                                                value.imgUrl == "none"
+                                                                value.imgUrl === "none"
                                                                     ? <CardMedia
                                                                         component="img"
                                                                         height="140"
@@ -210,7 +220,7 @@ class SellProduct extends Component {
                         </Grid>
                         <Grid item md={4} lg={4} >
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden', overflowX: 'hidden' }}>
-                                <div id="choses-product" style={{ backgroundColor: '#ebebeb', height: '60%', margin: '10px', overflowY: 'scroll' }} >
+                                <div id="choses-product" style={{ backgroundColor: '#ebebeb', height: '60%', margin: '10px', overflowY: 'scroll', overflowX: 'hidden' }} >
                                     <Grid sty container spacing={0}>
                                         {/* Table */}
                                         <Grid item className="customizeTable" style={{ backgroundColor: 'rgba(20,20,20,0.4)', alignContent: 'center', justifyContent: 'center', borderBottom: '2px solic black' }} md={12} sm={12}>
@@ -219,6 +229,7 @@ class SellProduct extends Component {
                                                     #
                                                 </Grid>
                                                 <Grid item md={1} sm={1}>
+
                                                 </Grid>
                                                 <Grid item md={4} sm={4}>
                                                     Name
@@ -242,6 +253,9 @@ class SellProduct extends Component {
                         </Grid>
                     </Grid>
                 </Container>
+                {this.props.statusShowHistoryReciept ? (
+                    <HistoryReciept></HistoryReciept>
+                ) : null}
             </div>
         );
     }
@@ -253,6 +267,7 @@ const mapStateToProps = (state, ownProps) => {
         chooseTypeProductID: state.chooseTypeProduct,
         infoUser: state.infoUser,
         shoppingBags: state.shoppingBags,
+        statusShowHistoryReciept: state.statusShowHistoryReciept,
     }
 }
 
@@ -275,10 +290,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 data: data
             });
         },
-        addProductToShoppingBags: (product) => {
+        addNewProductToShoppingBags: (newProduct) => {
             dispatch({
-                type: "ADD_PRODUCT_SHOPPING_BAGS",
-                product: product,
+                type: "ADD_NEW_PRODUCT_SHOPPING_BAGS",
+                newProduct: newProduct,
+            })
+        },
+        raiseQuantity: (name) => {
+            dispatch({
+                type: "RAISE_QUANTITY_SHOPPING_BAGS",
+                name: name,
             })
         }
     }

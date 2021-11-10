@@ -31,6 +31,8 @@ import AddEmployeeModal from './EmployeePartials/AddEmployeeModal';
 import UpdateEmployeeModal from './EmployeePartials/UpdateEmployeeModal';
 import PayMoneyModal from './EmployeePartials/PayMoneyModal';
 import FixedCalendar from './EmployeePartials/FixedCalendar';
+import UnShiftEmployee from './EmployeePartials/UnShiftEmployee';
+
 import axios from 'axios';
 
 function EmployeeObj(employeeID, managerID, password, firstName, lastName, 
@@ -319,7 +321,7 @@ class EmployeeManager extends Component {
     render() {
         return (
             <div
-                style={{height:'800px', overflowY: 'auto'}}
+                style={{display: 'block', overflowY: 'auto', height: '100vh'}}
             >
                 <div>
                     <Button
@@ -558,7 +560,8 @@ class EmployeeManager extends Component {
                     /> */}
                     </Card>
                 </Container>
-                <FixedCalendar></FixedCalendar>
+                <FixedCalendar/>
+                <UnShiftEmployee/>
                 {/* Đây là phần modal */}
                 {this.props.addEmployeeStatus ? (
                     <div 

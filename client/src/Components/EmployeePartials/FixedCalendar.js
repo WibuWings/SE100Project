@@ -60,37 +60,37 @@ class FixedCalendar extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <div style={{marginTop: 10, padding: 24, height: 600, overflowY: 'auto'}}> 
-            <TableContainer component={Paper}>
-                <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Shift</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Mon</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Tue</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Wed</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Thu</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Fri</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Sat</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Sun</TableCell>
-                        </TableRow>
-                        {
-                            this.listShift.map((shift) => (
-                                <TableRow>
-                                    <TableCell className={classes.goodTable_Cell}>{shift.timeFrom + '-' + shift.timeTo}</TableCell>
-                                    <FixedTableCell></FixedTableCell>
-                                    <FixedTableCell></FixedTableCell>
-                                    <FixedTableCell></FixedTableCell>
-                                    <FixedTableCell></FixedTableCell>
-                                    <FixedTableCell></FixedTableCell>
-                                    <FixedTableCell></FixedTableCell>
-                                    <FixedTableCell></FixedTableCell>
-                                </TableRow>
-                            ))
-                        }
-                    </TableHead>
-                </Table>
-            </TableContainer>
+      <div style={{marginTop: 10, padding: 24, maxHeight: 600, overflowY: 'auto'}}> 
+          <TableContainer component={Paper}>
+              <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                  <TableHead>
+                      <TableRow>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Shift</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center">Mon</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center">Tue</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center">Wed</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center">Thu</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center">Fri</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center">Sat</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center">Sun</TableCell>
+                      </TableRow>
+                      {
+                          this.listShift.map((shift) => (
+                              <TableRow>
+                                  <TableCell className={classes.goodTable_Cell}>{shift.timeFrom + '-' + shift.timeTo}</TableCell>
+                                  <FixedTableCell></FixedTableCell>
+                                  <FixedTableCell></FixedTableCell>
+                                  <FixedTableCell></FixedTableCell>
+                                  <FixedTableCell></FixedTableCell>
+                                  <FixedTableCell></FixedTableCell>
+                                  <FixedTableCell></FixedTableCell>
+                                  <FixedTableCell></FixedTableCell>
+                              </TableRow>
+                          ))
+                      }
+                  </TableHead>
+              </Table>
+          </TableContainer>
       </div>
     );
   }

@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import {
-    NavLink
-} from "react-router-dom";
+
 import DashboardURL from '../Router/DashboardURL';
 import { connect } from 'react-redux';
 import SideNavBar from './Partials/SideNavBar';
-import Alert from '@mui/material/Alert';
-import { FiChevronRight, FiXSquare } from "react-icons/fi";
 import '../css/Body.css'
 import ModalConfirmPassword from './ModalConfirmPassword';
 
