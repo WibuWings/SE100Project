@@ -1,28 +1,10 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button, InputLabel } from '@mui/material';
 import { connect } from 'react-redux'
-import { BiPlusMedical, BiEdit } from 'react-icons/bi';
-import Stack from '@mui/material/Stack';
-import { GiCancel } from 'react-icons/gi'
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import { Image } from 'cloudinary-react';
 import axios from 'axios';
 import '../../css/GoodManager.css';
 import { withStyles } from '@material-ui/styles';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DatePicker from '@mui/lab/DatePicker';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import { AiFillPlusCircle} from "react-icons/ai";
-import CancelIcon from '@mui/icons-material/Cancel';
-
-var productTypes =[
-    'food', 'detergent', 'cuisine'
-];
-
-var typeSet = [];
 
 const StyledTextField = withStyles((theme) => ({
     root: {
@@ -41,22 +23,83 @@ class UpdateEmployeeModal extends Component {
         super(props);
         
         this.state = {
-            goodID : "",
             change: false,
-            imageSelect: "null",
-            type:'none',
-            url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         }; 
+        this.loadInitialData();
     }
     
 
     cancel = () => {
-        this.props.changeAddEmployeeStatus();
+        
     }
 
-    addEmployee = () => {
-        this.props.changeAddEmployeeStatus();
+    updateEmployee = () => {
+        const data = {
+            token: localStorage.getItem('token'),
+            employee: {
+                _id: {
+                    employeeID: this.id,
+                    storeID: this.props.infoUser.email,
+                },
+                managerID: this.props.infoUser.email,
+                password: document.querySelector('input[name="password"]').value,
+                firstName: document.querySelector('input[name="firstName"]').value,
+                lastName: document.querySelector('input[name="lastName"]').value,
+                phoneNumber: document.querySelector('input[name="phoneNumber"]').value,
+                dateOfBirth: document.querySelector('input[name="birthDay"]').value,
+                email: document.querySelector('input[name="email"]').value,
+                address: document.querySelector('input[name="adress"]').value,
+                cardID: document.querySelector('input[name="cardID"]').value,
+                startDate: document.querySelector('input[name="startDate"]').value,
+            }   
+        }
+        console.log(data);
+        axios.put(`http://localhost:5000/api/employee`, data)
+            .then(res => {
+                console.log("Update success");
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        this.props.changeUpdateEmployeeStatus();
     }
+
+    id = "";
+    password = "";
+    firstName = "";
+    lastName = "";
+    cardID = "";
+    phoneNumber = "";
+    address = "";
+    email = "";
+    startDate = "";
+    birthDay = "";
+
+
+    loadInitialData() {
+        var currentEmployee = this.props.currentEditEmployee.state;
+        console.log("currentEmployee", currentEmployee);
+        this.id = currentEmployee._id.employeeID;
+        this.password = currentEmployee.password;
+        this.firstName = currentEmployee.firstName;
+        this.lastName = currentEmployee.lastName;
+        this.cardID = currentEmployee.cardID;
+        this.phoneNumber = currentEmployee.phoneNumber;
+        this.address = currentEmployee.address;
+        this.email = currentEmployee.email;
+        this.startDate = currentEmployee.startDate;
+        if(this.startDate!=null)
+        {
+            this.startDate = this.startDate.substring(0, this.startDate.indexOf('T'));
+        }
+        this.birthDay = currentEmployee.dateOfBirth;
+        if(this.birthDay!=null)
+        {
+            this.birthDay = this.birthDay.substring(0, this.birthDay.indexOf('T'));
+        }
+        this.setState({change: !this.state.change})
+    }
+
     render() {
         return (
             <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
@@ -87,7 +130,7 @@ class UpdateEmployeeModal extends Component {
 
                             <Card>
                                 
-                                <Grid container md={12}>
+                               <Grid container md={12}>
                                     <Grid item md={6} 
                                         className='input-item'
                                     >
@@ -106,9 +149,25 @@ class UpdateEmployeeModal extends Component {
                                             style = {{width: '70%'}} 
                                             fullWidth 
                                             size="small" 
-                                            variant="outlined" 
+                                            variant="outlined"
+                                            value={this.id}
                                             readOnly={true}
                                             disabled={true}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label" style={{width: '114px'}}>Password</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="text" 
+                                            name="password" 
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.password}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -118,11 +177,12 @@ class UpdateEmployeeModal extends Component {
                                         <StyledTextField
                                             classname='input-box'   
                                             type="text" 
-                                            // class="input-val" 
+                                            name="firstName"
                                             style = {{width: '70%'}} 
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            defaultValue={this.firstName}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -132,13 +192,15 @@ class UpdateEmployeeModal extends Component {
                                         <StyledTextField
                                             classname='input-box'   
                                             type="text" 
-                                            // class="input-val" 
+                                            name="lastName"
                                             style = {{width: '70%'}} 
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            defaultValue={this.lastName}
                                         />
                                     </Grid>
+                                    
                                     <Grid item md={6} 
                                         className='input-item'
                                     >
@@ -146,55 +208,15 @@ class UpdateEmployeeModal extends Component {
                                         <StyledTextField
                                             classname='input-box'   
                                             type="text" 
-                                            // class="input-val" 
+                                            name="cardID" 
                                             style = {{width: '70%'}} 
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            defaultValue={this.cardID}
                                         />
                                     </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label" style={{width: '114px'}}>Old</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>Gender</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>Province</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
+                                    
                                     <Grid item md={6} 
                                         className='input-item'
                                     >
@@ -202,11 +224,42 @@ class UpdateEmployeeModal extends Component {
                                         <StyledTextField
                                             classname='input-box'   
                                             type="text" 
-                                            // class="input-val" 
+                                            name="phoneNumber"
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.phoneNumber}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label"style={{width: '114px'}}>Adress</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="text" 
+                                            name="adress" 
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.address}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label"style={{width: '114px'}}>StartDate</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="date"
+                                            name="startDate"
                                             style = {{width: '100%'}} 
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            defaultValue={this.startDate}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -216,11 +269,12 @@ class UpdateEmployeeModal extends Component {
                                         <StyledTextField
                                             classname='input-box'   
                                             type="text" 
-                                            // class="input-val" 
+                                            name="email"
                                             style = {{width: '70%'}} 
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            defaultValue={this.email}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -229,20 +283,22 @@ class UpdateEmployeeModal extends Component {
                                         <div className="input-label"style={{width: '114px'}}>BirthDay</div>
                                         <StyledTextField
                                             classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
+                                            type="date" 
+                                            // class="input-val"
+                                            name="birthDay"
                                             style = {{width: '70%'}} 
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            defaultValue={this.birthDay}
                                         />
                                     </Grid>
                                     <Grid item md={9}></Grid>
                                     <Grid item md={3}
                                         className='input-item'
                                     >
-                                        <Button variant="contained" onClick={() => this.props.changeUpdateEmployeeStatus()}>
-                                            UPDATE employee
+                                        <Button variant="contained" onClick={() => this.updateEmployee()}>
+                                            UPDATE
                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -263,6 +319,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         addEmployeeStatus: state.addEmployeeStatus,
         confirmStatus: state.confirmStatus,
+        currentEditEmployee: state.currentEditEmployee,
+        infoUser: state.infoUser
     }
 }
 

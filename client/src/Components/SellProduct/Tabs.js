@@ -2,7 +2,6 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useSelector , useDispatch} from 'react-redux';
-import { Table } from '@material-ui/core';
 
 export default function IconLabelTabs() {
     const [value, setValue] = React.useState(0);
@@ -23,15 +22,7 @@ export default function IconLabelTabs() {
                 return true;
             })
         }
-        // console.log(typeProduct.state, typeProduct.state.length);
-        // // typeProduct.map(val => {
-        // //     console.log(val.name);
-        // // });
-
-        // for(var i = 0 ; i < typeProduct.state.length; i++)
-        // {
-        //     console.log("name:", typeProduct.state[i].name)
-        // };
+        
         dispatch({
             type: "UPDATE_TYPE_CHOOSE",
             typeProductID: index,

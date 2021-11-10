@@ -1,3 +1,9 @@
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 .sell-product{
     position: relative;
     background-color: transparent;
@@ -9,7 +15,7 @@
     overflow: hidden;
     height: 100vh;
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: scroll;
 }
 
 #choses-product::-webkit-scrollbar-track {
@@ -33,4 +39,43 @@
 
 .customize-list-table {
     border-bottom: 1px solid black;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+  
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+.modal-history-reciept{
+    position: fixed;
+    display: flex;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 20;
+    /* background-color: rgba(0, 0, 0, 0.4); */
+    justify-content: center;
+    align-items: center;
+}
+
+.history-list-receipt{
+    background-color: #f4f6f8;
+    width: 70%;
+    height: 80%;
+    border-radius: 4px;
+    z-index: 2;
+}
+
+.css-1ygcj2i-MuiTableCell-root{
+    color: white !important;
+}
+
+.css-1azl6jz-MuiTableCell-root{
+    color: white !important;
 }

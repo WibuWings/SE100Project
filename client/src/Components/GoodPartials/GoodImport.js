@@ -353,16 +353,23 @@ class GoodImport extends Component {
         return typeName;
     }
 
+    foundTypeInSet(typeID) {
+        for(var i = 0 ; i < typeSet.length; i++)
+        {
+            if(typeSet[i]==typeID._id.typeID) return true;
+        }
+        return false;
+    }
     render() {
         
         return(
             <div 
                 style={{ 
-                    height: "800px", width: '100%', overflowY: 'scroll', backgroundColor: 'rgb(221,235,255)'   
+                    display: 'block', height: "900px", overflowY: 'auto ', backgroundColor: 'rgb(221,235,255)'   
                 }}
             >   
                 <div className="good-import-header"></div>
-                <Grid className="import-container" container spacing={2}>
+                <Grid className="import-container" style={{height: '79vh', overflowY: 'scroll'}} container spacing={2}>
                     <Grid item md={3}  
                         style={{
                             display: 'flex', 
@@ -558,6 +565,7 @@ class GoodImport extends Component {
                                                 {
                                                     typeSet.push(event.target.value);
                                                 }
+                                                this.setState({change: !this.state.change})
                                             }}
                                             style={{
                                                 height: 36,
@@ -566,7 +574,9 @@ class GoodImport extends Component {
                                             {
                                                 listTypeInfor.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
                                                 : listTypeInfor.map((type) =>
-                                                    <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
+                                                    ! this.foundTypeInSet(type) 
+                                                    ? <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
+                                                    : null
                                                 )
                                             }   
                                         </Select> 
