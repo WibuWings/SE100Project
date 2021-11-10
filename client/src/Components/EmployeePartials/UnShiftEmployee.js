@@ -4,9 +4,13 @@ import axios from 'axios';
 import { Icon } from '@iconify/react';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import { withStyles } from '@material-ui/styles';
+import '../../css/EmployeeManager.css'
 // material
-import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, Button} from '@mui/material';
-
+import { Paper, TableContainer, Table, 
+  TableHead, TableCell, TableRow, Button,
+  Menu, MenuItem, Grid
+} from '@mui/material';
+import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
 // ----------------------------------------------------------------------
 const styles = theme =>  ({
     goodTable: {                                     
@@ -32,7 +36,7 @@ class UnShiftEmployee extends Component {
   constructor(props) {
     super(props);
     this.state= {
-      change: 'false'
+      change: false
     }
   }
 
@@ -67,13 +71,28 @@ class UnShiftEmployee extends Component {
     this.setState({change: !this.state.change})
   }
 
+  openOption = false;
+
+  handleClose ()
+  {
+      this.openOption = false;
+      this.setState({change: !this.state.change});
+  }
+
+  handleOpen()
+  {
+      this.openOption = true;
+      alert("Ấn vào mở rồi")
+      this.setState({change: !this.state.change});
+  }
+
   render() {
     const { classes } = this.props;
     return (
       <div style={{marginTop: 0, padding: 24}}> 
           <Button variant="contained">Reload</Button>
-          <TableContainer component={Paper}>
-                <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+          <TableContainer component={Paper} >
+                <Table className={classes.goodTable} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
                             <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px' rowSpan={2}>Day</TableCell>
@@ -90,7 +109,11 @@ class UnShiftEmployee extends Component {
                         </TableRow>
                         {
                           this.props.nextWeekTimeKeeping.map((item) => 
-                          <TableRow>
+                          <TableRow
+                              style={{
+                                position: 'relative',
+                              }}
+                          >
                               <TableCell className={classes.goodTable_Cell}>{item._id.dateInWeek}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{this.getShiftNameAndTime(item._id.shiftType._id.shiftID)}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{item.realDate}</TableCell>
@@ -98,14 +121,25 @@ class UnShiftEmployee extends Component {
                               <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item._id.employee._id.employeeID)}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{item.alternativeEmployee._id.employeeID}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item.alternativeEmployee._id.employeeID)}</TableCell>
-                              <TableCell width={10} className={classes.goodTable_Cell}><Icon icon={moreVerticalFill} width={20} height={20} /></TableCell>
-
+                              <TableCell width={60} className={classes.goodTable_Cell} >
+                                    <div style={{display: 'flex'}}>
+                                      <AiOutlineEdit size={20} style={{display: 'inline-block'}}/>
+                                      <AiFillDelete size={20} style={{display: 'inline-block'}}/>
+                                    </div>
+                                    
+                                  
+                              </TableCell>
+                              
+                              
                           </TableRow>
+                          
                           )
                         }
                     </TableHead>
+                    
                 </Table>
             </TableContainer>
+              
             <Button 
               variant="contained"
               onClick={() => this.props.changeAddNextWeekTimeKeepingStatus()}

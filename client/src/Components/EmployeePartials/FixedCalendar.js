@@ -75,9 +75,9 @@ class FixedCalendar extends Component {
                           <TableCell className={classes.goodTable_Cell_Header} align="center">Sun</TableCell>
                       </TableRow>
                       {
-                          this.listShift.map((shift) => (
+                          this.props.listShift.map((shift) => (
                               <TableRow>
-                                  <TableCell className={classes.goodTable_Cell}>{shift.timeFrom + '-' + shift.timeTo}</TableCell>
+                                  <TableCell className={classes.goodTable_Cell} width={100}>{shift.timeFrom + '-' + shift.timeEnd}</TableCell>
                                   <FixedTableCell></FixedTableCell>
                                   <FixedTableCell></FixedTableCell>
                                   <FixedTableCell></FixedTableCell>
@@ -99,7 +99,7 @@ class FixedCalendar extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    
+    listShift: state.listShift,
   }
 }
 
