@@ -18,7 +18,6 @@ const NextWeekTimeKeeping = new Schema({
             },
         },
     },
-    isAttending: Boolean,
     alternativeEmployee: {
         _id: {
             employeeID: String,
