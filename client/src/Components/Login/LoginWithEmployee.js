@@ -17,37 +17,29 @@ class LoginWithEmployee extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            statusFailed: false,
-            statusSucces: false,
+
         }
     }
 
-    message = "Login success";
 
-    // Out Alert
-    OutAlert = () => {
-        this.setState({
-            statusFailed: false,
-            statusSucces: false,
-        })
-    }
+
 
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = async (e) => {
-        this.props.setRole()
-        await axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
+        this.props.setRole();
+        if (this.blurEmail() && this.blurPassword()) {
+            await axios.post(`http://localhost:5000/sign-in-employee`, {
                 email: document.querySelector('#username').value,
                 password: document.getElementById('password').value,
             })
                 .then(res => {
                     console.log(res.data);
                     switch (res.data.status) {
-                        case 1:
+                        case 1: 
                             localStorage.setItem('token', res.data.token);
                             this.props.changeLoginStatus();
                             this.props.updateProfile(res.data.data);
                             this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
-                            this.props.updateShiftTypes(res.data.data.shiftTypes);
                             this.props.hideAlert();
                             this.props.showAlert(res.data.message, "success");
                             break;
@@ -60,9 +52,10 @@ class LoginWithEmployee extends Component {
                     }
                 })
                 .catch(err => {
-                    //this.props.hideAlert();
-                    //this.props.showAlert("Error system", "error");
+                    this.props.hideAlert();
+                    this.props.showAlert("Error system", "error");
                 })
+        }
     }
 
 
@@ -167,8 +160,6 @@ class LoginWithEmployee extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.statusSucces ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
-                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
             </div>
         );
     }
