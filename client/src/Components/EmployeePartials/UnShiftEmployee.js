@@ -123,16 +123,16 @@ class UnShiftEmployee extends Component {
                               <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item.alternativeEmployee._id.employeeID)}</TableCell>
                               <TableCell width={60} className={classes.goodTable_Cell} >
                                     <div style={{display: 'flex'}}>
-                                      <AiOutlineEdit size={20} style={{display: 'inline-block'}}/>
-                                      <AiFillDelete size={20} style={{display: 'inline-block'}}/>
-                                    </div>
-                                    
-                                  
-                              </TableCell>
-                              
-                              
-                          </TableRow>
-                          
+                                      <AiOutlineEdit size={20} 
+                                        onClick={() =>{
+                                          this.props.changeUpdateNextWeekTimeKeepingStatus();
+                                        }
+                                        }
+                                      />
+                                      <AiFillDelete size={20} />
+                                    </div>      
+                              </TableCell> 
+                          </TableRow> 
                           )
                         }
                     </TableHead>
@@ -165,6 +165,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           type: "CHANGE_ADD_NEXTWEEK_TIMEKEEPING_STATUS",
       });
     },
+    changeUpdateNextWeekTimeKeepingStatus: () => {
+      dispatch({
+          type: "CHANGE_UPDATE_NEXTWEEK_TIMEKEEPING_STATUS",
+      });
+  },
   }
 }
 
