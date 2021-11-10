@@ -49,6 +49,7 @@ const Receipt = new Schema({
         expire: Date,
         createdAt: Date,
     },
+    isEdit: Boolean,
     createAt: Date,
     editAt: Date,
     deleteAt: Date,
