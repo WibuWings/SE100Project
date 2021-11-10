@@ -35,6 +35,8 @@ import statusShowHistoryReciept from './SellProduct/StatusShowHistoryRecieptRedu
 import listRecieptReducer from './SellProduct/ListRecieptReducer';
 import statusEditInfomationBill from './SellProduct/StatusEditInfomationBill';
 import InfomationBillEditReducer from './SellProduct/InfomationBillEdit';
+import nextWeekTimeKeepingReducer from './Employee/nextWeekTimeKeepingReducer';
+import statusAddNextWeekTimeKeepingReducer from './Employee/addNextWeekTimeKeepingStatus';
 
 var redux = require('redux');
 
@@ -56,16 +58,21 @@ const allReducers = redux.combineReducers({
     role: roleReducer,
     confirmCode: confirmModalReducer,
     yesConfirm: statusYesConfirmReducer,
+    // Nhân viên
     listEmployee: listEmployeeReducer,
     listSackedEmployee: listSackedEmployeeReducer,
     currentEditEmployee: currentEditEmployeeReducer, 
     addEmployeeStatus: statusAddEmployeeReducer,
     payEmployeeStatus: statusPayEmployeeReducer,
     updateEmpoyeeStatus: statusUpdateEmployeeReducer,
+    nextWeekTimeKeeping: nextWeekTimeKeepingReducer,
+    statusAddNextWeekTimeKeeping: statusAddNextWeekTimeKeepingReducer,
+    // Ca
     editShiftStatus: statusEditShiftReducer,
     objectEditShift: objectEditShiftReducer,
     statusDarkmode: statusDarkmodeReducer,
     statusConfirmPassword: statusModalConfirmPasswordReducer,
+    //Hàng hoá
     typeProductValue: typeProductValueReducer,
     listProduct: listProductReducer,
     typeProduct: typeProductReducer,

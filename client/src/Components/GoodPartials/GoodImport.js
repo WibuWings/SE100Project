@@ -66,8 +66,9 @@ class GoodImport extends Component {
     
     getCurrentDateTime()
     {
-        var day = new Date().getDay().toString();
-        if(day.length<2)
+        var currentDate = new Date();
+        var day = (currentDate.toString().split(' '))[2];
+        if(day.length < 2)
         {
             day = '0' + day;
         }

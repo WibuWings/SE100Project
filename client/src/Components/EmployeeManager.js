@@ -32,6 +32,7 @@ import UpdateEmployeeModal from './EmployeePartials/UpdateEmployeeModal';
 import PayMoneyModal from './EmployeePartials/PayMoneyModal';
 import FixedCalendar from './EmployeePartials/FixedCalendar';
 import UnShiftEmployee from './EmployeePartials/UnShiftEmployee';
+import AddNextWeekTimeKeepingModal from './EmployeePartials/AddNextWeekTimeKeeping';
 import { withStyles } from '@material-ui/styles';
 
 import axios from 'axios';
@@ -627,7 +628,21 @@ class EmployeeManager extends Component {
                         </PayMoneyModal>
                     </div>
                 ): null}
-
+                {this.props.statusAddNextWeekTimeKeeping 
+                ? 
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changeAddNextWeekTimeKeepingStatus();}} className="modal-overlay"></div>
+                        <AddNextWeekTimeKeepingModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </AddNextWeekTimeKeepingModal>
+                    </div>
+                : null
+                }
             </div>
             
         );
@@ -642,6 +657,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         listEmployee: state.listEmployee,
         listSackedEmployee: state.listSackedEmployee,
+        statusAddNextWeekTimeKeeping: state.statusAddNextWeekTimeKeeping,
     }
 }
 
@@ -673,7 +689,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "GET_EMPLOYEE_SACKED",
                 employees: data,
             });
-        }
+        },
+        changeAddNextWeekTimeKeepingStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_NEXTWEEK_TIMEKEEPING_STATUS",
+            });
+        },
 
     }
 }
