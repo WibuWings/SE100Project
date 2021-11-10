@@ -14,6 +14,11 @@ const Product = require("../models/product");
 const Employee = require("../models/employee");
 const Coupon = require("../models/coupon");
 const Regulation = require("../models/regulation");
+const ProductType = require("../models/productType");
+const ProductJoinType = require("../models/productJoinType");
+const Revenue = require("../models/revenue");
+const TimeKeeping = require("../models/timeKeeping");
+const NextWeekTimeKeeping = require("../models/nextWeekTimeKeeping");
 const {JWTVerify} = require("../helper/JWT");
 const MESSAGES = {
     SIGN_IN_SUCCESS: "Sign-in successfully.",
@@ -314,6 +319,29 @@ class meProfile {
                     )
                 }
             })
+    }
+
+    deleteAccount = async (req, res) => {
+        const manager = await Manager.findOne({_id: req.body._id}).exec();
+        const storeID = manager.storeID;
+
+        Manager.deleteOne({ _id: manager._id }).exec();
+        Store.deleteOne({ _id: storeID }).exec();
+        Coupon.deleteMany({ storeID: storeID }).exec(),
+        Employee.deleteMany({ managerID: storeID }).exec(),
+        Product.deleteMany({ storeID: storeID }).exec(),
+        ProductType.deleteMany({ storeID: storeID }).exec(),
+        ProductJoinType.deleteMany({ storeID: storeID }).exec(),
+        Revenue.deleteMany({ storeID: storeID }).exec(),
+        Receipt.deleteMany({ storeID: storeID }).exec(),
+        ReturnProduct.deleteMany({ storeID: storeID }).exec(),
+        ShiftAssign.deleteMany({ storeID: storeID }).exec(),
+        ShiftType.deleteMany({  storeID: storeID }).exec(),
+        Regulation.deleteMany({ storeID }).exec(),
+        TimeKeeping.deleteMany({ storeID }).exec(),
+        NextWeekTimeKeeping.deleteMany({ storeID }).exec(),
+
+        res.status(200).send("Delete account successfully!");
     }
 }
 

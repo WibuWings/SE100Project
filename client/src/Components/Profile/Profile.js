@@ -22,7 +22,8 @@ class Profile extends Component {
 
     deleteDataAccout = async () => {
         axios.post('http://localhost:5000/api/profile/delete-account', {
-            email: this.props.infoUser.email,
+            _id: this.props.infoUser._id,
+            token: localStorage.getItem("token"),
         })
         .then( res => {
             console.log('Thành công')
