@@ -110,7 +110,21 @@ class FixedCalendarCell extends Component {
         },
       }
       console.log("data", data);
-      this.props.RemoveShiftAssign(data); 
+      this.props.RemoveShiftAssign(data);
+  }
+
+  findShiftInShiftAssign()
+  {
+      var listShiftAssign = this.props.listShiftAssign;
+      for(var i = 0 ; i < listShiftAssign.length ; i++)
+      {
+          if(this.props.shiftID == listShiftAssign[i]._id.shiftType._id.shiftID && 
+            this.props.dayIndex == listShiftAssign[i]._id.dateInWeek)
+            { 
+                return true;
+            }
+      }
+      return false;
   }
 
   render() {
@@ -120,9 +134,10 @@ class FixedCalendarCell extends Component {
             className={classes.goodTable_Cell} 
             style={{
                 position: 'relative',
-                backgroundColor: '#ff6057',
+                backgroundColor: !this.findShiftInShiftAssign() ?'#ff6057': '#b3cde0',
                 height: '80px',
-            }}    
+            }}
+            // ref={this.myRef}    
         >
             <div
                 style={{
