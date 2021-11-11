@@ -6,7 +6,6 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import { Grid, Box, Button, Checkbox } from '@mui/material';
-import { pink, green} from '@mui/material/colors';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -21,54 +20,13 @@ import { FiXSquare } from 'react-icons/fi'
 function Row(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
+    const statusSelectAll = useSelector(state => state.statusSelectAll)
     const dispatch = useDispatch();
-    const listReciept = useSelector(state => state.listReciept)
-    const infoUser = useSelector(state => state.infoUser)
-    const statusEditInfoBill = useSelector(state => state.statusEditInfoBill)
-    const editReciept = (MAHD) => {
-        let objectInfoBill = [];
-        listReciept.map(value => {
-            if (value.MAHD === MAHD) {
-                objectInfoBill = value
-            }
-            return value;
-        })
-        if (!statusEditInfoBill) {
-            axios.post('http://localhost:5000/api/sell-product/edit-reciept', {
-                MAHD: MAHD,
-                token: localStorage.getItem('token'),
-                email: infoUser.email,
-            })
-            dispatch({
-                type: "EDIT_SHOPPING_BAGS",
-                MAHD: MAHD,
-            })
-            dispatch({
-                type: "INFO_SHOPPING_BAGS_EDIT",
-                listProduct: objectInfoBill.listProduct,
-            })
-            dispatch({
-                type: "ADD_INFO_BILL_EDIT",
-                InfoBill: objectInfoBill,
-            })
-            dispatch({
-                type: "CHANGE_EDIT_INFOMATION_STATUS",
-            })
-            dispatch({
-                type: "CHANGE_HISTORY_RECIEPT_STATUS"
-            })
-        } else {
-            dispatch({
-                type: "HIDE_ALERT",
-            })
-            dispatch({
-                type: "SHOW_ALERT",
-                message: "Con` don hang` cho` !",
-                typeMessage: "warning"
-            })
-        }
-
-    }
+    const [statusSelectReplace, setStatusSelectReplace] = React.useState(false);
+    
+    React.useEffect(() => {
+        setStatusSelectReplace(statusSelectAll)
+    },[statusSelectAll])
 
     const countQuantity = () => {
         let count = 0;
@@ -110,6 +68,7 @@ function Row(props) {
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
     const ChangeCheckbox = (e, MAHD) => {
+        setStatusSelectReplace(!statusSelectReplace);
         console.log(e.target.checked)
         console.log(MAHD)
     }
@@ -118,7 +77,8 @@ function Row(props) {
         <React.Fragment>
             <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.isDelete) }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
-                    <Checkbox {...label} onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
+                    {console.log(statusSelectAll)}
+                    <Checkbox {...label}   checked={statusSelectReplace}  onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
                 </TableCell>
                 <TableCell>
                     <IconButton
@@ -322,6 +282,7 @@ export default function CollapsibleTable() {
     const typeByDate = useSelector(state => state.typeByDate)
     const [listRecieptReplace, setListRecieptReplace] = React.useState(listReciept);
 
+
     React.useEffect(() => {
         var list = typeReciept.length === 0 ? listReciept : listReciept.filter(value => {
             for (var i = 0; i < typeReciept.length; i++) {
@@ -399,7 +360,7 @@ export default function CollapsibleTable() {
                 <TableBody>
                     {listRecieptReplace ?
                         listRecieptReplace.map((row) => (
-                            <Row key={row.MAHD} row={row} />
+                            <Row key={row.MAHD}  row={row} />
                         )) : null
                     }
                 </TableBody>

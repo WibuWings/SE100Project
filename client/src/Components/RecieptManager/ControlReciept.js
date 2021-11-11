@@ -23,6 +23,7 @@ const style = {
 function ControlReciept(props) {
     const dispatch = useDispatch()
     const darkmode = useSelector(state => state.statusDarkmode)
+    const statusSelectAll = useSelector(state => state.statusSelectAll)
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => {
         setOpen(true);
@@ -30,6 +31,13 @@ function ControlReciept(props) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    const changeStatus = () => {
+        console.log('click')
+        dispatch({
+            type:"CHANGE_SELECT_ALL_STATUS"
+        })
+    }
 
     return (
         <Grid container spacing={2}>
@@ -40,7 +48,9 @@ function ControlReciept(props) {
                     <CardContent>
                         <Grid container spacing={2}>
                             <Grid item md={12} sm={12}  >
-                                <Button style={{ width: '100%', backgroundColor: blue[600], color: 'white' }} size='medium'>Select All</Button>
+                                <Button onClick={() => changeStatus()} style={{ width: '100%', backgroundColor: blue[600], color: 'white' }} size='medium'>
+                                    {statusSelectAll ? 'Turn off select all' : 'Select All'}
+                                    </Button>
                             </Grid>
                             <Grid item md={12} sm={12}  >
                                 <Button style={{ width: '100%', backgroundColor: red[400], color: 'white' }} size='medium'>
