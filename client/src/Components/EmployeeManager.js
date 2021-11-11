@@ -104,7 +104,7 @@ class EmployeeManager extends Component {
             change: false,
         }; 
         //this.getAllEmployee();
-        this.getAllEmployee();
+        // this.getAllEmployee();
         this.getSackedEmployee();
     }
 

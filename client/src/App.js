@@ -28,6 +28,7 @@ class App extends Component {
             this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
             this.props.updateShiftTypes(res.data.data.shiftTypes)
             this.props.changeLoginStatus();
+            this.props.getEmployee(res.data.data.employees);
           }
         })
         .catch(err => {
@@ -93,7 +94,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "HIDE_ALERT",
       })
-    }
+    },
+    getEmployee: (data) => {
+      dispatch({
+          type: "GET_EMPLOYEE",
+          employees: data,
+      });
+    },
   }
 }
 

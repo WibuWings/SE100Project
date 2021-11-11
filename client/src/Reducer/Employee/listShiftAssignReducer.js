@@ -47,10 +47,6 @@ const listShiftAssignReducer = (state = listShiftAssignInitialState, action) => 
                         {
                             newState.push(state[i]);
                         }
-                        else 
-                        {
-                            console.log('Xoá được một cái rồi')
-                        }
                     }
                     return newState;
 
