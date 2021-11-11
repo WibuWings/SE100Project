@@ -5,7 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import { Grid, Box, Button } from '@mui/material';
+import { Grid, Box, Button, Checkbox } from '@mui/material';
+import { pink, green} from '@mui/material/colors';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -106,9 +107,19 @@ function Row(props) {
         }
     }
 
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
+    const ChangeCheckbox = (e, MAHD) => {
+        console.log(e.target.checked)
+        console.log(MAHD)
+    }
+
     return (
         <React.Fragment>
             <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.isDelete) }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+                <TableCell>
+                    <Checkbox {...label} onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
+                </TableCell>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -138,6 +149,7 @@ function Row(props) {
                                     <Table size="small" aria-label="purchases">
                                         <TableHead>
                                             <TableRow>
+
                                                 <TableCell>#</TableCell>
                                                 <TableCell>Name</TableCell>
                                                 <TableCell>Quantity</TableCell>
@@ -329,7 +341,7 @@ export default function CollapsibleTable() {
             }
         })
 
-        if (typeByDate.type === 'typeByDate' || typeByDate.type === 'yesterday' || typeByDate.type === 'today' ) {
+        if (typeByDate.type === 'typeByDate' || typeByDate.type === 'yesterday' || typeByDate.type === 'today') {
             list = list.filter(value => {
                 let timeMau = value.date;
                 timeMau = timeMau.replace(/\s/g, "");
@@ -340,7 +352,7 @@ export default function CollapsibleTable() {
             })
         }
 
-        if ( typeByDate.type === 'lastmonth') {
+        if (typeByDate.type === 'lastmonth') {
             list = list.filter(value => {
                 let timeMau = value.date;
                 timeMau = timeMau.replace(/\s/g, "");
@@ -351,7 +363,7 @@ export default function CollapsibleTable() {
             })
         }
 
-        if ( typeByDate.type === 'lastyear') {
+        if (typeByDate.type === 'lastyear') {
             list = list.filter(value => {
                 let timeMau = value.date;
                 timeMau = timeMau.replace(/\s/g, "");
@@ -366,11 +378,16 @@ export default function CollapsibleTable() {
         setListRecieptReplace(list)
     }, [typeReciept, typeByDate])
 
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
     return (
         <TableContainer component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow style={{ backgroundColor: 'black', color: 'white' }}>
+                        <TableCell>
+                            
+                        </TableCell>
                         <TableCell />
                         <TableCell >Mã HĐ</TableCell>
                         <TableCell align="right">Ngày hóa đơn</TableCell>

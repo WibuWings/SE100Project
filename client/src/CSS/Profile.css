@@ -133,3 +133,18 @@ hr:not([size]).profile-header__divider {
     background-color: white;
     top: -5px !important;
 }
+
+.modal-add-shift{
+    animation: animationModalShift ease-in-out 0.3s;
+}
+
+@keyframes animationModalShift {
+    from {
+        transform: scale(0) translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}

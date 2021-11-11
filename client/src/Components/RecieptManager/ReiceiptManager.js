@@ -3,6 +3,7 @@ import { Container, Grid, Button } from '@mui/material';
 import CollapsibleTable from './TableReciept'
 import StatusReceiptType from './StatusReceiptType';
 import DateReciept from './DateReciept';
+import ControlReciept from './ControlReciept';
 import '../../css/RecieptManager.css'
 class ReceiptManager extends Component {
     render() {
@@ -17,6 +18,9 @@ class ReceiptManager extends Component {
                                 </Grid>
                                 <Grid item md={12} sm={12}>
                                     <StatusReceiptType></StatusReceiptType>
+                                </Grid>
+                                <Grid item md={12} sm={12}>
+                                    <ControlReciept></ControlReciept>
                                 </Grid>
                             </Grid>
                         </Grid>

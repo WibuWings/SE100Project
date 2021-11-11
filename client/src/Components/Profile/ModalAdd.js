@@ -214,7 +214,7 @@ class ModalAdd extends Component {
 
     render() {
         return (
-            <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
+            <form className="modal-add-shift" style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Create shift" />
                     <Divider />
