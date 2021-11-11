@@ -77,7 +77,6 @@ class SideNavBar extends Component {
     render() {
 
         const navbarContainer = document.querySelector('.navbar-container');
-        console.log(navbarContainer);
         return (
             <div
                 class="navbar-container"

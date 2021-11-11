@@ -32,6 +32,9 @@ import UpdateEmployeeModal from './EmployeePartials/UpdateEmployeeModal';
 import PayMoneyModal from './EmployeePartials/PayMoneyModal';
 import FixedCalendar from './EmployeePartials/FixedCalendar';
 import UnShiftEmployee from './EmployeePartials/UnShiftEmployee';
+import AddNextWeekTimeKeepingModal from './EmployeePartials/AddNextWeekTimeKeeping';
+import UpdateNextWeekTimeKeepingModal from './EmployeePartials/UpdateNextWeekTimeKeeping';
+import NoJobEmployee from './EmployeePartials/NoJobEmployee';
 import { withStyles } from '@material-ui/styles';
 
 import axios from 'axios';
@@ -181,7 +184,6 @@ class EmployeeManager extends Component {
         }
         // Thêm vào cái redux
         this.props.getEmployee(listUsers);
-        console.log("listUsers", listUsers);
         this.setState({change: !this.state.change});
     }
     // Thêm nhân viên
@@ -285,14 +287,12 @@ class EmployeeManager extends Component {
             .then(res => {
                 // alert("Lấy hết đc product ròi anh chai");
                 result = res.data.data;
-                console.log(res.data.data);
             })
             .catch(err => {
                 console.log(err);
                 alert(err)
             })
         this.props.getSackedEmployee(result);
-        console.log("sacked reducer", this.props.listSackedEmployee)
         this.setState({change: !this.state.change});
     }
 
@@ -491,6 +491,7 @@ class EmployeeManager extends Component {
                     </Card>
                 </Container>
                 <FixedCalendar/>
+                <NoJobEmployee></NoJobEmployee>
                 <UnShiftEmployee/>
                 <Container
                     style={{marginTop: 20, }}
@@ -627,7 +628,36 @@ class EmployeeManager extends Component {
                         </PayMoneyModal>
                     </div>
                 ): null}
-
+                {this.props.statusAddNextWeekTimeKeeping 
+                ? 
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changeAddNextWeekTimeKeepingStatus();}} className="modal-overlay"></div>
+                        <AddNextWeekTimeKeepingModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </AddNextWeekTimeKeepingModal>
+                    </div>
+                : null
+                }
+                {this.props.statusUpdateNextWeekTimeKeeping 
+                ? 
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changeUpdateNextWeekTimeKeepingStatus();}} className="modal-overlay"></div>
+                        <UpdateNextWeekTimeKeepingModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </UpdateNextWeekTimeKeepingModal>
+                    </div>
+                : null
+                }
             </div>
             
         );
@@ -642,6 +672,8 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         listEmployee: state.listEmployee,
         listSackedEmployee: state.listSackedEmployee,
+        statusAddNextWeekTimeKeeping: state.statusAddNextWeekTimeKeeping,
+        statusUpdateNextWeekTimeKeeping: state.statusUpdateNextWeekTimeKeeping
     }
 }
 
@@ -673,7 +705,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "GET_EMPLOYEE_SACKED",
                 employees: data,
             });
-        }
+        },
+        changeAddNextWeekTimeKeepingStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_NEXTWEEK_TIMEKEEPING_STATUS",
+            });
+        },
+        changeUpdateNextWeekTimeKeepingStatus: () => {
+            dispatch({
+                type: "CHANGE_UPDATE_NEXTWEEK_TIMEKEEPING_STATUS",
+            });
+        },
 
     }
 }

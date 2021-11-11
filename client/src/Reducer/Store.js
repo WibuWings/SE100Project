@@ -35,6 +35,11 @@ import statusShowHistoryReciept from './SellProduct/StatusShowHistoryRecieptRedu
 import listRecieptReducer from './SellProduct/ListRecieptReducer';
 import statusEditInfomationBill from './SellProduct/StatusEditInfomationBill';
 import InfomationBillEditReducer from './SellProduct/InfomationBillEdit';
+import nextWeekTimeKeepingReducer from './Employee/nextWeekTimeKeepingReducer';
+import statusAddNextWeekTimeKeepingReducer from './Employee/addNextWeekTimeKeepingStatus';
+import statusUpdateNextWeekTimeKeepingReducer from './Employee/updateNextWeekTimeKeepingStatus';
+import updateNextWeekTimeKeepingValueReducer from './Employee/updateNextWeekTimeKeepingValue';
+import listShiftAssignReducer from './Employee/listShiftAssignReducer';
 
 var redux = require('redux');
 
@@ -56,16 +61,25 @@ const allReducers = redux.combineReducers({
     role: roleReducer,
     confirmCode: confirmModalReducer,
     yesConfirm: statusYesConfirmReducer,
+    // Nhân viên
     listEmployee: listEmployeeReducer,
     listSackedEmployee: listSackedEmployeeReducer,
     currentEditEmployee: currentEditEmployeeReducer, 
     addEmployeeStatus: statusAddEmployeeReducer,
     payEmployeeStatus: statusPayEmployeeReducer,
     updateEmpoyeeStatus: statusUpdateEmployeeReducer,
+    updateNextWeekTimeKeepingValue : updateNextWeekTimeKeepingValueReducer ,
+    listShiftAssign: listShiftAssignReducer,
+    // Chấm công các kiểu
+    nextWeekTimeKeeping: nextWeekTimeKeepingReducer,
+    statusAddNextWeekTimeKeeping: statusAddNextWeekTimeKeepingReducer,
+    statusUpdateNextWeekTimeKeeping: statusUpdateNextWeekTimeKeepingReducer,
+    // Ca
     editShiftStatus: statusEditShiftReducer,
     objectEditShift: objectEditShiftReducer,
     statusDarkmode: statusDarkmodeReducer,
     statusConfirmPassword: statusModalConfirmPasswordReducer,
+    //Hàng hoá
     typeProductValue: typeProductValueReducer,
     listProduct: listProductReducer,
     typeProduct: typeProductReducer,

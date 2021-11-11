@@ -60,14 +60,14 @@ class GoodImport extends Component {
         this.loadAllGood();
 
         this.currentDateTime = this.getCurrentDateTime();
-        console.log("this.currentDateTime",this.currentDateTime);
         typeSet = [];
     }
     
     getCurrentDateTime()
     {
-        var day = new Date().getDay().toString();
-        if(day.length<2)
+        var currentDate = new Date();
+        var day = (currentDate.toString().split(' '))[2];
+        if(day.length < 2)
         {
             day = '0' + day;
         }

@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => ({
         borderWidth: '1px',
         borderColor: '#ccc',
         borderStyle: 'solid',
-        height: 4
+        height: 4,
+        color: '#333'
     }
 }));
 
@@ -144,11 +145,11 @@ function GoodRow(props) {
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell className={classes.goodTable_Cell}>Expired Day</TableCell>
-                                            <TableCell className={classes.goodTable_Cell}>Original Price</TableCell>
-                                            <TableCell className={classes.goodTable_Cell}>Good Remain</TableCell>
-                                            <TableCell className={classes.goodTable_Cell}>Product Type</TableCell>
-                                            <TableCell className={classes.goodTable_Cell}>Unit</TableCell>
+                                            <TableCell className={classes.goodTable_Cell}><div style={{color: '#333'}}>Expired Day</div></TableCell>
+                                            <TableCell className={classes.goodTable_Cell}><div  style={{color: '#333'}}>Original Price</div></TableCell>
+                                            <TableCell className={classes.goodTable_Cell} style={{color: '#333'}}><div  style={{color: '#333'}}>Good Remain</div></TableCell>
+                                            <TableCell className={classes.goodTable_Cell} style={{color: '#333'}}><div  style={{color: '#333'}}>Product Type</div></TableCell>
+                                            <TableCell className={classes.goodTable_Cell} style={{color: '#333'}}><div style={{color: '#333'}}>Unit</div></TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
