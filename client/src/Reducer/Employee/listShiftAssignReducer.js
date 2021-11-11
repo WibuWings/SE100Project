@@ -3,22 +3,23 @@ const listShiftAssignInitialState =
 [
     {
         _id: {
-            dateInWeek: 'T7',
-            storeID: '19522006@gm.uit.edu.vn',
+            dateInWeek: String,
+            storeID: String,
             shiftType: {
                 _id: {
-                    shiftID: 'v908tB',
-                    storeID: '19522006@gm.uit.edu.vn',
+                    shiftID: String,
+                    storeID: String,
                 },
             },
             employee: {
                 _id: {
-                    employeeID: '1',
-                    storeID: '19522006@gm.uit.edu.vn',
+                    employeeID: String,
+                    storeID: String,
                 },
             },
         },
-        createdAt: '2021-01-02',
+        realDate: Date,
+        isPaidSalary: Boolean,
     }
     
 ];

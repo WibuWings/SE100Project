@@ -90,7 +90,6 @@ class UnShiftEmployee extends Component {
     const { classes } = this.props;
     return (
       <div style={{marginTop: 0, padding: 24}}> 
-          <Button variant="contained">Reload</Button>
           <TableContainer component={Paper} >
                 <Table className={classes.goodTable} size="small" aria-label="a dense table">
                     <TableHead>

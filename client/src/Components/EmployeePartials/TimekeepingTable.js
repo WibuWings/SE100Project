@@ -36,21 +36,21 @@ class TimeKeepingTable extends Component {
 
   render() {
     const { classes } = this.props;
-    return (
+    return ( 
       <div style={{marginTop: 0, padding: 24}}> 
-          <Button variant="contained">Reload</Button>
+          <span
+              style={{
+                  color: '#fff',
+                  backgroundColor: 'blue',
+                  padding: 10,
+              }}
+          >ALL TIMEKEEPING</span>
           <TableContainer component={Paper}>
                 <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px' rowSpan={2}>Day</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" rowSpan={2}>Shift</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" colSpan={2}>Withdraw</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" colSpan={2}>Change</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Day</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" >Shift</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
                         </TableRow>
@@ -59,12 +59,8 @@ class TimeKeepingTable extends Component {
                             <TableCell className={classes.goodTable_Cell}></TableCell>
                             <TableCell className={classes.goodTable_Cell}></TableCell>
                             <TableCell className={classes.goodTable_Cell}></TableCell>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
                             <TableCell className={classes.goodTable_Cell}></TableCell>
                             <TableCell className={classes.goodTable_Cell}></TableCell>
                             <TableCell className={classes.goodTable_Cell}></TableCell>

@@ -36,6 +36,8 @@ import AddNextWeekTimeKeepingModal from './EmployeePartials/AddNextWeekTimeKeepi
 import UpdateNextWeekTimeKeepingModal from './EmployeePartials/UpdateNextWeekTimeKeeping';
 import NoJobEmployee from './EmployeePartials/NoJobEmployee';
 import { withStyles } from '@material-ui/styles';
+import TimekeepingTable from './EmployeePartials/TimekeepingTable';
+
 
 import axios from 'axios';
 
@@ -493,6 +495,7 @@ class EmployeeManager extends Component {
                 <FixedCalendar/>
                 <NoJobEmployee></NoJobEmployee>
                 <UnShiftEmployee/>
+                <TimekeepingTable></TimekeepingTable> 
                 <Container
                     style={{marginTop: 20, }}
                 >
