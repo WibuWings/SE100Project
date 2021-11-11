@@ -38,7 +38,6 @@ const nextWeekTimeKeepingReducer = (state = nextWeekTimeKeepingInitialState, act
                 return [...state, action.data]
             case "UPDATE_NEXT_WEEK_TIMEKEEPER":
                 {
-                    console.log("action.data",action.data);
                     var newState = [];
                     for(var i = 0 ; i < state.length ; i ++)
                     {
@@ -52,9 +51,6 @@ const nextWeekTimeKeepingReducer = (state = nextWeekTimeKeepingInitialState, act
                         }
                     }
                     return newState;
-                    console.log("action.index",action.index)
-                    state[action.index] = action.data;
-                    return state;
                 }
             case "DELETE_NEXT_WEEK_TIMEKEEPER":
             {

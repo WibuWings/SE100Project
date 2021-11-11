@@ -55,6 +55,20 @@ class NoJobEmployee extends Component {
         this.addEmployeeToDatabase();
         this.props.changeAddEmployeeStatus();
     }
+
+    findEmployeeInAssign(employeeID)
+    {
+        var shiftAssign = this.props.listShiftAssign;
+        for(var i = 0 ; i < shiftAssign.length; i++)
+        {
+            if(shiftAssign[i]._id.employee._id.employeeID == employeeID)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -72,13 +86,14 @@ class NoJobEmployee extends Component {
                                 </TableRow>
                         </TableHead>
                         {
+
                             this.props.listEmployee.employees.map((item) => 
-                            
-                                <TableRow>
+                                !this.findEmployeeInAssign(item._id.employeeID)
+                                ?<TableRow>
                                     <TableCell className={classes.goodTable_Cell_Header} align="center" style={{height: 30}}>{item._id.employeeID}</TableCell>
                                     <TableCell className={classes.goodTable_Cell_Header} align="center">{item.firstName + ' ' + item.lastName}</TableCell>
                                 </TableRow>
-
+                                :(null)
                             )
                         }
                         
@@ -95,6 +110,7 @@ const mapStateToProps = (state, ownProps) => {
         confirmStatus: state.confirmStatus,
         infoUser: state.infoUser,
         listEmployee: state.listEmployee,
+        listShiftAssign: state.listShiftAssign,
     }
 }
 
