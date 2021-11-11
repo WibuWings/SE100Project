@@ -38,6 +38,9 @@ import InfomationBillEditReducer from './SellProduct/InfomationBillEdit';
 import nextWeekTimeKeepingReducer from './Employee/nextWeekTimeKeepingReducer';
 import statusAddNextWeekTimeKeepingReducer from './Employee/addNextWeekTimeKeepingStatus';
 import statusUpdateNextWeekTimeKeepingReducer from './Employee/updateNextWeekTimeKeepingStatus';
+import updateNextWeekTimeKeepingValueReducer from './Employee/updateNextWeekTimeKeepingValue';
+
+
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -65,6 +68,7 @@ const allReducers = redux.combineReducers({
     addEmployeeStatus: statusAddEmployeeReducer,
     payEmployeeStatus: statusPayEmployeeReducer,
     updateEmpoyeeStatus: statusUpdateEmployeeReducer,
+    updateNextWeekTimeKeepingValue : updateNextWeekTimeKeepingValueReducer ,
     // Chấm công các kiểu
     nextWeekTimeKeeping: nextWeekTimeKeepingReducer,
     statusAddNextWeekTimeKeeping: statusAddNextWeekTimeKeepingReducer,

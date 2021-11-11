@@ -3,7 +3,7 @@ const nextWeekTimeKeepingInitialState =
 [
     {
         _id: {
-            dateInWeek: "T2",
+            dateInWeek: "T6",
             storeID: "19522006@gm.uit.edu.vn",
             shiftType: {
                 _id: {
@@ -24,7 +24,7 @@ const nextWeekTimeKeepingInitialState =
                 storeID: "19522006@gm.uit.edu.vn",
             },
         },
-        realDate: "1/10/2021",
+        realDate: "2021-12-04",
     }
 ];
 

@@ -49,6 +49,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
             dayChosed: '',
             shiftID: '',
         };
+        this.loadInitialData();
     }
 
     // Thêm nhân viên
@@ -132,6 +133,27 @@ class UpdateNextWeekTimeKeepingModal extends Component {
         // console.log(this.props.nextWeekTimeKeeping)
         this.props.changeUpdateNextWeekTimeKeepingStatus();
     }
+    
+    realDate = '';
+    currentdayChosed = '';
+    currentShipChosed = '';
+    currentWidrawID = '';
+    loadInitialData() {
+        var val = this.props.updateNextWeekTimeKeepingValue.state;
+        this.realDate = val.realDate;
+        this.currentdayChosed = val._id.dateInWeek;
+        this.currentShipChosed = val._id.shiftType._id.shiftID;
+        this.currentWidrawID = val._id.employee._id.employeeID;
+        this.currentAlterID = val.alternativeEmployee._id.employeeID;
+        console.log(val);
+        this.setState({
+            change : !this.state.change,
+            shiftID: this.currentShipChosed,
+            dayChosed: this.currentdayChosed,
+            witdrawID: this.currentWidrawID,
+            alterID: this.currentAlterID,
+        });
+    }
 
     render() {
         return (
@@ -169,7 +191,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                             fullWidth 
                                             size="small" 
                                             variant="outlined"
-                                            defaultValue={this.getCurrentDateTime()}
+                                            defaultValue={this.realDate}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -181,7 +203,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                         <FormControl sx={{ minWidth: 120 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
-                                                // value={this.state.type}
+                                                value={this.currentdayChosed}
                                                 onChange={(event) => {
                                                     this.setState({dayChosed: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
@@ -214,7 +236,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                         <FormControl sx={{ minWidth: 220 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
-                                                // value={this.state.type}
+                                                value={this.currentShipChosed}
                                                 onChange={(event) => {
                                                     this.setState({shiftID: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
@@ -248,7 +270,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                         <FormControl sx={{ minWidth: 320 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
-                                                // value={this.state.type}
+                                                value={this.currentWidrawID}
                                                 onChange={(event) => {
                                                     this.setState({witdrawID: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
@@ -280,7 +302,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                         <FormControl sx={{ minWidth: 320 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
-                                                // value={this.state.type}
+                                                value={this.currentAlterID}
                                                 onChange={(event) => {
                                                     this.setState({alterID: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
@@ -335,6 +357,7 @@ const mapStateToProps = (state, ownProps) => {
         listShift: state.listShift,
         listEmployee: state.listEmployee,
         nextWeekTimeKeeping: state.nextWeekTimeKeeping,
+        updateNextWeekTimeKeepingValue: state.updateNextWeekTimeKeepingValue,
     }
 }
 
