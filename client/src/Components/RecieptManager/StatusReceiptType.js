@@ -6,6 +6,7 @@ import { useSelector , useDispatch} from 'react-redux'
 
 function StatusReceiptType(props) {
     const dispatch = useDispatch()
+    const darkmode = useSelector(state => state.statusDarkmode)
 
     const changeCheckbox = (e) => {
         if (e.target.checked) {
@@ -31,7 +32,7 @@ function StatusReceiptType(props) {
         <Grid container spacing={2}>
             <Grid item md={12} sm={12}  >
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Status" />
+                    <CardHeader style={{ color: !darkmode ? '#0091ea' :'white', backgroundColor: !darkmode ? '#efeeef' :'#455a64'}} title="Status" />
                     <Divider></Divider>
                     <CardContent>
                         <Grid container spacing={2}>

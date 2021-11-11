@@ -47,8 +47,8 @@ function ShoppingBags(props) {
                                     {key + 1}
                                 </Grid>
                                 <Grid item md={1} sm={1}>
-                                    <IconButton onClick={() => deleteProduct(value.product.name)} aria-label="delete" size="small">
-                                        <DeleteIcon />
+                                    <IconButton  onClick={() => deleteProduct(value.product.name)} aria-label="delete" size="small">
+                                        <DeleteIcon style={{color: 'red'}} />
                                     </IconButton>
                                 </Grid>
                                 <Grid style={{ fontSize: '0.8rem', overflow: 'hidden' }} item md={4} sm={4}>

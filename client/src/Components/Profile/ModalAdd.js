@@ -216,7 +216,7 @@ class ModalAdd extends Component {
         return (
             <form className="modal-add-shift" style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Create shift" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Create shift" />
                     <Divider />
                     <CardContent>
                         <Grid container spacing={2}>
@@ -295,6 +295,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         editShiftStatus: state.editShiftStatus,
         objectEditShift: state.objectEditShift,
+        statusDarkmode: state.statusDarkmode
     }
 }
 

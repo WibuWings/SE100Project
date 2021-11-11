@@ -166,13 +166,13 @@ class ProfileDetail extends Component {
 
     render() {
         return (
-            <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
+            <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Profile" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Profile" />
                     <Divider />
                     <CardContent>
                         <Grid container spacing={3}>
-                            <Grid item md={6} xs={12}>
+                            <Grid  item md={6} xs={12}>
                                 <Box >
                                     <TextField
                                         id="outlined-basic"
@@ -341,6 +341,7 @@ const mapStateToProps = (state, ownProps) => {
         country: state.country,
         district: state.district,
         infoUser: state.infoUser,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 

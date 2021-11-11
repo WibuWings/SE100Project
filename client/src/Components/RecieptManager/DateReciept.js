@@ -16,6 +16,7 @@ function DataReciept(props) {
     const typeByDate = useSelector(state => state.typeByDate)
     const [value, setValue] = React.useState(new Date());
     const [value1, setValue1] = React.useState('all');
+    const darkmode = useSelector(state => state.statusDarkmode)
 
     const selectDate = () => {
         const data = {
@@ -174,7 +175,7 @@ function DataReciept(props) {
         <Grid container spacing={2}>
             <Grid item md={12} sm={12}  >
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Date" />
+                    <CardHeader style={{ color: !darkmode ? '#0091ea' :'white', backgroundColor: !darkmode ? '#efeeef' :'#455a64'}} title="Date" />
                     <Divider></Divider>
                     <CardContent>
                         <Grid container spacing={2}>

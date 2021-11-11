@@ -82,6 +82,7 @@ const mapStateToProps = (state, ownProps) => {
         editShiftStatus: state.editShiftStatus,
         infoUser: state.infoUser,
         role: state.role,
+        statusDarkmode: state.statusDarkmode
     }
 }
 

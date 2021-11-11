@@ -82,19 +82,19 @@ class SideNavBar extends Component {
             <div
                 class="navbar-container"
                 style={{
-                    width: 0
+                    width: 0,
                 }}
             >
-                <div class="navibar sidebar">
+                <div style={{backgroundColor: !this.props.statusDarkmode ?  '#fafafa' : '#37474f' }} class="navibar sidebar">
                     <div className="nav-icon" >
                         <IoIosArrowBack
                             size={20}
                         />
                     </div>
                     <div class="nav-heading">
-                        <div class="navbar-heading-container">
+                        <div style={{backgroundColor: !this.props.statusDarkmode ?  '#cfd8dc' : '#455a64'  }} class="navbar-heading-container">
                             <img src={this.props.infoUser.avatar ? this.props.infoUser.avatar : Avatar} style={{ width: 40, height: 40, borderRadius: '100%' }}></img>
-                            <span class="user-name">{this.props.infoUser.lastName + " " + this.props.infoUser.firstName}</span>
+                            <span style={{color: !this.props.statusDarkmode ?  'black' : 'white', fontWeight:'700'}} class="user-name">{this.props.infoUser.lastName + " " + this.props.infoUser.firstName}</span>
                         </div>
                     </div>
                     <div class="nav-container">
@@ -191,6 +191,7 @@ const mapStateToProps = (state, ownProps) => {
         isLogin: state.loginStatus,
         infoUser: state.infoUser,
         role: state.role,
+        statusDarkmode: state.statusDarkmode
     }
 }
 
