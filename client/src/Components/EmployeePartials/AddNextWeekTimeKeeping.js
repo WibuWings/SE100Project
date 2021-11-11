@@ -110,7 +110,37 @@ class AddNextWeekTimeKeepingModal extends Component {
         return new Date().getFullYear() + '-' + month + '-' + day;
     }
 
+    checkContraint() {
+        if(this.state.dayChosed.length == 0)
+        {
+            alert("Chưa chọn ngày nào trong tuần");
+            return false;
+        }
+        if(this.state.shiftID.length == 0)
+        {
+            alert("Chưa chọn ca nào");
+            return false;
+        }
+        console.log(this.state.withdrawID );
+        if( this.state.withdrawID == undefined || this.state.withdrawID.length == 0)
+        {
+            alert("Chưa chọn nhân viên nào nghỉ"); 
+            return false;
+        }
+        if(this.state.alterID== undefined || this.state.alterID.length == 0)
+        {
+            alert("Chưa chọn nhân viên nào thay thế");
+            return false;
+        }
+        // Có CSDL thì báo xem có trùng với cái cũ ko nữa
+        
+        alert("Đã check hết constraint");
+        return true;
+    }
+
+
     addChange() {
+        if(this.checkContraint()==false);
         const data = {
             _id: {
                 dateInWeek: this.state.dayChosed,
@@ -123,7 +153,7 @@ class AddNextWeekTimeKeepingModal extends Component {
                 },
                 employee: {
                     _id: {
-                        employeeID: this.state.witdrawID,
+                        employeeID: this.state.withdrawID,
                         storeID: this.props.infoUser.email,
                     },
                 },
@@ -136,9 +166,9 @@ class AddNextWeekTimeKeepingModal extends Component {
             },
             realDate: document.querySelector('input[name="realDate"]').value,
         };
-        this.props.addNewChange(data);
-        console.log(this.props.nextWeekTimeKeeping)
-        this.props.changeAddNextWeekTimeKeepingStatus();
+        // this.props.addNewChange(data);
+        // console.log(this.props.nextWeekTimeKeeping)
+        // this.props.changeAddNextWeekTimeKeepingStatus();
     }
 
     render() {
@@ -258,7 +288,7 @@ class AddNextWeekTimeKeepingModal extends Component {
                                             <Select
                                                 // value={this.state.type}
                                                 onChange={(event) => {
-                                                    this.setState({witdrawID: event.target.value});
+                                                    this.setState({withdrawID: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
                                                     // {
                                                     //     typeSet.push(event.target.value);
@@ -271,9 +301,11 @@ class AddNextWeekTimeKeepingModal extends Component {
                                             >
                                                 {
                                                     this.props.listEmployee.employees.map((item) =>
+                                                        !(this.state.alterID == item._id.employeeID) ?
                                                         <MenuItem value={item._id.employeeID}>
                                                             {item._id.employeeID + ' - ' + item.firstName + ' ' + item.lastName}
                                                         </MenuItem>
+                                                        : null
                                                     )
                                                 }   
                                             </Select> 
@@ -303,7 +335,7 @@ class AddNextWeekTimeKeepingModal extends Component {
                                             >
                                                 {
                                                     this.props.listEmployee.employees.map((item) =>
-                                                        !(this.state.witdrawID == item._id.employeeID) ?
+                                                        !(this.state.withdrawID == item._id.employeeID) ?
                                                         <MenuItem value={item._id.employeeID}>
                                                             {item._id.employeeID + ' - ' + item.firstName + ' ' + item.lastName}
                                                         </MenuItem>
