@@ -5,6 +5,8 @@ const typeRecieptInitialState = [],
                 return [...state, action.typeReciept];
             case "DELETE_TYPE_RECIEPT":
                 return state.filter((value) => value !== action.typeReciept);
+            case "RESET_TYPE_RECIEPT":
+                return state = []
             default:
                 return state
         }

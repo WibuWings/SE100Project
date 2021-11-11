@@ -328,9 +328,8 @@ export default function CollapsibleTable() {
                 }
             }
         })
-        // typeReciept.length === 0 ? setListRecieptReplace(listReciept) : setListRecieptReplace(list)
 
-        if (typeByDate.type === 'typeByDate' || typeByDate.type === 'yesterday') {
+        if (typeByDate.type === 'typeByDate' || typeByDate.type === 'yesterday' || typeByDate.type === 'today' ) {
             list = list.filter(value => {
                 let timeMau = value.date;
                 timeMau = timeMau.replace(/\s/g, "");
@@ -340,6 +339,29 @@ export default function CollapsibleTable() {
                 }
             })
         }
+
+        if ( typeByDate.type === 'lastmonth') {
+            list = list.filter(value => {
+                let timeMau = value.date;
+                timeMau = timeMau.replace(/\s/g, "");
+                timeMau = timeMau.split("/");
+                if (typeByDate.month == timeMau[1] && typeByDate.year == timeMau[2]) {
+                    return value;
+                }
+            })
+        }
+
+        if ( typeByDate.type === 'lastyear') {
+            list = list.filter(value => {
+                let timeMau = value.date;
+                timeMau = timeMau.replace(/\s/g, "");
+                timeMau = timeMau.split("/");
+                if (typeByDate.year == timeMau[2]) {
+                    return value;
+                }
+            })
+        }
+
         console.log(typeByDate)
         setListRecieptReplace(list)
     }, [typeReciept, typeByDate])

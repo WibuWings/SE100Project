@@ -52,7 +52,7 @@ function DataReciept(props) {
         if (value1 === 'all') {
             dispatch({
                 type: "TYPE_BY_DATE",
-                typeByDate: {type: 'all'},
+                typeByDate: { type: 'all' },
             })
         } else if (value1 === 'yesterday') {
             let yesterday = new Date()
@@ -66,17 +66,49 @@ function DataReciept(props) {
                 type: "TYPE_BY_DATE",
                 typeByDate: data,
             })
+        } else if (value1 === 'today') {
+            let today = new Date()
+            const data = {
+                type: "today",
+                day: today.getDate(),
+                month: today.getMonth() + 1,
+                year: today.getFullYear(),
+            }
+            dispatch({
+                type: "TYPE_BY_DATE",
+                typeByDate: data,
+            })
+        } else if (value1 === 'lastmonth') {
+            let today = new Date()
+            const data = {
+                type: "lastmonth",
+                month: today.getMonth(),
+                year: today.getFullYear(),
+            }
+            dispatch({
+                type: "TYPE_BY_DATE",
+                typeByDate: data,
+            })
+        } else if (value1 === 'lastyear') {
+            let today = new Date()
+            const data = {
+                type: "lastyear",
+                year: today.getFullYear() - 1,
+            }
+            dispatch({
+                type: "TYPE_BY_DATE",
+                typeByDate: data,
+            })
         }
     }
 
     const changeType = (e) => {
         setValue1(e.target.value)
-        console.log(e.target.value)
-        if (typeByDate.type === 'all' || typeByDate.type === 'yesterday') {
+        if (typeByDate.type === 'all' || typeByDate.type === 'yesterday' || typeByDate.type === 'today' || typeByDate.type === 'lastmonth' || typeByDate.type === 'lastyear') {
             if (e.target.value === 'all') {
                 dispatch({
                     type: "TYPE_BY_DATE",
-                    typeByDate: {type: 'all'},
+                    typeByDate: { type: 'all' },
                 })
             }
             if (e.target.value === 'yesterday') {
@@ -92,8 +124,51 @@ function DataReciept(props) {
                     typeByDate: data,
                 })
             }
+            if (e.target.value === 'today') {
+                let today = new Date()
+                const data = {
+                    type: "today",
+                    day: today.getDate(),
+                    month: today.getMonth() + 1,
+                    year: today.getFullYear(),
+                }
+                dispatch({
+                    type: "TYPE_BY_DATE",
+                    typeByDate: data,
+                })
+            }
+            if (e.target.value === 'lastmonth') {
+                let today = new Date()
+                const data = {
+                    type: "lastmonth",
+                    month: today.getMonth(),
+                    year: today.getFullYear(),
+                }
+                dispatch({
+                    type: "TYPE_BY_DATE",
+                    typeByDate: data,
+                })
+            }
+            if (e.target.value === 'lastyear') {
+                let today = new Date()
+                const data = {
+                    type: "lastyear",
+                    year: today.getFullYear() - 1,
+                }
+                dispatch({
+                    type: "TYPE_BY_DATE",
+                    typeByDate: data,
+                })
+            }
         }
     }
+
+    React.useEffect(() => {
+        dispatch({
+            type: "TYPE_BY_DATE",
+            typeByDate: { type: 'all' },
+        })
+    }, [])
 
     return (
         <Grid container spacing={2}>
@@ -117,8 +192,10 @@ function DataReciept(props) {
                                                 onChange={(e) => changeType(e)}
                                             >
                                                 <MenuItem value='all'>All</MenuItem>
+                                                <MenuItem value='today'>Today</MenuItem>
                                                 <MenuItem value='yesterday'>Yesterday</MenuItem>
-                                                <MenuItem value='1weekago'>1 week ago</MenuItem>
+                                                <MenuItem value='lastmonth'>Last month</MenuItem>
+                                                <MenuItem value='lastyear'>Last year</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </div>

@@ -21,6 +21,12 @@ function StatusReceiptType(props) {
         }
     }
 
+    React.useEffect(() => {
+        dispatch({
+            type: "RESET_TYPE_RECIEPT"
+        })
+    })
+
     return (
         <Grid container spacing={2}>
             <Grid item md={12} sm={12}  >
