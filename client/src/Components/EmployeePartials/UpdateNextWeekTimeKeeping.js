@@ -103,37 +103,56 @@ class UpdateNextWeekTimeKeepingModal extends Component {
         return new Date().getFullYear() + '-' + month + '-' + day;
     }
 
-    addChange() {
-        // const data = {
-        //     _id: {
-        //         dateInWeek: this.state.dayChosed,
-        //         storeID: this.props.infoUser.email,
-        //         shiftType: {
-        //             _id: {
-        //                 shiftID: this.state.shiftID,
-        //                 storeID: this.props.infoUser.email,
-        //             },
-        //         },
-        //         employee: {
-        //             _id: {
-        //                 employeeID: this.state.witdrawID,
-        //                 storeID: this.props.infoUser.email,
-        //             },
-        //         },
-        //     },
-        //     alternativeEmployee: {
-        //         _id: {
-        //             employeeID: this.state.alterID,
-        //             storeID: this.props.infoUser.email,
-        //         },
-        //     },
-        //     realDate: document.querySelector('input[name="realDate"]').value,
-        // };
+    updateChange() {
+        const data = {
+            _id: {
+                dateInWeek: this.currentdayChosed,
+                storeID: this.props.infoUser.email,
+                shiftType: {
+                    _id: {
+                        shiftID: this.currentShipChosed,
+                        storeID: this.props.infoUser.email,
+                    },
+                },
+                employee: {
+                    _id: {
+                        employeeID: this.currentWidrawID,
+                        storeID: this.props.infoUser.email,
+                    },
+                },
+            },
+            alternativeEmployee: {
+                _id: {
+                    employeeID: this.state.alterID,
+                    storeID: this.props.infoUser.email,
+                },
+            },
+            realDate: document.querySelector('input[name="realDate"]').value,
+        };
+        var indexOfData = this.findIndexCurrentNextTimeKeepingInRedux(data._id)
+        this.props.changeUpdateNextWeekTimeKeeping(data, indexOfData);
         // this.props.addNewChange(data);
-        // console.log(this.props.nextWeekTimeKeeping)
+        console.log(this.props.nextWeekTimeKeeping)
+
         this.props.changeUpdateNextWeekTimeKeepingStatus();
     }
-    
+
+    findIndexCurrentNextTimeKeepingInRedux(id)
+    {
+        //Đụng đến nếu sửa bảng
+        var listToSearch = this.props.nextWeekTimeKeeping;
+        for(var i = 0 ; i < listToSearch.length ; i ++)
+        {
+            if(listToSearch[i]._id.dateInWeek == id.dateInWeek && 
+                listToSearch[i]._id.shiftType._id.shiftID == id.shiftType._id.shiftID&& 
+                listToSearch[i]._id.employee._id.employeeID == id.employee._id.employeeID)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     realDate = '';
     currentdayChosed = '';
     currentShipChosed = '';
@@ -145,7 +164,6 @@ class UpdateNextWeekTimeKeepingModal extends Component {
         this.currentShipChosed = val._id.shiftType._id.shiftID;
         this.currentWidrawID = val._id.employee._id.employeeID;
         this.currentAlterID = val.alternativeEmployee._id.employeeID;
-        console.log(val);
         this.setState({
             change : !this.state.change,
             shiftID: this.currentShipChosed,
@@ -204,7 +222,9 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
                                                 value={this.currentdayChosed}
+                                                readOnly={true}
                                                 onChange={(event) => {
+                                                    this.currentdayChosed = event.target.value;
                                                     this.setState({dayChosed: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
                                                     // {
@@ -237,14 +257,15 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
                                                 value={this.currentShipChosed}
-                                                onChange={(event) => {
-                                                    this.setState({shiftID: event.target.value});
-                                                    // if(!typeSet.includes(event.target.value))
-                                                    // {
-                                                    //     typeSet.push(event.target.value);
-                                                    // }
-                                                    // this.setState({change: !this.state.change})
-                                                }}
+                                                readOnly={true}
+                                                // onChange={(event) => {
+                                                //     this.setState({shiftID: event.target.value});
+                                                //     // if(!typeSet.includes(event.target.value))
+                                                //     // {
+                                                //     //     typeSet.push(event.target.value);
+                                                //     // }
+                                                //     // this.setState({change: !this.state.change})
+                                                // }}
                                                 style={{
                                                     height: 36,
                                                 }}
@@ -271,14 +292,16 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
                                                 value={this.currentWidrawID}
-                                                onChange={(event) => {
-                                                    this.setState({witdrawID: event.target.value});
-                                                    // if(!typeSet.includes(event.target.value))
-                                                    // {
-                                                    //     typeSet.push(event.target.value);
-                                                    // }
-                                                    // this.setState({change: !this.state.change})
-                                                }}
+                                                readOnly={true}
+                                                // onChange={(event) => {
+                                                //     this.currentWidrawID = event.target.value;
+                                                //     this.setState({witdrawID: event.target.value});
+                                                //     // if(!typeSet.includes(event.target.value))
+                                                //     // {
+                                                //     //     typeSet.push(event.target.value);
+                                                //     // }
+                                                //     // this.setState({change: !this.state.change})
+                                                // }}
                                                 style={{
                                                     height: 36,
                                                 }}
@@ -304,6 +327,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                             <Select
                                                 value={this.currentAlterID}
                                                 onChange={(event) => {
+                                                    this.currentAlterID = event.target.value;
                                                     this.setState({alterID: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
                                                     // {
@@ -317,7 +341,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                             >
                                                 {
                                                     this.props.listEmployee.employees.map((item) =>
-                                                        !(this.state.witdrawID == item._id.employeeID) ?
+                                                        !(this.currentWidrawID == item._id.employeeID) ?
                                                         <MenuItem value={item._id.employeeID}>
                                                             {item._id.employeeID + ' - ' + item.firstName + ' ' + item.lastName}
                                                         </MenuItem>
@@ -331,7 +355,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                     <Grid item md={3}
                                         className='input-item'
                                     >
-                                        <Button variant="contained" onClick={() => this.addChange()}>
+                                        <Button variant="contained" onClick={() => this.updateChange()}>
                                             Add Change
                                         </Button>
                                     </Grid>
@@ -379,7 +403,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "ADD_NEW_NEXT_WEEK_TIMEKEEPER",
                 data: data,
             });
-        } 
+        },
+        
+        changeUpdateNextWeekTimeKeeping: (data, indexOfData) => {
+            dispatch({
+                type: "UPDATE_NEXT_WEEK_TIMEKEEPER",
+                data: data,
+                index: indexOfData,
+            });
+        },
+        
     }
 }
 

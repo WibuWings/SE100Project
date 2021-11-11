@@ -131,7 +131,16 @@ class UnShiftEmployee extends Component {
                                           }
                                         }
                                       />
-                                      <AiFillDelete size={20} />
+                                      <AiFillDelete size={20} 
+                                          onClick={() => 
+                                              {
+                                                  this.props.deleteNextWeekTimeKeeping(item);
+                                              }
+                                            // this.props.changeUpdateNextWeekTimeKeepingStatus();
+                                            
+                                            // this.props.changeUpdateNextWeekTimeKeepingValue(item);
+                                          }
+                                      />
                                     </div>      
                               </TableCell> 
                           </TableRow> 
@@ -178,6 +187,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "SET_UPDATE_NEXT_WEEK_TIMEKEEPER_VALUE",
         data: data
       });
+    },
+    deleteNextWeekTimeKeeping: (data) => {
+      dispatch({
+        type: "DELETE_NEXT_WEEK_TIMEKEEPER",
+        data: data
+      });
+      console.log("data", data)
     },
   }
 }
