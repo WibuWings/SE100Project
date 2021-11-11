@@ -37,13 +37,30 @@ const listShiftAssignReducer = (state = listShiftAssignInitialState, action) => 
             case "DELETE_SHIFT_ASSIGN":
                 {
                     console.log("Đã vô được delete");
-                    return state.filter((value, key) => 
-                        (
-                            value._id.dateInWeek !== action.data._id.dateInWeek 
-                            || value._id.shiftType._id.shiftID !== action.data._id.shiftType._id.shiftID 
-                            || value._id.employee._id.employeeID !== action.data._id.employee._id.employeeID 
-                        )
-                    );
+                    console.log(action.data);
+                    var newState = [];
+                    for(var i = 0 ; i < state.length ; i ++)
+                    {
+                        if(state[i]._id.dateInWeek !== action.data._id.dateInWeek 
+                            || state[i]._id.shiftType._id.shiftID !== action.data._id.shiftType._id.shiftID 
+                            || state[i]._id.employee._id.employeeID !== action.data._id.employee._id.employeeID)
+                        {
+                            newState.push(state[i]);
+                        }
+                        else 
+                        {
+                            console.log('Xoá được một cái rồi')
+                        }
+                    }
+                    return newState;
+
+                    // return state.filter((value, key) => 
+                    //     (
+                    //         value._id.dateInWeek !== action.data._id.dateInWeek 
+                    //         || value._id.shiftType._id.shiftID !== action.data._id.shiftType._id.shiftID 
+                    //         || value._id.employee._id.employeeID !== action.data._id.employee._id.employeeID 
+                    //     )
+                    // );
                 }
                
                 

@@ -109,6 +109,7 @@ class FixedCalendarCell extends Component {
             },
         },
       }
+      console.log("data", data);
       this.props.RemoveShiftAssign(data); 
   }
 
@@ -173,7 +174,7 @@ class FixedCalendarCell extends Component {
                             top: 0,
                           }} 
                           size={20}
-                          onClick={() => this.removeShift(item._id.employeeID)}
+                          onClick={() => this.removeShift(item._id.employee._id.employeeID)}
                       ></AiFillCloseCircle>
                     </div>
                   : null
