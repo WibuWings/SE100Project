@@ -94,7 +94,7 @@ class Printf extends React.PureComponent {
         name: this.props.infoUser.lastName + " " + this.props.infoUser.firstName,
         date: this.dateFunction(),
         discount: this.state.percentDiscount,
-        totalMoney: this.totalFinalMoney(),
+        totalMoney: this.totalMoney(),
         totalFinalMoney: this.totalFinalMoney(),
         listProduct: this.props.shoppingBags,
         time: this.state.date.getHours() + ":" + this.state.date.getMinutes(),
