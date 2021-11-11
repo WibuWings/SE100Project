@@ -76,7 +76,8 @@ class FixedCalendar extends Component {
                       </TableRow>
                   </TableHead>
                       {
-                          this.props.listShift.map((shift) => (
+                          this.props.listShift.map((shift) => 
+                          (
                               <TableRow>
                                   <TableCell className={classes.goodTable_Cell} width={100}>{shift.timeFrom + '-' + shift.timeEnd}</TableCell>
                                   <FixedTableCell></FixedTableCell>

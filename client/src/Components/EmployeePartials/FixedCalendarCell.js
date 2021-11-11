@@ -31,8 +31,8 @@ class FixedCalendarCell extends Component {
 
   handleChange() {
     this.isOpen = !this.isOpen;
-    console.log("this.isOpen", this.isOpen)
     this.setState({change : !this.state.change})
+    console.log(this.props.listEmployee.employees);
   }
 
   render() {
@@ -80,27 +80,23 @@ class FixedCalendarCell extends Component {
                   right: 0,
                   top: 20,
                   zIndex: 10,
-                  height: 100,
+                  maxHeight: 100,
                   overflowY: 'auto',
                   width: 140,
                   backgroundColor: '#fff',
                 }}
               >
-                  <ListItem disablePadding height={30} onClick={() => this.handleChange()}>
-                      <ListItemButton>
-                          <ListItemText>1-Azpili</ListItemText>
-                      </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding onClick={() => this.handleChange()}>
-                      <ListItemButton>
-                          <ListItemText>2-Chris</ListItemText>
-                      </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding onClick={() => this.handleChange()}>
-                      <ListItemButton>
-                          <ListItemText>3-Antonio</ListItemText>
-                      </ListItemButton>
-                  </ListItem>
+                {
+                  this.props.listEmployee.employees.map((item) =>
+                    <ListItem disablePadding height={30} onClick={() => this.handleChange()}>
+                        <ListItemButton>
+                            <ListItemText>
+                                {item._id.employeeID + ' - ' + item.firstName}
+                            </ListItemText>
+                        </ListItemButton>
+                    </ListItem>
+                  )
+                }
               </List>
               : null
             }
@@ -113,7 +109,7 @@ class FixedCalendarCell extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    
+    listEmployee: state.listEmployee,
   }
 }
 
