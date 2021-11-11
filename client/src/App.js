@@ -25,6 +25,7 @@ class App extends Component {
           if (res.status === 200) {
             localStorage.setItem('token', res.data.token);
             this.props.updateProfile(res.data.data);
+            this.props.updateRecieptUser(res.data.data.receipts)
             this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
             this.props.updateShiftTypes(res.data.data.shiftTypes)
             this.props.changeLoginStatus();
@@ -69,6 +70,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "UPDATE_DATA",
         data: data,
+      })
+    },
+    updateRecieptUser: (data) => {
+      dispatch({
+        type: "UPDATE_RECIEPT_USER",
+        listReciept: data,
       })
     },
     updateProfile: (data) => {

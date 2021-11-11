@@ -330,7 +330,7 @@ export default function CollapsibleTable() {
         })
         // typeReciept.length === 0 ? setListRecieptReplace(listReciept) : setListRecieptReplace(list)
 
-        if (typeByDate.type === 'typeByDate') {
+        if (typeByDate.type === 'typeByDate' || typeByDate.type === 'yesterday') {
             list = list.filter(value => {
                 let timeMau = value.date;
                 timeMau = timeMau.replace(/\s/g, "");
@@ -340,6 +340,7 @@ export default function CollapsibleTable() {
                 }
             })
         }
+        console.log(typeByDate)
         setListRecieptReplace(list)
     }, [typeReciept, typeByDate])
 

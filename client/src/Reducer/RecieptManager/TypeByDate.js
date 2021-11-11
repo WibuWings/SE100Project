@@ -1,5 +1,5 @@
 const typeByDateInitialState = {
-    
+   type: 'all' 
 },
     typeByDateReducer = (state = typeByDateInitialState, action) => {
         switch (action.type) {
