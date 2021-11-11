@@ -107,7 +107,6 @@ class EmployeeTab {
         var employee = req.body.employee;
         Employee.delete({ _id: { $in: [...employee] } })
             .then((data) => {
-                console.log(data);
                 res.status(200).send(
                     JSON.stringify({
                         email: res.locals.decoded.email,
@@ -130,7 +129,6 @@ class EmployeeTab {
         Employee.findDeleted(filter)
             .exec()
             .then((data) => {
-                console.log(data);
                 res.status(200).send(
                     JSON.stringify({
                         email: res.locals.decoded.email,
