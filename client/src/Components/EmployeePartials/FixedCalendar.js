@@ -74,6 +74,7 @@ class FixedCalendar extends Component {
                           <TableCell className={classes.goodTable_Cell_Header} align="center">Sat</TableCell>
                           <TableCell className={classes.goodTable_Cell_Header} align="center">Sun</TableCell>
                       </TableRow>
+                  </TableHead>
                       {
                           this.props.listShift.map((shift) => (
                               <TableRow>
@@ -88,7 +89,6 @@ class FixedCalendar extends Component {
                               </TableRow>
                           ))
                       }
-                  </TableHead>
               </Table>
           </TableContainer>
           <Button variant="contained">Save</Button>

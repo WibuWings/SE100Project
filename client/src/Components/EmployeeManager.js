@@ -34,6 +34,7 @@ import FixedCalendar from './EmployeePartials/FixedCalendar';
 import UnShiftEmployee from './EmployeePartials/UnShiftEmployee';
 import AddNextWeekTimeKeepingModal from './EmployeePartials/AddNextWeekTimeKeeping';
 import UpdateNextWeekTimeKeepingModal from './EmployeePartials/UpdateNextWeekTimeKeeping';
+import NoJobEmployee from './EmployeePartials/NoJobEmployee';
 import { withStyles } from '@material-ui/styles';
 
 import axios from 'axios';
@@ -493,6 +494,7 @@ class EmployeeManager extends Component {
                     </Card>
                 </Container>
                 <FixedCalendar/>
+                <NoJobEmployee></NoJobEmployee>
                 <UnShiftEmployee/>
                 <Container
                     style={{marginTop: 20, }}
