@@ -7,8 +7,8 @@ import { TableCell, List, ListItem, ListItemButton, ListItemText} from '@mui/mat
 import '../../css/EmployeeManager.css';
 
 //icon
-import { IoIosAdd } from "react-icons/io";
-
+import { IoIosAdd,} from "react-icons/io";
+import {  AiFillCloseCircle} from "react-icons/ai";
 // ----------------------------------------------------------------------
 const styles = theme =>  ({
     goodTable_Cell: {                                     
@@ -27,13 +27,11 @@ class FixedCalendarCell extends Component {
     this.state= {
       change: false
     }
-    console.log("this.props.listShiftAssign",this.props.listShiftAssign);
   }
 
   handleChange() {
     this.isOpen = !this.isOpen;
     this.setState({change : !this.state.change})
-    console.log(this.props.listEmployee.employees);
   }
 
   getEmployeeNameByID(employeeID)
@@ -91,6 +89,29 @@ class FixedCalendarCell extends Component {
       this.props.AddShiftAssign(data);
   }
 
+  removeShift(employeeID)
+  {
+      const data = {
+          _id: {
+            dateInWeek: this.props.dayIndex,
+            storeID: this.props.infoUser.email,
+            shiftType: {
+                _id: {
+                    shiftID: this.props.shiftID,
+                    storeID: this.props.infoUser.email,
+                },
+            },
+            employee: {
+                _id: {
+                    employeeID: employeeID,
+                    storeID: this.props.infoUser.email,
+                },
+            },
+        },
+      }
+      this.props.RemoveShiftAssign(data); 
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -132,9 +153,28 @@ class FixedCalendarCell extends Component {
               this.props.listShiftAssign.map((item) => 
                 (
                   ( this.props.shiftID == item._id.shiftType._id.shiftID && this.props.dayIndex == item._id.dateInWeek )
-                  ? <div style={{backgroundColor: "#fff", padding: 10, maxWidth: 100}}>
-                      {item._id.employee._id.employeeID + ' - ' 
-                      + this.getEmployeeNameByID(item._id.employee._id.employeeID)}
+                  ? <div style={{
+                            backgroundColor: "#fff", 
+                            padding: 10, 
+                            maxWidth: 100,
+                            position: 'relative',
+                            marginBottom: 4
+                            }}
+                    >
+                      <span>
+                          {item._id.employee._id.employeeID + ' - ' 
+                          + this.getEmployeeNameByID(item._id.employee._id.employeeID)}
+                      </span>
+                      <AiFillCloseCircle
+                          style={{
+                            color: 'red',
+                            position: 'absolute',
+                            right: 0, 
+                            top: 0,
+                          }} 
+                          size={20}
+                          onClick={() => this.removeShift(item._id.employeeID)}
+                      ></AiFillCloseCircle>
                     </div>
                   : null
                 )
@@ -192,6 +232,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           data: data,
       });
     },
+    RemoveShiftAssign: (data) => {
+      dispatch({
+          type: "DELETE_SHIFT_ASSIGN",
+          data: data,
+      });
+    }
   }
 }
 

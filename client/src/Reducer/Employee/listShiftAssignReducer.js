@@ -34,14 +34,19 @@ const listShiftAssignReducer = (state = listShiftAssignInitialState, action) => 
             // case "UPDATE_NEXT_WEEK_TIMEKEEPER":
             //     state[action.index] = action.data;
             //     return state;
-            // case "DELETE_NEXT_WEEK_TIMEKEEPER":
-            //     return state.filter((value, key) => 
-            //         (
-            //             value._id.dateInWeek !== action.data._id.dateInWeek 
-            //             || value._id.shiftType._id.shiftID !== action.data._id.shiftType._id.shiftID 
-            //             || value._id.employee._id.employeeID !== action.data._id.employee._id.employeeID 
-            //         )
-            //     );
+            case "DELETE_SHIFT_ASSIGN":
+                {
+                    console.log("Đã vô được delete");
+                    return state.filter((value, key) => 
+                        (
+                            value._id.dateInWeek !== action.data._id.dateInWeek 
+                            || value._id.shiftType._id.shiftID !== action.data._id.shiftType._id.shiftID 
+                            || value._id.employee._id.employeeID !== action.data._id.employee._id.employeeID 
+                        )
+                    );
+                }
+               
+                
             default:
                 return state
         }
