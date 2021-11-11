@@ -39,7 +39,7 @@ import nextWeekTimeKeepingReducer from './Employee/nextWeekTimeKeepingReducer';
 import statusAddNextWeekTimeKeepingReducer from './Employee/addNextWeekTimeKeepingStatus';
 import statusUpdateNextWeekTimeKeepingReducer from './Employee/updateNextWeekTimeKeepingStatus';
 import updateNextWeekTimeKeepingValueReducer from './Employee/updateNextWeekTimeKeepingValue';
-
+import listShiftAssignReducer from './Employee/listShiftAssignReducer';
 
 var redux = require('redux');
 
@@ -69,6 +69,7 @@ const allReducers = redux.combineReducers({
     payEmployeeStatus: statusPayEmployeeReducer,
     updateEmpoyeeStatus: statusUpdateEmployeeReducer,
     updateNextWeekTimeKeepingValue : updateNextWeekTimeKeepingValueReducer ,
+    listShiftAssign: listShiftAssignReducer,
     // Chấm công các kiểu
     nextWeekTimeKeeping: nextWeekTimeKeepingReducer,
     statusAddNextWeekTimeKeeping: statusAddNextWeekTimeKeepingReducer,

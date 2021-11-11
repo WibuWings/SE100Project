@@ -184,7 +184,6 @@ class EmployeeManager extends Component {
         }
         // Thêm vào cái redux
         this.props.getEmployee(listUsers);
-        console.log("listUsers", listUsers);
         this.setState({change: !this.state.change});
     }
     // Thêm nhân viên
@@ -288,14 +287,12 @@ class EmployeeManager extends Component {
             .then(res => {
                 // alert("Lấy hết đc product ròi anh chai");
                 result = res.data.data;
-                console.log(res.data.data);
             })
             .catch(err => {
                 console.log(err);
                 alert(err)
             })
         this.props.getSackedEmployee(result);
-        console.log("sacked reducer", this.props.listSackedEmployee)
         this.setState({change: !this.state.change});
     }
 

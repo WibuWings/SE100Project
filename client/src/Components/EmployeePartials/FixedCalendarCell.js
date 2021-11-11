@@ -27,12 +27,68 @@ class FixedCalendarCell extends Component {
     this.state= {
       change: false
     }
+    console.log("this.props.listShiftAssign",this.props.listShiftAssign);
   }
 
   handleChange() {
     this.isOpen = !this.isOpen;
     this.setState({change : !this.state.change})
     console.log(this.props.listEmployee.employees);
+  }
+
+  getEmployeeNameByID(employeeID)
+  {
+      for(var i = 0 ; i < this.props.listEmployee.employees.length; i++)
+      {
+          var currentEmployee = this.props.listEmployee.employees[i];
+          if(currentEmployee._id.employeeID==employeeID)
+          {
+            return currentEmployee.firstName;
+          }
+      }
+      return "Can't get name";
+  }
+
+    getCurrentDateTime()
+    {
+        var currentDate = new Date();
+        var day = (currentDate.toString().split(' '))[2];
+        if(day.length < 2)
+        {
+            day = '0' + day;
+        }
+        var month = (new Date().getMonth() + 1).toString();
+        if(month.length<2)
+        {
+            month = '0' + month;
+        }
+        return new Date().getFullYear() + '-' + month + '-' + day;
+    }
+
+  addThisShiftAssign(employeeID)
+  {
+      const data = {
+          _id: {
+            dateInWeek: this.props.dayIndex,
+            storeID: this.props.infoUser.email,
+            shiftType: {
+                _id: {
+                    shiftID: this.props.shiftID,
+                    storeID: this.props.infoUser.email,
+                },
+            },
+            employee: {
+                _id: {
+                    employeeID: employeeID,
+                    storeID: this.props.infoUser.email,
+                },
+            },
+        },
+        createdAt: this.getCurrentDateTime(),
+      }
+      console.log(data);
+      this.handleChange();
+      this.props.AddShiftAssign(data);
   }
 
   render() {
@@ -42,7 +98,8 @@ class FixedCalendarCell extends Component {
             className={classes.goodTable_Cell} 
             style={{
                 position: 'relative',
-                backgroundColor: '#ff6057'
+                backgroundColor: '#ff6057',
+                height: '80px',
             }}    
         >
             <div
@@ -72,6 +129,19 @@ class FixedCalendarCell extends Component {
                 
             </div>
             {
+              this.props.listShiftAssign.map((item) => 
+                (
+                  ( this.props.shiftID == item._id.shiftType._id.shiftID && this.props.dayIndex == item._id.dateInWeek )
+                  ? <div style={{backgroundColor: "#fff", padding: 10, maxWidth: 100}}>
+                      {item._id.employee._id.employeeID + ' - ' 
+                      + this.getEmployeeNameByID(item._id.employee._id.employeeID)}
+                    </div>
+                  : null
+                )
+                
+              )
+            }
+            {
               this.isOpen 
               ? 
               <List 
@@ -88,7 +158,7 @@ class FixedCalendarCell extends Component {
               >
                 {
                   this.props.listEmployee.employees.map((item) =>
-                    <ListItem disablePadding height={30} onClick={() => this.handleChange()}>
+                    <ListItem disablePadding height={30} onClick={() => this.addThisShiftAssign(item._id.employeeID)}>
                         <ListItemButton>
                             <ListItemText>
                                 {item._id.employeeID + ' - ' + item.firstName}
@@ -100,8 +170,7 @@ class FixedCalendarCell extends Component {
               </List>
               : null
             }
-            
-            
+
         </TableCell>
     );
   }
@@ -109,13 +178,20 @@ class FixedCalendarCell extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    listEmployee: state.listEmployee,
+      listEmployee: state.listEmployee,
+      listShiftAssign: state.listShiftAssign,
+      infoUser: state.infoUser,
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-      
+    AddShiftAssign: (data) => {
+      dispatch({
+          type: "ADD_NEW_SHIFT_ASSIGN",
+          data: data,
+      });
+    },
   }
 }
 

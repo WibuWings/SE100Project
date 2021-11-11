@@ -60,7 +60,6 @@ class GoodImport extends Component {
         this.loadAllGood();
 
         this.currentDateTime = this.getCurrentDateTime();
-        console.log("this.currentDateTime",this.currentDateTime);
         typeSet = [];
     }
     
