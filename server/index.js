@@ -7,8 +7,8 @@ const app = express();
 const route = require('./routers/index'); // router impl
 
 //some middleware
-app.use(bodyParser.json({ limit: 1000 }));
-app.use(bodyParser.urlencoded({extended: true, limit: 1000 }));
+app.use(bodyParser.json({ limit: 10000 }));
+app.use(bodyParser.urlencoded({extended: true, limit: 10000 }));
 app.use(cors());
 
 //connect to MongoDB

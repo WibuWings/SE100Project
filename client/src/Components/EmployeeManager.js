@@ -32,6 +32,7 @@ import UpdateEmployeeModal from './EmployeePartials/UpdateEmployeeModal';
 import PayMoneyModal from './EmployeePartials/PayMoneyModal';
 import FixedCalendar from './EmployeePartials/FixedCalendar';
 import UnShiftEmployee from './EmployeePartials/UnShiftEmployee';
+import { withStyles } from '@material-ui/styles';
 
 import axios from 'axios';
 
@@ -66,6 +67,26 @@ const TABLE_HEAD = [
     { id: '' }
 ];
 
+const styles = theme =>  ({
+    goodTable: {                                     
+        borderWidth: '1px',
+        borderColor: '#ccc',
+        borderStyle: 'solid'
+    },
+    goodTable_Cell_Header: {                                     
+        borderWidth: '1px',
+        borderColor: '#ccc',
+        borderStyle: 'solid',
+        height: '40px',
+    },
+    goodTable_Cell: {                                     
+        borderWidth: '1px',
+        borderColor: '#ccc',
+        borderStyle: 'solid',
+        height: '80px',
+    } 
+})
+
 var selected = [];
 var filterName = "";
 var filteredUsers = [];
@@ -73,6 +94,7 @@ var listUsers = [];
 var page = 5;
 var rowsPerPage = 5;
 class EmployeeManager extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -319,6 +341,7 @@ class EmployeeManager extends Component {
     }
 
     render() {
+        const { classes } = this.props;
         return (
             <div
                 style={{display: 'block', overflowY: 'auto', height: '100vh'}}
@@ -425,10 +448,10 @@ class EmployeeManager extends Component {
                                             // onChange={(event) => handleClick(event, name)}
                                             />
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell className = {classes.goodTable_Cell} align="left">
                                             {row._id.employeeID}
                                         </TableCell>
-                                        <TableCell component="th" scope="row" padding="none">
+                                        <TableCell className = {classes.goodTable_Cell} component="th" scope="row" padding="none">
                                             <Stack direction="row" alignItems="center" spacing={2}>
                                             {/* <Avatar alt={row.firstName} src={avatarUrl} /> */}
                                             <Typography variant="subtitle2" noWrap>
@@ -436,14 +459,14 @@ class EmployeeManager extends Component {
                                             </Typography>
                                             </Stack>
                                         </TableCell>
-                                        <TableCell align="left">{row.lastName}</TableCell>  
-                                        <TableCell align="left">{row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T'))}</TableCell>
-                                        <TableCell align="left">{"gender"}</TableCell>
-                                        <TableCell align="left">{"province"}</TableCell>
-                                        <TableCell align="left">{row.phoneNumber}</TableCell>
-                                        <TableCell align="left">{row.email}</TableCell>
-                                        <TableCell align="left">{row.address}</TableCell>
-                                        <TableCell align="right">
+                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.lastName}</TableCell>  
+                                        <TableCell className = {classes.goodTable_Cell}align="left">{row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T'))}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="left">{"gender"}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="left">{"province"}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="left">{row.phoneNumber}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="left">{row.email}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="left">{row.address}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="right">
                                             <EmployeeMoreMenu
                                                 data={row._id.employeeID}    
                                             >
@@ -467,6 +490,8 @@ class EmployeeManager extends Component {
                     /> */}
                     </Card>
                 </Container>
+                <FixedCalendar/>
+                <UnShiftEmployee/>
                 <Container
                     style={{marginTop: 20, }}
                 >
@@ -474,8 +499,8 @@ class EmployeeManager extends Component {
                         style = {{
                             color: "#fff",
                             padding: 12,
-                            border: '1px solid cyan',
-                            backgroundColor: '#222'
+                            border: '1px solid red',
+                            backgroundColor: 'red'
                         }}
                     >
                         Sacked Employee
@@ -512,13 +537,13 @@ class EmployeeManager extends Component {
                                         // selected={isItemSelected}
                                         // aria-checked={isItemSelected}
                                     >
-                                        <TableCell padding="checkbox">
+                                        <TableCell className = {classes.goodTable_Cell} padding="checkbox">
                                             <Checkbox
                                             // checked={isItemSelected}
                                             // onChange={(event) => handleClick(event, name)}
                                             />
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell className = {classes.goodTable_Cell} align="left">
                                             {row._id.employeeID}
                                         </TableCell>
                                         <TableCell component="th" scope="row" padding="none">
@@ -529,14 +554,14 @@ class EmployeeManager extends Component {
                                             </Typography>
                                             </Stack>
                                         </TableCell>
-                                        <TableCell align="left">{row.lastName}</TableCell>  
-                                        <TableCell align="left">{row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T'))}</TableCell>
-                                        <TableCell align="left">{"gender"}</TableCell>
-                                        <TableCell align="left">{"province"}</TableCell>
-                                        <TableCell align="left">{row.phoneNumber}</TableCell>
-                                        <TableCell align="left">{row.email}</TableCell>
-                                        <TableCell align="left">{row.address}</TableCell>
-                                        <TableCell align="right">
+                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.lastName}</TableCell>  
+                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T'))}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell} align="left">{"gender"}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell} align="left">{"province"}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.phoneNumber}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.email}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.address}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell} align="right">
                                             <SackedEmployeeMenu
                                                 data={row._id.employeeID}    
                                             >
@@ -560,8 +585,6 @@ class EmployeeManager extends Component {
                     /> */}
                     </Card>
                 </Container>
-                <FixedCalendar/>
-                <UnShiftEmployee/>
                 {/* Đây là phần modal */}
                 {this.props.addEmployeeStatus ? (
                     <div 
@@ -654,4 +677,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
     }
 }
-export default connect(mapStateToProps , mapDispatchToProps)(EmployeeManager);
+export default connect(mapStateToProps , mapDispatchToProps)((withStyles(styles, {withTheme: true}))(EmployeeManager));

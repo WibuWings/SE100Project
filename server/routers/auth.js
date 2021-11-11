@@ -7,6 +7,7 @@ const {AuthMiddleware} = require('../helper/JWT');
 //--------
 //these router handle sign in and sign up
 router.post("/sign-in-with-gmail-password", authController.authSignInRegular);
+router.post("/sign-in-with-gmail-password-employee", authController.authSignInRegularEmployee);
 router.post("/sign-in-with-google", authController.authSignInWithGG);
 router.post("/find-password", authController.forgetPassword);
 router.post("/register-with-email", authController.register);

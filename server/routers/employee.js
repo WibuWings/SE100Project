@@ -13,7 +13,10 @@ router.get('/delete', AuthMiddleware, employeeController.getEmployeeDelete);
 router.patch('/delete', AuthMiddleware, employeeController.restoreEmployee);
 router.delete('/delete', AuthMiddleware, employeeController.deleteEmployeeforever);
 // Thắng
-
+router.get('/shift-assign',AuthMiddleware, employeeController.getShiftAssign);
+router.post('/shift-assign',AuthMiddleware, employeeController.createShiftAssign);
+router.put('/shift-assign',AuthMiddleware, employeeController.updateShiftAssign);
+router.delete('/shift-assign',AuthMiddleware, employeeController.deleteShiftAssign);
 ////////////////////////////////
 
 module.exports = router;

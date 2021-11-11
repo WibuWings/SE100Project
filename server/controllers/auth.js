@@ -286,6 +286,37 @@ class Authentication {
             )
         })
     }
+    authSignInRegularEmployee = async (req, res) => {
+        const username = req.body.email;
+        const password = req.body.password;
+
+        Employee.findOne({ "_id.EmployeeID": username })
+            .exec()
+            .then((data) => {
+                //check password, if password is correct then get all data and respond for client
+                if (password === data.password) {
+                    getAllDataEmployee(username).then((data) => {
+                        res.status(200).send(
+                            JSON.stringify({
+                                token: JWTAuthToken({_id: req.body.email}),
+                                _id: req.body.email,
+                                data,
+                            })
+                        );
+                    });
+                } else {
+                    throw new Error();
+                }
+            })
+            .catch((err) => {
+                res.send(
+                    JSON.stringify({
+                        status: STATUS.FAILURE,
+                        message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
+                    })
+                );
+            });
+    }
     
 }
 
@@ -339,4 +370,13 @@ async function getAllData(email) {
         regulation,
     };
 }
+async function getAllDataEmployee(username){
+    //const employee = await Employee.findOne({"_id.employeeID" : username});
+    //const reciept = await Receipt.findOne({"EmployeeID._id.employeeID" : username})
+    const [employee,reciept] = await Promise.all(
+        [Employee.find({ "_id.employeeID" : username}).exec(),
+        Receipt.find({"EmployeeID._id.employeeID" : username}).exec(),]);
+    return {employee,reciept,}
+}
+
 module.exports = new Authentication();

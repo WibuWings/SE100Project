@@ -22,7 +22,7 @@ const styles = theme =>  ({
         borderWidth: '1px',
         borderColor: '#ccc',
         borderStyle: 'solid',
-        height: '80px',
+        height: '40px',
     } 
 })
 
@@ -42,18 +42,26 @@ class UnShiftEmployee extends Component {
                 <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Shift</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Mon</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Tue</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Wed</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Thu</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Fri</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Sat</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Sun</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px' rowSpan={2}>Day</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" rowSpan={2}>Shift</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" colSpan={2}>Withdraw</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" colSpan={2}>Change</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell className={classes.goodTable_Cell}></TableCell>
                             <TableCell className={classes.goodTable_Cell}></TableCell>
+                            <TableCell className={classes.goodTable_Cell}></TableCell>
+                            <TableCell className={classes.goodTable_Cell}></TableCell>
+                            <TableCell className={classes.goodTable_Cell}></TableCell>
+                            <TableCell className={classes.goodTable_Cell}></TableCell>
+                        </TableRow>
+                        <TableRow>
                             <TableCell className={classes.goodTable_Cell}></TableCell>
                             <TableCell className={classes.goodTable_Cell}></TableCell>
                             <TableCell className={classes.goodTable_Cell}></TableCell>
