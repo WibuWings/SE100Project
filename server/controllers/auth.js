@@ -371,12 +371,12 @@ async function getAllData(email) {
     };
 }
 async function getAllDataEmployee(username){
-    //const employee = await Employee.findOne({"_id.employeeID" : username});
-    //const reciept = await Receipt.findOne({"EmployeeID._id.employeeID" : username})
-    const [employee,reciept] = await Promise.all(
+    const employee = await Employee.findOne({"_id.employeeID" : username});
+    const [employee,reciept,product] = await Promise.all(
         [Employee.find({ "_id.employeeID" : username}).exec(),
-        Receipt.find({"EmployeeID._id.employeeID" : username}).exec(),]);
-    return {employee,reciept,}
+        Receipt.find({"EmployeeID._id.employeeID" : username}).exec(),
+        Product.find({"_id.storeID" : employee._id.storeID}).exec()]);
+    return {employee,reciept,product}
 }
 
 module.exports = new Authentication();
