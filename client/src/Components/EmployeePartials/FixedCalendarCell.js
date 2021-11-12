@@ -29,6 +29,8 @@ class FixedCalendarCell extends Component {
     }
   }
 
+ 
+
   handleChange() {
     this.isOpen = !this.isOpen;
     this.setState({change : !this.state.change})
@@ -47,21 +49,21 @@ class FixedCalendarCell extends Component {
       return "Can't get name";
   }
 
-    getCurrentDateTime()
-    {
-        var currentDate = new Date();
-        var day = (currentDate.toString().split(' '))[2];
-        if(day.length < 2)
-        {
-            day = '0' + day;
-        }
-        var month = (new Date().getMonth() + 1).toString();
-        if(month.length<2)
-        {
-            month = '0' + month;
-        }
-        return new Date().getFullYear() + '-' + month + '-' + day;
-    }
+  getCurrentDateTime()
+  {
+      var currentDate = new Date();
+      var day = (currentDate.toString().split(' '))[2];
+      if(day.length < 2)
+      {
+          day = '0' + day;
+      }
+      var month = (new Date().getMonth() + 1).toString();
+      if(month.length<2)
+      {
+          month = '0' + month;
+      }
+      return new Date().getFullYear() + '-' + month + '-' + day;
+  }
 
   addThisShiftAssign(employeeID)
   {
@@ -84,6 +86,15 @@ class FixedCalendarCell extends Component {
         },
         createdAt: this.getCurrentDateTime(),
       }
+      // await axios.post(`http://localhost:5000/api/????``, data)
+      //   .then(res => {
+      //       console.log("Save success");
+      //       alert("Lưu thành công")
+      //   })
+      //   .catch(err => {
+      //       alert(err);
+      //       console.log(err);
+      //   })
       console.log(data);
       this.handleChange();
       this.props.AddShiftAssign(data);
@@ -109,6 +120,13 @@ class FixedCalendarCell extends Component {
             },
         },
       }
+      // axios.delete(`http://localhost:5000/api/????`,{data: data})
+      //   .then(res => {
+      //       alert("success");
+      //   })
+      //   .catch(err => {
+      //       alert(err);
+      //   })
       console.log("data", data);
       this.props.RemoveShiftAssign(data);
   }

@@ -129,6 +129,14 @@ class UpdateNextWeekTimeKeepingModal extends Component {
             },
             realDate: document.querySelector('input[name="realDate"]').value,
         };
+        // axios.put(`http://localhost:5000/api/????`, data)
+        //     .then(res => {
+        //         console.log("Update success");
+        //         alert('Đã update thành công sản phẩm')
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //     })
         var indexOfData = this.findIndexCurrentNextTimeKeepingInRedux(data._id)
         this.props.changeUpdateNextWeekTimeKeeping(data, indexOfData);
         // this.props.addNewChange(data);

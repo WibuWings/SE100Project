@@ -34,29 +34,27 @@ class FixedCalendar extends Component {
       change: 'false'
     }
   }
-  // Lấy các ca làm và từ đó tạo các dòng của ca làm đó, đầu tiên cứ mặc định là có 3 ca làm đã
-  listShift = [
-    {
-        timeFrom: '6h',
-        timeTo: '9h',
-        name: 'Morning shift 1'
-    },
-    {
-        timeFrom: '9h',
-        timeTo: '12h',
-        name: 'Morning shift 2'
-    },
-    {
-        timeFrom: '12h',
-        timeTo: '4h',
-        name: 'Afternoon shift'
-    },
-    {
-        timeFrom: '4h',
-        timeTo: '8h',
-        name: 'Night shift'
+  getAllShiftAssign()
+  {
+    const data = {
+      token: localStorage.getItem('token'),
+      filter: {
+          "_id.storeID": this.props.infoUser.email,
+      }   
     }
-  ]
+    // await axios.get(`http://localhost:5000/api/????`, {
+    //     params: {...data}
+    // })
+    //     .then(res => {
+    //         // alert("Lấy hết đc product ròi anh chai");
+    //         result = res.data.data;
+    //         console.log(res.data.data);
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //         alert(err)
+    //     })
+  }
   render() {
     const { classes } = this.props;
     return (

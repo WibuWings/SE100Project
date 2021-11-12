@@ -155,6 +155,15 @@ class AddTimeKeepingModal extends Component {
             },
             realDate: document.querySelector('input[name="realDate"]').value,
         };
+        // await axios.post(`http://localhost:5000/api/????``, data)
+        //   .then(res => {
+        //       console.log("Save success");
+        //       alert("Lưu thành công")
+        //   })
+        //   .catch(err => {
+        //       alert(err);
+        //       console.log(err);
+        //   })
         this.props.addNewTimeKeeper(data);
         this.props.changeAddTimeKeepingStatus();
     }

@@ -187,6 +187,14 @@ class UpdateTimeKeepingModal extends Component {
             },
             realDate: document.querySelector('input[name="realDate"]').value,
         };
+        // axios.put(`http://localhost:5000/api/????`, data)
+        //     .then(res => {
+        //         console.log("Update success");
+        //         alert('Đã update thành công sản phẩm')
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //     })
         this.props.updateTimeKeeper(data, this.findIndexCurrentKeepingInRedux(data._id));
         console.log(data);
         this.props.changeUpdateTimeKeepingStatus();

@@ -40,6 +40,28 @@ class UnShiftEmployee extends Component {
     }
   }
 
+  getAllNextWeekTimeKeeping()
+  {
+    const data = {
+      token: localStorage.getItem('token'),
+      filter: {
+          "_id.storeID": this.props.infoUser.email,
+      }   
+    }
+    // await axios.get(`http://localhost:5000/api/????`, {
+    //     params: {...data}
+    // })
+    //     .then(res => {
+    //         // alert("Lấy hết đc product ròi anh chai");
+    //         result = res.data.data;
+    //         console.log(res.data.data);
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //         alert(err)
+    //     })
+  }
+
   getShiftNameAndTime(shiftID)
   {
       var shifts= this.props.listShift;
@@ -140,6 +162,13 @@ class UnShiftEmployee extends Component {
                                       <AiFillDelete size={20} 
                                           onClick={() => 
                                               {
+                                                  // axios.delete(`http://localhost:5000/api/????`,{data: data})
+                                                  //   .then(res => {
+                                                  //       alert("success");
+                                                  //   })
+                                                  //   .catch(err => {
+                                                  //       alert(err);
+                                                  //   })
                                                   this.props.deleteNextWeekTimeKeeping(item);
                                               }
                                             // this.props.changeUpdateNextWeekTimeKeepingStatus();
