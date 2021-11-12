@@ -43,7 +43,7 @@ class AddTimeKeepingModal extends Component {
         
         this.state = {
             change: false,
-            withdrawID: '',
+            timeKeepingID: '',
             alterID: '',
             dayChosed: '',
             shiftID: '',
@@ -85,14 +85,14 @@ class AddTimeKeepingModal extends Component {
             })
     }
 
-    cancel = () => {
-        this.props.changeAddNextWeekTimeKeepingStatus();
-    }
+    // cancel = () => {
+    //     this.props.changeAddNextWeekTimeKeepingStatus();
+    // }
 
-    addEmployee = () => {
-        this.addEmployeeToDatabase();
-        this.props.changeAddEmployeeStatus();
-    }
+    // addEmployee = () => {
+    //     this.addEmployeeToDatabase();
+    //     this.props.changeAddEmployeeStatus();
+    // }
 
     getCurrentDateTime()
     {
@@ -121,15 +121,10 @@ class AddTimeKeepingModal extends Component {
             alert("Chưa chọn ca nào");
             return false;
         }
-        console.log(this.state.withdrawID );
-        if( this.state.withdrawID == undefined || this.state.withdrawID.length == 0)
+        console.log(this.state.timeKeepingID );
+        if( this.state.timeKeepingID == undefined || this.state.timeKeepingID.length == 0)
         {
-            alert("Chưa chọn nhân viên nào nghỉ"); 
-            return false;
-        }
-        if(this.state.alterID== undefined || this.state.alterID.length == 0)
-        {
-            alert("Chưa chọn nhân viên nào thay thế");
+            alert("Chưa chọn nhân viên nào để chấm công"); 
             return false;
         }
         // Có CSDL thì báo xem có trùng với cái cũ ko nữa
@@ -153,21 +148,14 @@ class AddTimeKeepingModal extends Component {
                 },
                 employee: {
                     _id: {
-                        employeeID: this.state.withdrawID,
+                        employeeID: this.state.timeKeepingID,
                         storeID: this.props.infoUser.email,
                     },
                 },
             },
-            alternativeEmployee: {
-                _id: {
-                    employeeID: this.state.alterID,
-                    storeID: this.props.infoUser.email,
-                },
-            },
             realDate: document.querySelector('input[name="realDate"]').value,
         };
-        // this.props.addNewChange(data);
-        // console.log(this.props.nextWeekTimeKeeping)
+        this.props.addNewTimeKeeper(data);
         this.props.changeAddTimeKeepingStatus();
     }
 
@@ -281,14 +269,14 @@ class AddTimeKeepingModal extends Component {
                                         className='input-item'
                                     >
                                         <div className="input-label" style={{width: '220px'}}>
-                                            Widraw Employee
+                                            TimeKeeping Employee
                                         </div>
                                         <FormControl sx={{ minWidth: 320 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
                                                 // value={this.state.type}
                                                 onChange={(event) => {
-                                                    this.setState({withdrawID: event.target.value});
+                                                    this.setState({timeKeepingID: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
                                                     // {
                                                     //     typeSet.push(event.target.value);
@@ -302,40 +290,6 @@ class AddTimeKeepingModal extends Component {
                                                 {
                                                     this.props.listEmployee.employees.map((item) =>
                                                         !(this.state.alterID == item._id.employeeID) ?
-                                                        <MenuItem value={item._id.employeeID}>
-                                                            {item._id.employeeID + ' - ' + item.firstName + ' ' + item.lastName}
-                                                        </MenuItem>
-                                                        : null
-                                                    )
-                                                }   
-                                            </Select> 
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item md={12} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label" style={{width: '220px'}}>
-                                            Alter Employee
-                                        </div>
-                                        <FormControl sx={{ minWidth: 320 }}>
-                                            {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
-                                            <Select
-                                                // value={this.state.type}
-                                                onChange={(event) => {
-                                                    this.setState({alterID: event.target.value});
-                                                    // if(!typeSet.includes(event.target.value))
-                                                    // {
-                                                    //     typeSet.push(event.target.value);
-                                                    // }
-                                                    // this.setState({change: !this.state.change})
-                                                }}
-                                                style={{
-                                                    height: 36,
-                                                }}
-                                            >
-                                                {
-                                                    this.props.listEmployee.employees.map((item) =>
-                                                        !(this.state.withdrawID == item._id.employeeID) ?
                                                         <MenuItem value={item._id.employeeID}>
                                                             {item._id.employeeID + ' - ' + item.firstName + ' ' + item.lastName}
                                                         </MenuItem>
@@ -391,9 +345,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 employees: data,
             });
         },
-        addNewChange: (data) => {
+        addNewTimeKeeper: (data) => {
             dispatch({
-                type: "ADD_NEW_NEXT_WEEK_TIMEKEEPER",
+                type: "ADD_NEW_TIME_KEEPER",
                 data: data,
             });
         } 
