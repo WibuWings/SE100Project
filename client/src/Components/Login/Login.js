@@ -36,6 +36,7 @@ class Login extends Component {
                         this.props.updateProfile(res.data.data);
                         this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                         this.props.updateShiftTypes(res.data.data.shiftTypes);
+                        this.props.updateRecieptUser(res.data.data.receipts);
                         this.props.changeLoginStatus();
                         this.props.hideAlert();
                         this.props.showAlert(res.data.message, "success");
@@ -274,6 +275,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "UPDATE_DATA_SHIFT_USER",
                 shiftTypes: shiftTypes,
+            })
+        },
+        updateRecieptUser: (data) => {
+            dispatch({
+                type: "UPDATE_RECIEPT_USER",
+                listReciept: data,
             })
         },
     }

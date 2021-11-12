@@ -182,7 +182,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "EMPLOYEE_ROLE",
             });
-            localStorage.setItem('role', 'employee');
         },
         showAlert: (message, typeMessage) => {
             dispatch({

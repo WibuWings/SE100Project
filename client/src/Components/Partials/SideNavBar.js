@@ -99,8 +99,7 @@ class SideNavBar extends Component {
                     </div>
                     <div class="nav-container">
                         {
-                            // this.props.role == true ?
-                            localStorage.getItem('role') == 'admin' ?
+                             this.props.role == true ?
                                 (<NavLink className={"nav-item " + this.active[0]} to="/dashboard"
                                     onClick={() => this.changeIndex(0)}
                                 >

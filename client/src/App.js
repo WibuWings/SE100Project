@@ -23,6 +23,7 @@ class App extends Component {
           console.log("Thành công");
           console.log(res.data);
           if (res.status === 200) {
+            this.props.setRole()
             localStorage.setItem('token', res.data.token);
             this.props.updateProfile(res.data.data);
             this.props.updateRecieptUser(res.data.data.receipts)
@@ -33,6 +34,7 @@ class App extends Component {
         })
         .catch(err => {
           console.log("thất bại");
+          console.log(err)
         })
     }
   }
@@ -46,7 +48,7 @@ class App extends Component {
       <Router>
         <DirectionURL></DirectionURL>
         {this.props.alertReducer.status ? this.autoHideAlert() : null}
-        {this.props.alertReducer.status ? <Alert style={{cursor: 'pointer'}} onClick={() => this.props.hideAlert()} className="message-error" severity={this.props.alertReducer.typeMessage}>{this.props.alertReducer.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
+        {this.props.alertReducer.status ? <Alert style={{ cursor: 'pointer' }} onClick={() => this.props.hideAlert()} className="message-error" severity={this.props.alertReducer.typeMessage}>{this.props.alertReducer.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
       </Router>
     );
   }
@@ -100,7 +102,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "HIDE_ALERT",
       })
-    }
+    },
+    setRole: () => {
+      dispatch({
+          type: "ADMIN_ROLE"
+      });
+  },
   }
 }
 
