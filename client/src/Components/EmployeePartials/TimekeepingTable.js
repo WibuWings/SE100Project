@@ -34,6 +34,31 @@ class TimeKeepingTable extends Component {
     }
   }
 
+  getShiftInforByID(shiftID)
+  {
+      var listShift = this.props.listShift;
+      for(var i = 0 ; i < listShift.length; i++)
+      {
+        if(listShift[i]._id.shiftID == shiftID)
+        {
+            return listShift[i].name + ' (' + listShift[i].timeFrom + '-' + listShift[i].timeEnd + ')';
+        }
+      }
+      return "Can't get shift";
+  }
+
+  getEmployeeFullNameByID(employeeID)
+  {
+      for(var i = 0 ; i < this.props.listEmployee.employees.length; i++)
+      {
+          var currentEmployee = this.props.listEmployee.employees[i];
+          if(currentEmployee._id.employeeID==employeeID)
+          {
+            return currentEmployee.lastName + ' ' + currentEmployee.firstName;
+          }
+      }
+      return "Can't get name";
+  }
   render() {
     const { classes } = this.props;
     return ( 
@@ -50,16 +75,25 @@ class TimeKeepingTable extends Component {
                     <TableHead>
                         <TableRow>
                             <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Day</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Date Of Week</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center" >Shift</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
                         </TableRow>
-                        <TableRow>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
-                        </TableRow>
+                        {
+                            this.props.listTimeKeeper.map((timeKeeper)=>
+                                (
+                                  <TableRow>
+                                    <TableCell className={classes.goodTable_Cell}>{timeKeeper.realDate}</TableCell>
+                                    <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.dateInWeek}</TableCell>
+                                    <TableCell className={classes.goodTable_Cell}>{this.getShiftInforByID(timeKeeper._id.shiftType._id.shiftID)}</TableCell>
+                                    <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.employee._id.employeeID}</TableCell>
+                                    <TableCell className={classes.goodTable_Cell}>{this.getEmployeeFullNameByID(timeKeeper._id.employee._id.employeeID)}</TableCell>
+                                </TableRow>
+                                )
+                            )
+                        }
+                        
                         <TableRow>
                             <TableCell className={classes.goodTable_Cell}></TableCell>
                             <TableCell className={classes.goodTable_Cell}></TableCell>
@@ -76,7 +110,9 @@ class TimeKeepingTable extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    
+      listTimeKeeper: state.listTimeKeeping,
+      listShift: state.listShift,
+      listEmployee: state.listEmployee,
   }
 }
 

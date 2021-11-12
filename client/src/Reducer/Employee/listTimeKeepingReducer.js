@@ -1,4 +1,4 @@
-const listShiftAssignInitialState =   
+const listTimeKeepingInitialState =   
 [
     {
         _id: {
@@ -17,25 +17,26 @@ const listShiftAssignInitialState =
                 },
             },
         },
+        realDate: '2021-11-11',
+        isPaidSalary: false,
         createdAt: '2021-01-02',
     }
     
 ];
 
-const listShiftAssignReducer = (state = listShiftAssignInitialState, action) => {
+const listTimeKeepingReducer = (state = listTimeKeepingInitialState, action) => {
         switch (action.type) {
             // case "SET_NEXT_WEEK_TIMEKEEPER":
             //     return{
             //         state: action.data
             //     }
-            case "ADD_NEW_SHIFT_ASSIGN":
+            case "ADD_NEW_TIME_KEEPER":
                 return [...state, action.data]
             // case "UPDATE_NEXT_WEEK_TIMEKEEPER":
             //     state[action.index] = action.data;
             //     return state;
-            case "DELETE_SHIFT_ASSIGN":
+            case "DELETE_TIME_KEEPER":
                 {
-                    console.log("Đã vô được delete");
                     console.log(action.data);
                     var newState = [];
                     for(var i = 0 ; i < state.length ; i ++)
@@ -64,4 +65,4 @@ const listShiftAssignReducer = (state = listShiftAssignInitialState, action) => 
         }
     }
 
-export default listShiftAssignReducer;
+export default listTimeKeepingReducer;
