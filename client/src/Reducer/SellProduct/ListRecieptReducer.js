@@ -2,21 +2,22 @@ const listRecieptInitialState = [],
     listRecieptReducer = (state = listRecieptInitialState, action) => {
         switch (action.type) {
             case "UPDATE_RECIEPT_USER":
-                // action.listReciept.map(value => {
-                //     let date = {
-                //         MAHD: value._id.recieptID,
-                //         name: value.employeeID.name,
-                //         date: this.dateFunction(),
-                //         discount: this.state.percentDiscount,
-                //         totalMoney: this.totalFinalMoney(),
-                //         totalFinalMoney: this.totalFinalMoney(),
-                //         listProduct: this.props.shoppingBags,
-                //         time: this.state.date.getHours() + ":" + this.state.date.getMinutes(),
-                //         isEdit: false,
-                //         oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
-                //     }
-                // })
-
+                action.listReciept.map(value => {
+                    let data = {
+                        MAHD: value._id.receiptID,
+                        name: value.employeeID.name,
+                        date: value.createAt,
+                        discount: value.discount,
+                        totalMoney: value.totalMoney,
+                        totalFinalMoney: value.totalFinalMoney,
+                        listProduct: value.listItem,
+                        time: value.timeCreate,
+                        isEdit: value.isEdit,
+                        oldBill: value.oldBill,
+                        isDelete: value.isDelete? value.isDelete : false,
+                    }
+                    state.push(data)
+                })
                 return state;
             case "ADD_RECIEPT":
                 return [...state, action.newReciept]

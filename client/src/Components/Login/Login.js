@@ -245,7 +245,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "ADMIN_ROLE"
             });
-            localStorage.setItem('role', 'admin');
         },
         updateAvatar: (avatar) => {
             dispatch({

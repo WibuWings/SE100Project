@@ -28,7 +28,7 @@ class LoginWithEmployee extends Component {
     isLoginCheck = async (e) => {
         this.props.setRole();
         if (this.blurEmail() && this.blurPassword()) {
-            await axios.post(`http://localhost:5000/sign-in-employee`, {
+            await axios.post(`http://localhost:5000/sign-in-with-gmail-password-employee`, {
                 email: document.querySelector('#username').value,
                 password: document.getElementById('password').value,
             })
