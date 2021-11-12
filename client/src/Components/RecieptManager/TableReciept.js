@@ -344,7 +344,9 @@ export default function CollapsibleTable() {
     const typeByDate = useSelector(state => state.typeByDate)
     const [listRecieptReplace, setListRecieptReplace] = React.useState(listReciept);
     const listRecieptDelete = useSelector(state => state.listRecieptDelete)
-
+    const statusSelectAll = useSelector(state => state.statusSelectAll)
+    const dispatch = useDispatch()
+    let listMAHD = []
     React.useEffect(() => {
         var list = typeReciept.length === 0 ? listReciept : listReciept.filter(value => {
             for (var i = 0; i < typeReciept.length; i++) {
@@ -397,9 +399,20 @@ export default function CollapsibleTable() {
             })
         }
 
+        list.map(value => {
+            listMAHD.push(value.MAHD)
+        })
+
+        statusSelectAll ? dispatch({
+            type: "SELECTED_ALL_RECIEPT",
+            listMAHD: listMAHD,
+        }) : dispatch({
+            type: "RESET_MAHD_RECIEPT"
+        })
+
         console.log(typeByDate)
         setListRecieptReplace(list)
-    }, [typeReciept, typeByDate, listReciept])
+    }, [typeReciept, typeByDate, listReciept, statusSelectAll])
 
     return (
         <TableContainer component={Paper}>

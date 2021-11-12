@@ -52,6 +52,12 @@ const listRecieptInitialState = [],
                     })
                     if (!isCheck) return value
                 })
+            case "DELETE_MAHD_INVOICE_RECIEPT":
+                return state.filter(value => {
+                    return !value.isDelete
+                })
+            case "DELETE_ALL_RECIEPT":
+                return []
             default:
                 return state
         }
