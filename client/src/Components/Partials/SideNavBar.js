@@ -118,8 +118,7 @@ class SideNavBar extends Component {
                         </NavLink>
 
                         {
-                            // this.props.role == true ?
-                            localStorage.getItem('role') == 'admin' ?
+                            this.props.role === true ?
                                 (
                                     <div>
                                         <NavLink

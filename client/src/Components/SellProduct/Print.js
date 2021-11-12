@@ -97,17 +97,17 @@ class Printf extends React.PureComponent {
       isEdit: false,
       oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
     }
-    // axios('http://localhost:5000/api/sell-product/add-reciept', {
-    //   email: this.props.infoUser.email,
-    //   token: localStorage.getItem('token'),
-    //   data: data,
-    // })
-    //   .then(res => {
-
-    //   })
-    //   .catch(err => {
-
-    //   })
+    axios.post('http://localhost:5000/api/sell-product/add-reciept', {
+      email: this.props.infoUser.email,
+      token: localStorage.getItem('token'),
+      data: data,
+    })
+      .then(res => {
+        console.log('Thành công!')
+      })
+      .catch(err => {
+        console.log('Thất bại!')
+      })
     if (this.props.statusEditInfoBill) {
       this.props.changeStatusEditRecipt()
     }
@@ -117,7 +117,6 @@ class Printf extends React.PureComponent {
     this.props.showAlert("In bill success", "success")
     this.props.resetShoppingBag();
     this.props.addRecieptToHistory(data);
-
   }
 
   render() {

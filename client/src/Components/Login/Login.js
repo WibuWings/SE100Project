@@ -278,6 +278,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 employees: data,
             });
           },
+        updateShiftTypes: (shiftTypes) => {
+            dispatch({
+                type: "UPDATE_DATA_SHIFT_USER",
+                shiftTypes: shiftTypes,
+            })
+        },
     }
 }
 

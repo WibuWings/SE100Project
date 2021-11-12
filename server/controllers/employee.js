@@ -1,4 +1,9 @@
-const { getCurrentDateTimeString } = require("../helper/DateTime");
+const {
+    getCurrentDateTimeString,
+    getDayInWeek,
+    getTimeFromTimeString,
+    dateEquals,
+} = require("../helper/DateTime");
 //db models
 const Employee = require("../models/employee");
 const ShiftType = require("../models/shiftType");
@@ -258,14 +263,245 @@ class EmployeeTab {
     //
 
     //timekeeping
-    getTimeKeeping = async (req, res) => {};
+    getTimeKeeping = async (req, res) => {
+        var filter =
+            typeof req.body.filter === "object"
+                ? req.body.filter
+                : JSON.parse(req.body.filter);
+        TimeKeeping.find(filter)
+            .exec()
+            .then((data) => {
+                res.status(200).send(
+                    JSON.stringify({
+                        email: res.locals.decoded.email,
+                        token: res.locals.newToken,
+                        data,
+                    })
+                );
+            })
+            .catch((err) => {
+                res.status(404).send(err);
+            });
+    };
 
-    createTimeKeeping = async (req, res) => {};
+    createTimeKeeping = async (req, res) => {
+        var employeeID = req.body.employeeID;
+        var timeString = req.body.time;
+        var time = getTimeFromTimeString(timeString);
+
+        var employee = await Employee.findOne({
+            employeeID: employeeID,
+        }).exec();
+        var dateInWeek = getDayInWeek(time.toString());
+        var storeID = employee._id.storeID;
+        var shiftTypes = await ShiftType.findOne({ storeID }).exec();
+        var currentShiftType = shiftTypes.find((shift) => {
+            return (
+                getTimeFromTimeString(shift.timeFrom) - time <= 0 &&
+                getTimeFromTimeString(shift.timeEnd) - time >= 0
+            );
+        });
+
+        if (currentShiftType) {
+            ShiftAssign.findOne({
+                _id: {
+                    dateInWeek,
+                    storeID,
+                    shiftType: {
+                        _id: currentShiftType._id,
+                    },
+                    employee: {
+                        _id: employee._id,
+                    },
+                },
+            })
+                .then((data) => {
+                    if (data) {
+                        NextWeekTimeKeeping.find({
+                            _id: data._id,
+                        }).then((result) => {
+                            var currentOffDay = result.find((offDay) => {
+                                return dateEquals(offDay, new Date());
+                            });
+
+                            if (currentOffDay) {
+                                res.status(404).send(
+                                    JSON.stringify({
+                                        employeeID: res.locals.decoded.email,
+                                        token: res.locals.newToken,
+                                        message:
+                                            "You is absence in this shift!",
+                                    })
+                                );
+                            } else {
+                                const newTimeKeeping = new TimeKeeping({
+                                    _id: {
+                                        dateInWeek,
+                                        storeID,
+                                        shiftType: currentShiftType,
+                                        employee,
+                                    },
+                                    alternatedEmployee: {},
+                                    realDate: new Date(),
+                                    isPaidSalary: false,
+                                });
+
+                                const db =  newTimeKeeping.save();
+
+                                res.status(200).send(
+                                    JSON.stringify({
+                                        employeeID: res.locals.decoded.email,
+                                        token: res.locals.newToken,
+                                        message: "Check-in successfully!",
+                                    })
+                                );
+                            }
+                        });
+                    } else {
+                        NextWeekTimeKeeping.find({
+                            "_id.dateInWeek": dateInWeek,
+                            "_id.storeID": storeID,
+                            "_id.shiftType": currentShiftType._id,
+                            alternativeEmployee: {
+                                _id: employee._id,
+                            },
+                        }).then((result) => {
+                            var currentOffDay = result.find((offDay) => {
+                                return dateEquals(offDay, new Date());
+                            });
+
+                            if (currentOffDay) {
+                                const newTimeKeeping = new TimeKeeping({
+                                    _id: {
+                                        dateInWeek,
+                                        storeID,
+                                        shiftType: currentShiftType,
+                                        employee,
+                                    },
+                                    alternatedEmployee: currentOffDay._id.employee,
+                                    realDate: new Date(),
+                                    isPaidSalary: false,
+                                });
+
+                                const db = newTimeKeeping.save();
+
+                                res.status(200).send(
+                                    JSON.stringify({
+                                        employeeID: res.locals.decoded.email,
+                                        token: res.locals.newToken,
+                                        message: "Check-in successfully!",
+                                    })
+                                );
+                            } else {
+                                res.status(404).send(
+                                    JSON.stringify({
+                                        employeeID: res.locals.decoded.email,
+                                        token: res.locals.newToken,
+                                        message:
+                                            "You is absence in this shift!",
+                                    })
+                                );
+                            }
+                        });
+                    }
+                })
+                .catch((err) => res.status(404).send(err));
+        } else {
+            res.status(404).send(
+                JSON.stringify({
+                    employeeID: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                    message: "Not found shift",
+                })
+            );
+        }
+    };
 
     updateTimeKeeping = async (req, res) => {};
 
     deleteTimeKeeping = async (req, res) => {};
+    //
 
+    // ofday
+    getOffDay = async (req, res) => {
+        var filter =
+            typeof req.body.filter === "object"
+                ? req.body.filter
+                : JSON.parse(req.body.filter);
+        NextWeekTimeKeeping.find(filter)
+            .exec()
+            .then((data) => {
+                res.status(200).send(
+                    JSON.stringify({
+                        email: res.locals.decoded.email,
+                        token: res.locals.newToken,
+                        data,
+                    })
+                );
+            })
+            .catch((err) => {
+                res.status(404).send(err);
+            });
+    };
+
+    createOffDay = async (req, res) => {
+        const offDay = req.body.offDay;
+        offDay._id.dayInWeek = getDayInWeek(offDay.realDate);
+
+        ShiftAssign.findOne({ _id: offDay._id }).then((data) => {
+            if (data) {
+                const shiftAssignOfAlternativeEmployee = offDay._id;
+                shiftAssignOfAlternativeEmployee.employee =
+                    offDay.alternativeEmployee;
+
+                ShiftAssign.findOne({
+                    _id: shiftAssignOfAlternativeEmployee,
+                }).then((data) => {
+                    if (data) {
+                        res.status(404).send("Employee is busy in this shift!");
+                    } else {
+                        const newOffDay = new ShiftAssign({
+                            ...offDay,
+                        });
+                        newOffDay
+                            .save()
+                            .then((data) => {
+                                res.status(200).send(
+                                    JSON.stringify({
+                                        email: res.locals.decoded.email,
+                                        token: res.locals.newToken,
+                                        data,
+                                    })
+                                );
+                            })
+                            .catch((err) => {
+                                res.status(404).send(err);
+                            });
+                    }
+                });
+            } else {
+                res.status(404).send("Not found shift for this employee!");
+            }
+        });
+    };
+
+    updateOffDay = async (req, res) => {};
+
+    deleteOffDay = async (req, res) => {
+        const deletedOffDay = req.body.offDay;
+        NextWeekTimeKeeping.delete({ _id: deletedOffDay._id })
+            .then((data) => {
+                res.status(200).send(
+                    JSON.stringify({
+                        email: res.locals.decoded.email,
+                        token: res.locals.newToken,
+                    })
+                );
+            })
+            .catch((err) => {
+                res.status(404).send(err);
+            });
+    };
     //
 }
 
