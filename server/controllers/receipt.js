@@ -19,7 +19,10 @@ class myReceipt {
         employeeID: {
             name : receipt.name
         },
-        listItem : [...receipt.listProduct], 
+        listItem : [...receipt.listProduct],
+        discount:receipt.discount,
+        totalMoney: receipt.totalMoney,
+        totalFinalMoney: receipt.totalFinalMoney,
         isEdit: receipt.isEdit,
         oldBill : receipt.oldBill,
         createAt: receipt.date,
