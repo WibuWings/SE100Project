@@ -34,6 +34,24 @@ const listRecieptInitialState = [],
                     }
                     return value;
                 })
+            case "DELETE_ONE_RECIEPT":
+                return state.filter((value) => {
+                    if (value.MAHD !== action.MAHD) {
+                        return value
+                    }
+                })
+            case "DELETE_MAHD_SELECTED_RECIEPT":
+                return state.filter(value => {
+                    let isCheck = false
+                    action.listMAHD.map(value1 => {
+                        console.log(value.MAHD)
+                        console.log(value1)
+                        if (value.MAHD == value1) {
+                            isCheck = true;
+                        }
+                    })
+                    if (!isCheck) return value
+                })
             default:
                 return state
         }

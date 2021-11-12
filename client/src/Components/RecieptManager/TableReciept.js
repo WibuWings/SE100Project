@@ -5,7 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import { Grid, Box, Button, Checkbox } from '@mui/material';
+import { Grid, Box, Button, Checkbox, Modal } from '@mui/material';
+import { red , lightBlue } from '@mui/material/colors';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -20,13 +21,29 @@ import { FiXSquare } from 'react-icons/fi'
 function Row(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
+    const [openModal, setOpenModal] = React.useState(false);
     const statusSelectAll = useSelector(state => state.statusSelectAll)
     const dispatch = useDispatch();
     const [statusSelectReplace, setStatusSelectReplace] = React.useState(false);
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '1px solid #000',
+        borderRadius: '5px',
+        boxShadow: 24,
+        pt: 2,
+        px: 4,
+        pb: 3,
+    };
     
     React.useEffect(() => {
         setStatusSelectReplace(statusSelectAll)
-    },[statusSelectAll])
+    }, [statusSelectAll])
 
     const countQuantity = () => {
         let count = 0;
@@ -36,13 +53,31 @@ function Row(props) {
         return count;
     }
 
-    const DeleteReciept = (MAHD) => {
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+
+    const DeleteReciept = (MAHD, isDelete) => {
         console.log(MAHD);
-        setOpen(!open)
+        if (isDelete) {
+            setOpenModal(true)
+        } else {
+            setOpen(!open)
+            dispatch({
+                type: "DELETE_RECIEPT",
+                MAHD: MAHD,
+            })
+        }
+    }
+
+    const PermanentlyDelete = (MAHD) => {
+        console.log(MAHD)
         dispatch({
-            type: "DELETE_RECIEPT",
+            type:"DELETE_ONE_RECIEPT",
             MAHD: MAHD,
         })
+        setOpenModal(false)
     }
 
     const TypeReciept = (isEdit, isDelete) => {
@@ -65,20 +100,29 @@ function Row(props) {
         }
     }
 
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+   
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' }};
 
     const ChangeCheckbox = (e, MAHD) => {
         setStatusSelectReplace(!statusSelectReplace);
-        console.log(e.target.checked)
-        console.log(MAHD)
+        if (e.target.checked) {
+            dispatch({
+                type: "ADD_MAHD_RECIEPT",
+                MAHD: MAHD,
+            })
+        } else {
+            dispatch({
+                type: "DELETE_MAHD_RECIEPT",
+                MAHD: MAHD,
+            })
+        }
     }
 
     return (
         <React.Fragment>
             <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.isDelete) }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
-                    {console.log(statusSelectAll)}
-                    <Checkbox {...label}   checked={statusSelectReplace}  onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
+                    <Checkbox {...label} checked={statusSelectReplace} onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
                 </TableCell>
                 <TableCell>
                     <IconButton
@@ -241,7 +285,7 @@ function Row(props) {
                                 <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
                                     <Grid style={{ justifyContent: 'end' }} container>
                                         <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
-                                            <Button onClick={() => DeleteReciept(row.MAHD)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: 'red', color: 'white' }}>
+                                            <Button onClick={() => DeleteReciept(row.MAHD, row.isDelete)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: 'red', color: 'white' }}>
                                                 <FiXSquare style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></FiXSquare>
                                                 Xóa bỏ
                                             </Button>
@@ -253,6 +297,24 @@ function Row(props) {
                     </Collapse>
                 </TableCell>
             </TableRow>
+            <Modal
+                open={openModal}
+                onClose={handleClose}
+                aria-labelledby="parent-modal-title"
+                aria-describedby="parent-modal-description"
+            >
+                <Box sx={{ ...style, width: 400 }}>
+                    <h2 style={{ textAlign: 'center' }} id="parent-modal-title">Are you sure to delete?</h2>
+                    <Grid container spacing={2}>
+                        <Grid style={{ justifyContent: 'center', display: 'flex' }} item md={6} sm={6}  >
+                            <Button onClick={() => PermanentlyDelete(row.MAHD)} style={{ color: 'white', backgroundColor: red[500] }}>DELETE</Button>
+                        </Grid>
+                        <Grid style={{ justifyContent: 'center', display: 'flex' }} item md={6} sm={6}  >
+                            <Button onClick={() => setOpenModal(false)} style={{ backgroundColor: lightBlue[100] }}>CANCEL</Button>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Modal>
         </React.Fragment>
     );
 }
@@ -281,7 +343,7 @@ export default function CollapsibleTable() {
     const listReciept = useSelector(state => state.listReciept)
     const typeByDate = useSelector(state => state.typeByDate)
     const [listRecieptReplace, setListRecieptReplace] = React.useState(listReciept);
-
+    const listRecieptDelete = useSelector(state => state.listRecieptDelete)
 
     React.useEffect(() => {
         var list = typeReciept.length === 0 ? listReciept : listReciept.filter(value => {
@@ -337,17 +399,15 @@ export default function CollapsibleTable() {
 
         console.log(typeByDate)
         setListRecieptReplace(list)
-    }, [typeReciept, typeByDate])
-
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+    }, [typeReciept, typeByDate, listReciept])
 
     return (
         <TableContainer component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead>
+                    {console.log(listRecieptDelete)}
                     <TableRow style={{ backgroundColor: 'black', color: 'white' }}>
                         <TableCell>
-                            
                         </TableCell>
                         <TableCell />
                         <TableCell >Mã HĐ</TableCell>
@@ -360,7 +420,7 @@ export default function CollapsibleTable() {
                 <TableBody>
                     {listRecieptReplace ?
                         listRecieptReplace.map((row) => (
-                            <Row key={row.MAHD}  row={row} />
+                            <Row key={row.MAHD} row={row} />
                         )) : null
                     }
                 </TableBody>

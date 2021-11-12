@@ -24,13 +24,35 @@ function ControlReciept(props) {
     const dispatch = useDispatch()
     const darkmode = useSelector(state => state.statusDarkmode)
     const statusSelectAll = useSelector(state => state.statusSelectAll)
+    const listRecieptDelete = useSelector(state => state.listRecieptDelete)
     const [open, setOpen] = React.useState(false);
+    const [message, setMessage] = React.useState('');
+    const [typeDelete, setTypeDelete] = React.useState('');
     const handleOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
     };
+
+    const handleDelete = () => {
+        if(typeDelete === "DELETE_MAHD_SELECTED_RECIEPT") {
+            dispatch({
+                type: typeDelete,
+                listMAHD: listRecieptDelete,
+            })
+            dispatch({
+                type: "RESET_MAHD_RECIEPT",
+            })
+            handleClose();
+        }
+    }
+
+    const DeleteSelect = () => {
+        setTypeDelete("DELETE_MAHD_SELECTED_RECIEPT")
+        setMessage("Are you sure to delete the selected?")
+        handleOpen();
+    }
 
     const changeStatus = () => {
         console.log('click')
@@ -53,7 +75,7 @@ function ControlReciept(props) {
                                     </Button>
                             </Grid>
                             <Grid item md={12} sm={12}  >
-                                <Button style={{ width: '100%', backgroundColor: red[400], color: 'white' }} size='medium'>
+                                <Button onClick={() => DeleteSelect()} style={{ width: '100%', backgroundColor: red[400], color: 'white' }} size='medium'>
                                     <CgDanger style={{ fontSize: '1.6rem', paddingRight: '5px' }}></CgDanger>
                                     Delete Selected
                                 </Button>
@@ -81,10 +103,11 @@ function ControlReciept(props) {
                 aria-describedby="parent-modal-description"
             >
                 <Box sx={{ ...style, width: 400 }}>
-                    <h2 style={{textAlign:'center'}} id="parent-modal-title">Are you sure to delete them all?</h2>
-                    <Grid  container spacing={2}>
+                    <h2 style={{textAlign:'center', fontSize: '1.4rem', marginBottom: '15px'}} >{message}</h2>
+                    <Divider />
+                    <Grid style={{marginTop:'5px'}} container spacing={2}>
                         <Grid style={{ justifyContent: 'center', display: 'flex' }} item md={6} sm={6}  >
-                            <Button style={{color: 'white', backgroundColor: red[500]}}>DELETE</Button>
+                            <Button onClick={() => handleDelete()} style={{color: 'white', backgroundColor: red[500]}}>DELETE</Button>
                         </Grid>
                         <Grid style={{ justifyContent: 'center', display: 'flex' }}  item md={6} sm={6}  >
                             <Button onClick={() => setOpen(false)} style={{ backgroundColor: lightBlue[100]}}>CANCEL</Button>
