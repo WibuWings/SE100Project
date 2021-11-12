@@ -290,7 +290,7 @@ class Authentication {
         const username = req.body.email;
         const password = req.body.password;
 
-        Employee.findOne({ "_id.EmployeeID": username })
+        Employee.findOne({ "_id.employeeID": username })
             .exec()
             .then((data) => {
                 //check password, if password is correct then get all data and respond for client
