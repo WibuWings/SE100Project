@@ -34,9 +34,8 @@ var listDayInWeek = [
     {ID:'T7',name:'Thứ bảy'}, 
     {ID:'CN',name:'Chủ nhật'}
 ];
-class AddTimeKeepingModal extends Component {
 
-    genID = 0;
+class UpdateTimeKeepingModal extends Component {
 
     constructor(props) {
         super(props);
@@ -48,6 +47,7 @@ class AddTimeKeepingModal extends Component {
             dayChosed: '',
             shiftID: '',
         };
+        this.loadInitialData()
     }
 
     // Thêm nhân viên
@@ -93,6 +93,23 @@ class AddTimeKeepingModal extends Component {
     //     this.addEmployeeToDatabase();
     //     this.props.changeAddEmployeeStatus();
     // }
+    realDate = '';
+    shiftID = '';
+    dayChosed = '';
+    timeKeepingID = '';
+    loadInitialData()
+    {
+        console.log(this.props.updateTimeKeepingValue.state);
+        this.realDate = this.props.updateTimeKeepingValue.state.realDate;
+        this.shiftID = this.props.updateTimeKeepingValue.state._id.shiftType._id.shiftID;
+        this.timeKeepingID = this.props.updateTimeKeepingValue.state._id.employee._id.employeeID;
+        this.dayChosed= this.props.updateTimeKeepingValue.state._id.dateInWeek;
+        this.setState({
+            shiftID : this.props.updateTimeKeepingValue.state._id.shiftType._id.shiftID,
+            dayChosed: this.props.updateTimeKeepingValue.state._id.dateInWeek,
+            timeKeepingID: this.props.updateTimeKeepingValue.state._id.employee._id.employeeID,
+        });
+    }
 
     getCurrentDateTime()
     {
@@ -134,7 +151,7 @@ class AddTimeKeepingModal extends Component {
     }
 
 
-    addChange() {
+    UpdateChange() {
         // if(this.checkContraint()==false);
         // const data = {
         //     _id: {
@@ -195,7 +212,7 @@ class AddTimeKeepingModal extends Component {
                                             fullWidth 
                                             size="small" 
                                             variant="outlined"
-                                            defaultValue={this.getCurrentDateTime()}
+                                            defaultValue={this.realDate}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -207,7 +224,7 @@ class AddTimeKeepingModal extends Component {
                                         <FormControl sx={{ minWidth: 120 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
-                                                // value={this.state.type}
+                                                value = {this.dayChosed}
                                                 onChange={(event) => {
                                                     this.setState({dayChosed: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
@@ -240,7 +257,7 @@ class AddTimeKeepingModal extends Component {
                                         <FormControl sx={{ minWidth: 220 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
-                                                // value={this.state.type}
+                                                value={this.shiftID}
                                                 onChange={(event) => {
                                                     this.setState({shiftID: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
@@ -274,7 +291,7 @@ class AddTimeKeepingModal extends Component {
                                         <FormControl sx={{ minWidth: 320 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
-                                                // value={this.state.type}
+                                                value={this.timeKeepingID}
                                                 onChange={(event) => {
                                                     this.setState({timeKeepingID: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
@@ -329,6 +346,7 @@ const mapStateToProps = (state, ownProps) => {
         listShift: state.listShift,
         listEmployee: state.listEmployee,
         nextWeekTimeKeeping: state.nextWeekTimeKeeping,
+        updateTimeKeepingValue: state.updateTimeKeepingValue,
     }
 }
 
@@ -354,6 +372,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddTimeKeepingModal);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateTimeKeepingModal);
 
                

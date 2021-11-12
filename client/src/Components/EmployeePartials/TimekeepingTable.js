@@ -97,7 +97,7 @@ class TimeKeepingTable extends Component {
                                           onClick={() =>
                                             {
                                               this.props.changeUpdateTimeKeepingStatus();
-                                              // this.props.changeUpdateNextWeekTimeKeepingValue(item);
+                                              this.props.changeUpdateTimeKeepingValue(timeKeeper);
                                             }
                                           }
                                         />
@@ -130,11 +130,22 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    changeAddTimeKeepingStatus: () => {
+      dispatch({
+          type: "CHANGE_ADD_TIMEKEEPING_STATUS",
+      });
+    },
     changeUpdateTimeKeepingStatus: () => {
       dispatch({
           type: "CHANGE_UPDATE_TIMEKEEPING_STATUS",
       });
-  },
+    },
+    changeUpdateTimeKeepingValue: (data) => {
+      dispatch({
+        type: "SET_UPDATE_TIMEKEEPER_VALUE",
+        data: data
+      });
+    }
   }
 }
 

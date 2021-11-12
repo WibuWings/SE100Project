@@ -38,7 +38,7 @@ import NoJobEmployee from './EmployeePartials/NoJobEmployee';
 import { withStyles } from '@material-ui/styles';
 import TimekeepingTable from './EmployeePartials/TimekeepingTable';
 import AddTimeKeepingModal from './EmployeePartials/AddTimeKeeperModal';
-import UpdateTimeKeepingModal from './EmployeePartials/AddTimeKeeperModal';
+import UpdateTimeKeepingModal from './EmployeePartials/UpdateTimeKeepingModal';
 
 import axios from 'axios';
 
@@ -668,7 +668,7 @@ class EmployeeManager extends Component {
                     <div 
                         className="modal-add"
                     >
-                        <div onClick={() => {this.props.changeAddTimeKeepingStatus();}} className="modal-overlay"></div>
+                        <div onClick={() => {this.props.changeAddTimeKeepingStatus()}} className="modal-overlay"></div>
                         <AddTimeKeepingModal
                             style={{
                                 marginTop: 0
