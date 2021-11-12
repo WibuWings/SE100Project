@@ -34,7 +34,7 @@ var listDayInWeek = [
     {ID:'T7',name:'Thứ bảy'}, 
     {ID:'CN',name:'Chủ nhật'}
 ];
-class AddNextWeekTimeKeepingModal extends Component {
+class AddTimeKeepingModal extends Component {
 
     genID = 0;
 
@@ -166,9 +166,9 @@ class AddNextWeekTimeKeepingModal extends Component {
             },
             realDate: document.querySelector('input[name="realDate"]').value,
         };
-        this.props.addNewChange(data);
+        // this.props.addNewChange(data);
         // console.log(this.props.nextWeekTimeKeeping)
-        this.props.changeAddNextWeekTimeKeepingStatus();
+        this.props.changeAddTimeKeepingStatus();
     }
 
     render() {
@@ -176,7 +176,7 @@ class AddNextWeekTimeKeepingModal extends Component {
             <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} 
-                    title="Change NextWEEK TimeKeeper" />
+                    title="Change TimeKeeper" />
                         <div 
                         style={{ 
                             width: '100%', backgroundColor: 'rgb(221,235,255)'   
@@ -380,9 +380,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        changeAddNextWeekTimeKeepingStatus: () => {
+        changeAddTimeKeepingStatus: () => {
             dispatch({
-                type: "CHANGE_ADD_NEXTWEEK_TIMEKEEPING_STATUS",
+                type: "CHANGE_ADD_TIMEKEEPING_STATUS",
             });
         },
         getEmployee: (data) => {
@@ -400,6 +400,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddNextWeekTimeKeepingModal);
+export default connect(mapStateToProps, mapDispatchToProps)(AddTimeKeepingModal);
 
                

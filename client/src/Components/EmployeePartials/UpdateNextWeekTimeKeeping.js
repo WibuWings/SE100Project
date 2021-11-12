@@ -178,7 +178,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
             <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} 
-                    title="Change TimeKeeper" />
+                    title="Update Change TimeKeeper" />
                         <div 
                         style={{ 
                             width: '100%', backgroundColor: 'rgb(221,235,255)'   

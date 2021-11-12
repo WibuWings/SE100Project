@@ -37,7 +37,7 @@ import UpdateNextWeekTimeKeepingModal from './EmployeePartials/UpdateNextWeekTim
 import NoJobEmployee from './EmployeePartials/NoJobEmployee';
 import { withStyles } from '@material-ui/styles';
 import TimekeepingTable from './EmployeePartials/TimekeepingTable';
-
+import AddTimeKeepingModal from './EmployeePartials/AddTimeKeeperModal';
 
 import axios from 'axios';
 
@@ -496,6 +496,7 @@ class EmployeeManager extends Component {
                 <NoJobEmployee></NoJobEmployee>
                 <UnShiftEmployee/>
                 <TimekeepingTable></TimekeepingTable> 
+                
                 <Container
                     style={{marginTop: 20, }}
                 >
@@ -661,6 +662,22 @@ class EmployeeManager extends Component {
                     </div>
                 : null
                 }
+                {this.props.statusAddTimeKeeping 
+                ? 
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changeAddTimeKeepingStatus();}} className="modal-overlay"></div>
+                        <AddTimeKeepingModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </AddTimeKeepingModal>
+                    </div>
+                : null
+                }
+                
             </div>
             
         );
@@ -676,7 +693,8 @@ const mapStateToProps = (state, ownProps) => {
         listEmployee: state.listEmployee,
         listSackedEmployee: state.listSackedEmployee,
         statusAddNextWeekTimeKeeping: state.statusAddNextWeekTimeKeeping,
-        statusUpdateNextWeekTimeKeeping: state.statusUpdateNextWeekTimeKeeping
+        statusUpdateNextWeekTimeKeeping: state.statusUpdateNextWeekTimeKeeping,
+        statusAddTimeKeeping: state.statusAddTimeKeeping,
     }
 }
 
@@ -719,7 +737,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_UPDATE_NEXTWEEK_TIMEKEEPING_STATUS",
             });
         },
-
+        changeAddTimeKeepingStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_TIMEKEEPING_STATUS",
+            });
+        },
     }
 }
 export default connect(mapStateToProps , mapDispatchToProps)((withStyles(styles, {withTheme: true}))(EmployeeManager));

@@ -41,7 +41,7 @@ import statusUpdateNextWeekTimeKeepingReducer from './Employee/updateNextWeekTim
 import updateNextWeekTimeKeepingValueReducer from './Employee/updateNextWeekTimeKeepingValue';
 import listShiftAssignReducer from './Employee/listShiftAssignReducer';
 import listTimeKeepingReducer from './Employee/listTimeKeepingReducer';
-
+import statusAddTimeKeepingReducer from './Employee/addTimeKeepingStatus';
 
 var redux = require('redux');
 
@@ -77,6 +77,7 @@ const allReducers = redux.combineReducers({
     nextWeekTimeKeeping: nextWeekTimeKeepingReducer,
     statusAddNextWeekTimeKeeping: statusAddNextWeekTimeKeepingReducer,
     statusUpdateNextWeekTimeKeeping: statusUpdateNextWeekTimeKeepingReducer,
+    statusAddTimeKeeping: statusAddTimeKeepingReducer,
     // Ca
     editShiftStatus: statusEditShiftReducer,
     objectEditShift: objectEditShiftReducer,

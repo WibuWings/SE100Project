@@ -103,6 +103,12 @@ class TimeKeepingTable extends Component {
                     </TableHead>
                 </Table>
             </TableContainer>
+            <Button 
+                variant="contained"
+                onClick={() => this.props.changeAddTimeKeepingStatus()}
+            >
+              Add
+            </Button>
       </div>
     );
   }
@@ -118,7 +124,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-      
+    changeAddTimeKeepingStatus: () => {
+      dispatch({
+          type: "CHANGE_ADD_TIMEKEEPING_STATUS",
+      });
+  },
   }
 }
 
