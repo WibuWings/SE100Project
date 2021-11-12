@@ -139,8 +139,45 @@ class AddNextWeekTimeKeepingModal extends Component {
     }
 
 
-    addChange() {
+    async addChange() {
         if(this.checkContraint()==false);
+        const data1 = {
+            token: localStorage.getItem('token'),
+            offDay: {
+                _id: {
+                    dateInWeek: this.state.dayChosed,
+                    storeID: this.props.infoUser.email,
+                    shiftType: {
+                        _id: {
+                            shiftID: this.state.shiftID,
+                            storeID: this.props.infoUser.email,
+                        },
+                    },
+                    employee: {
+                        _id: {
+                            employeeID: this.state.withdrawID,
+                            storeID: this.props.infoUser.email,
+                        },
+                    },
+                },
+                alternativeEmployee: {
+                    _id: {
+                        employeeID: this.state.alterID,
+                        storeID: this.props.infoUser.email,
+                    },
+                },
+                realDate: document.querySelector('input[name="realDate"]').value,
+            }
+        };
+        await axios.post(`http://localhost:5000/api/employee/off-day`, data1)
+          .then(res => {
+              console.log("Save success");
+              alert("Lưu thành công")
+          })
+          .catch(err => {
+              alert(err);
+              console.log(err);
+          })
         const data = {
             _id: {
                 dateInWeek: this.state.dayChosed,
@@ -166,15 +203,7 @@ class AddNextWeekTimeKeepingModal extends Component {
             },
             realDate: document.querySelector('input[name="realDate"]').value,
         };
-        // await axios.post(`http://localhost:5000/api/????``, data)
-        //   .then(res => {
-        //       console.log("Save success");
-        //       alert("Lưu thành công")
-        //   })
-        //   .catch(err => {
-        //       alert(err);
-        //       console.log(err);
-        //   })
+        
         this.props.addNewChange(data);
         // console.log(this.props.nextWeekTimeKeeping)
         this.props.changeAddNextWeekTimeKeepingStatus();

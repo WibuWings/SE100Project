@@ -65,43 +65,72 @@ class FixedCalendarCell extends Component {
       return new Date().getFullYear() + '-' + month + '-' + day;
   }
 
-  addThisShiftAssign(employeeID)
+  async addThisShiftAssign(employeeID)
   {
       const data = {
-          _id: {
-            dateInWeek: this.props.dayIndex,
-            storeID: this.props.infoUser.email,
-            shiftType: {
-                _id: {
-                    shiftID: this.props.shiftID,
-                    storeID: this.props.infoUser.email,
-                },
+          token: localStorage.getItem('token'),
+          shiftAssign: {
+            _id: {
+              dateInWeek: "Monday",
+              storeID: this.props.infoUser.email,
+              shiftType: {
+                  _id: {
+                      shiftID: this.props.shiftID,
+                      storeID: this.props.infoUser.email,
+                  },
+              },
+              employee: {
+                  _id: {
+                      employeeID: employeeID,
+                      storeID: this.props.infoUser.email,
+                  },
+              },
             },
-            employee: {
-                _id: {
-                    employeeID: employeeID,
-                    storeID: this.props.infoUser.email,
-                },
-            },
-        },
-        createdAt: this.getCurrentDateTime(),
+          }
+          
       }
-      // await axios.post(`http://localhost:5000/api/????``, data)
-      //   .then(res => {
-      //       console.log("Save success");
-      //       alert("Lưu thành công")
-      //   })
-      //   .catch(err => {
-      //       alert(err);
-      //       console.log(err);
-      //   })
-      console.log(data);
+      await axios.post(`http://localhost:5000/api/employee/shift-assign`, data)
+        .then(res => {
+            alert("Lưu thành công")
+        })
+        .catch(err => {
+            alert(err);
+            console.log(err);
+        })
       this.handleChange();
-      this.props.AddShiftAssign(data);
+      this.props.AddShiftAssign(data.shiftAssign);
   }
 
   removeShift(employeeID)
   {
+    const data1 = {
+        token: localStorage.getItem('token'),
+        shiftAssign: {
+          _id: {
+            dateInWeek: this.props.dayIndex,
+            storeID: this.props.infoUser.email,
+            shiftType: {
+                _id: {
+                    shiftID: this.props.shiftID,
+                    storeID: this.props.infoUser.email,
+                },
+            },
+            employee: {
+                _id: {
+                    employeeID: employeeID,
+                    storeID: this.props.infoUser.email,
+                },
+            },
+          }
+      },
+    }
+      axios.delete(`http://localhost:5000/api/employee/shift-assign`,{data: data1})
+      .then(res => {
+          alert("success");
+      })
+      .catch(err => {
+          alert(err);
+      })
       const data = {
           _id: {
             dateInWeek: this.props.dayIndex,
@@ -120,15 +149,10 @@ class FixedCalendarCell extends Component {
             },
         },
       }
-      // axios.delete(`http://localhost:5000/api/????`,{data: data})
-      //   .then(res => {
-      //       alert("success");
-      //   })
-      //   .catch(err => {
-      //       alert(err);
-      //   })
+      
       console.log("data", data);
       this.props.RemoveShiftAssign(data);
+      
   }
 
   findShiftInShiftAssign()

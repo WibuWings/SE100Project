@@ -162,13 +162,21 @@ class UnShiftEmployee extends Component {
                                       <AiFillDelete size={20} 
                                           onClick={() => 
                                               {
-                                                  // axios.delete(`http://localhost:5000/api/????`,{data: data})
-                                                  //   .then(res => {
-                                                  //       alert("success");
-                                                  //   })
-                                                  //   .catch(err => {
-                                                  //       alert(err);
-                                                  //   })
+                                                  item._id.dateInWeek = 'Monday';
+                                                  const data = {
+                                                      token: localStorage.getItem('token'),
+                                                      
+                                                      offDay: {
+                                                          _id: item._id
+                                                      }
+                                                  }
+                                                  axios.delete(`http://localhost:5000/api/employee/off-day`,{data: data})
+                                                    .then(res => {
+                                                        alert("success");
+                                                    })
+                                                    .catch(err => {
+                                                        alert(err);
+                                                    })
                                                   this.props.deleteNextWeekTimeKeeping(item);
                                               }
                                             // this.props.changeUpdateNextWeekTimeKeepingStatus();

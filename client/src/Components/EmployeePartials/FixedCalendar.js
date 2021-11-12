@@ -33,27 +33,28 @@ class FixedCalendar extends Component {
     this.state= {
       change: 'false'
     }
+    this.getAllShiftAssign();
   }
-  getAllShiftAssign()
+  async getAllShiftAssign()
   {
+    var result = [];
     const data = {
       token: localStorage.getItem('token'),
       filter: {
           "_id.storeID": this.props.infoUser.email,
       }   
     }
-    // await axios.get(`http://localhost:5000/api/????`, {
-    //     params: {...data}
-    // })
-    //     .then(res => {
-    //         // alert("Lấy hết đc product ròi anh chai");
-    //         result = res.data.data;
-    //         console.log(res.data.data);
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //         alert(err)
-    //     })
+    await axios.get(`http://localhost:5000/api/employee/shift-assign`, {
+        params: {...data}
+    })
+        .then(res => {
+            result = res.data.data;
+            console.log("shift-Assign", res.data.data);
+        })
+        .catch(err => {
+            console.log(err);
+            alert(err)
+        })
   }
   render() {
     const { classes } = this.props;
@@ -99,6 +100,7 @@ class FixedCalendar extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     listShift: state.listShift,
+    infoUser: state.infoUser,
   }
 }
 
