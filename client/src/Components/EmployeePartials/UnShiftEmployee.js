@@ -121,7 +121,7 @@ class UnShiftEmployee extends Component {
                               <TableCell className={classes.goodTable_Cell}>{item.alternativeEmployee._id.employeeID}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item.alternativeEmployee._id.employeeID)}</TableCell>
                               <TableCell width={60} className={classes.goodTable_Cell} >
-                                    <div style={{display: 'flex'}}>
+                                  <div style={{display: 'flex'}}>
                                       <AiOutlineEdit size={20} 
                                         onClick={() =>
                                           {

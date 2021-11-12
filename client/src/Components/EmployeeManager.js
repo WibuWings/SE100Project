@@ -38,6 +38,7 @@ import NoJobEmployee from './EmployeePartials/NoJobEmployee';
 import { withStyles } from '@material-ui/styles';
 import TimekeepingTable from './EmployeePartials/TimekeepingTable';
 import AddTimeKeepingModal from './EmployeePartials/AddTimeKeeperModal';
+import UpdateTimeKeepingModal from './EmployeePartials/AddTimeKeeperModal';
 
 import axios from 'axios';
 
@@ -677,7 +678,21 @@ class EmployeeManager extends Component {
                     </div>
                 : null
                 }
-                
+                {this.props.statusUpdateTimeKeeping 
+                ? 
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changeUpdateTimeKeepingStatus();}} className="modal-overlay"></div>
+                        <UpdateTimeKeepingModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </UpdateTimeKeepingModal>
+                    </div>
+                : null
+                }
             </div>
             
         );
@@ -695,6 +710,7 @@ const mapStateToProps = (state, ownProps) => {
         statusAddNextWeekTimeKeeping: state.statusAddNextWeekTimeKeeping,
         statusUpdateNextWeekTimeKeeping: state.statusUpdateNextWeekTimeKeeping,
         statusAddTimeKeeping: state.statusAddTimeKeeping,
+        statusUpdateTimeKeeping: state.statusUpdateTimeKeeping,
     }
 }
 
@@ -740,6 +756,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         changeAddTimeKeepingStatus: () => {
             dispatch({
                 type: "CHANGE_ADD_TIMEKEEPING_STATUS",
+            });
+        },
+        changeUpdateTimeKeepingStatus: () => {
+            dispatch({
+                type: "CHANGE_UPDATE_TIMEKEEPING_STATUS",
             });
         },
     }

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { withStyles } from '@material-ui/styles';
 // material
 import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, Button} from '@mui/material';
-
+import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
 // ----------------------------------------------------------------------
 const styles = theme =>  ({
     goodTable: {                                     
@@ -74,11 +74,12 @@ class TimeKeepingTable extends Component {
                 <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Day</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='180px'>Day</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Date Of Week</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center" >Shift</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center"></TableCell>
                         </TableRow>
                         {
                             this.props.listTimeKeeper.map((timeKeeper)=>
@@ -88,18 +89,23 @@ class TimeKeepingTable extends Component {
                                     <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.dateInWeek}</TableCell>
                                     <TableCell className={classes.goodTable_Cell}>{this.getShiftInforByID(timeKeeper._id.shiftType._id.shiftID)}</TableCell>
                                     <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.employee._id.employeeID}</TableCell>
-                                    <TableCell className={classes.goodTable_Cell}>{this.getEmployeeFullNameByID(timeKeeper._id.employee._id.employeeID)}</TableCell>
+                                    <TableCell className={classes.goodTable_Cell}>
+                                        {this.getEmployeeFullNameByID(timeKeeper._id.employee._id.employeeID)}
+                                    </TableCell>
+                                    <TableCell className={classes.goodTable_Cell}>
+                                      <AiOutlineEdit size={20} 
+                                          onClick={() =>
+                                            {
+                                              this.props.changeUpdateTimeKeepingStatus();
+                                              // this.props.changeUpdateNextWeekTimeKeepingValue(item);
+                                            }
+                                          }
+                                        />
+                                    </TableCell>
                                 </TableRow>
                                 )
                             )
                         }
-                        
-                        <TableRow>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
-                            <TableCell className={classes.goodTable_Cell}></TableCell>
-                        </TableRow>
                     </TableHead>
                 </Table>
             </TableContainer>
@@ -124,9 +130,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    changeAddTimeKeepingStatus: () => {
+    changeUpdateTimeKeepingStatus: () => {
       dispatch({
-          type: "CHANGE_ADD_TIMEKEEPING_STATUS",
+          type: "CHANGE_UPDATE_TIMEKEEPING_STATUS",
       });
   },
   }
