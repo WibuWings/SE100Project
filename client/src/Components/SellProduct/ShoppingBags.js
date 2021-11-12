@@ -35,7 +35,6 @@ function ShoppingBags(props) {
 
     return (
         <div style={{width: '100%'}}>
-            {console.log(shoppingBags)}
             {
                 (shoppingBags === []) ?
                     (<div style={{ width: '100%', height: '100%', textAlign: 'center', marginTop: '100px' }}>

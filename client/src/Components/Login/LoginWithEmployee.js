@@ -34,12 +34,12 @@ class LoginWithEmployee extends Component {
             })
                 .then(res => {
                     console.log(res);
-                    switch (res.data.status) {
-                        case 1:
+                    switch (res.status) {
+                        case 200:
                             localStorage.setItem('token', res.data.token);
+                            //this.props.updateProfile(res.data.data);
+                            //this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                             this.props.changeLoginStatus();
-                            this.props.updateProfile(res.data.data);
-                            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                             this.props.hideAlert();
                             this.props.showAlert(res.data.message, "success");
                             break;
@@ -52,6 +52,7 @@ class LoginWithEmployee extends Component {
                     }
                 })
                 .catch(err => {
+                    console.log(err)
                     this.props.hideAlert();
                     this.props.showAlert("Error system", "error");
                 })

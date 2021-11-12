@@ -109,20 +109,23 @@ class Printf extends React.PureComponent {
       })
         .then(res => {
           console.log('Thành công!')
+          if (this.props.statusEditInfoBill) {
+            this.props.changeStatusEditRecipt()
+          }
+          this.setState({
+            infoReciept: this.props.shoppingBags,
+          })
+          this.props.hideAlert()
+          this.props.showAlert("In bill success", "success")
+          this.props.resetShoppingBag();
+          this.props.addRecieptToHistory(data);
         })
         .catch(err => {
           console.log('Thất bại!')
+          this.props.hideAlert()
+          this.props.showAlert("Fail", "error")
         })
-      if (this.props.statusEditInfoBill) {
-        this.props.changeStatusEditRecipt()
-      }
-      this.setState({
-        infoReciept: this.props.shoppingBags,
-      })
-      this.props.hideAlert()
-      this.props.showAlert("In bill success", "success")
-      this.props.resetShoppingBag();
-      this.props.addRecieptToHistory(data);
+
     }
 
   }

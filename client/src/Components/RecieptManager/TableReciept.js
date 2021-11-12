@@ -59,7 +59,6 @@ function Row(props) {
 
 
     const DeleteReciept = (MAHD, isDelete) => {
-        console.log(MAHD);
         if (isDelete) {
             setOpenModal(true)
         } else {
@@ -68,14 +67,29 @@ function Row(props) {
                 type: "DELETE_RECIEPT",
                 MAHD: MAHD,
             })
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+            dispatch({
+                type: "SHOW_ALERT",
+                message: 'Delete success',
+                typeMessage: 'success',
+            })
         }
     }
 
     const PermanentlyDelete = (MAHD) => {
-        console.log(MAHD)
         dispatch({
             type:"DELETE_ONE_RECIEPT",
             MAHD: MAHD,
+        })
+        dispatch({
+            type: "HIDE_ALERT",
+        })
+        dispatch({
+            type: "SHOW_ALERT",
+            message: 'Delete success',
+            typeMessage: 'success',
         })
         setOpenModal(false)
     }
@@ -187,16 +201,6 @@ function Row(props) {
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.MAHD}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>IDUser:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.idUser}</p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -420,7 +424,7 @@ export default function CollapsibleTable() {
             type: "RESET_MAHD_RECIEPT"
         })
 
-        console.log(typeByDate)
+
         setListRecieptReplace(list)
     }, [typeReciept, typeByDate, listReciept, statusSelectAll])
 
@@ -428,7 +432,6 @@ export default function CollapsibleTable() {
         <TableContainer component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead>
-                    {console.log(listRecieptDelete)}
                     <TableRow style={{ backgroundColor: 'black', color: 'white' }}>
                         <TableCell>
                         </TableCell>

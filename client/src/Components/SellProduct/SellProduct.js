@@ -160,7 +160,6 @@ class SellProduct extends Component {
     
 
     render() {
-        console.log("ĐÃ reset");
         return (
             <div className="sell-product" >
                 <Container maxWidth="xl">

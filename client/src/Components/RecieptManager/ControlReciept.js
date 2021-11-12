@@ -42,6 +42,14 @@ function ControlReciept(props) {
                 listMAHD: listRecieptDelete,
             })
             dispatch({
+                type: "HIDE_ALERT",
+            })
+            dispatch({
+                type: "SHOW_ALERT",
+                message: 'Delete success',
+                typeMessage: 'success',
+            })
+            dispatch({
                 type: "RESET_MAHD_RECIEPT",
             })
             handleClose();
@@ -49,19 +57,47 @@ function ControlReciept(props) {
             dispatch({
                 type: typeDelete,
             })
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+            dispatch({
+                type: "SHOW_ALERT",
+                message: 'Delete success',
+                typeMessage: 'success',
+            })
             handleClose();
         } else if (typeDelete === "DELETE_ALL_RECIEPT") {
             dispatch({
                 type: typeDelete,
+            })
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+            dispatch({
+                type: "SHOW_ALERT",
+                message: 'Delete success',
+                typeMessage: 'success',
             })
             handleClose();
         }
     }
 
     const DeleteSelect = () => {
-        setTypeDelete("DELETE_MAHD_SELECTED_RECIEPT")
-        setMessage("Are you sure to delete the selected?")
-        handleOpen();
+        if (listRecieptDelete.length === 0) {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+            dispatch({
+                type: "SHOW_ALERT",
+                message: 'You have not selected any invoices yet',
+                typeMessage: 'warning',
+            })
+        } else {
+            setTypeDelete("DELETE_MAHD_SELECTED_RECIEPT")
+            setMessage("Are you sure to delete the selected?")
+            handleOpen();
+        }
+
     }
 
     const DeleteInvoice = () => {
@@ -77,7 +113,6 @@ function ControlReciept(props) {
     }
 
     const changeStatus = () => {
-        console.log('click')
         dispatch({
             type: "CHANGE_SELECT_ALL_STATUS"
         })
