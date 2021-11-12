@@ -35,8 +35,7 @@ const TimeKeeping = new Schema({
             endDate: Date,
         },
     },
-    isAttending: Boolean,
-    alternativeEmployee: {
+    alternatedEmployee: {
         _id: {
             employeeID: String,
             storeID: String,
