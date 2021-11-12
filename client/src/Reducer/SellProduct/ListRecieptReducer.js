@@ -6,6 +6,7 @@ const listRecieptInitialState = [],
                     let data = {
                         MAHD: value._id.receiptID,
                         name: value.employeeID.name,
+                        idUser: value.idUser? value.idUser: null,
                         date: value.createAt,
                         discount: value.discount,
                         totalMoney: value.totalMoney,

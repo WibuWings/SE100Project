@@ -371,11 +371,11 @@ async function getAllData(email) {
     };
 }
 async function getAllDataEmployee(username){
-    const employee = await Employee.findOne({"_id.employeeID" : username});
+    const employees = await Employee.findOne({"_id.employeeID" : username});
     const [employee,reciept,product] = await Promise.all(
         [Employee.find({ "_id.employeeID" : username}).exec(),
         Receipt.find({"EmployeeID._id.employeeID" : username}).exec(),
-        Product.find({"_id.storeID" : employee._id.storeID}).exec()]);
+        Product.find({"_id.storeID" : employees._id.storeID}).exec()]);
     return {employee,reciept,product}
 }
 

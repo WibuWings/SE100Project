@@ -91,6 +91,7 @@ class Printf extends React.PureComponent {
       this.code = this.makeCode(8)
       const data = {
         MAHD: this.code,
+        idUser: this.props.infoUser._id,
         name: this.props.infoUser.lastName + " " + this.props.infoUser.firstName,
         date: this.dateFunction(),
         discount: this.state.percentDiscount,

@@ -193,6 +193,16 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>IDUser:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.idUser}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>Trạng thái:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
