@@ -18,10 +18,10 @@ router.post('/shift-assign',AuthMiddleware, employeeController.createShiftAssign
 router.put('/shift-assign',AuthMiddleware, employeeController.updateShiftAssign);
 router.delete('/shift-assign',AuthMiddleware, employeeController.deleteShiftAssign);
 // offDay
-router.get('/off-day',AuthMiddleware, employeeController.getShiftAssign);
-router.post('/off-day',AuthMiddleware, employeeController.createShiftAssign);
-router.put('/off-day',AuthMiddleware, employeeController.updateShiftAssign);
-router.delete('/off-day',AuthMiddleware, employeeController.deleteShiftAssign);
+router.get('/off-day',AuthMiddleware, employeeController.getOffDay);
+router.post('/off-day',AuthMiddleware, employeeController.createOffDay);
+router.put('/off-day',AuthMiddleware, employeeController.updateOffDay);
+router.delete('/off-day',AuthMiddleware, employeeController.deleteOffDay);
 ////////////////////////////////
 
 module.exports = router;

@@ -10,6 +10,7 @@ const ShiftType = require("../models/shiftType");
 const ShiftAssign = require("../models/shiftAssign");
 const TimeKeeping = require("../models/timeKeeping");
 const NextWeekTimeKeeping = require("../models/nextWeekTimeKeeping");
+const nextWeekTimeKeeping = require("../models/nextWeekTimeKeeping");
 class EmployeeTab {
     //shift Assign
     getEmployee = async (req, res) => {
@@ -204,7 +205,7 @@ class EmployeeTab {
     createShiftAssign = async (req, res) => {
         const newShiftAssign = new ShiftAssign({
             ...req.body.shiftAssign,
-            createAt: getCurrentDateTimeString(),
+            createdAt: new Date(),
         });
 
         newShiftAssign
@@ -228,7 +229,7 @@ class EmployeeTab {
             ...req.body.shiftAssign,
             createAt: getCurrentDateTimeString(),
         };
-
+        
         newShiftAssign
             .save()
             .then((data) => {
@@ -247,7 +248,8 @@ class EmployeeTab {
 
     deleteShiftAssign = async (req, res) => {
         const deletedShiftAssign = req.body.shiftAssign;
-        ShiftAssign.delete({ _id: deletedShiftAssign._id })
+
+        ShiftAssign.deleteOne({ _id: deletedShiftAssign._id })
             .then((data) => {
                 res.status(200).send(
                     JSON.stringify({
@@ -446,11 +448,12 @@ class EmployeeTab {
 
     createOffDay = async (req, res) => {
         const offDay = req.body.offDay;
-        offDay._id.dayInWeek = getDayInWeek(offDay.realDate);
+        offDay._id.dateInWeek = getDayInWeek(offDay.realDate);
 
+        // console.log(offDay);
         ShiftAssign.findOne({ _id: offDay._id }).then((data) => {
             if (data) {
-                const shiftAssignOfAlternativeEmployee = offDay._id;
+                const shiftAssignOfAlternativeEmployee = {...offDay._id};
                 shiftAssignOfAlternativeEmployee.employee =
                     offDay.alternativeEmployee;
 
@@ -460,9 +463,11 @@ class EmployeeTab {
                     if (data) {
                         res.status(404).send("Employee is busy in this shift!");
                     } else {
-                        const newOffDay = new ShiftAssign({
+                        const newOffDay = new NextWeekTimeKeeping({
                             ...offDay,
                         });
+                        console.log("newOffDay",newOffDay);
+                        console.log("newOffDay._id.employee",newOffDay._id.employee );
                         newOffDay
                             .save()
                             .then((data) => {
@@ -489,7 +494,10 @@ class EmployeeTab {
 
     deleteOffDay = async (req, res) => {
         const deletedOffDay = req.body.offDay;
-        NextWeekTimeKeeping.delete({ _id: deletedOffDay._id })
+        console.log(deletedOffDay);
+        const newI = await NextWeekTimeKeeping.findOne({_id: deletedOffDay._id});
+        console.log(newI);
+        NextWeekTimeKeeping.deleteOne({ _id: deletedOffDay._id })
             .then((data) => {
                 res.status(200).send(
                     JSON.stringify({
