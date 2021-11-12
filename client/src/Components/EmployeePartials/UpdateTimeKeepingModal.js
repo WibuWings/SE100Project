@@ -188,7 +188,7 @@ class UpdateTimeKeepingModal extends Component {
             realDate: document.querySelector('input[name="realDate"]').value,
         };
         this.props.updateTimeKeeper(data, this.findIndexCurrentKeepingInRedux(data._id));
-        console.log("index", this.findIndexCurrentKeepingInRedux(data._id));
+        console.log(data);
         this.props.changeUpdateTimeKeepingStatus();
     }
 
@@ -224,6 +224,7 @@ class UpdateTimeKeepingModal extends Component {
                                             classname='input-box' 
                                             type="date" 
                                             name='realDate'
+                                            readOnly={true}
                                             style = {{width: '70%'}} 
                                             fullWidth 
                                             size="small" 
@@ -240,6 +241,7 @@ class UpdateTimeKeepingModal extends Component {
                                         <FormControl sx={{ minWidth: 120 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
+                                                readOnly={true}
                                                 value = {this.dayChosed}
                                                 onChange={(event) => {
                                                     this.dayChosed = event.target.value;
@@ -274,6 +276,7 @@ class UpdateTimeKeepingModal extends Component {
                                         <FormControl sx={{ minWidth: 220 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
+                                                readOnly={true}
                                                 value={this.shiftID}
                                                 onChange={(event) => {
                                                     this.shiftID = event.target.value;
@@ -309,6 +312,7 @@ class UpdateTimeKeepingModal extends Component {
                                         <FormControl sx={{ minWidth: 320 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
+                                                readOnly={true}
                                                 value={this.timeKeepingID}
                                                 onChange={(event) => {
                                                     this.timeKeepingID = event.target.value;

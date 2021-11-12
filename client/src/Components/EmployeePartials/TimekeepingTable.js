@@ -93,14 +93,28 @@ class TimeKeepingTable extends Component {
                                         {this.getEmployeeFullNameByID(timeKeeper._id.employee._id.employeeID)}
                                     </TableCell>
                                     <TableCell className={classes.goodTable_Cell}>
-                                      <AiOutlineEdit size={20} 
-                                          onClick={() =>
-                                            {
-                                              this.props.changeUpdateTimeKeepingStatus();
-                                              this.props.changeUpdateTimeKeepingValue(timeKeeper);
+                                      <div style={{display: 'flex'}}>
+                                        <AiOutlineEdit size={20} 
+                                            onClick={() =>
+                                              {
+                                                this.props.changeUpdateTimeKeepingStatus();
+                                                this.props.changeUpdateTimeKeepingValue(timeKeeper);
+                                              }
                                             }
-                                          }
+                                          />
+                                          <AiFillDelete size={20} 
+                                            onClick={() => 
+                                                {
+                                                    this.props.deleteTimeKeeping(timeKeeper);
+                                                    console.log(this.props.listTimeKeeper);
+                                                }
+                                                
+                                              // this.props.changeUpdateNextWeekTimeKeepingStatus();
+                                              
+                                              // this.props.changeUpdateNextWeekTimeKeepingValue(item);
+                                            }
                                         />
+                                      </div>
                                     </TableCell>
                                 </TableRow>
                                 )
@@ -145,7 +159,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "SET_UPDATE_TIMEKEEPER_VALUE",
         data: data
       });
-    }
+    },
+    deleteTimeKeeping: (data) => {
+      console.log("data", data)
+      dispatch({
+        type: "DELETE_TIMEKEEPER",
+        data: data
+      });
+      
+    },
   }
 }
 

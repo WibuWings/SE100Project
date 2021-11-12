@@ -48,9 +48,9 @@ const listTimeKeepingReducer = (state = listTimeKeepingInitialState, action) => 
                     }
                     return newState;
                 }
-            case "DELETE_TIME_KEEPER":
+            case "DELETE_TIMEKEEPER":
                 {
-                    console.log(action.data);
+                    console.log("action", action);
                     var newState = [];
                     for(var i = 0 ; i < state.length ; i ++)
                     {
@@ -59,6 +59,9 @@ const listTimeKeepingReducer = (state = listTimeKeepingInitialState, action) => 
                             || state[i]._id.employee._id.employeeID !== action.data._id.employee._id.employeeID)
                         {
                             newState.push(state[i]);
+                        }
+                        else {
+                            console.log("Kiếm đc cái xoá rồi")
                         }
                     }
                     return newState;

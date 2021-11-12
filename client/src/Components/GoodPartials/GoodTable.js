@@ -39,7 +39,7 @@ class GoodTable extends Component {
         }
         this.loadAllType();
         this.loadAllGood();
-        console.log(this.props.listProduct.state)
+        console.log(this.props.listProduct.state);
     }
     removeProduct= (row) => {
         // Đây là xử lý ở phía dữ liệu, có thể await gì đó.
@@ -181,9 +181,12 @@ class GoodTable extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.props.listProduct.state.map((product) => (
-                                <GoodRow data={product} />
-                            ))}
+                            {
+                                this.props.listProduct.state == undefined ? (null):
+                                this.props.listProduct.state.map((product) => (
+                                    <GoodRow data={product} />
+                                ))
+                            }   
                         </TableBody>
                     </Table>
                 </TableContainer>
