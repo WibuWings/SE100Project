@@ -43,7 +43,6 @@ class UpdateTimeKeepingModal extends Component {
         this.state = {
             change: false,
             timeKeepingID: '',
-            alterID: '',
             dayChosed: '',
             shiftID: '',
         };
@@ -111,6 +110,22 @@ class UpdateTimeKeepingModal extends Component {
         });
     }
 
+    findIndexCurrentKeepingInRedux(id)
+    {
+        //Đụng đến nếu sửa bảng
+        var listToSearch = this.props.listTimeKeeper;
+        for(var i = 0 ; i < listToSearch.length ; i ++)
+        {
+            if(listToSearch[i]._id.dateInWeek == id.dateInWeek && 
+                listToSearch[i]._id.shiftType._id.shiftID == id.shiftType._id.shiftID&& 
+                listToSearch[i]._id.employee._id.employeeID == id.employee._id.employeeID)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     getCurrentDateTime()
     {
         var currentDate = new Date();
@@ -128,18 +143,18 @@ class UpdateTimeKeepingModal extends Component {
     }
 
     checkContraint() {
-        if(this.state.dayChosed.length == 0)
+        if(this.dayChosed.length == 0)
         {
             alert("Chưa chọn ngày nào trong tuần");
             return false;
         }
-        if(this.state.shiftID.length == 0)
+        if(this.shiftID.length == 0)
         {
             alert("Chưa chọn ca nào");
             return false;
         }
-        console.log(this.state.timeKeepingID );
-        if( this.state.timeKeepingID == undefined || this.state.timeKeepingID.length == 0)
+        // console.log(this.state.timeKeepingID );
+        if( this.timeKeepingID == undefined || this.timeKeepingID.length == 0)
         {
             alert("Chưa chọn nhân viên nào để chấm công"); 
             return false;
@@ -152,27 +167,28 @@ class UpdateTimeKeepingModal extends Component {
 
 
     UpdateChange() {
-        // if(this.checkContraint()==false);
-        // const data = {
-        //     _id: {
-        //         dateInWeek: this.state.dayChosed,
-        //         storeID: this.props.infoUser.email,
-        //         shiftType: {
-        //             _id: {
-        //                 shiftID: this.state.shiftID,
-        //                 storeID: this.props.infoUser.email,
-        //             },
-        //         },
-        //         employee: {
-        //             _id: {
-        //                 employeeID: this.state.timeKeepingID,
-        //                 storeID: this.props.infoUser.email,
-        //             },
-        //         },
-        //     },
-        //     realDate: document.querySelector('input[name="realDate"]').value,
-        // };
-        // this.props.addNewTimeKeeper(data);
+        if(this.checkContraint()==false) return;
+        const data = {
+            _id: {
+                dateInWeek: this.dayChosed,
+                storeID: this.props.infoUser.email,
+                shiftType: {
+                    _id: {
+                        shiftID: this.shiftID,
+                        storeID: this.props.infoUser.email,
+                    },
+                },
+                employee: {
+                    _id: {
+                        employeeID: this.timeKeepingID,
+                        storeID: this.props.infoUser.email,
+                    },
+                },
+            },
+            realDate: document.querySelector('input[name="realDate"]').value,
+        };
+        this.props.updateTimeKeeper(data, this.findIndexCurrentKeepingInRedux(data._id));
+        console.log("index", this.findIndexCurrentKeepingInRedux(data._id));
         this.props.changeUpdateTimeKeepingStatus();
     }
 
@@ -226,6 +242,7 @@ class UpdateTimeKeepingModal extends Component {
                                             <Select
                                                 value = {this.dayChosed}
                                                 onChange={(event) => {
+                                                    this.dayChosed = event.target.value;
                                                     this.setState({dayChosed: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
                                                     // {
@@ -259,6 +276,7 @@ class UpdateTimeKeepingModal extends Component {
                                             <Select
                                                 value={this.shiftID}
                                                 onChange={(event) => {
+                                                    this.shiftID = event.target.value;
                                                     this.setState({shiftID: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
                                                     // {
@@ -293,6 +311,7 @@ class UpdateTimeKeepingModal extends Component {
                                             <Select
                                                 value={this.timeKeepingID}
                                                 onChange={(event) => {
+                                                    this.timeKeepingID = event.target.value;
                                                     this.setState({timeKeepingID: event.target.value});
                                                     // if(!typeSet.includes(event.target.value))
                                                     // {
@@ -340,6 +359,7 @@ class UpdateTimeKeepingModal extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
+        listTimeKeeper: state.listTimeKeeping,
         addEmployeeStatus: state.addEmployeeStatus,
         confirmStatus: state.confirmStatus,
         infoUser: state.infoUser,
@@ -368,7 +388,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "ADD_NEW_TIME_KEEPER",
                 data: data,
             });
-        } 
+        }, 
+        updateTimeKeeper: (data, indexOfVal) => {
+            dispatch({
+                type: "UPDATE_TIMEKEEPER",
+                data: data,
+                index: indexOfVal
+            });
+        }, 
     }
 }
 

@@ -32,9 +32,22 @@ const listTimeKeepingReducer = (state = listTimeKeepingInitialState, action) => 
             //     }
             case "ADD_NEW_TIME_KEEPER":
                 return [...state, action.data]
-            // case "UPDATE_NEXT_WEEK_TIMEKEEPER":
-            //     state[action.index] = action.data;
-            //     return state;
+            case "UPDATE_TIMEKEEPER":
+                {
+                    var newState = [];
+                    for(var i = 0 ; i < state.length ; i ++)
+                    {
+                        if(i != action.index)
+                        {
+                            newState.push(state[i]);
+                        }
+                        else 
+                        {
+                            newState.push(action.data);
+                        }
+                    }
+                    return newState;
+                }
             case "DELETE_TIME_KEEPER":
                 {
                     console.log(action.data);
