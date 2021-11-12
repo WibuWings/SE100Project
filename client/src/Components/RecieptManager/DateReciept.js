@@ -189,7 +189,7 @@ function DataReciept(props) {
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
                                                 value={value1}
-                                                label="Age"
+                                                label="Option"
                                                 onChange={(e) => changeType(e)}
                                             >
                                                 <MenuItem value='all'>All</MenuItem>

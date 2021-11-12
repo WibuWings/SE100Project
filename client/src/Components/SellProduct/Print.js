@@ -43,7 +43,7 @@ class Printf extends React.PureComponent {
     this.props.shoppingBags.map(value => {
       total += value.quantity * value.product.sellPrice;
     })
-    return total.toLocaleString();
+    return total;
   }
 
   reduceMoney = () => {
@@ -53,9 +53,9 @@ class Printf extends React.PureComponent {
     })
     if (total !== 0) {
       total = total * this.state.percentDiscount / 100
-      return total.toLocaleString();
+      return total;
     }
-    return total.toLocaleString();
+    return total;
   }
 
   totalFinalMoney = () => {
@@ -65,9 +65,9 @@ class Printf extends React.PureComponent {
     })
     if (total !== 0) {
       total -= total * this.state.percentDiscount / 100
-      return total.toLocaleString();
+      return total;
     }
-    return total.toLocaleString();
+    return total;
   }
 
   makeCode = (length) => {
@@ -141,7 +141,7 @@ class Printf extends React.PureComponent {
                 <p style={{}}>Total</p>
               </div>
               <div className="col-5">
-                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>{this.totalMoney()}</p>
+                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>{this.totalMoney().toLocaleString()}</p>
               </div>
               <div style={{ fontSize: '1.2rem' }} className="col-7">
                 <p>Discount (%)</p>
@@ -153,13 +153,13 @@ class Printf extends React.PureComponent {
                 <p style={{}}>Reduce</p>
               </div>
               <div className="col-5">
-                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>-{this.reduceMoney()}</p>
+                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>-{this.reduceMoney().toLocaleString()}</p>
               </div>
               <div className="col-7">
                 <p style={{ margin: '0', fontSize: '1.2rem', fontWeight: '700' }}>TOTAL FINAL</p>
               </div>
               <div className="col-5">
-                <p style={{ margin: '0', fontSize: '1.2rem', textAlign: 'end', color: 'green', fontWeight: '700' }}>{this.totalFinalMoney()}</p>
+                <p style={{ margin: '0', fontSize: '1.2rem', textAlign: 'end', color: 'green', fontWeight: '700' }}>{this.totalFinalMoney().toLocaleString()}</p>
               </div>
             </div>
           </div>

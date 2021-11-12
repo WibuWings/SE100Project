@@ -137,9 +137,9 @@ function Row(props) {
                     {row.MAHD}
                 </TableCell>
                 <TableCell align="right">{row.date}</TableCell>
-                <TableCell align="right">{row.totalMoney}</TableCell>
+                <TableCell align="right">{row.totalMoney.toLocaleString()}</TableCell>
                 <TableCell align="right">{row.discount}</TableCell>
-                <TableCell align="right">{row.totalFinalMoney}</TableCell>
+                <TableCell align="right">{row.totalFinalMoney.toLocaleString()}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
