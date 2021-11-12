@@ -12,30 +12,6 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import GoodRow from './TableRow';
 
-function createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType, imgUrl, unit, expires, storeID) {
-    return {
-        storeID,
-        index,
-        id,
-        name,
-        quantity,
-        sellPrice,
-        importTime,
-        imgLink: imgUrl,
-        hidden:
-        {
-            expires: expires,
-            remaining: quantity,
-            originalPrice: originalPrice,
-            productType: productType,
-            unit: unit,
-        },
-    };
-}
-
-
-var rows = [];
-
 const styles = theme =>  ({
     goodTable: {                                     
         borderWidth: '1px',
@@ -63,6 +39,7 @@ class GoodTable extends Component {
         }
         this.loadAllType();
         this.loadAllGood();
+        console.log(this.props.listProduct.state)
     }
     removeProduct= (row) => {
         // Đây là xử lý ở phía dữ liệu, có thể await gì đó.
@@ -72,32 +49,25 @@ class GoodTable extends Component {
         this.setState({update: this.state.update})
     }
     async loadAllGood() {
-        var result = [];
+        var resultProduct = [];
         const data = {
             token: localStorage.getItem('token'),
             filter: {
                 "_id.storeID": this.props.infoUser.email,
-            }   
+            }
         }
         await axios.get(`http://localhost:5000/api/product/`, {
-            params: {...data}
+            params: { ...data }
         })
             .then(res => {
-                // alert("Lấy hết đc product ròi anh chai");
-                result = res.data.data;
+                resultProduct = res.data.data;
             })
             .catch(err => {
                 console.log(err);
                 alert(err)
             })
-        // Get data và lưu các tên Type vào dữ liệU
-        //Get data và lưu các tên Type vào bảng
-        listProductInfor=[];
-        for(var i=0; i < result.length ; i++)
-        {
-            listProductInfor.push(result[i]);
-        }
         // Get hết từ cái productjoinType
+        var result = [];
         const data1 = {
             token: localStorage.getItem('token'),
             filter: {
@@ -105,51 +75,53 @@ class GoodTable extends Component {
             }   
         }
         await axios.get(`http://localhost:5000/api/product/join`, {
-            params: {...data}
+            params: { ...data1 }
         })
             .then(res => {
                 result = res.data.data;
+                localStorage.getItem('token', res.data.token);
             })
             .catch(err => {
                 console.log(err);
                 alert(err)
-            })  
+            })
         // Lấy các cái jointype
-        joinTypeInfor = [];
-        for(var i = 0 ; i < result.length; i++)
-        {
+        var joinTypeInfor = [];
+        for (let i = 0; i < result.length; i++) {
             joinTypeInfor.push(result[i]);
         }
+        console.log("joinTypeInfor", joinTypeInfor);
 
-        //createData(index, id, name, quantity, originalPrice, sellPrice, importTime, productType, imgUrl)
-        // Cập nhật vào cái row đi cho chắc
-        rows = [];
-        for(var i = 0; i < listProductInfor.length ; i++)
-        {
-            var obj = listProductInfor[i];
-
+        var listProductInfor = [];
+        for (let i = 0; i < resultProduct.length; i++) {
+            var typeIDList = [];
             var joinType = '';
-            // // Lấy tất cả các type trong cái product
-            for(var j = 0; j < joinTypeInfor.length ; j++)
-            {
-
-                // console.log("joinTypeInfor[]", j ,joinTypeInfor[j])
-                if(joinTypeInfor[j]._id.productID == obj._id.productID && joinTypeInfor[j]._id.storeID == obj._id.storeID)
+            for (var j = 0; j < joinTypeInfor.length; j++) {
+                if (resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID &&
+                    resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) 
                 {
+                    typeIDList.push(joinTypeInfor[j]._id.typeID);
                     joinType = joinType + ' ' + this.getTypeNamebyTypeID(joinTypeInfor[j]._id.typeID);
                 }
             }
 
-            rows.push(
-                createData((i+1), obj._id.productID, obj.name, obj.quantity, 
-                    obj.importPrice, obj.sellPrice, obj._id.importDate, joinType, 
-                    obj.imgUrl, obj.unit, obj.expires, obj._id.storeID)
-            );
-        }
-        
-        this.setState({change: !this.state.change});
-    }
+            listProductInfor.push(
+                {
+                    ...resultProduct[i],
+                    typeIDList: typeIDList,
+                    joinType: joinType
+                });
 
+            // rows.push(
+            //     createData((i+1), obj._id.productID, obj.name, obj.quantity, 
+            //         obj.importPrice, obj.sellPrice, obj._id.importDate, joinType, 
+            //         obj.imgUrl, obj.unit, obj.expires, obj._id.storeID)
+            // );
+            
+        }
+        this.props.getProductToReducer(listProductInfor);
+        this.setState({ change: !this.state.change });
+    }
     async loadAllType() {
         var result = [];
         const data = {
@@ -200,7 +172,6 @@ class GoodTable extends Component {
                     <Table className={classes.goodTable} aria-label="collapsible table">
                         <TableHead>
                             <TableRow>
-                                <TableCell className={classes.goodTable_Cell} align="center">Index</TableCell>
                                 <TableCell className={classes.goodTable_Cell} align="center">ID</TableCell>
                                 <TableCell className={classes.goodTable_Cell} align="center">GoodName</TableCell>
                                 <TableCell className={classes.goodTable_Cell} align="center">Quantity</TableCell>
@@ -210,8 +181,8 @@ class GoodTable extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <GoodRow key={row.name} row={row} />
+                            {this.props.listProduct.state.map((product) => (
+                                <GoodRow data={product} />
                             ))}
                         </TableBody>
                     </Table>
@@ -226,13 +197,19 @@ const mapStateToProps = (state, ownProps) => {
         addTypeStatus: state.addTypeStatus,
         infoUser: state.infoUser,
         isAddTypeStatus: state.isAddTypeStatus,
-        confirmStatus: state.confirmStatus
+        confirmStatus: state.confirmStatus,
+        listProduct: state.listProduct,
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        
+        getProductToReducer: (data) => {
+            dispatch({
+                type: "GET_PRODUCT_AND_TYPE",
+                data: data
+            });
+        },
     }
 }
 
