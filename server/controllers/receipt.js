@@ -17,6 +17,9 @@ class myReceipt {
             receiptID: receipt.MAHD,
         },
         employeeID: {
+            _id: {
+                employeeID: receipt.idUser,
+            },
             name : receipt.name
         },
         listItem : [...receipt.listProduct],

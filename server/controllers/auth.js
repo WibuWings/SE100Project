@@ -309,7 +309,7 @@ class Authentication {
                 }
             })
             .catch((err) => {
-                res.send(
+                res.status(404).send(
                     JSON.stringify({
                         status: STATUS.FAILURE,
                         message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
