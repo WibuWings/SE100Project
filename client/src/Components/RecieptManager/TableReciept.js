@@ -6,7 +6,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import { Grid, Box, Button, Checkbox, Modal } from '@mui/material';
-import { red , lightBlue } from '@mui/material/colors';
+import { red, lightBlue } from '@mui/material/colors';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -23,6 +23,7 @@ function Row(props) {
     const [open, setOpen] = React.useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const statusSelectAll = useSelector(state => state.statusSelectAll)
+    const infoUser = useSelector(state => state.infoUser)
     const dispatch = useDispatch();
     const [statusSelectReplace, setStatusSelectReplace] = React.useState(false);
 
@@ -40,7 +41,7 @@ function Row(props) {
         px: 4,
         pb: 3,
     };
-    
+
     React.useEffect(() => {
         setStatusSelectReplace(statusSelectAll)
     }, [statusSelectAll])
@@ -57,11 +58,22 @@ function Row(props) {
         setOpen(false);
     };
 
-
+    //Xoa mềm
     const DeleteReciept = (MAHD, isDelete) => {
         if (isDelete) {
             setOpenModal(true)
         } else {
+            axios.post('http://localhost:5000/api/sell-product/soft-delete', {
+                token: localStorage.getItem('token'),
+                email: infoUser.email,
+                MAHD: MAHD
+            })
+                .then(res => {
+                    console.log('Xóa thành công')
+                })
+                .catch(err => {
+                    console.log('Xóa thất bại')
+                })
             setOpen(!open)
             dispatch({
                 type: "DELETE_RECIEPT",
@@ -78,9 +90,22 @@ function Row(props) {
         }
     }
 
-    const PermanentlyDelete = (MAHD) => {
+    // Xóa vĩnh viễn
+    const PermanentlyDelete = async (MAHD) => {
+        axios.post('http://localhost:5000/api/sell-product/permanently-delete', {
+            token: localStorage.getItem('token'),
+            email: infoUser.email,
+            MAHD: MAHD
+        })
+            .then(res => {
+                console.log('Xóa thành công')
+            })
+            .catch(err => {
+                console.log('Xóa thất bại')
+            })
+
         dispatch({
-            type:"DELETE_ONE_RECIEPT",
+            type: "DELETE_ONE_RECIEPT",
             MAHD: MAHD,
         })
         dispatch({
@@ -114,8 +139,8 @@ function Row(props) {
         }
     }
 
-   
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' }};
+
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
     const ChangeCheckbox = (e, MAHD) => {
         setStatusSelectReplace(!statusSelectReplace);

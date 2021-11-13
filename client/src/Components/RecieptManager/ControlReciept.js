@@ -3,6 +3,7 @@ import { Grid, Card, CardHeader, Divider, CardContent, Box, Modal, Button } from
 import { red, blue, lightBlue } from '@mui/material/colors';
 import { CgDanger } from 'react-icons/cg'
 import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
 
 const style = {
     position: 'absolute',
@@ -24,6 +25,7 @@ function ControlReciept(props) {
     const dispatch = useDispatch()
     const darkmode = useSelector(state => state.statusDarkmode)
     const statusSelectAll = useSelector(state => state.statusSelectAll)
+    const infoUser = useSelector(state => state.infoUser)
     const listRecieptDelete = useSelector(state => state.listRecieptDelete)
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
@@ -37,6 +39,17 @@ function ControlReciept(props) {
 
     const handleDelete = () => {
         if (typeDelete === "DELETE_MAHD_SELECTED_RECIEPT") {
+            axios.post('http://localhost:5000/api/sell-product/delete-receipt-selected', {
+                token: localStorage.getItem('token'),
+                email: infoUser.email,
+                listMAHD: listRecieptDelete,
+            })
+                .then(res => {
+                    console.log('Xóa thành công')
+                })
+                .catch(err => {
+                    console.log('Xóa thất bại')
+                })
             dispatch({
                 type: typeDelete,
                 listMAHD: listRecieptDelete,
@@ -54,6 +67,16 @@ function ControlReciept(props) {
             })
             handleClose();
         } else if (typeDelete === "DELETE_MAHD_INVOICE_RECIEPT") {
+            axios.post('http://localhost:5000/api/sell-product/delete-invoice-receipt', {
+                token: localStorage.getItem('token'),
+                email: infoUser.email,
+            })
+                .then(res => {
+                    console.log('Xóa thành công')
+                })
+                .catch(err => {
+                    console.log('Xóa thất bại')
+                })
             dispatch({
                 type: typeDelete,
             })
@@ -67,6 +90,16 @@ function ControlReciept(props) {
             })
             handleClose();
         } else if (typeDelete === "DELETE_ALL_RECIEPT") {
+            axios.post('http://localhost:5000/api/sell-product/delete-all-receipt', {
+                token: localStorage.getItem('token'),
+                email: infoUser.email,
+            })
+                .then(res => {
+                    console.log('Xóa thành công')
+                })
+                .catch(err => {
+                    console.log('Xóa thất bại')
+                })
             dispatch({
                 type: typeDelete,
             })
