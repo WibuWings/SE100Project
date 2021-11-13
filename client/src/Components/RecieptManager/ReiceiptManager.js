@@ -5,6 +5,8 @@ import StatusReceiptType from './StatusReceiptType';
 import DateReciept from './DateReciept';
 import ControlReciept from './ControlReciept';
 import '../../css/RecieptManager.css'
+import SearchReceipt from './SearchReceipt';
+
 class ReceiptManager extends Component {
     render() {
         return (
@@ -24,7 +26,12 @@ class ReceiptManager extends Component {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item md={9} sm={9}  >
+                        <Grid item md={9} sm={9}>
+                            <Grid>
+                                <Grid item md={12} sm={12}>
+                                    <SearchReceipt></SearchReceipt>
+                                </Grid>
+                            </Grid>
                             <CollapsibleTable></CollapsibleTable>
                         </Grid>
                     </Grid>

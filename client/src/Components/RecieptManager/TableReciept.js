@@ -384,6 +384,7 @@ export default function CollapsibleTable() {
     const [listRecieptReplace, setListRecieptReplace] = React.useState(listReciept);
     const listRecieptDelete = useSelector(state => state.listRecieptDelete)
     const statusSelectAll = useSelector(state => state.statusSelectAll)
+    const search = useSelector(state => state.search)
     const dispatch = useDispatch()
     let listMAHD = []
     React.useEffect(() => {
@@ -438,6 +439,22 @@ export default function CollapsibleTable() {
             })
         }
 
+        if (search.length !== 0) {
+            list = list.filter(value => {
+                let isCheck = true
+                for(let i = 0; i < search.length; i++){
+                   if(search[0] !== value.MAHD[0]){
+                        isCheck = false;
+                        break;
+                    } 
+                }
+                if (isCheck) {
+                    return value;
+                }
+            })
+        }
+
+
         list.map(value => {
             listMAHD.push(value.MAHD)
         })
@@ -451,7 +468,7 @@ export default function CollapsibleTable() {
 
 
         setListRecieptReplace(list)
-    }, [typeReciept, typeByDate, listReciept, statusSelectAll])
+    }, [typeReciept, typeByDate, listReciept, statusSelectAll, search])
 
     return (
         <TableContainer component={Paper}>

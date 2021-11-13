@@ -39,6 +39,8 @@ import typeRecieptReducer from './RecieptManager/TypeReciept';
 import typeByDateReducer from './RecieptManager/TypeByDate';
 import statusSelectAllReducer from './RecieptManager/StatusSelectAll'
 import listRecieptDeleteReducer from './RecieptManager/ListRecieptDelete';
+import searchReducer from './RecieptManager/SearchReducer';
+
 
 var redux = require('redux');
 
@@ -84,6 +86,7 @@ const allReducers = redux.combineReducers({
     typeByDate: typeByDateReducer,
     statusSelectAll: statusSelectAllReducer,
     listRecieptDelete: listRecieptDeleteReducer,
+    search: searchReducer,
 })
 
 
