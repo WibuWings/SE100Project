@@ -270,6 +270,7 @@ class Authentication {
             
             res.status(200).send(
                 JSON.stringify({
+                    status: STATUS.SUCCESS,
                     message: MESSAGES.SIGN_IN_SUCCESS,
                     token: res.locals.newToken,
                     email: decoded.email,
@@ -282,6 +283,8 @@ class Authentication {
             res.status(404).send(
                 JSON.stringify({
                     err,
+                    status: STATUS.FAILURE,
+                    message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
                 })
             )
         })
