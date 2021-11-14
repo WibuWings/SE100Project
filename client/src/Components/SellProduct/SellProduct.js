@@ -151,7 +151,6 @@ class SellProduct extends Component {
                     typeIDList: typeIDList
                 });
         }
-
         console.log("listProductInfor: ", listProductInfor);
         this.props.getProductToReducer(listProductInfor);
         this.setState({ change: !this.state.change });
@@ -162,9 +161,9 @@ class SellProduct extends Component {
     render() {
         return (
             <div className="sell-product" >
-                <Container maxWidth="xl">
+                <Container style={{marginBottom: '20px'}} maxWidth="xl">
                     <Grid container spacing={2}>
-                        <Grid item md={8} sm={12}  >
+                        <Grid item lg={8} md={12} sm={12}>
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden' }}>
                                 <div style={{ overflow: 'hidden', marginBottom: '5px' }}>
                                     <Tabs></Tabs>
@@ -180,7 +179,7 @@ class SellProduct extends Component {
                                                     return value;
                                                 }
                                             }).map(value => (
-                                                <Grid item md={3} sm={3}>
+                                                <Grid item lg={3} md={4} sm={4} xs={4}>
                                                     <Card onClick={() => this.AddProduct(value)}>
                                                         <CardActionArea>
                                                             {
@@ -217,7 +216,7 @@ class SellProduct extends Component {
                                 </Container>
                             </div>
                         </Grid>
-                        <Grid item md={4} lg={4} >
+                        <Grid item lg={4} md={12}>
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden', overflowX: 'hidden' }}>
                                 <div id="choses-product" style={{ backgroundColor: '#ebebeb', height: '60%', margin: '10px', overflowY: 'scroll', overflowX: 'hidden' }} >
                                     <Grid sty container spacing={0}>

@@ -13,7 +13,7 @@ class ReceiptManager extends Component {
             <div className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
                 <Container style={{ marginBottom: '20px', marginTop: '20px' }} maxWidth="xl">
                     <Grid className="profile-body" container spacing={2}>
-                        <Grid item md={3} sm={4}>
+                        <Grid item  lg={3} md={12} sm={12}>
                             <Grid container spacing={2}>
                                 <Grid item md={12} sm={12}>
                                     <DateReciept></DateReciept>
@@ -26,7 +26,7 @@ class ReceiptManager extends Component {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item md={9} sm={9}>
+                        <Grid item  lg={9} md={12} sm={12}>
                             <Grid>
                                 <Grid item md={12} sm={12}>
                                     <SearchReceipt></SearchReceipt>

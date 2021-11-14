@@ -188,7 +188,7 @@ function Row(props) {
                                 Detail Recipet
                             </Typography>
                             <Grid container spacing={3}>
-                                <Grid item md={6} xs={6}>
+                                <Grid item lg={6} md={12} sm={12} xs={12}>
                                     <Table size="small" aria-label="purchases">
                                         <TableHead>
                                             <TableRow>
@@ -217,7 +217,7 @@ function Row(props) {
                                         </TableBody>
                                     </Table>
                                 </Grid>
-                                <Grid item md={6} xs={6}>
+                                <Grid style={{borderLeft: '1px solid black', marginTop: '15px'}} item lg={6}  md={12} sm={12} xs={12}>
                                     <Grid container spacing={3}>
                                         <Grid item md={6} xs={6}>
                                             <Grid container>

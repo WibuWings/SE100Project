@@ -38,25 +38,42 @@ function Row(props) {
                 MAHD: MAHD,
                 token: localStorage.getItem('token'),
                 email: infoUser.email,
+            }).then(res => {
+                if (res.status === 200) {
+                    localStorage.setItem('token', res.data.token)
+                    dispatch({
+                        type: "EDIT_SHOPPING_BAGS",
+                        MAHD: MAHD,
+                    })
+                    dispatch({
+                        type: "INFO_SHOPPING_BAGS_EDIT",
+                        listProduct: objectInfoBill.listProduct,
+                    })
+                    dispatch({
+                        type: "ADD_INFO_BILL_EDIT",
+                        InfoBill: objectInfoBill,
+                    })
+                    dispatch({
+                        type: "CHANGE_EDIT_INFOMATION_STATUS",
+                    })
+                    dispatch({
+                        type: "CHANGE_HISTORY_RECIEPT_STATUS"
+                    })
+                }
+            }).catch(err => {
+                dispatch({
+                    type: "CHANGE_LOGIN_STATUS",
+                })
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: 'Login timeout, signin again',
+                    typeMessage: 'warning',
+                })
             })
-            dispatch({
-                type: "EDIT_SHOPPING_BAGS",
-                MAHD: MAHD,
-            })
-            dispatch({
-                type: "INFO_SHOPPING_BAGS_EDIT",
-                listProduct: objectInfoBill.listProduct,
-            })
-            dispatch({
-                type: "ADD_INFO_BILL_EDIT",
-                InfoBill: objectInfoBill,
-            })
-            dispatch({
-                type: "CHANGE_EDIT_INFOMATION_STATUS",
-            })
-            dispatch({
-                type: "CHANGE_HISTORY_RECIEPT_STATUS"
-            })
+            
         } else {
             dispatch({
                 type: "HIDE_ALERT",
@@ -139,7 +156,7 @@ function Row(props) {
                                 Detail Recipet
                             </Typography>
                             <Grid container spacing={3}>
-                                <Grid item md={6} xs={6}>
+                                <Grid item  lg={6} md={12} xs={12}>
                                     <Table size="small" aria-label="purchases">
                                         <TableHead>
                                             <TableRow>
@@ -167,7 +184,7 @@ function Row(props) {
                                         </TableBody>
                                     </Table>
                                 </Grid>
-                                <Grid item md={6} xs={6}>
+                                <Grid style={{borderLeft: '1px solid black', marginTop: '15px'}} item lg={6} md={12} xs={12}>
                                     <Grid container spacing={3}>
                                         <Grid item md={6} xs={6}>
                                             <Grid container>

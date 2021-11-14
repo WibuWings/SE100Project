@@ -109,21 +109,26 @@ class Printf extends React.PureComponent {
       })
         .then(res => {
           console.log('Thành công!')
-          if (this.props.statusEditInfoBill) {
-            this.props.changeStatusEditRecipt()
+          console.log(res)
+          if (res.status === 200) {
+            localStorage.setItem('token', res.data.token)
+            if (this.props.statusEditInfoBill) {
+              this.props.changeStatusEditRecipt()
+            }
+            this.setState({
+              infoReciept: this.props.shoppingBags,
+            })
+            this.props.hideAlert()
+            this.props.showAlert("In bill success", "success")
+            this.props.resetShoppingBag();
+            this.props.addRecieptToHistory(data);
           }
-          this.setState({
-            infoReciept: this.props.shoppingBags,
-          })
-          this.props.hideAlert()
-          this.props.showAlert("In bill success", "success")
-          this.props.resetShoppingBag();
-          this.props.addRecieptToHistory(data);
+
         })
         .catch(err => {
-          console.log('Thất bại!')
-          this.props.hideAlert()
-          this.props.showAlert("Fail", "error")
+          this.props.changeLoginStatus();
+          this.props.hideAlert();
+          this.props.showAlert("Login timeout, signin again", "warning");
         })
 
     }
@@ -235,7 +240,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "CHANGE_EDIT_INFOMATION_STATUS"
       })
-    }
+    },
+    changeLoginStatus: () => {
+      dispatch({
+          type: "CHANGE_LOGIN_STATUS",
+      });
+  },
   }
 }
 
