@@ -21,7 +21,7 @@ const shoppingBagsInitialState = [],
                 return state.filter((value) => {
                     if (value.product.name !== action.name) {
                         return value;
-                    }
+                    } 
                 })
             case "RESET_SHOPPING_BAGS":
                 return state = [];
