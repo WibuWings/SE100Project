@@ -122,7 +122,7 @@ function Row(props) {
 
     const TypeReciept = (isEdit, isDelete) => {
         if (isDelete) {
-            return 'red'
+            return red[400]
         } else if (isEdit) {
             return '#f4f492'
         } else {
