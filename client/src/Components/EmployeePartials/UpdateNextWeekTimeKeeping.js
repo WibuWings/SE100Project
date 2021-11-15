@@ -120,6 +120,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                         storeID: this.props.infoUser.email,
                     },
                 },
+                realDate: document.querySelector('input[name="realDate"]').value,
             },
             alternativeEmployee: {
                 _id: {
@@ -127,7 +128,7 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                     storeID: this.props.infoUser.email,
                 },
             },
-            realDate: document.querySelector('input[name="realDate"]').value,
+            
         };
         // axios.put(`http://localhost:5000/api/????`, data)
         //     .then(res => {

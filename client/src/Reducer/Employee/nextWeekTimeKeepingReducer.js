@@ -31,9 +31,7 @@ const nextWeekTimeKeepingInitialState =
 const nextWeekTimeKeepingReducer = (state = nextWeekTimeKeepingInitialState, action) => {
         switch (action.type) {
             case "SET_NEXT_WEEK_TIMEKEEPER":
-                return{
-                    state: action.data
-                }
+                return action.data;
             case "ADD_NEW_NEXT_WEEK_TIMEKEEPER":
                 return [...state, action.data]
             case "UPDATE_NEXT_WEEK_TIMEKEEPER":
@@ -59,7 +57,8 @@ const nextWeekTimeKeepingReducer = (state = nextWeekTimeKeepingInitialState, act
                 (
                     value._id.dateInWeek !== action.data._id.dateInWeek 
                     || value._id.shiftType._id.shiftID !== action.data._id.shiftType._id.shiftID 
-                    || value._id.employee._id.employeeID !== action.data._id.employee._id.employeeID 
+                    || value._id.employee._id.employeeID !== action.data._id.employee._id.employeeID
+                    || value._id.realDate !== action.data._id.realDate
                 ));
             }
                 

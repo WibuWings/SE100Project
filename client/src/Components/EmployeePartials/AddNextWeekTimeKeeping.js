@@ -26,13 +26,13 @@ const StyledTextField = withStyles((theme) => ({
   }))(TextField);
 
 var listDayInWeek = [
-    {ID:'T2',name:'Thứ hai'}, 
-    {ID:'T3',name:'Thứ ba'}, 
-    {ID:'T4',name:'Thứ tư'}, 
-    {ID:'T5',name:'Thứ năm'}, 
-    {ID:'T6',name:'Thứ sáu'}, 
-    {ID:'T7',name:'Thứ bảy'}, 
-    {ID:'CN',name:'Chủ nhật'}
+    {ID:'Monday',name:'Thứ hai'}, 
+    {ID:'Tuesday',name:'Thứ ba'}, 
+    {ID:'Wednesday',name:'Thứ tư'}, 
+    {ID:'Thursday',name:'Thứ năm'}, 
+    {ID:'Friday',name:'Thứ sáu'}, 
+    {ID:'Saturday',name:'Thứ bảy'}, 
+    {ID:'Sunday',name:'Chủ nhật'}
 ];
 class AddNextWeekTimeKeepingModal extends Component {
 
@@ -140,10 +140,41 @@ class AddNextWeekTimeKeepingModal extends Component {
 
 
     async addChange() {
-        if(this.checkContraint()==false);
+        if(this.checkContraint()==false) return ;
         const data1 = {
             token: localStorage.getItem('token'),
             offDay: {
+                _id: {
+                    dateInWeek: this.state.dayChosed,
+                    storeID: this.props.infoUser.email,
+                    shiftType: {
+                        _id: {
+                            shiftID: this.state.shiftID,
+                            storeID: this.props.infoUser.email,
+                        },
+                    },
+                    employee: {
+                        _id: {
+                            employeeID: this.state.withdrawID,
+                            storeID: this.props.infoUser.email,
+                        },
+                    },
+                    realDate: document.querySelector('input[name="realDate"]').value,
+                },
+                alternativeEmployee: {
+                    _id: {
+                        employeeID: this.state.alterID,
+                        storeID: this.props.infoUser.email,
+                    },
+                },
+                
+            }
+        };
+        await axios.post(`http://localhost:5000/api/employee/off-day`, data1)
+          .then(res => {
+              console.log("Save success");
+              alert("Lưu thành công")
+              const data = {
                 _id: {
                     dateInWeek: this.state.dayChosed,
                     storeID: this.props.infoUser.email,
@@ -167,46 +198,18 @@ class AddNextWeekTimeKeepingModal extends Component {
                     },
                 },
                 realDate: document.querySelector('input[name="realDate"]').value,
-            }
-        };
-        await axios.post(`http://localhost:5000/api/employee/off-day`, data1)
-          .then(res => {
-              console.log("Save success");
-              alert("Lưu thành công")
+            };
+            
+            this.props.addNewChange(data);
+            this.props.changeAddNextWeekTimeKeepingStatus();
           })
           .catch(err => {
               alert(err);
               console.log(err);
           })
-        const data = {
-            _id: {
-                dateInWeek: this.state.dayChosed,
-                storeID: this.props.infoUser.email,
-                shiftType: {
-                    _id: {
-                        shiftID: this.state.shiftID,
-                        storeID: this.props.infoUser.email,
-                    },
-                },
-                employee: {
-                    _id: {
-                        employeeID: this.state.withdrawID,
-                        storeID: this.props.infoUser.email,
-                    },
-                },
-            },
-            alternativeEmployee: {
-                _id: {
-                    employeeID: this.state.alterID,
-                    storeID: this.props.infoUser.email,
-                },
-            },
-            realDate: document.querySelector('input[name="realDate"]').value,
-        };
         
-        this.props.addNewChange(data);
         // console.log(this.props.nextWeekTimeKeeping)
-        this.props.changeAddNextWeekTimeKeepingStatus();
+
     }
 
     render() {

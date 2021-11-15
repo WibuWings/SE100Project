@@ -32,6 +32,7 @@ class TimeKeepingTable extends Component {
     this.state= {
       change: 'false'
     }
+    this.getAllTimeKeeping()
   }
 
   getAllTimeKeeping()
@@ -101,7 +102,7 @@ class TimeKeepingTable extends Component {
                             <TableCell className={classes.goodTable_Cell_Header} align="center" >Shift</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center"></TableCell>
+                            {/* <TableCell className={classes.goodTable_Cell_Header} align="center"></TableCell> */}
                         </TableRow>
                         {
                             this.props.listTimeKeeper.map((timeKeeper)=>
@@ -114,7 +115,7 @@ class TimeKeepingTable extends Component {
                                     <TableCell className={classes.goodTable_Cell}>
                                         {this.getEmployeeFullNameByID(timeKeeper._id.employee._id.employeeID)}
                                     </TableCell>
-                                    <TableCell className={classes.goodTable_Cell}>
+                                    {/* <TableCell className={classes.goodTable_Cell}>
                                       <div style={{display: 'flex'}}>
                                         <AiOutlineEdit size={20} 
                                             onClick={() =>
@@ -144,7 +145,7 @@ class TimeKeepingTable extends Component {
                                             }
                                         />
                                       </div>
-                                    </TableCell>
+                                    </TableCell> */}
                                 </TableRow>
                                 )
                             )
@@ -152,12 +153,12 @@ class TimeKeepingTable extends Component {
                     </TableHead>
                 </Table>
             </TableContainer>
-            <Button 
+            {/* <Button 
                 variant="contained"
                 onClick={() => this.props.changeAddTimeKeepingStatus()}
             >
               Add
-            </Button>
+            </Button> */}
       </div>
     );
   }
@@ -168,6 +169,7 @@ const mapStateToProps = (state, ownProps) => {
       listTimeKeeper: state.listTimeKeeping,
       listShift: state.listShift,
       listEmployee: state.listEmployee,
+      infoUser: state.infoUser
   }
 }
 
