@@ -138,6 +138,9 @@ function ControlReciept(props) {
             })
             handleClose();
         }
+        dispatch({
+            type:"RESET_STATUS_SELECT_ALL"
+        })
     }
 
     const DeleteSelect = () => {
@@ -187,6 +190,7 @@ function ControlReciept(props) {
         <Grid container spacing={2}>
             <Grid item md={12} sm={12}  >
                 <Card>
+                    {console.log(listRecieptDelete)}
                     <CardHeader style={{ color: !darkmode ? '#0091ea' : 'white', backgroundColor: !darkmode ? '#efeeef' : '#455a64' }} title="Control" />
                     <Divider></Divider>
                     <CardContent>

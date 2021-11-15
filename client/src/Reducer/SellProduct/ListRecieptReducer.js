@@ -44,21 +44,16 @@ const listRecieptInitialState = [],
                 })
             case "DELETE_MAHD_SELECTED_RECIEPT":
                 return state.filter(value => {
-                    let isCheck = false
                     action.listMAHD.map(value1 => {
-                        if (value.MAHD == value1) {
-                            if (value.deleted) {
-                                isCheck = true;
-                            } else {
-                                value.deleted = true
-                            }
+                        if (value.MAHD === value1) {
+                            value.deleted = true
                         }
                     })
-                    if (!isCheck) return value
+                    return value
                 })
             case "DELETE_MAHD_INVOICE_RECIEPT":
                 return state.filter(value => {
-                    return !value.isDelete
+                    return !value.deleted
                 })
             case "RESTONE_ONE_RECIEPT":
                 return state.filter(value => {
