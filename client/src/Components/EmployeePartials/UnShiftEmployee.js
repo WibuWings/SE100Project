@@ -166,13 +166,13 @@ class UnShiftEmployee extends Component {
                                       <AiFillDelete size={20} 
                                           onClick={() => 
                                               {
-                                                  item._id.dateInWeek = 'Monday';
                                                   const data = {
                                                       token: localStorage.getItem('token'),   
                                                       offDay: {
                                                           _id: item._id
                                                       }
                                                   }
+                                                  console.log("data.offDay._id", data.offDay._id)
                                                   axios.delete(`http://localhost:5000/api/employee/off-day`,{data: data})
                                                     .then(res => {
                                                         alert("success");

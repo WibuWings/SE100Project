@@ -224,6 +224,9 @@ class AddEmployeeModal extends Component {
                 alert(err);
                 console.log(err);
             })
+        // Thêm vào redux
+        this.props.addEmployee(data.employee);
+        
     }
 
     cancel = () => {
@@ -460,7 +463,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "GET_EMPLOYEE",
                 employees: data,
             });
-        }
+        },
+        addEmployee: (data) => {
+            dispatch({
+                type: "ADD_EMPLOYEE",
+                employees: data,
+            });
+        },
     }
 }
 
