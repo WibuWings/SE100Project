@@ -186,7 +186,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted), borderWidth: open ? '2px' : null, borderStyle:'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae'  }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted), borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <Checkbox {...label} checked={statusSelectReplace} onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
                 </TableCell>
@@ -207,7 +207,7 @@ function Row(props) {
                 <TableCell align="right">{row.discount}</TableCell>
                 <TableCell align="right">{row.totalFinalMoney.toLocaleString()}</TableCell>
             </TableRow>
-            <TableRow style={{borderWidth: open ? '2px' : null, borderStyle:'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae'  }}>
+            <TableRow style={{ borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae' }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
@@ -262,7 +262,7 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0' }}>Trạng thái:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{StatusTypeReciept(row.isEdit, row.isDelete)}</p>
+                                                    <p style={{ marginBottom: '0' }}>{StatusTypeReciept(row.isEdit, row.deleted)}</p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -423,6 +423,7 @@ export default function CollapsibleTable() {
     const dispatch = useDispatch()
     let listMAHD = []
     React.useEffect(() => {
+        console.log(typeReciept)
         var list = typeReciept.length === 0 ? listReciept : listReciept.filter(value => {
             for (var i = 0; i < typeReciept.length; i++) {
                 if (typeReciept[i] === 'delete') {
@@ -430,11 +431,11 @@ export default function CollapsibleTable() {
                         return value;
                     }
                 } else if (typeReciept[i] === 'return') {
-                    if (!value.isDelete && value.isEdit) {
+                    if (!value.deleted && value.isEdit) {
                         return value;
                     }
                 } else {
-                    if (!value.isDelete && !value.isEdit) {
+                    if (!value.deleted && !value.isEdit) {
                         return value;
                     }
                 }

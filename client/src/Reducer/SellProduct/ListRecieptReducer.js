@@ -73,7 +73,10 @@ const listRecieptInitialState = [],
                     return value
                 })
             case "DELETE_ALL_RECIEPT":
-                return []
+                return state.filter(value => {
+                    value.deleted = true
+                    return value;
+                })
             default:
                 return state
         }
