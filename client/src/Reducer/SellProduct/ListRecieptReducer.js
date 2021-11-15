@@ -15,7 +15,7 @@ const listRecieptInitialState = [],
                         time: value.timeCreate,
                         isEdit: value.isEdit,
                         oldBill: value.oldBill,
-                        isDelete: value.isDelete ? value.isDelete : false,
+                        deleted: value.deleted ? value.deleted : false,
                     }
                     state.push(data)
                 })
