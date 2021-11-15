@@ -350,7 +350,7 @@ async function getAllData(email) {
         ProductType.find({ "_id.storeID": store._id }).exec(),
         ProductJoinType.find({ "_id.storeID": store._id }).exec(),
         Revenue.find({ "_id.storeID": store._id }).exec(),
-        Receipt.find({ "_id.storeID": store._id }).exec(),
+        Receipt.findWithDeleted({ "_id.storeID": store._id }).exec(),
         ReturnProduct.find({ "_id.storeID": store._id }).exec(),
         ShiftAssign.find({ "_id.storeID": store._id }).exec(),
         ShiftType.find({  "_id.storeID": store._id }).exec(),
