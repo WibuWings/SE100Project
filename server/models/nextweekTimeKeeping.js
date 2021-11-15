@@ -17,6 +17,7 @@ const NextWeekTimeKeeping = new Schema({
                 storeID: String,
             },
         },
+        realDate: Date,
     },
     alternativeEmployee: {
         _id: {
@@ -24,7 +25,7 @@ const NextWeekTimeKeeping = new Schema({
             storeID: String,
         },
     },
-    realDate: Date,
+    
 });
 
 module.exports = mongoose.model("NextWeekTimeKeeping", NextWeekTimeKeeping);
