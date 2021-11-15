@@ -186,7 +186,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted) }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted), borderWidth: open ? '2px' : null, borderStyle:'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae'  }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <Checkbox {...label} checked={statusSelectReplace} onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
                 </TableCell>
@@ -207,7 +207,7 @@ function Row(props) {
                 <TableCell align="right">{row.discount}</TableCell>
                 <TableCell align="right">{row.totalFinalMoney.toLocaleString()}</TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow style={{borderWidth: open ? '2px' : null, borderStyle:'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae'  }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>

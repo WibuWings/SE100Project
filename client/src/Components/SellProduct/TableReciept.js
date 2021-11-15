@@ -124,7 +124,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted),border: open ? '1px solid white' : null }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted), borderWidth: open ? '2px' : null, borderStyle:'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae'  }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -149,7 +149,7 @@ function Row(props) {
                     ) : null}
                 </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow style={{borderWidth: open ? '2px' : null, borderStyle:'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae'  }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
