@@ -17,6 +17,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios';
 import { FiXSquare } from 'react-icons/fi'
+import { TiArrowBack } from 'react-icons/ti'
 
 function Row(props) {
     const { row } = props;
@@ -121,7 +122,7 @@ function Row(props) {
 
     const TypeReciept = (isEdit, isDelete) => {
         if (isDelete) {
-            return 'red'
+            return red[400]
         } else if (isEdit) {
             return '#f4f492'
         } else {
@@ -139,6 +140,32 @@ function Row(props) {
         }
     }
 
+    const RestoneReciept = (MAHD) => {
+        axios.post('http://localhost:5000/api/sell-product/restone-receipt', {
+            token: localStorage.getItem('token'),
+            email: infoUser.email,
+            MAHD: MAHD
+        })
+            .then(res => {
+                console.log('Restone thành công')
+            })
+            .catch(err => {
+                console.log('Restone thất bại')
+            })
+        dispatch({
+            type: 'RESTONE_ONE_RECIEPT',
+            MAHD: MAHD
+        })
+        dispatch({
+            type: "HIDE_ALERT",
+        })
+        dispatch({
+            type: "SHOW_ALERT",
+            message: 'Restone success',
+            typeMessage: 'success',
+        })
+        setOpen(false);
+    }
 
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -159,7 +186,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.isDelete) }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted), borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <Checkbox {...label} checked={statusSelectReplace} onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
                 </TableCell>
@@ -180,7 +207,7 @@ function Row(props) {
                 <TableCell align="right">{row.discount}</TableCell>
                 <TableCell align="right">{row.totalFinalMoney.toLocaleString()}</TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow style={{ borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae' }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
@@ -217,7 +244,7 @@ function Row(props) {
                                         </TableBody>
                                     </Table>
                                 </Grid>
-                                <Grid style={{borderLeft: '1px solid black', marginTop: '15px'}} item lg={6}  md={12} sm={12} xs={12}>
+                                <Grid style={{ borderLeft: '1px solid black', marginTop: '15px' }} item lg={6} md={12} sm={12} xs={12}>
                                     <Grid container spacing={3}>
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
@@ -235,7 +262,7 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0' }}>Trạng thái:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{StatusTypeReciept(row.isEdit, row.isDelete)}</p>
+                                                    <p style={{ marginBottom: '0' }}>{StatusTypeReciept(row.isEdit, row.deleted)}</p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -323,8 +350,16 @@ function Row(props) {
                                 </Grid>
                                 <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
                                     <Grid style={{ justifyContent: 'end' }} container>
+                                        {row.deleted ? (
+                                            <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
+                                                <Button onClick={() => RestoneReciept(row.MAHD)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: '#00bfa5', color: 'white' }}>
+                                                    <TiArrowBack style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></TiArrowBack>
+                                                    Restone
+                                                </Button>
+                                            </Grid>
+                                        ) : null}
                                         <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
-                                            <Button onClick={() => DeleteReciept(row.MAHD, row.isDelete)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: 'red', color: 'white' }}>
+                                            <Button onClick={() => DeleteReciept(row.MAHD, row.deleted)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: red[400], color: 'white' }}>
                                                 <FiXSquare style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></FiXSquare>
                                                 Xóa bỏ
                                             </Button>
@@ -388,18 +423,19 @@ export default function CollapsibleTable() {
     const dispatch = useDispatch()
     let listMAHD = []
     React.useEffect(() => {
+        console.log(typeReciept)
         var list = typeReciept.length === 0 ? listReciept : listReciept.filter(value => {
             for (var i = 0; i < typeReciept.length; i++) {
                 if (typeReciept[i] === 'delete') {
-                    if (value.isDelete) {
+                    if (value.deleted) {
                         return value;
                     }
                 } else if (typeReciept[i] === 'return') {
-                    if (!value.isDelete && value.isEdit) {
+                    if (!value.deleted && value.isEdit) {
                         return value;
                     }
                 } else {
-                    if (!value.isDelete && !value.isEdit) {
+                    if (!value.deleted && !value.isEdit) {
                         return value;
                     }
                 }
@@ -442,11 +478,11 @@ export default function CollapsibleTable() {
         if (search.length !== 0) {
             list = list.filter(value => {
                 let isCheck = true
-                for(let i = 0; i < search.length; i++){
-                   if(search[0] !== value.MAHD[0]){
+                for (let i = 0; i < search.length; i++) {
+                    if (search[0] !== value.MAHD[0]) {
                         isCheck = false;
                         break;
-                    } 
+                    }
                 }
                 if (isCheck) {
                     return value;

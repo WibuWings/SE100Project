@@ -8,6 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import { Grid, Box } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
+import {red} from '@mui/material/colors'
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -89,7 +90,7 @@ function Row(props) {
 
     const TypeReciept = (isEdit, isDelete) => {
         if (isDelete) {
-            return 'red'
+            return red[400]
         } else if (isEdit) {
             return '#f4f492'
         } else {
@@ -123,7 +124,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.isDelete) }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted), borderWidth: open ? '2px' : null, borderStyle:'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae'  }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -141,14 +142,14 @@ function Row(props) {
                 <TableCell align="right">{row.discount}</TableCell>
                 <TableCell align="right">{row.totalFinalMoney}</TableCell>
                 <TableCell>
-                    {!showEdit(row.isEdit, row.isDelete) ? (
+                    {!showEdit(row.isEdit, row.deleted) ? (
                         <IconButton onClick={() => editReciept(row.MAHD)} color="secondary" aria-label="fingerprint">
                             <FiEdit />
                         </IconButton>
                     ) : null}
                 </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow style={{borderWidth: open ? '2px' : null, borderStyle:'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae'  }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>

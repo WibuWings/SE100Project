@@ -6,7 +6,7 @@ const listRecieptInitialState = [],
                     let data = {
                         MAHD: value._id.receiptID,
                         name: value.employeeID.name,
-                        idUser:  value.employeeID._id.employeeID ? value.employeeID._id.employeeID : '',
+                        idUser: value.employeeID._id.employeeID ? value.employeeID._id.employeeID : '',
                         date: value.createAt,
                         discount: value.discount,
                         totalMoney: value.totalMoney,
@@ -15,7 +15,7 @@ const listRecieptInitialState = [],
                         time: value.timeCreate,
                         isEdit: value.isEdit,
                         oldBill: value.oldBill,
-                        isDelete: value.isDelete? value.isDelete : false,
+                        isDelete: value.isDelete ? value.isDelete : false,
                     }
                     state.push(data)
                 })
@@ -32,7 +32,7 @@ const listRecieptInitialState = [],
             case "DELETE_RECIEPT":
                 return state.filter((value) => {
                     if (value.MAHD === action.MAHD) {
-                        value.isDelete = true
+                        value.deleted = true
                     }
                     return value;
                 })
@@ -46,10 +46,12 @@ const listRecieptInitialState = [],
                 return state.filter(value => {
                     let isCheck = false
                     action.listMAHD.map(value1 => {
-                        console.log(value.MAHD)
-                        console.log(value1)
                         if (value.MAHD == value1) {
-                            isCheck = true;
+                            if (value.deleted) {
+                                isCheck = true;
+                            } else {
+                                value.deleted = true
+                            }
                         }
                     })
                     if (!isCheck) return value
@@ -58,8 +60,23 @@ const listRecieptInitialState = [],
                 return state.filter(value => {
                     return !value.isDelete
                 })
+            case "RESTONE_ONE_RECIEPT":
+                return state.filter(value => {
+                    if (value.MAHD === action.MAHD) {
+                        value.deleted = false;
+                    }
+                    return value
+                })
+            case "RESTONE_ALL_RECIEPT":
+                return state.filter(value => {
+                    value.deleted = false;
+                    return value
+                })
             case "DELETE_ALL_RECIEPT":
-                return []
+                return state.filter(value => {
+                    value.deleted = true
+                    return value;
+                })
             default:
                 return state
         }
