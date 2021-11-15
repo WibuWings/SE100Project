@@ -49,15 +49,12 @@ class FixedCalendar extends Component {
     })
         .then(res => {
             result = res.data.data;
-            // console.log("shift-Assign", res.data.data);
             this.props.setShiftAssign(result);
-            console.log("this.props.listShiftAssign", this.props.listShiftAssign);
         })
         .catch(err => {
             console.log(err);
-            // alert(err)
+            alert(err)
         })
-        // 
   }
   render() {
     const { classes } = this.props;
@@ -94,7 +91,6 @@ class FixedCalendar extends Component {
                       }
               </Table>
           </TableContainer>
-          <Button variant="contained">Save</Button>
       </div>
     );
   }

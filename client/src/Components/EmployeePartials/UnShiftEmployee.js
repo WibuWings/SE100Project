@@ -38,28 +38,30 @@ class UnShiftEmployee extends Component {
     this.state= {
       change: false
     }
+    this.getAllNextWeekTimeKeeping();
   }
 
-  getAllNextWeekTimeKeeping()
+  async getAllNextWeekTimeKeeping()
   {
+    var result = [];
     const data = {
       token: localStorage.getItem('token'),
       filter: {
           "_id.storeID": this.props.infoUser.email,
       }   
     }
-    // await axios.get(`http://localhost:5000/api/????`, {
-    //     params: {...data}
-    // })
-    //     .then(res => {
-    //         // alert("Lấy hết đc product ròi anh chai");
-    //         result = res.data.data;
-    //         console.log(res.data.data);
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //         alert(err)
-    //     })
+    await axios.get(`http://localhost:5000/api/employee/off-day`, {
+        params: {...data}
+    })
+        .then(res => {
+            result = res.data.data;
+            console.log("Báo nghỉ", res.data.data);
+            this.props.getEmployeeDayOff(result);
+        })
+        .catch(err => {
+            console.log(err);
+            alert(err)
+        })
   }
 
   getShiftNameAndTime(shiftID)
@@ -144,7 +146,9 @@ class UnShiftEmployee extends Component {
                           >
                               <TableCell className={classes.goodTable_Cell}>{item._id.dateInWeek}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{this.getShiftNameAndTime(item._id.shiftType._id.shiftID)}</TableCell>
-                              <TableCell className={classes.goodTable_Cell}>{item.realDate}</TableCell>
+                              <TableCell className={classes.goodTable_Cell}>
+                                  {item._id.realDate ? item._id.realDate.substring(0,item._id.realDate.indexOf('T') ) : ""}
+                              </TableCell>
                               <TableCell className={classes.goodTable_Cell}>{item._id.employee._id.employeeID}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item._id.employee._id.employeeID)}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{item.alternativeEmployee._id.employeeID}</TableCell>
@@ -164,8 +168,7 @@ class UnShiftEmployee extends Component {
                                               {
                                                   item._id.dateInWeek = 'Monday';
                                                   const data = {
-                                                      token: localStorage.getItem('token'),
-                                                      
+                                                      token: localStorage.getItem('token'),   
                                                       offDay: {
                                                           _id: item._id
                                                       }
@@ -209,7 +212,7 @@ const mapStateToProps = (state, ownProps) => {
     nextWeekTimeKeeping: state.nextWeekTimeKeeping,
     listEmployee: state.listEmployee,
     listShift: state.listShift,
-    
+    infoUser: state.infoUser,
   }
 }
 
@@ -238,6 +241,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       });
       console.log("data", data)
     },
+    getEmployeeDayOff: (data) => {
+      dispatch({
+        type: "SET_NEXT_WEEK_TIMEKEEPER",
+        data: data
+      });
+    }
   }
 }
 
