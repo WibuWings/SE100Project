@@ -229,7 +229,7 @@ class EmployeeTab {
             ...req.body.shiftAssign,
             createAt: getCurrentDateTimeString(),
         };
-        
+
         newShiftAssign
             .save()
             .then((data) => {
@@ -348,7 +348,7 @@ class EmployeeTab {
                                     isPaidSalary: false,
                                 });
 
-                                const db =  newTimeKeeping.save();
+                                const db = newTimeKeeping.save();
 
                                 res.status(200).send(
                                     JSON.stringify({
@@ -380,7 +380,8 @@ class EmployeeTab {
                                         shiftType: currentShiftType,
                                         employee,
                                     },
-                                    alternatedEmployee: currentOffDay._id.employee,
+                                    alternatedEmployee:
+                                        currentOffDay._id.employee,
                                     realDate: new Date(),
                                     isPaidSalary: false,
                                 });
@@ -449,13 +450,13 @@ class EmployeeTab {
     createOffDay = async (req, res) => {
         const offDay = req.body.offDay;
         offDay._id.dateInWeek = getDayInWeek(offDay._id.realDate);
-        const newOffDayID = {...offDay._id};
+        const newOffDayID = { ...offDay._id };
         delete newOffDayID.realDate;
         // console.log(newOffDayID);
         // console.log(offDay);
         ShiftAssign.findOne({ _id: newOffDayID }).then((data) => {
             if (data) {
-                const shiftAssignOfAlternativeEmployee = {...offDay._id};
+                const shiftAssignOfAlternativeEmployee = { ...newOffDayID };
                 shiftAssignOfAlternativeEmployee.employee =
                     offDay.alternativeEmployee;
 
@@ -463,23 +464,51 @@ class EmployeeTab {
                     _id: shiftAssignOfAlternativeEmployee,
                 }).then((data) => {
                     if (data) {
-                        res.status(404).send("Employee is busy in this shift!");
+                        res.status(404).send(
+                            JSON.stringify({
+                                email: res.locals.decoded.email,
+                                token: res.locals.newToken,
+                                message: "Employee is busy in this shift!",
+                            })
+                        );
                     } else {
-                        const newOffDay = new NextWeekTimeKeeping({
-                            ...offDay,
-                        });
-                        // console.log("newOffDay",newOffDay);
-                        // console.log("newOffDay._id.employee",newOffDay._id.employee );
-                        newOffDay
-                            .save()
-                            .then((data) => {
-                                res.status(200).send(
-                                    JSON.stringify({
-                                        email: res.locals.decoded.email,
-                                        token: res.locals.newToken,
-                                        data,
-                                    })
-                                );
+                        NextWeekTimeKeeping.findOne({
+                            "_id.dateInWeek": offDay._id.dateInWeek,
+                            "_id.storeID": offDay._id.storeID,
+                            "_id.shiftType": offDay._id.shiftType,
+                            "_id.realDate": offDay._id.realDate,
+                            alternativeEmployee: offDay.alternativeEmployee,
+                        })
+                            .then((busyEmployee) => {
+                                if (busyEmployee) {
+                                    res.status(404).send(
+                                        JSON.stringify({
+                                            email: res.locals.decoded.email,
+                                            token: res.locals.newToken,
+                                            message:
+                                                "Employee is busy in this shift!",
+                                        })
+                                    );
+                                } else {
+                                    const newOffDay = new NextWeekTimeKeeping({
+                                        ...offDay,
+                                    });
+                                    newOffDay
+                                        .save()
+                                        .then((data) => {
+                                            res.status(200).send(
+                                                JSON.stringify({
+                                                    email: res.locals.decoded
+                                                        .email,
+                                                    token: res.locals.newToken,
+                                                    data,
+                                                })
+                                            );
+                                        })
+                                        .catch((err) => {
+                                            res.status(404).send(err);
+                                        });
+                                }
                             })
                             .catch((err) => {
                                 res.status(404).send(err);
@@ -487,7 +516,13 @@ class EmployeeTab {
                     }
                 });
             } else {
-                res.status(404).send("Not found shift for this employee!");
+                res.status(404).send(
+                    JSON.stringify({
+                        email: res.locals.decoded.email,
+                        token: res.locals.newToken,
+                        message: "Not found shift for this employee!",
+                    })
+                );
             }
         });
     };
@@ -498,7 +533,7 @@ class EmployeeTab {
         const deletedOffDay = req.body.offDay;
         deletedOffDay._id.realDate = new Date(deletedOffDay._id.realDate);
         // console.log("deletedOffDay._id", deletedOffDay._id);
-        
+
         // const newI = await NextWeekTimeKeeping.findOne({
         //     "_id.dateInWeek": deletedOffDay._id.dateInWeek,
         //     "_id.storeID": deletedOffDay._id.storeID,
@@ -512,7 +547,7 @@ class EmployeeTab {
             "_id.storeID": deletedOffDay._id.storeID,
             "_id.shiftType": deletedOffDay._id.shiftType,
             "_id.employee": deletedOffDay._id.employee,
-            "_id.realDate": deletedOffDay._id.realDate
+            "_id.realDate": deletedOffDay._id.realDate,
         })
             .then((data) => {
                 res.status(200).send(
