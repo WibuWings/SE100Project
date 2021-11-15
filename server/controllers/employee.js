@@ -496,22 +496,35 @@ class EmployeeTab {
 
     deleteOffDay = async (req, res) => {
         const deletedOffDay = req.body.offDay;
-        console.log("deletedOffDay._id", deletedOffDay._id);
-
-        const newI = await NextWeekTimeKeeping.findOne({_id: deletedOffDay._id});
-        console.log("newI", newI);
-        // NextWeekTimeKeeping.deleteOne({ _id: deletedOffDay._id })
-        //     .then((data) => {
-        //         res.status(200).send(
-        //             JSON.stringify({
-        //                 email: res.locals.decoded.email,
-        //                 token: res.locals.newToken,
-        //             })
-        //         );
-        //     })
-        //     .catch((err) => {
-        //         res.status(404).send(err);
-        //     });
+        deletedOffDay._id.realDate = new Date(deletedOffDay._id.realDate);
+        // console.log("deletedOffDay._id", deletedOffDay._id);
+        
+        // const newI = await NextWeekTimeKeeping.findOne({
+        //     "_id.dateInWeek": deletedOffDay._id.dateInWeek,
+        //     "_id.storeID": deletedOffDay._id.storeID,
+        //     "_id.shiftType": deletedOffDay._id.shiftType,
+        //     "_id.employee": deletedOffDay._id.employee,
+        //     "_id.realDate": deletedOffDay._id.realDate
+        // });
+        // console.log("newI", newI);
+        NextWeekTimeKeeping.deleteOne({
+            "_id.dateInWeek": deletedOffDay._id.dateInWeek,
+            "_id.storeID": deletedOffDay._id.storeID,
+            "_id.shiftType": deletedOffDay._id.shiftType,
+            "_id.employee": deletedOffDay._id.employee,
+            "_id.realDate": deletedOffDay._id.realDate
+        })
+            .then((data) => {
+                res.status(200).send(
+                    JSON.stringify({
+                        email: res.locals.decoded.email,
+                        token: res.locals.newToken,
+                    })
+                );
+            })
+            .catch((err) => {
+                res.status(404).send(err);
+            });
     };
     //
 }

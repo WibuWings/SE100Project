@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 
 const TimeKeeping = new Schema({
     _id: {
+        realDate: Date,
         dateInWeek: String,
         storeID: String,
         shiftType: {
@@ -52,7 +53,6 @@ const TimeKeeping = new Schema({
         startDate: Date,
         endDate: Date,
     },
-    realDate: Date,
     isPaidSalary: Boolean,
 });
 
