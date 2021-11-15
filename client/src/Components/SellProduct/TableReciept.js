@@ -123,7 +123,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.isDelete) }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted) }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"

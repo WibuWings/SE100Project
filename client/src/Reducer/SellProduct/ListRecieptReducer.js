@@ -32,7 +32,7 @@ const listRecieptInitialState = [],
             case "DELETE_RECIEPT":
                 return state.filter((value) => {
                     if (value.MAHD === action.MAHD) {
-                        value.isDelete = true
+                        value.deleted = true
                     }
                     return value;
                 })
@@ -46,10 +46,12 @@ const listRecieptInitialState = [],
                 return state.filter(value => {
                     let isCheck = false
                     action.listMAHD.map(value1 => {
-                        console.log(value.MAHD)
-                        console.log(value1)
                         if (value.MAHD == value1) {
-                            isCheck = true;
+                            if(value.deleted) {
+                                isCheck = true;
+                            } else {
+                                value.deleted = true
+                            }
                         }
                     })
                     if (!isCheck) return value

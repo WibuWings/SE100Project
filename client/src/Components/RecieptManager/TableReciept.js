@@ -17,6 +17,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios';
 import { FiXSquare } from 'react-icons/fi'
+import {TiArrowBack} from  'react-icons/ti'
 
 function Row(props) {
     const { row } = props;
@@ -159,7 +160,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.isDelete) }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted) }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <Checkbox {...label} checked={statusSelectReplace} onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
                 </TableCell>
@@ -217,7 +218,7 @@ function Row(props) {
                                         </TableBody>
                                     </Table>
                                 </Grid>
-                                <Grid style={{borderLeft: '1px solid black', marginTop: '15px'}} item lg={6}  md={12} sm={12} xs={12}>
+                                <Grid style={{ borderLeft: '1px solid black', marginTop: '15px' }} item lg={6} md={12} sm={12} xs={12}>
                                     <Grid container spacing={3}>
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
@@ -324,7 +325,13 @@ function Row(props) {
                                 <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
                                     <Grid style={{ justifyContent: 'end' }} container>
                                         <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
-                                            <Button onClick={() => DeleteReciept(row.MAHD, row.isDelete)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: 'red', color: 'white' }}>
+                                            <Button onClick={() => DeleteReciept(row.MAHD, row.deleted)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: '#00bfa5', color: 'white' }}>
+                                                <TiArrowBack style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></TiArrowBack>
+                                                Restone
+                                            </Button>
+                                        </Grid>
+                                        <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
+                                            <Button onClick={() => DeleteReciept(row.MAHD, row.deleted)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: red[400], color: 'white' }}>
                                                 <FiXSquare style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></FiXSquare>
                                                 Xóa bỏ
                                             </Button>
@@ -442,11 +449,11 @@ export default function CollapsibleTable() {
         if (search.length !== 0) {
             list = list.filter(value => {
                 let isCheck = true
-                for(let i = 0; i < search.length; i++){
-                   if(search[0] !== value.MAHD[0]){
+                for (let i = 0; i < search.length; i++) {
+                    if (search[0] !== value.MAHD[0]) {
                         isCheck = false;
                         break;
-                    } 
+                    }
                 }
                 if (isCheck) {
                     return value;
