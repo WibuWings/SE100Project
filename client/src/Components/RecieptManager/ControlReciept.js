@@ -3,6 +3,7 @@ import { Grid, Card, CardHeader, Divider, CardContent, Box, Modal, Button } from
 import { red, blue, lightBlue } from '@mui/material/colors';
 import { CgDanger } from 'react-icons/cg'
 import { useSelector, useDispatch } from 'react-redux'
+import {TiArrowBack} from 'react-icons/ti'
 import axios from 'axios'
 
 const style = {
@@ -30,6 +31,7 @@ function ControlReciept(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [typeDelete, setTypeDelete] = React.useState('');
+    const [typeRestone, setTypeRestone] = React.useState(false);
     const handleOpen = () => {
         setOpen(true);
     };
@@ -112,6 +114,29 @@ function ControlReciept(props) {
                 typeMessage: 'success',
             })
             handleClose();
+        } else if (typeDelete === 'RESTONE_ALL_RECIEPT') {
+            axios.post('http://localhost:5000/api/sell-product/restone-all-receipt', {
+                token: localStorage.getItem('token'),
+                email: infoUser.email,
+            })
+                .then(res => {
+                    console.log('Restone thành công')
+                })
+                .catch(err => {
+                    console.log('Restone thất bại')
+                })
+            dispatch({
+                type: typeDelete,
+            })
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+            dispatch({
+                type: "SHOW_ALERT",
+                message: 'Restone success',
+                typeMessage: 'success',
+            })
+            handleClose();
         }
     }
 
@@ -131,6 +156,13 @@ function ControlReciept(props) {
             handleOpen();
         }
 
+    }
+
+    const RestoneAll = () => {
+        setTypeDelete("RESTONE_ALL_RECIEPT")
+        setMessage("Are you want to restone all receipt?")
+        handleOpen();
+        setTypeRestone(true);
     }
 
     const DeleteInvoice = () => {
@@ -162,6 +194,12 @@ function ControlReciept(props) {
                             <Grid item md={12} sm={12}  >
                                 <Button onClick={() => changeStatus()} style={{ width: '100%', backgroundColor: blue[600], color: 'white' }} size='medium'>
                                     {statusSelectAll ? 'Turn off select all' : 'Select All'}
+                                </Button>
+                            </Grid>
+                            <Grid item md={12} sm={12}  >
+                                <Button onClick={() => RestoneAll()} style={{ width: '100%', backgroundColor: '#00bfa5', color: 'white' }} size='medium'>
+                                    <TiArrowBack style={{ fontSize: '1.6rem', paddingRight: '5px' }}></TiArrowBack>
+                                    Restone All
                                 </Button>
                             </Grid>
                             <Grid item md={12} sm={12}  >
@@ -197,7 +235,7 @@ function ControlReciept(props) {
                     <Divider />
                     <Grid style={{ marginTop: '5px' }} container spacing={2}>
                         <Grid style={{ justifyContent: 'center', display: 'flex' }} item md={6} sm={6}  >
-                            <Button onClick={() => handleDelete()} style={{ color: 'white', backgroundColor: red[500] }}>DELETE</Button>
+                            <Button onClick={() => handleDelete()} style={{ color: 'white', backgroundColor: typeRestone? '#00bfa5' : red[500] }}>{typeRestone ? 'RESTONE' : 'DELETE'}</Button>
                         </Grid>
                         <Grid style={{ justifyContent: 'center', display: 'flex' }} item md={6} sm={6}  >
                             <Button onClick={() => setOpen(false)} style={{ backgroundColor: lightBlue[100] }}>CANCEL</Button>

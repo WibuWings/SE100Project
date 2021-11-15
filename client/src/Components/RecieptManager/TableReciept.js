@@ -17,7 +17,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios';
 import { FiXSquare } from 'react-icons/fi'
-import {TiArrowBack} from  'react-icons/ti'
+import { TiArrowBack } from 'react-icons/ti'
 
 function Row(props) {
     const { row } = props;
@@ -140,6 +140,32 @@ function Row(props) {
         }
     }
 
+    const RestoneReciept = (MAHD) => {
+        axios.post('http://localhost:5000/api/sell-product/restone-receipt', {
+            token: localStorage.getItem('token'),
+            email: infoUser.email,
+            MAHD: MAHD
+        })
+            .then(res => {
+                console.log('Restone thành công')
+            })
+            .catch(err => {
+                console.log('Restone thất bại')
+            })
+        dispatch({
+            type: 'RESTONE_ONE_RECIEPT',
+            MAHD: MAHD
+        })
+        dispatch({
+            type: "HIDE_ALERT",
+        })
+        dispatch({
+            type: "SHOW_ALERT",
+            message: 'Restone success',
+            typeMessage: 'success',
+        })
+        setOpen(false);
+    }
 
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -324,12 +350,14 @@ function Row(props) {
                                 </Grid>
                                 <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
                                     <Grid style={{ justifyContent: 'end' }} container>
-                                        <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
-                                            <Button onClick={() => DeleteReciept(row.MAHD, row.deleted)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: '#00bfa5', color: 'white' }}>
-                                                <TiArrowBack style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></TiArrowBack>
-                                                Restone
-                                            </Button>
-                                        </Grid>
+                                        {row.deleted ? (
+                                            <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
+                                                <Button onClick={() => RestoneReciept(row.MAHD)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: '#00bfa5', color: 'white' }}>
+                                                    <TiArrowBack style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></TiArrowBack>
+                                                    Restone
+                                                </Button>
+                                            </Grid>
+                                        ) : null}
                                         <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
                                             <Button onClick={() => DeleteReciept(row.MAHD, row.deleted)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: red[400], color: 'white' }}>
                                                 <FiXSquare style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></FiXSquare>

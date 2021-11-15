@@ -6,7 +6,7 @@ const listRecieptInitialState = [],
                     let data = {
                         MAHD: value._id.receiptID,
                         name: value.employeeID.name,
-                        idUser:  value.employeeID._id.employeeID ? value.employeeID._id.employeeID : '',
+                        idUser: value.employeeID._id.employeeID ? value.employeeID._id.employeeID : '',
                         date: value.createAt,
                         discount: value.discount,
                         totalMoney: value.totalMoney,
@@ -15,7 +15,7 @@ const listRecieptInitialState = [],
                         time: value.timeCreate,
                         isEdit: value.isEdit,
                         oldBill: value.oldBill,
-                        isDelete: value.isDelete? value.isDelete : false,
+                        isDelete: value.isDelete ? value.isDelete : false,
                     }
                     state.push(data)
                 })
@@ -47,7 +47,7 @@ const listRecieptInitialState = [],
                     let isCheck = false
                     action.listMAHD.map(value1 => {
                         if (value.MAHD == value1) {
-                            if(value.deleted) {
+                            if (value.deleted) {
                                 isCheck = true;
                             } else {
                                 value.deleted = true
@@ -59,6 +59,18 @@ const listRecieptInitialState = [],
             case "DELETE_MAHD_INVOICE_RECIEPT":
                 return state.filter(value => {
                     return !value.isDelete
+                })
+            case "RESTONE_ONE_RECIEPT":
+                return state.filter(value => {
+                    if (value.MAHD === action.MAHD) {
+                        value.deleted = false;
+                    }
+                    return value
+                })
+            case "RESTONE_ALL_RECIEPT":
+                return state.filter(value => {
+                    value.deleted = false;
+                    return value
                 })
             case "DELETE_ALL_RECIEPT":
                 return []
