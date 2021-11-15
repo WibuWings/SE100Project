@@ -118,8 +118,8 @@ class myReceipt {
         });
     }
     restoreRecieptOne = async (req, res) => {
-        const products = req.body.listMAHD
-        Receipt.restore({"_id.receiptID" : { $in: [...products]} })
+        const products = req.body.MAHD
+        Receipt.restore({"_id.receiptID" : products })
             .then((data) => {
                 res.status(200).send(
                     JSON.stringify({
@@ -180,8 +180,8 @@ class myReceipt {
         });
     }
     deleteRecieptForceOne = async (req, res) => {
-        const email = req.body.email;
-        Receipt.deleteOne({ "_id.storeID": email})
+        const products = req.body.MAHD
+        Receipt.deleteOne({"_id.receiptID" : products })
         .then((data) => {
             res.status(200).send(
                 JSON.stringify({
