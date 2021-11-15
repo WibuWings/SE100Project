@@ -33,27 +33,31 @@ class FixedCalendar extends Component {
     this.state= {
       change: 'false'
     }
+    this.getAllShiftAssign();
   }
-  getAllShiftAssign()
+  async getAllShiftAssign()
   {
+    var result = [];
     const data = {
       token: localStorage.getItem('token'),
       filter: {
           "_id.storeID": this.props.infoUser.email,
       }   
     }
-    // await axios.get(`http://localhost:5000/api/????`, {
-    //     params: {...data}
-    // })
-    //     .then(res => {
-    //         // alert("Lấy hết đc product ròi anh chai");
-    //         result = res.data.data;
-    //         console.log(res.data.data);
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //         alert(err)
-    //     })
+    await axios.get(`http://localhost:5000/api/employee/shift-assign`, {
+        params: {...data}
+    })
+        .then(res => {
+            result = res.data.data;
+            // console.log("shift-Assign", res.data.data);
+            this.props.setShiftAssign(result);
+            console.log("this.props.listShiftAssign", this.props.listShiftAssign);
+        })
+        .catch(err => {
+            console.log(err);
+            // alert(err)
+        })
+        // 
   }
   render() {
     const { classes } = this.props;
@@ -78,13 +82,13 @@ class FixedCalendar extends Component {
                           (
                               <TableRow>
                                   <TableCell className={classes.goodTable_Cell} width={100}>{shift.timeFrom + '-' + shift.timeEnd}</TableCell>
-                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'T2'}></FixedTableCell>
-                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'T3'}></FixedTableCell>
-                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'T4'}></FixedTableCell>
-                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'T5'}></FixedTableCell>
-                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'T6'}></FixedTableCell>
-                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'T7'}></FixedTableCell>
-                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'CN'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Monday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Tuesday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Wednesday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Thursday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Friday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Saturday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Sunday'}></FixedTableCell>
                               </TableRow>
                           ))
                       }
@@ -97,14 +101,21 @@ class FixedCalendar extends Component {
   
 }
 const mapStateToProps = (state, ownProps) => {
-  return {
-    listShift: state.listShift,
-  }
+    return {
+        listShift: state.listShift,
+        infoUser: state.infoUser,
+        listShiftAssign: state.listShiftAssign,
+    }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-      
+      setShiftAssign: (data) => {
+          dispatch({
+              type: "SET_SHIFT_ASSIGN",
+              data: data,
+          });
+      }
   }
 }
 
