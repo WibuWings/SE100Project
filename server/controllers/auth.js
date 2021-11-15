@@ -377,7 +377,7 @@ async function getAllDataEmployee(username){
     const employees = await Employee.findOne({"_id.employeeID" : username});
     const [employee,reciept,product] = await Promise.all(
         [Employee.find({ "_id.employeeID" : username}).exec(),
-        Receipt.find({"EmployeeID._id.employeeID" : username}).exec(),
+        Receipt.findWithDeleted({"EmployeeID._id.employeeID" : username}).exec(),
         Product.find({"_id.storeID" : employees._id.storeID}).exec()]);
     return {employee,reciept,product}
 }
