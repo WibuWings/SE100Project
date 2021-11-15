@@ -303,6 +303,10 @@ class EmployeeTab {
                 getTimeFromTimeString(shift.timeEnd) - time >= 0
             );
         });
+        var realDate = new Date();
+        realDate.setHours = 0;
+        realDate.setMinutes = 0;
+        realDate.setSeconds = 0;
 
         if (currentShiftType) {
             ShiftAssign.findOne({
@@ -320,10 +324,13 @@ class EmployeeTab {
                 .then((data) => {
                     if (data) {
                         NextWeekTimeKeeping.find({
-                            _id: data._id,
+                            "_id.dateInWeek": data._id.dateInWeek,
+                            "_id.storeID": data._id.storeID,
+                            "_id.shiftType": data._id.shiftType,
+                            "_id.employee": data._id.employee,
                         }).then((result) => {
                             var currentOffDay = result.find((offDay) => {
-                                return dateEquals(offDay, new Date());
+                                return dateEquals(offDay._id.realDate, new Date());
                             });
 
                             if (currentOffDay) {
@@ -336,27 +343,46 @@ class EmployeeTab {
                                     })
                                 );
                             } else {
-                                const newTimeKeeping = new TimeKeeping({
-                                    _id: {
-                                        dateInWeek,
-                                        storeID,
-                                        shiftType: currentShiftType,
-                                        employee,
-                                    },
-                                    alternatedEmployee: {},
-                                    realDate: new Date(),
-                                    isPaidSalary: false,
-                                });
-
-                                const db = newTimeKeeping.save();
-
-                                res.status(200).send(
-                                    JSON.stringify({
-                                        employeeID: res.locals.decoded.email,
-                                        token: res.locals.newToken,
-                                        message: "Check-in successfully!",
-                                    })
-                                );
+                                TimeKeeping.findOne({
+                                    "_id.dateInWeek": dateInWeek,
+                                    "_id.storeID": storeID,
+                                    "_id.shiftType": currentShiftType,
+                                    "_id.employee": employee,
+                                    "_id.realDate": realDate,
+                                })
+                                .then(timeKeeping => {
+                                    if(timeKeeping) {
+                                        res.status(200).send(
+                                            JSON.stringify({
+                                                employeeID: res.locals.decoded.email,
+                                                token: res.locals.newToken,
+                                                message: "You have been Checked-in",
+                                            })
+                                        );
+                                    } else {
+                                        const newTimeKeeping = new TimeKeeping({
+                                            _id: {
+                                                dateInWeek,
+                                                storeID,
+                                                shiftType: currentShiftType,
+                                                employee,
+                                                realDate: new Date(),
+                                            },
+                                            alternatedEmployee: {},
+                                            isPaidSalary: false,
+                                        });
+        
+                                        const db = newTimeKeeping.save();
+        
+                                        res.status(200).send(
+                                            JSON.stringify({
+                                                employeeID: res.locals.decoded.email,
+                                                token: res.locals.newToken,
+                                                message: "Check-in successfully!",
+                                            })
+                                        );
+                                    }
+                                })
                             }
                         });
                     } else {
@@ -369,7 +395,7 @@ class EmployeeTab {
                             },
                         }).then((result) => {
                             var currentOffDay = result.find((offDay) => {
-                                return dateEquals(offDay, new Date());
+                                return dateEquals(offDay._id.realDate, new Date());
                             });
 
                             if (currentOffDay) {
@@ -379,10 +405,10 @@ class EmployeeTab {
                                         storeID,
                                         shiftType: currentShiftType,
                                         employee,
+                                        realDate: new Date(),
                                     },
                                     alternatedEmployee:
                                         currentOffDay._id.employee,
-                                    realDate: new Date(),
                                     isPaidSalary: false,
                                 });
 
@@ -420,7 +446,30 @@ class EmployeeTab {
         }
     };
 
-    updateTimeKeeping = async (req, res) => {};
+    updateTimeKeeping = async (req, res) => {
+        var updatedTimeKeeping = req.body.updatedTimeKeeping;
+
+        TimeKeeping.findOneAndUpdate({_id: updatedTimeKeeping._id},
+            {
+            $set: {
+                ...updatedTimeKeeping
+            },
+        },
+        {
+            returnOriginal: false,
+        },)
+        .then((data)=>{
+            res.status(200).send(
+                JSON.stringify({
+                    employeeID: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                    message:
+                        "Update successfully!",
+                    data
+                })
+            );
+        })
+    };
 
     deleteTimeKeeping = async (req, res) => {};
     //
