@@ -49,7 +49,7 @@ class myReceipt {
        });
 
     };
-    updateReciept= async (req, res) => {
+    updateReciept = async (req, res) => {
         Receipt.findOneAndUpdate(
             {'_id.receiptID': req.body.MAHD}, 
             {
@@ -71,5 +71,68 @@ class myReceipt {
             res.status(404).send(err);
         });
     };
+    deleteReciept = async (req, res) => {
+        const products = req.body.listMAHD
+        Receipt.delete({"_id.receiptID" : { $in: [...products]}})
+        .then((data) => {
+            res.status(200).send(
+                JSON.stringify({
+                    email: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                    data
+                })  
+            );
+        })
+        .catch((err) => {
+            res.status(404).send(err);
+        });
+    }
+    restoreReciept = async (req, res) => {
+        const products = req.body.listMAHD
+        Receipt.restore({"_id.receiptID" : { $in: [...products]} })
+            .then((data) => {
+                res.status(200).send(
+                    JSON.stringify({
+                        email: res.locals.decoded.email,
+                        token: res.locals.newToken,
+                        data,
+                    })
+                );
+            })
+            .catch((err) => {
+                res.status(404).send(err);
+            });
+    };
+    deleteRecieptAll = async (req, res) => {
+        const email = req.body.email;
+        Receipt.delete({ "_id.storeID": email})
+        .then((data) => {
+            res.status(200).send(
+                JSON.stringify({
+                    email: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                })
+            );
+        })
+        .catch((err) => {
+            res.status(404).send(err);
+        });
+
+    }
+    deleteRecieptForce = async (req, res) => {
+        const email = req.body.email;
+        Receipt.deleteMany({ "_id.storeID": email})
+        .then((data) => {
+            res.status(200).send(
+                JSON.stringify({
+                    email: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                })
+            );
+        })
+        .catch((err) => {
+            res.status(404).send(err);
+        });
+    }
 }
 module.exports = new myReceipt();
