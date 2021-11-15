@@ -426,7 +426,7 @@ export default function CollapsibleTable() {
         var list = typeReciept.length === 0 ? listReciept : listReciept.filter(value => {
             for (var i = 0; i < typeReciept.length; i++) {
                 if (typeReciept[i] === 'delete') {
-                    if (value.isDelete) {
+                    if (value.deleted) {
                         return value;
                     }
                 } else if (typeReciept[i] === 'return') {
