@@ -448,10 +448,12 @@ class EmployeeTab {
 
     createOffDay = async (req, res) => {
         const offDay = req.body.offDay;
-        offDay._id.dateInWeek = getDayInWeek(offDay.realDate);
-
+        offDay._id.dateInWeek = getDayInWeek(offDay._id.realDate);
+        const newOffDayID = {...offDay._id};
+        delete newOffDayID.realDate;
+        // console.log(newOffDayID);
         // console.log(offDay);
-        ShiftAssign.findOne({ _id: offDay._id }).then((data) => {
+        ShiftAssign.findOne({ _id: newOffDayID }).then((data) => {
             if (data) {
                 const shiftAssignOfAlternativeEmployee = {...offDay._id};
                 shiftAssignOfAlternativeEmployee.employee =
@@ -466,8 +468,8 @@ class EmployeeTab {
                         const newOffDay = new NextWeekTimeKeeping({
                             ...offDay,
                         });
-                        console.log("newOffDay",newOffDay);
-                        console.log("newOffDay._id.employee",newOffDay._id.employee );
+                        // console.log("newOffDay",newOffDay);
+                        // console.log("newOffDay._id.employee",newOffDay._id.employee );
                         newOffDay
                             .save()
                             .then((data) => {
@@ -494,21 +496,22 @@ class EmployeeTab {
 
     deleteOffDay = async (req, res) => {
         const deletedOffDay = req.body.offDay;
-        console.log(deletedOffDay);
+        console.log("deletedOffDay._id", deletedOffDay._id);
+
         const newI = await NextWeekTimeKeeping.findOne({_id: deletedOffDay._id});
-        console.log(newI);
-        NextWeekTimeKeeping.deleteOne({ _id: deletedOffDay._id })
-            .then((data) => {
-                res.status(200).send(
-                    JSON.stringify({
-                        email: res.locals.decoded.email,
-                        token: res.locals.newToken,
-                    })
-                );
-            })
-            .catch((err) => {
-                res.status(404).send(err);
-            });
+        console.log("newI", newI);
+        // NextWeekTimeKeeping.deleteOne({ _id: deletedOffDay._id })
+        //     .then((data) => {
+        //         res.status(200).send(
+        //             JSON.stringify({
+        //                 email: res.locals.decoded.email,
+        //                 token: res.locals.newToken,
+        //             })
+        //         );
+        //     })
+        //     .catch((err) => {
+        //         res.status(404).send(err);
+        //     });
     };
     //
 }
