@@ -27,6 +27,7 @@ class FixedCalendarCell extends Component {
     this.state= {
       change: false
     }
+    
   }
 
  
@@ -71,7 +72,7 @@ class FixedCalendarCell extends Component {
           token: localStorage.getItem('token'),
           shiftAssign: {
             _id: {
-              dateInWeek: "Monday",
+              dateInWeek: this.props.dayIndex,
               storeID: this.props.infoUser.email,
               shiftType: {
                   _id: {
@@ -169,6 +170,18 @@ class FixedCalendarCell extends Component {
       return false;
   }
 
+  findEmployeeInShift(employeeID)
+  {
+      var listShiftAssign = this.props.listShiftAssign;
+      for(var i = 0 ; i < listShiftAssign.length; i++)
+      {
+          if(this.props.shiftID == listShiftAssign[i]._id.shiftType._id.shiftID 
+            && this.props.dayIndex == listShiftAssign[i]._id.dateInWeek
+            && listShiftAssign[i]._id.employee._id.employeeID == employeeID)
+          return true;
+      }
+      return false;
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -236,12 +249,12 @@ class FixedCalendarCell extends Component {
                     </div>
                   : null
                 )
-                
               )
             }
             {
               this.isOpen 
               ? 
+              // Đây là cái bảng chọn nhân viên
               <List 
                 style={{
                   position: 'absolute',
@@ -256,6 +269,7 @@ class FixedCalendarCell extends Component {
               >
                 {
                   this.props.listEmployee.employees.map((item) =>
+                    this.findEmployeeInShift(item._id.employeeID) ? null :
                     <ListItem disablePadding height={30} onClick={() => this.addThisShiftAssign(item._id.employeeID)}>
                         <ListItemButton>
                             <ListItemText>

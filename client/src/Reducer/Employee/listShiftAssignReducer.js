@@ -26,10 +26,8 @@ const listShiftAssignInitialState =
 
 const listShiftAssignReducer = (state = listShiftAssignInitialState, action) => {
         switch (action.type) {
-            // case "SET_NEXT_WEEK_TIMEKEEPER":
-            //     return{
-            //         state: action.data
-            //     }
+            case "SET_SHIFT_ASSIGN":
+                return action.data;
             case "ADD_NEW_SHIFT_ASSIGN":
                 return [...state, action.data]
             // case "UPDATE_NEXT_WEEK_TIMEKEEPER":
