@@ -220,5 +220,26 @@ class myReceipt {
                 );
             });
     };
+    deleteRecieptOne = async (req, res) => {
+        const products = req.body.MAHD
+        Receipt.delete({"_id.receiptID" : products })
+        .then((data) => {
+            res.status(200).send(
+                JSON.stringify({
+                    email: res.locals.decoded.email,
+                    token: res.locals.newToken,
+                    status: STATUS.SUCCESS,
+                    data
+                })  
+            );
+        })
+        .catch((err) => {
+            res.send(
+                JSON.stringify({
+                    status: STATUS.FAILURE,
+                })
+            );
+        });
+    }
 }
 module.exports = new myReceipt();
