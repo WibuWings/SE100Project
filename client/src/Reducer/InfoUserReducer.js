@@ -43,6 +43,11 @@ const infoUserInitialState = {
                     employeeID: action.data._id.employeeID,
                     password: action.data.password,  
                 }
+            case "SET_EMPLOYEE_PASS":
+                return{
+                    ...state,
+                    password: action.password,
+                }
             case "UPDATA_PROFILE_DATA_USER":
                 return {
                     ...state, 

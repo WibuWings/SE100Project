@@ -55,6 +55,7 @@ class ChangePassword extends Component {
             .then(res => {
                 this.props.hideAlert();
                 this.props.showAlert("Change password success", "success");
+                this.props.setEmployeePass(this.newPass);
             })
             .catch(err => {
                 console.log(err);
@@ -256,6 +257,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         hideAlert: () => {
             dispatch({
                 type: "HIDE_ALERT",
+            })
+        },
+        setEmployeePass: (password) => {
+            dispatch({
+                type: "SET_EMPLOYEE_PASS",
+                password: password
             })
         }
     }
