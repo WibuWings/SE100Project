@@ -263,13 +263,13 @@ function ControlReciept(props) {
                                     Delete Selected
                                 </Button>
                             </Grid>
-                            <Grid item md={12} sm={12}  >
+                            <Grid style={{display:'none'}} item md={12} sm={12}  >
                                 <Button onClick={() => DeleteInvoice()} style={{ width: '100%', backgroundColor: red[400], color: 'white' }} size='medium'>
                                     <CgDanger style={{ fontSize: '1.6rem', paddingRight: '5px' }}></CgDanger>
                                     Delete deleted invoice
                                 </Button>
                             </Grid>
-                            <Grid item md={12} sm={12}  >
+                            <Grid  item md={12} sm={12}  >
                                 <Button onClick={() => DeleteAll()} style={{ width: '100%', backgroundColor: red[600], color: 'white' }} size='medium'>
                                     <CgDanger style={{ fontSize: '1.6rem', paddingRight: '5px' }}></CgDanger>
                                     Delete All
