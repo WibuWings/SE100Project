@@ -34,9 +34,9 @@ const TimeKeeping = new Schema({
             startDate: Date,
             endDate: Date,
         },
+        realDate: Date,
     },
-    isAttending: Boolean,
-    alternativeEmployee: {
+    alternatedEmployee: {
         _id: {
             employeeID: String,
             storeID: String,
@@ -53,7 +53,6 @@ const TimeKeeping = new Schema({
         startDate: Date,
         endDate: Date,
     },
-    realDate: Date,
     isPaidSalary: Boolean,
 });
 

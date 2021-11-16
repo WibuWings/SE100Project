@@ -28,7 +28,19 @@ class EmployeeMoreMenu extends Component {
         
     }
 
-    edit() {
+    getSackedEmployeeByID(employeeID) {
+        var listEmployee = this.props.listSackedEmployee.employees;
+        console.log(listEmployee);
+        for(var i = 0; i < listEmployee.length ; i++)
+        {
+          if(employeeID == listEmployee[i]._id.employeeID)
+          {
+            return listEmployee[i];
+          }
+        }
+    }
+
+    backToWork() {
         const data = {
             token: localStorage.getItem('token'),
             employee:
@@ -47,6 +59,12 @@ class EmployeeMoreMenu extends Component {
             .catch(err => {
                 alert(err);
             })
+
+        // Xoá khỏi redux sacked
+        this.props.backToWorkSackedEmployee(this.props.data);
+
+        // Thêm vào redux ko sacked
+        this.props.addEmployee(this.getSackedEmployeeByID(this.props.data));
     }
 
     delete() {
@@ -104,7 +122,7 @@ class EmployeeMoreMenu extends Component {
             </MenuItem>
     
             <MenuItem sx={{ color: 'text.secondary' }}
-                onClick={() => this.edit()}
+                onClick={() => this.backToWork()}
             >
                 <ListItemIcon>
                 <Icon icon={editFill} width={24} height={24} />
@@ -123,12 +141,24 @@ const mapStateToProps = (state, ownProps) => {
         payEmployeeStatus: state.payEmployeeStatus,
         listEmployee: state.listEmployee,
         infoUser: state.infoUser,
+        listSackedEmployee: state.listSackedEmployee,
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        
+        backToWorkSackedEmployee: (id) => {
+            dispatch({
+                type: "RETURN_TO_WORK",
+                id: id
+            });
+        },
+        addEmployee: (data) => {
+            dispatch({
+                type: "ADD_EMPLOYEE",
+                employees: data,
+            });
+        },
     }
 }
 

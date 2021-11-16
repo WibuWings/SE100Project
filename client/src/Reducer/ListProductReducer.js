@@ -21,7 +21,7 @@ const listProductInitialState = [
     listProductReducer = (state = listProductInitialState, action) => {
         switch (action.type) {
             case "GET_PRODUCT_AND_TYPE":
-                return{
+                return {
                     state: action.data
                 }
             default:

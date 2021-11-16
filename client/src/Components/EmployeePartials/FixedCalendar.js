@@ -33,79 +33,85 @@ class FixedCalendar extends Component {
     this.state= {
       change: 'false'
     }
+    this.getAllShiftAssign();
   }
-  // Lấy các ca làm và từ đó tạo các dòng của ca làm đó, đầu tiên cứ mặc định là có 3 ca làm đã
-  listShift = [
-    {
-        timeFrom: '6h',
-        timeTo: '9h',
-        name: 'Morning shift 1'
-    },
-    {
-        timeFrom: '9h',
-        timeTo: '12h',
-        name: 'Morning shift 2'
-    },
-    {
-        timeFrom: '12h',
-        timeTo: '4h',
-        name: 'Afternoon shift'
-    },
-    {
-        timeFrom: '4h',
-        timeTo: '8h',
-        name: 'Night shift'
+  async getAllShiftAssign()
+  {
+    var result = [];
+    const data = {
+      token: localStorage.getItem('token'),
+      filter: {
+          "_id.storeID": this.props.infoUser.email,
+      }   
     }
-  ]
+    await axios.get(`http://localhost:5000/api/employee/shift-assign`, {
+        params: {...data}
+    })
+        .then(res => {
+            result = res.data.data;
+            this.props.setShiftAssign(result);
+        })
+        .catch(err => {
+            console.log(err);
+            alert(err)
+        })
+  }
   render() {
     const { classes } = this.props;
     return (
-      <div style={{marginTop: 10, padding: 24, maxHeight: 600, overflowY: 'auto'}}> 
+      <div style={{marginTop: 10, padding: 24, maxHeight: 600}}> 
           <TableContainer component={Paper}>
               <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                   <TableHead>
                       <TableRow>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Shift</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center">Mon</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center">Tue</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center">Wed</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center">Thu</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center">Fri</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center">Sat</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center">Sun</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Shift</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Mon</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Tue</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Wed</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Thu</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Fri</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Sat</TableCell>
+                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Sun</TableCell>
                       </TableRow>
+                  </TableHead>
                       {
-                          this.listShift.map((shift) => (
+                          this.props.listShift.map((shift) => 
+                          (
                               <TableRow>
-                                  <TableCell className={classes.goodTable_Cell}>{shift.timeFrom + '-' + shift.timeTo}</TableCell>
-                                  <FixedTableCell></FixedTableCell>
-                                  <FixedTableCell></FixedTableCell>
-                                  <FixedTableCell></FixedTableCell>
-                                  <FixedTableCell></FixedTableCell>
-                                  <FixedTableCell></FixedTableCell>
-                                  <FixedTableCell></FixedTableCell>
-                                  <FixedTableCell></FixedTableCell>
+                                  <TableCell className={classes.goodTable_Cell} width={100}>{shift.timeFrom + '-' + shift.timeEnd}</TableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Monday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Tuesday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Wednesday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Thursday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Friday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Saturday'}></FixedTableCell>
+                                  <FixedTableCell shiftID = {shift._id.shiftID} dayIndex = {'Sunday'}></FixedTableCell>
                               </TableRow>
                           ))
                       }
-                  </TableHead>
               </Table>
           </TableContainer>
-          <Button variant="contained">Save</Button>
       </div>
     );
   }
   
 }
 const mapStateToProps = (state, ownProps) => {
-  return {
-    
-  }
+    return {
+        listShift: state.listShift,
+        infoUser: state.infoUser,
+        listShiftAssign: state.listShiftAssign,
+    }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-      
+      setShiftAssign: (data) => {
+          dispatch({
+              type: "SET_SHIFT_ASSIGN",
+              data: data,
+          });
+      }
   }
 }
 

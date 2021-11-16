@@ -32,7 +32,13 @@ import UpdateEmployeeModal from './EmployeePartials/UpdateEmployeeModal';
 import PayMoneyModal from './EmployeePartials/PayMoneyModal';
 import FixedCalendar from './EmployeePartials/FixedCalendar';
 import UnShiftEmployee from './EmployeePartials/UnShiftEmployee';
+import AddNextWeekTimeKeepingModal from './EmployeePartials/AddNextWeekTimeKeeping';
+import UpdateNextWeekTimeKeepingModal from './EmployeePartials/UpdateNextWeekTimeKeeping';
+import NoJobEmployee from './EmployeePartials/NoJobEmployee';
 import { withStyles } from '@material-ui/styles';
+import TimekeepingTable from './EmployeePartials/TimekeepingTable';
+import AddTimeKeepingModal from './EmployeePartials/AddTimeKeeperModal';
+import UpdateTimeKeepingModal from './EmployeePartials/UpdateTimeKeepingModal';
 
 import axios from 'axios';
 
@@ -101,7 +107,7 @@ class EmployeeManager extends Component {
             change: false,
         }; 
         //this.getAllEmployee();
-        this.getAllEmployee();
+        // this.getAllEmployee();
         this.getSackedEmployee();
     }
 
@@ -180,7 +186,6 @@ class EmployeeManager extends Component {
         }
         // Thêm vào cái redux
         this.props.getEmployee(listUsers);
-        console.log("listUsers", listUsers);
         this.setState({change: !this.state.change});
     }
     // Thêm nhân viên
@@ -284,14 +289,12 @@ class EmployeeManager extends Component {
             .then(res => {
                 // alert("Lấy hết đc product ròi anh chai");
                 result = res.data.data;
-                console.log(res.data.data);
             })
             .catch(err => {
                 console.log(err);
                 alert(err)
             })
         this.props.getSackedEmployee(result);
-        console.log("sacked reducer", this.props.listSackedEmployee)
         this.setState({change: !this.state.change});
     }
 
@@ -459,7 +462,9 @@ class EmployeeManager extends Component {
                                             </Stack>
                                         </TableCell>
                                         <TableCell className = {classes.goodTable_Cell} align="left">{row.lastName}</TableCell>  
-                                        <TableCell className = {classes.goodTable_Cell}align="left">{row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T'))}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="left">
+                                            {row.dateOfBirth.indexOf('T') != -1 ? row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T')): row.dateOfBirth}
+                                        </TableCell>
                                         <TableCell className = {classes.goodTable_Cell}align="left">{"gender"}</TableCell>
                                         <TableCell className = {classes.goodTable_Cell}align="left">{"province"}</TableCell>
                                         <TableCell className = {classes.goodTable_Cell}align="left">{row.phoneNumber}</TableCell>
@@ -490,7 +495,12 @@ class EmployeeManager extends Component {
                     </Card>
                 </Container>
                 <FixedCalendar/>
+                <NoJobEmployee></NoJobEmployee>
                 <UnShiftEmployee/>
+                <TimekeepingTable></TimekeepingTable> 
+                
+
+                {/* Sacked EMployee */}
                 <Container
                     style={{marginTop: 20, }}
                 >
@@ -584,6 +594,8 @@ class EmployeeManager extends Component {
                     /> */}
                     </Card>
                 </Container>
+
+
                 {/* Đây là phần modal */}
                 {this.props.addEmployeeStatus ? (
                     <div 
@@ -603,7 +615,7 @@ class EmployeeManager extends Component {
                         className="modal-add"
                     >
                         <div onClick={() => {this.props.changeUpdateEmployeeStatus();}} 
-                            className="moFixedCalendar"
+                            className="modal-overlay"
                         />
                         <UpdateEmployeeModal
                             style={{
@@ -626,7 +638,66 @@ class EmployeeManager extends Component {
                         </PayMoneyModal>
                     </div>
                 ): null}
-
+                {this.props.statusAddNextWeekTimeKeeping 
+                ? 
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changeAddNextWeekTimeKeepingStatus();}} className="modal-overlay"></div>
+                        <AddNextWeekTimeKeepingModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </AddNextWeekTimeKeepingModal>
+                    </div>
+                : null
+                }
+                {this.props.statusUpdateNextWeekTimeKeeping 
+                ? 
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changeUpdateNextWeekTimeKeepingStatus();}} className="modal-overlay"></div>
+                        <UpdateNextWeekTimeKeepingModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </UpdateNextWeekTimeKeepingModal>
+                    </div>
+                : null
+                }
+                {this.props.statusAddTimeKeeping 
+                ? 
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changeAddTimeKeepingStatus()}} className="modal-overlay"></div>
+                        <AddTimeKeepingModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </AddTimeKeepingModal>
+                    </div>
+                : null
+                }
+                {this.props.statusUpdateTimeKeeping 
+                ? 
+                    <div 
+                        className="modal-add"
+                    >
+                        <div onClick={() => {this.props.changeUpdateTimeKeepingStatus();}} className="modal-overlay"></div>
+                        <UpdateTimeKeepingModal
+                            style={{
+                                marginTop: 0
+                            }}
+                        >
+                        </UpdateTimeKeepingModal>
+                    </div>
+                : null
+                }
             </div>
             
         );
@@ -641,6 +712,10 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         listEmployee: state.listEmployee,
         listSackedEmployee: state.listSackedEmployee,
+        statusAddNextWeekTimeKeeping: state.statusAddNextWeekTimeKeeping,
+        statusUpdateNextWeekTimeKeeping: state.statusUpdateNextWeekTimeKeeping,
+        statusAddTimeKeeping: state.statusAddTimeKeeping,
+        statusUpdateTimeKeeping: state.statusUpdateTimeKeeping,
     }
 }
 
@@ -672,8 +747,27 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "GET_EMPLOYEE_SACKED",
                 employees: data,
             });
-        }
-
+        },
+        changeAddNextWeekTimeKeepingStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_NEXTWEEK_TIMEKEEPING_STATUS",
+            });
+        },
+        changeUpdateNextWeekTimeKeepingStatus: () => {
+            dispatch({
+                type: "CHANGE_UPDATE_NEXTWEEK_TIMEKEEPING_STATUS",
+            });
+        },
+        changeAddTimeKeepingStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_TIMEKEEPING_STATUS",
+            });
+        },
+        changeUpdateTimeKeepingStatus: () => {
+            dispatch({
+                type: "CHANGE_UPDATE_TIMEKEEPING_STATUS",
+            });
+        },
     }
 }
 export default connect(mapStateToProps , mapDispatchToProps)((withStyles(styles, {withTheme: true}))(EmployeeManager));

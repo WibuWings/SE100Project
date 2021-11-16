@@ -40,6 +40,22 @@ class AddEmployeeModal extends Component {
         this.getAllEmployee(); 
     }
 
+    getCurrentDateTime()
+    {
+        var currentDate = new Date();
+        var day = (currentDate.toString().split(' '))[2];
+        if(day.length < 2)
+        {
+            day = '0' + day;
+        }
+        var month = (new Date().getMonth() + 1).toString();
+        if(month.length<2)
+        {
+            month = '0' + month;
+        }
+        return new Date().getFullYear() + '-' + month + '-' + day;
+    }
+
     async getAllEmployee () {
         var result = [];
         const data = {
@@ -72,6 +88,119 @@ class AddEmployeeModal extends Component {
         this.setState({change: !this.state.change});
     }
 
+    isGreater(dateString1, dateString2){
+        return (new Date(dateString1).getTime() - new Date(dateString2).getTime()) > 0;
+    }
+
+    checkConstraint() {
+        // Constraint 1: ID trống hoặc bị trùng
+        var id  = document.querySelector('input[name="ID"]').value;
+        if( id.length == 0)
+        {
+            alert("Không thể nhập id rỗng");
+            return false;
+        }
+        for(var i = 0; i < this.props.listEmployee.employees.length ; i++)
+        {
+            if(this.props.listEmployee.employees[i]._id.employeeID == id)
+            {
+                alert("ID đã bị trùng");
+                return false;
+            }
+        }
+        // Trùng ID sa thải
+        for(var i = 0; i < this.props.listSackedEmployee.employees.length ; i++)
+        {
+            if(this.props.listSackedEmployee.employees[i]._id.employeeID == id)
+            {
+                alert("ID đã bị trùng với nhân viên đã sai thải");
+                return false;
+            }
+        }
+
+        //Constraint 2: Password không được có dưới 6 ký tự
+        var password = document.querySelector('input[name="password"]').value.trim();
+        if(password.length == 0)
+        {
+            alert("Password không được rỗng");
+            return false;
+        }
+        if(password.length < 6)
+        {
+            alert("Password không được có dưới 6 ký tự");
+            return false;
+        }
+        // Constraint 3: FirstName không được trống
+        var firstName =  document.querySelector('input[name="firstName"]').value.trim();
+        if(firstName.length == 0)
+        {
+            alert('Tên riêng không được rỗng');
+            return false;
+        }
+        // Constraint 4: lastName không được trống
+        var lastName =  document.querySelector('input[name="lastName"]').value.trim();
+        if(lastName.length == 0)
+        {
+            alert('Họ không được trống');
+            return false;
+        }
+        // Constraint 5: Số ID card không được để trống
+        var cardID= document.querySelector('input[name="cardID"]').value.trim();
+        if(cardID.length == 0)
+        {
+            alert("Số id card không được để trống");
+            return false;
+        }
+        // Constrain 6:Số điện thoại không được để trống và phải lớn hơn 6 ký tự
+        var phoneNumber= document.querySelector('input[name="phoneNumber"]').value;
+        if(phoneNumber.length == 0)
+        {
+            alert("Số điện thoại không được để trống");
+            return false;
+        }
+        if(phoneNumber.length < 6)
+        {
+            alert("Số điện thoại không được dưới 6 ký tự");
+            return false;
+        }
+        // Constrain 7:Địa chỉ không được để trống
+        var address = document.querySelector('input[name="adress"]').value;
+        if(address.length==0)
+        {
+            alert("Địa chỉ không được để trống");
+            return false;
+        }
+        // Constraint 8: Ngày sinh không được để trống
+        var birthDay = document.querySelector('input[name="birthDay"]').value;
+        if(birthDay.length == 0)
+        {
+            alert("Ngày sinh không được để trống");
+            return false;
+        }
+        // Constraint 9: Email không được để trống
+        var email = document.querySelector('input[name="email"]').value.trim();
+        if(email.length == 0)
+        {
+            alert("Email không dược để trống");
+            return false;
+        }
+        if(email.indexOf('@')==-1 || email.indexOf('@')==email.length-1)
+        {
+            alert("Email không hợp lệ");
+            return false;
+        }
+        // Constraint 10: Ngày sinh không thể lớn hơn ngày bất đầu làm
+        var startDate = document.querySelector('input[name="startDate"]').value;
+        if(!this.isGreater(startDate, birthDay))
+        {
+            alert("Ngày sinh không thể lớn hơn ngày bất đầu làm");
+            return false;
+        }
+
+
+        alert("Đã check hết các constraint")
+        return true;
+    }
     // Thêm nhân viên
     async addEmployeeToDatabase()
     {
@@ -105,6 +234,9 @@ class AddEmployeeModal extends Component {
                 alert(err);
                 console.log(err);
             })
+        // Thêm vào redux
+        this.props.addEmployee(data.employee);
+        
     }
 
     cancel = () => {
@@ -112,6 +244,7 @@ class AddEmployeeModal extends Component {
     }
 
     addEmployee = () => {
+        if(this.checkConstraint()==false) return;
         this.addEmployeeToDatabase();
         this.props.changeAddEmployeeStatus();
     }
@@ -126,7 +259,7 @@ class AddEmployeeModal extends Component {
                         }}
                     >   
                     <Grid className="import-container" container >
-                        <Grid item md={12}  
+                        {/* <Grid item md={12}  
                             style={{
                                 display: 'flex', 
                                 justifyContent:'center', 
@@ -138,9 +271,8 @@ class AddEmployeeModal extends Component {
                             <label className="profile-header__avatar" for="profile-header-update-avatar" style={{ overflow: 'hidden' }}>
                                 <Image style={{width: '150px',height: '150px' }} cloudName="databaseimg" publicId={this.imgUrl=='none' ? 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png' : this.imgUrl}></Image>
                             </label>
-                            {/* Ẩn đi */}
                             <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input>
-                        </Grid>
+                        </Grid> */}
                         <Grid item md={12}>
 
                             <Card>
@@ -165,8 +297,7 @@ class AddEmployeeModal extends Component {
                                             style = {{width: '70%'}} 
                                             fullWidth 
                                             size="small" 
-                                            variant="outlined"
-                                            defaultValue={"None"}
+                                            variant="outlined"  
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -218,7 +349,7 @@ class AddEmployeeModal extends Component {
                                         <div className="input-label"style={{width: '114px'}}>ID CARD</div>
                                         <StyledTextField
                                             classname='input-box'   
-                                            type="text" 
+                                            type="number" 
                                             name="cardID" 
                                             style = {{width: '70%'}} 
                                             fullWidth
@@ -233,7 +364,7 @@ class AddEmployeeModal extends Component {
                                         <div className="input-label"style={{width: '114px'}}>PhoneNumber</div>
                                         <StyledTextField
                                             classname='input-box'   
-                                            type="text" 
+                                            type="number" 
                                             name="phoneNumber"
                                             style = {{width: '70%'}} 
                                             fullWidth
@@ -263,7 +394,8 @@ class AddEmployeeModal extends Component {
                                             classname='input-box'   
                                             type="date"
                                             name="startDate"
-                                            style = {{width: '100%'}} 
+                                            defaultValue={this.getCurrentDateTime()}
+                                            style = {{width: '70%'}} 
                                             fullWidth
                                             size="small"
                                             variant="outlined"
@@ -325,6 +457,8 @@ const mapStateToProps = (state, ownProps) => {
         addEmployeeStatus: state.addEmployeeStatus,
         confirmStatus: state.confirmStatus,
         infoUser: state.infoUser,
+        listEmployee: state.listEmployee,
+        listSackedEmployee: state.listSackedEmployee,
     }
 }
 
@@ -340,7 +474,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "GET_EMPLOYEE",
                 employees: data,
             });
-        }
+        },
+        addEmployee: (data) => {
+            dispatch({
+                type: "ADD_EMPLOYEE",
+                employees: data,
+            });
+        },
     }
 }
 
