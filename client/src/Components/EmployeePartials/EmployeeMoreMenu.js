@@ -59,7 +59,7 @@ class EmployeeMoreMenu extends Component {
     // Delete redux
     this.props.deleteEmployeeRedux(this.props.data);
     //Move to sacked
-    this.props.deleteEmployeeToSackRedux(this.getEmployeeByID(this.props.data))
+    this.props.deleteEmployeeToSackRedux(this.currentEmployee)
   }
 
   getEmployeeByID(employeeID) {
@@ -69,6 +69,7 @@ class EmployeeMoreMenu extends Component {
     {
       if(employeeID == listEmployee[i]._id.employeeID)
       {
+        this.currentEmployee = listEmployee[i];
         return listEmployee[i];
       }
     }

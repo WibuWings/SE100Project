@@ -31,6 +31,23 @@ const  listSackedEmployeeReducer = (state = listSackedEmployeeInitialState, acti
                 return {
                     employees: [...state.employees, action.data]
                 };
+            case "RETURN_TO_WORK":
+            {
+                var newState = [];
+                for(var i = 0 ; i < state.employees.length ; i ++)
+                {
+                    if(state.employees[i]._id.employeeID !== action.id)
+                    {
+                        newState.push(state.employees[i]);
+                    }
+                    else {
+                        console.log("Kiếm đc cái xoá rồi")
+                    }
+                }
+                return {
+                    employees : newState
+                }
+            }
             default:
                 return state
         }

@@ -500,6 +500,8 @@ class EmployeeManager extends Component {
                 <UnShiftEmployee/>
                 <TimekeepingTable></TimekeepingTable> 
                 
+
+                {/* Sacked EMployee */}
                 <Container
                     style={{marginTop: 20, }}
                 >
@@ -593,6 +595,8 @@ class EmployeeManager extends Component {
                     /> */}
                     </Card>
                 </Container>
+
+
                 {/* Đây là phần modal */}
                 {this.props.addEmployeeStatus ? (
                     <div 
