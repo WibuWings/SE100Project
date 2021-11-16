@@ -36,10 +36,8 @@ class LoginWithEmployee extends Component {
                     console.log(res);
                     if (res.status === 200) {
                         localStorage.setItem('token', res.data.token);
-                        console.log("res.data.data.employee[0]",res.data.data.employee[0])
-                        this.props.setProfile(res.data.data.employee[0]);
-
-                        //this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+                        this.props.updateProfile(res.data.data.employee[0]);
+                        this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                         this.props.changeLoginStatus();
                         this.props.hideAlert();
                         this.props.showAlert(res.data.message, "success");
@@ -195,7 +193,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         updateProfile: (data) => {
             dispatch({
-                type: "UPDATA_DATA_USER",
+                type: "UPDATA_DATA_EMPLOYEE",
                 data: data,
             })
         },

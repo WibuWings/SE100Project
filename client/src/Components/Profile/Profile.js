@@ -25,12 +25,12 @@ class Profile extends Component {
             email: this.props.infoUser.email,
             token: localStorage.getItem('token'),
         })
-        .then( res => {
-            console.log('Thành công')
-        })
-        .catch(err => {
-            console.log('Thất bại')
-        })
+            .then(res => {
+                console.log('Thành công')
+            })
+            .catch(err => {
+                console.log('Thất bại')
+            })
     }
 
 
@@ -62,9 +62,11 @@ class Profile extends Component {
                                 <ListShift></ListShift>
                             </Grid>
                         )}
-                        <Grid item sm={12} md={12} >
-                            <Button onClick={() => this.deleteDataAccout()} style={{backgroundColor: 'red', width: '100%', color: 'white'}}>Delete Data Account</Button>
-                        </Grid>
+                        {!this.props.role ? null : (
+                            <Grid item sm={12} md={12} >
+                                <Button onClick={() => this.deleteDataAccout()} style={{ backgroundColor: 'red', width: '100%', color: 'white' }}>Delete Data Account</Button>
+                            </Grid>
+                        )}
                     </Grid>
                 </Container>
                 {this.props.addStatus ? (<div className="modal-add">
