@@ -26,6 +26,11 @@ const  listSackedEmployeeReducer = (state = listSackedEmployeeInitialState, acti
             case "GET_EMPLOYEE_SACKED":
                 state.employees = action.employees;
                 return state;
+            case "DELETE_EMPLOYEE_SACKED":
+                console.log("action", action);
+                return {
+                    employees: [...state.employees, action.data]
+                };
             default:
                 return state
         }
