@@ -55,7 +55,9 @@ class EmployeeMoreMenu extends Component {
         .catch(err => {
             alert(err);
         })
-    // Delete 
+    
+    // Delete redux
+    this.props.deleteEmployeeRedux(this.props.data);
   }
 
   getEmployeeByID(employeeID) {
@@ -150,6 +152,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch({
           type: "SET_UPDATE_EMPLOYEE",
           data: currentEmployee
+        });
+      }, 
+      deleteEmployeeRedux: (id) => {
+        dispatch({
+          type: "DELETE_EMPLOYEE",
+          id: id
         });
       }
   }

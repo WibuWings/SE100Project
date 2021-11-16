@@ -50,6 +50,25 @@ const  listEmployeeReducer = (state = listEmployeeInitialState, action) => {
                     }
 
                 }
+                case "DELETE_EMPLOYEE":
+                {
+                    console.log("action", action);
+                    var newState = [];
+                    for(var i = 0 ; i < state.employees.length ; i ++)
+                    {
+                        if(state.employees[i]._id.employeeID !== action.id)
+                        {
+                            newState.push(state.employees[i]);
+                        }
+                        else {
+                            console.log("Kiếm đc cái xoá rồi")
+                        }
+                    }
+                    return {
+                        employees : newState
+                    }
+
+                }
             default:
                 return state
         }
