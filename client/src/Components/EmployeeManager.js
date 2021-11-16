@@ -171,7 +171,6 @@ class EmployeeManager extends Component {
                 result = res.data.data;
             })
             .catch(err => {
-                // console.log(err);
                 alert(err)
             })
         listUsers = [];

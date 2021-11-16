@@ -39,108 +39,160 @@ function ControlReciept(props) {
         setOpen(false);
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         if (typeDelete === "DELETE_MAHD_SELECTED_RECIEPT") {
-            axios.post('http://localhost:5000/api/sell-product/delete-receipt-selected', {
+            await axios.post('http://localhost:5000/api/sell-product/delete-receipt-selected', {
                 token: localStorage.getItem('token'),
                 email: infoUser.email,
                 listMAHD: listRecieptDelete,
             })
                 .then(res => {
-                    console.log('Xóa thành công')
+                    if (res.data.status === 1) {
+                        localStorage.setItem('token', res.data.token)
+                        dispatch({
+                            type: typeDelete,
+                            listMAHD: listRecieptDelete,
+                        })
+                        dispatch({
+                            type: "HIDE_ALERT",
+                        })
+                        dispatch({
+                            type: "SHOW_ALERT",
+                            message: 'Delete success',
+                            typeMessage: 'success',
+                        })
+                        dispatch({
+                            type: "RESET_MAHD_RECIEPT",
+                        })
+                    }
                 })
                 .catch(err => {
-                    console.log('Xóa thất bại')
+                    dispatch({
+                        type: "CHANGE_LOGIN_STATUS",
+                    });
+                    dispatch({
+                        type: "HIDE_ALERT",
+                    })
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: 'Login timeout, signin again',
+                        typeMessage: 'warning',
+                    })
                 })
-            dispatch({
-                type: typeDelete,
-                listMAHD: listRecieptDelete,
-            })
-            dispatch({
-                type: "HIDE_ALERT",
-            })
-            dispatch({
-                type: "SHOW_ALERT",
-                message: 'Delete success',
-                typeMessage: 'success',
-            })
-            dispatch({
-                type: "RESET_MAHD_RECIEPT",
-            })
-            handleClose();
+            
         } else if (typeDelete === "DELETE_MAHD_INVOICE_RECIEPT") {
-            axios.post('http://localhost:5000/api/sell-product/delete-invoice-receipt', {
+            await axios.post('http://localhost:5000/api/sell-product/delete-invoice-receipt', {
                 token: localStorage.getItem('token'),
                 email: infoUser.email,
             })
                 .then(res => {
-                    console.log('Xóa thành công')
+                    if (res.data.status === 1) {
+                        localStorage.setItem('token', res.data.token)
+                        dispatch({
+                            type: typeDelete,
+                        })
+                        dispatch({
+                            type: "HIDE_ALERT",
+                        })
+                        dispatch({
+                            type: "SHOW_ALERT",
+                            message: 'Delete success',
+                            typeMessage: 'success',
+                        })
+                    }
                 })
                 .catch(err => {
-                    console.log('Xóa thất bại')
+                    dispatch({
+                        type: "CHANGE_LOGIN_STATUS",
+                    });
+                    dispatch({
+                        type: "HIDE_ALERT",
+                    })
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: 'Login timeout, signin again',
+                        typeMessage: 'warning',
+                    })
                 })
-            dispatch({
-                type: typeDelete,
-            })
-            dispatch({
-                type: "HIDE_ALERT",
-            })
-            dispatch({
-                type: "SHOW_ALERT",
-                message: 'Delete success',
-                typeMessage: 'success',
-            })
-            handleClose();
+            
         } else if (typeDelete === "DELETE_ALL_RECIEPT") {
-            axios.post('http://localhost:5000/api/sell-product/delete-all-receipt', {
+            await axios.post('http://localhost:5000/api/sell-product/delete-all-receipt', {
                 token: localStorage.getItem('token'),
                 email: infoUser.email,
             })
                 .then(res => {
-                    console.log('Xóa thành công')
+                    if (res.data.status === 1) {
+                        localStorage.setItem('token', res.data.token)
+                        dispatch({
+                            type: typeDelete,
+                        })
+                        dispatch({
+                            type: "HIDE_ALERT",
+                        })
+                        dispatch({
+                            type: "SHOW_ALERT",
+                            message: 'Delete success',
+                            typeMessage: 'success',
+                        })
+                    }
                 })
                 .catch(err => {
-                    console.log('Xóa thất bại')
+                    dispatch({
+                        type: "CHANGE_LOGIN_STATUS",
+                    });
+                    dispatch({
+                        type: "HIDE_ALERT",
+                    })
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: 'Login timeout, signin again',
+                        typeMessage: 'warning',
+                    })
                 })
-            dispatch({
-                type: typeDelete,
-            })
-            dispatch({
-                type: "HIDE_ALERT",
-            })
-            dispatch({
-                type: "SHOW_ALERT",
-                message: 'Delete success',
-                typeMessage: 'success',
-            })
-            handleClose();
+            
         } else if (typeDelete === 'RESTONE_ALL_RECIEPT') {
-            axios.post('http://localhost:5000/api/sell-product/restone-all-receipt', {
+            await axios.post('http://localhost:5000/api/sell-product/restone-all-receipt', {
                 token: localStorage.getItem('token'),
                 email: infoUser.email,
             })
                 .then(res => {
-                    console.log('Restone thành công')
+                    if (res.data.status === 1) {
+                        localStorage.setItem('token', res.data.token)
+                        dispatch({
+                            type: typeDelete,
+                        })
+                        dispatch({
+                            type: "HIDE_ALERT",
+                        })
+                        dispatch({
+                            type: "SHOW_ALERT",
+                            message: 'Restone success',
+                            typeMessage: 'success',
+                        })
+                    }
                 })
                 .catch(err => {
-                    console.log('Restone thất bại')
+                    dispatch({
+                        type: "CHANGE_LOGIN_STATUS",
+                    });
+                    dispatch({
+                        type: "HIDE_ALERT",
+                    })
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: 'Login timeout, signin again',
+                        typeMessage: 'warning',
+                    })
                 })
-            dispatch({
-                type: typeDelete,
-            })
-            dispatch({
-                type: "HIDE_ALERT",
-            })
-            dispatch({
-                type: "SHOW_ALERT",
-                message: 'Restone success',
-                typeMessage: 'success',
-            })
-            handleClose();
+            
         }
+        dispatch({
+            type: 'CHANGE_SELECT_ALL_STATUS'
+        })
         dispatch({
             type:"RESET_STATUS_SELECT_ALL"
         })
+        handleClose();
     }
 
     const DeleteSelect = () => {
@@ -190,7 +242,6 @@ function ControlReciept(props) {
         <Grid container spacing={2}>
             <Grid item md={12} sm={12}  >
                 <Card>
-                    {console.log(listRecieptDelete)}
                     <CardHeader style={{ color: !darkmode ? '#0091ea' : 'white', backgroundColor: !darkmode ? '#efeeef' : '#455a64' }} title="Control" />
                     <Divider></Divider>
                     <CardContent>

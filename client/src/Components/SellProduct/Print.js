@@ -108,8 +108,6 @@ class Printf extends React.PureComponent {
         data: data,
       })
         .then(res => {
-          console.log('Thành công!')
-          console.log(res)
           if (res.status === 200) {
             localStorage.setItem('token', res.data.token)
             if (this.props.statusEditInfoBill) {
@@ -119,11 +117,10 @@ class Printf extends React.PureComponent {
               infoReciept: this.props.shoppingBags,
             })
             this.props.hideAlert()
-            this.props.showAlert("In bill success", "success")
+            this.props.showAlert("Print bill success", "success")
             this.props.resetShoppingBag();
             this.props.addRecieptToHistory(data);
           }
-
         })
         .catch(err => {
           this.props.changeLoginStatus();

@@ -72,6 +72,8 @@ const listRecieptInitialState = [],
                     value.deleted = true
                     return value;
                 })
+            case "RESET_ALL_RECIEPT_USER":
+                return [];
             default:
                 return state
         }

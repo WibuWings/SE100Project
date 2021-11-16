@@ -85,6 +85,11 @@ class SideNavBar extends Component {
         this.props.showAlert('Attendanced success' , 'success')
     }
 
+    logOut = () => {
+        this.props.resetInfoUser()
+        this.props.changeLoginStatus()
+    }
+
     render() {
 
         const navbarContainer = document.querySelector('.navbar-container');
@@ -191,7 +196,7 @@ class SideNavBar extends Component {
                     <div class="nav-footer">
                         <a
                             to="/login"
-                            onClick={() => this.props.changeLoginStatus()}
+                            onClick={() => this.logOut()}
                             className={"nav-item "}
                             style={{ flex: 5 }}
                         >
@@ -223,6 +228,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         changeLoginStatus: () => {
             dispatch({
                 type: "CHANGE_LOGIN_STATUS",
+            })
+        },
+        resetInfoUser: () => {
+            dispatch({
+                type: "RESET_ALL_RECIEPT_USER",
             })
         },
         changeConfirmPasswordTest: () => {

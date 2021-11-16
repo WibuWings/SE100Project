@@ -79,7 +79,6 @@ class SellProduct extends Component {
                 localStorage.getItem('token', res.data.token);
             })
             .catch(err => {
-                console.log(err);
                 alert(err);
             })
         //Get data và lưu các tên Type vào bảng
@@ -106,7 +105,6 @@ class SellProduct extends Component {
                 resultProduct = res.data.data;
             })
             .catch(err => {
-                console.log(err);
                 alert(err)
             })
         // Get hết từ cái productjoinType
@@ -125,7 +123,6 @@ class SellProduct extends Component {
                 localStorage.getItem('token', res.data.token);
             })
             .catch(err => {
-                console.log(err);
                 alert(err)
             })
         // Lấy các cái jointype
@@ -133,7 +130,6 @@ class SellProduct extends Component {
         for (let i = 0; i < result.length; i++) {
             joinTypeInfor.push(result[i]);
         }
-        console.log("joinTypeInfor", joinTypeInfor);
 
         var listProductInfor = [];
         for (let i = 0; i < resultProduct.length; i++) {
@@ -151,7 +147,6 @@ class SellProduct extends Component {
                     typeIDList: typeIDList
                 });
         }
-        console.log("listProductInfor: ", listProductInfor);
         this.props.getProductToReducer(listProductInfor);
         this.setState({ change: !this.state.change });
     }

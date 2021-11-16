@@ -4,7 +4,7 @@ statusSelectAllReducer = (state = StatusSelectAllInitialState, action) => {
         case "CHANGE_SELECT_ALL_STATUS":
             return  !state; 
         case "RESET_STATUS_SELECT_ALL":
-            return state = false;
+            return false;
         default:
             return state
     }
