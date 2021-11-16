@@ -23,7 +23,9 @@ const typeProductInitialState = [
                     state: action.data
                 }
             case "ADD_TYPE":
-                return [...state, action.data]
+                return {
+                    state: [...state, action.data]
+                }
             default:
                 return state
         }

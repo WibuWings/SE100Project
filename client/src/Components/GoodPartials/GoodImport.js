@@ -300,6 +300,9 @@ class GoodImport extends Component {
         {
             productTypes.push(listTypeInfor[i].name);
         }
+
+        this.props.getProductType(result);
+        console.log("listType", this.props.typeProduct.state);
         this.setState({change: true});
     }
 
@@ -335,6 +338,7 @@ class GoodImport extends Component {
             this.generatedID = parseInt(listProductInfor[listProductInfor.length-1]._id.productID) + 1;
         } 
         else this.generatedID = 0;
+        this.props.getProductToReducer(listProductInfor);
         this.setState({change: false});
     }
 
@@ -572,8 +576,8 @@ class GoodImport extends Component {
                                             }}
                                         >
                                             {
-                                                listTypeInfor.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
-                                                : listTypeInfor.map((type) =>
+                                                this.props.typeProduct.state.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
+                                                : this.props.typeProduct.state.map((type) =>
                                                     ! this.foundTypeInSet(type) 
                                                     ? <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
                                                     : null
@@ -660,7 +664,8 @@ const mapStateToProps = (state, ownProps) => {
         addTypeStatus: state.addTypeStatus,
         infoUser: state.infoUser,
         isAddTypeStatus: state.isAddTypeStatus,
-        confirmStatus: state.confirmStatus
+        confirmStatus: state.confirmStatus,
+        typeProduct: state.typeProduct
     }
 }
 
@@ -703,6 +708,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "HIDE_ALERT",
             })
+        },
+        getProductToReducer: (data) => {
+            dispatch({
+                type: "GET_PRODUCT_AND_TYPE",
+                data: data
+            });
+        },
+        getProductType: (data) => {
+            dispatch({
+                type: "GET_PRODUCT_TYPE",
+                data: data
+            });
         },
     }
 }
