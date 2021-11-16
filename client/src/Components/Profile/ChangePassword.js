@@ -137,7 +137,7 @@ class ChangePassword extends Component {
         return (
             <form id="form-change-password" style={{marginBottom: '15px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Change Password" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Change Password" />
                     <Divider />
                     <CardContent>
                         <Grid container spacing={2}>
@@ -195,6 +195,7 @@ class ChangePassword extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         infoUser: state.infoUser,
+        statusDarkmode: state.statusDarkmode
     }
 }
 

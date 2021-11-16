@@ -7,7 +7,7 @@ import GoodImport from '../Components/GoodPartials/GoodImport';
 import EmployeeManager from '../Components/EmployeeManager';
 import DashBoard from '../Components/Dashboard/DashBoard';
 import Profile from '../Components/Profile/Profile';
-import ReceiptManager from '../Components/ReiceiptManager';
+import ReceiptManager from '../Components/RecieptManager/ReiceiptManager';
 import SellProduct from '../Components/SellProduct/SellProduct';
 import { connect } from 'react-redux'
 

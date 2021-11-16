@@ -7,6 +7,7 @@ import {
     AiOutlineContainer,
     AiFillContainer
 } from "react-icons/ai";
+import { Button } from '@mui/material';
 import { BsInfoCircleFill } from "react-icons/bs";
 import {
     IoPeopleOutline,
@@ -14,13 +15,13 @@ import {
     IoReceiptOutline,
     IoReceiptSharp,
 } from "react-icons/io5";
+import { ImCheckboxUnchecked, ImCheckboxChecked } from "react-icons/im"
 import { IoIosArrowBack } from "react-icons/io";
 import { RiProfileFill, RiProfileLine } from "react-icons/ri";
 import { FaSignOutAlt } from "react-icons/fa";
 import { GiSellCard } from 'react-icons/gi'
 import Avatar from '../../img/avatar_default.jpg';
 import { NavLink } from 'react-router-dom';
-
 import '../../css/SideNavBar.css';
 
 class SideNavBar extends Component {
@@ -28,6 +29,7 @@ class SideNavBar extends Component {
         super(props);
         this.state = {
             change: true,
+            attendance: false,
         }
         this.getInitialScreen();
     }
@@ -61,7 +63,7 @@ class SideNavBar extends Component {
                 break;
             case "import":
                 this.active[3] = 'active';
-                break;    
+                break;
             case "receiptmanager":
                 this.active[4] = 'active';
                 break;
@@ -74,6 +76,20 @@ class SideNavBar extends Component {
         }
         this.setState({ change: !this.state.change });
     }
+
+    attendance = () => {
+        this.setState({
+            attendance: true,
+        })
+        this.props.hideAlert()
+        this.props.showAlert('Attendanced success' , 'success')
+    }
+
+    logOut = () => {
+        this.props.resetInfoUser()
+        this.props.changeLoginStatus()
+    }
+
     render() {
 
         const navbarContainer = document.querySelector('.navbar-container');
@@ -81,25 +97,37 @@ class SideNavBar extends Component {
             <div
                 class="navbar-container"
                 style={{
-                    width: 0
+                    width: 0,
                 }}
             >
-                <div class="navibar sidebar">
+                <div style={{ backgroundColor: !this.props.statusDarkmode ? '#fafafa' : '#37474f' }} class="navibar sidebar">
                     <div className="nav-icon" >
                         <IoIosArrowBack
                             size={20}
                         />
                     </div>
                     <div class="nav-heading">
-                        <div class="navbar-heading-container">
+                        <div style={{ backgroundColor: !this.props.statusDarkmode ? '#cfd8dc' : '#455a64' }} class="navbar-heading-container">
                             <img src={this.props.infoUser.avatar ? this.props.infoUser.avatar : Avatar} style={{ width: 40, height: 40, borderRadius: '100%' }}></img>
-                            <span class="user-name">{this.props.infoUser.lastName + " " + this.props.infoUser.firstName}</span>
+                            <span style={{ color: !this.props.statusDarkmode ? 'black' : 'white', fontWeight: '700' }} class="user-name">{this.props.infoUser.lastName + " " + this.props.infoUser.firstName}</span>
                         </div>
                     </div>
                     <div class="nav-container">
                         {
-                            // this.props.role == true ?
-                            localStorage.getItem('role') == 'admin' ?
+                            this.props.role == true ? (null)
+                                : (<div style={{ justifyContent: 'center', display: 'flex', marginBottom: '10px' }}>
+                                    <Button onClick={() => this.attendance()} style={{ backgroundColor: this.state.attendance? '#b9f6ca':'#e0e0e0', color: '#424242' }}>
+                                        {!this.state.attendance ? (<ImCheckboxUnchecked style={{ marginRight: '10px' }}></ImCheckboxUnchecked>)
+                                            : (<ImCheckboxChecked style={{ marginRight: '10px', color: '#1b5e20' }}></ImCheckboxChecked>)
+                                        }
+
+                                        {this.state.attendance ? 'attendanced' : 'attendance'}
+                                    </Button>
+                                </div>
+                                )
+                        }
+                        {
+                            this.props.role == true ?
                                 (<NavLink className={"nav-item " + this.active[0]} to="/dashboard"
                                     onClick={() => this.changeIndex(0)}
                                 >
@@ -167,7 +195,7 @@ class SideNavBar extends Component {
                     <div class="nav-footer">
                         <a
                             to="/login"
-                            onClick={() => this.props.changeLoginStatus()}
+                            onClick={() => this.logOut()}
                             className={"nav-item "}
                             style={{ flex: 5 }}
                         >
@@ -190,6 +218,7 @@ const mapStateToProps = (state, ownProps) => {
         isLogin: state.loginStatus,
         infoUser: state.infoUser,
         role: state.role,
+        statusDarkmode: state.statusDarkmode
     }
 }
 
@@ -200,11 +229,28 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_LOGIN_STATUS",
             })
         },
+        resetInfoUser: () => {
+            dispatch({
+                type: "RESET_ALL_RECIEPT_USER",
+            })
+        },
         changeConfirmPasswordTest: () => {
             dispatch({
                 type: "CHANGE_MODAL_CONFIRM_PASSWORD_STATUS",
             })
-        }
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 

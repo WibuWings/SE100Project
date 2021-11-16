@@ -51,6 +51,7 @@ class EmployeeTab {
             address: employee.address,
             cardID: employee.cardID,
             startDate: employee.startDate,
+            isEmployee: true,
         });
         employees
             .save()

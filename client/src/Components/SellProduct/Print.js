@@ -43,7 +43,7 @@ class Printf extends React.PureComponent {
     this.props.shoppingBags.map(value => {
       total += value.quantity * value.product.sellPrice;
     })
-    return total.toLocaleString();
+    return total;
   }
 
   reduceMoney = () => {
@@ -53,9 +53,9 @@ class Printf extends React.PureComponent {
     })
     if (total !== 0) {
       total = total * this.state.percentDiscount / 100
-      return total.toLocaleString();
+      return total;
     }
-    return total.toLocaleString();
+    return total;
   }
 
   totalFinalMoney = () => {
@@ -65,9 +65,9 @@ class Printf extends React.PureComponent {
     })
     if (total !== 0) {
       total -= total * this.state.percentDiscount / 100
-      return total.toLocaleString();
+      return total;
     }
-    return total.toLocaleString();
+    return total;
   }
 
   makeCode = (length) => {
@@ -84,39 +84,57 @@ class Printf extends React.PureComponent {
   code = ''
 
   addReciept = async () => {
-    this.code = this.makeCode(8)
-    const data = {
-      MAHD: this.code,
-      name: this.props.infoUser.lastName + " " + this.props.infoUser.firstName,
-      date: this.state.date.getDate() + " / " + this.state.date.getMonth() + " / " + this.state.date.getFullYear(),
-      discount: this.state.percentDiscount,
-      totalMoney: this.totalFinalMoney(),
-      totalFinalMoney: this.totalFinalMoney(),
-      listProduct: this.props.shoppingBags,
-      time: this.state.date.getHours() + ":" + this.state.date.getMinutes(),
-      isEdit: false,
-      oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
-    }
-    axios.post('http://localhost:5000/api/sell-product/add-reciept', {
-      email: this.props.infoUser.email,
-      token: localStorage.getItem('token'),
-      data: data,
-    })
-      .then(res => {
-        console.log('Thành công!')
+    if (this.props.shoppingBags.length === 0) {
+      this.props.hideAlert()
+      this.props.showAlert("Cart empty ", "warning")
+    } else {
+      this.code = this.makeCode(8)
+      const data = {
+        MAHD: this.code,
+        idUser: this.props.infoUser._id,
+        name: this.props.infoUser.lastName + " " + this.props.infoUser.firstName,
+        date: this.dateFunction(),
+        discount: this.state.percentDiscount,
+        totalMoney: this.totalMoney(),
+        totalFinalMoney: this.totalFinalMoney(),
+        listProduct: this.props.shoppingBags,
+        time: this.state.date.getHours() + ":" + this.state.date.getMinutes(),
+        isEdit: false,
+        oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
+      }
+      axios.post('http://localhost:5000/api/sell-product/add-reciept', {
+        email: this.props.infoUser.email,
+        token: localStorage.getItem('token'),
+        data: data,
       })
-      .catch(err => {
-        console.log('Thất bại!')
-      })
-    if (this.props.statusEditInfoBill) {
-      this.props.changeStatusEditRecipt()
+        .then(res => {
+          if (res.status === 200) {
+            localStorage.setItem('token', res.data.token)
+            if (this.props.statusEditInfoBill) {
+              this.props.changeStatusEditRecipt()
+            }
+            this.setState({
+              infoReciept: this.props.shoppingBags,
+            })
+            this.props.hideAlert()
+            this.props.showAlert("Print bill success", "success")
+            this.props.resetShoppingBag();
+            this.props.addRecieptToHistory(data);
+          }
+        })
+        .catch(err => {
+          this.props.changeLoginStatus();
+          this.props.hideAlert();
+          this.props.showAlert("Login timeout, signin again", "warning");
+        })
+
     }
-    this.setState({
-      infoReciept: this.props.shoppingBags,
-    })
-    this.props.showAlert("In bill success", "success")
-    this.props.resetShoppingBag();
-    this.props.addRecieptToHistory(data);
+
+  }
+
+  dateFunction = () => {
+    let month = this.state.date.getMonth() + 1;
+    return "  " + this.state.date.getDate() + " / " + month + " / " + this.state.date.getFullYear()
   }
 
   render() {
@@ -129,7 +147,7 @@ class Printf extends React.PureComponent {
                 <p style={{}}>Total</p>
               </div>
               <div className="col-5">
-                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>{this.totalMoney()}</p>
+                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>{this.totalMoney().toLocaleString()}</p>
               </div>
               <div style={{ fontSize: '1.2rem' }} className="col-7">
                 <p>Discount (%)</p>
@@ -141,24 +159,25 @@ class Printf extends React.PureComponent {
                 <p style={{}}>Reduce</p>
               </div>
               <div className="col-5">
-                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>-{this.reduceMoney()}</p>
+                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>-{this.reduceMoney().toLocaleString()}</p>
               </div>
               <div className="col-7">
                 <p style={{ margin: '0', fontSize: '1.2rem', fontWeight: '700' }}>TOTAL FINAL</p>
               </div>
               <div className="col-5">
-                <p style={{ margin: '0', fontSize: '1.2rem', textAlign: 'end', color: 'green', fontWeight: '700' }}>{this.totalFinalMoney()}</p>
+                <p style={{ margin: '0', fontSize: '1.2rem', textAlign: 'end', color: 'green', fontWeight: '700' }}>{this.totalFinalMoney().toLocaleString()}</p>
               </div>
             </div>
           </div>
-          <div onClick={() => this.addReciept()} className="col-12">
+          <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-12">
             <ReactToPrint
               trigger={() => {
+
                 return <div style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
                   PAY (F9)
                 </div>;
               }}
-              content={() => this.componentRef}
+              content={this.props.shoppingBags.length !== 0 ? () => this.componentRef : null}
             />
           </div>
           <div className="col-12">
@@ -204,6 +223,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         typeMessage: typeMessage,
       })
     },
+    hideAlert: () => {
+      dispatch({
+        type: "HIDE_ALERT",
+      })
+    },
     resetShoppingBag: () => {
       dispatch({
         type: "RESET_SHOPPING_BAGS"
@@ -213,7 +237,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "CHANGE_EDIT_INFOMATION_STATUS"
       })
-    }
+    },
+    changeLoginStatus: () => {
+      dispatch({
+          type: "CHANGE_LOGIN_STATUS",
+      });
+  },
   }
 }
 

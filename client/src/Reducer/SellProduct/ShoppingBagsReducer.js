@@ -20,8 +20,8 @@ const shoppingBagsInitialState = [],
             case "DELETE_PRODUCT_SHOPPING_BAGS":
                 return state.filter((value) => {
                     if (value.product.name !== action.name) {
-                        return value
-                    }
+                        return value;
+                    } 
                 })
             case "RESET_SHOPPING_BAGS":
                 return state = [];

@@ -44,6 +44,12 @@ import listTimeKeepingReducer from './Employee/listTimeKeepingReducer';
 import statusAddTimeKeepingReducer from './Employee/addTimeKeepingStatus';
 import statusUpdateTimeKeepingReducer from './Employee/updateTimeKeepingStatus';
 import updateTimeKeepingValueReducer from './Employee/updateTimeKeeperValue';
+import typeRecieptReducer from './RecieptManager/TypeReciept';
+import typeByDateReducer from './RecieptManager/TypeByDate';
+import statusSelectAllReducer from './RecieptManager/StatusSelectAll'
+import listRecieptDeleteReducer from './RecieptManager/ListRecieptDelete';
+import searchReducer from './RecieptManager/SearchReducer';
+
 
 var redux = require('redux');
 
@@ -98,6 +104,11 @@ const allReducers = redux.combineReducers({
     listReciept: listRecieptReducer,
     statusEditInfoBill :statusEditInfomationBill,
     InfomationBillEdit : InfomationBillEditReducer,
+    typeReciept: typeRecieptReducer,
+    typeByDate: typeByDateReducer,
+    statusSelectAll: statusSelectAllReducer,
+    listRecieptDelete: listRecieptDeleteReducer,
+    search: searchReducer,
 })
 
 
