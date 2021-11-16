@@ -55,6 +55,7 @@ class EmployeeMoreMenu extends Component {
         .catch(err => {
             alert(err);
         })
+    // Delete 
   }
 
   getEmployeeByID(employeeID) {

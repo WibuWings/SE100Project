@@ -463,7 +463,9 @@ class EmployeeManager extends Component {
                                             </Stack>
                                         </TableCell>
                                         <TableCell className = {classes.goodTable_Cell} align="left">{row.lastName}</TableCell>  
-                                        <TableCell className = {classes.goodTable_Cell}align="left">{row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T'))}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="left">
+                                            {row.dateOfBirth.indexOf('T') != -1 ? row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T')): row.dateOfBirth}
+                                        </TableCell>
                                         <TableCell className = {classes.goodTable_Cell}align="left">{"gender"}</TableCell>
                                         <TableCell className = {classes.goodTable_Cell}align="left">{"province"}</TableCell>
                                         <TableCell className = {classes.goodTable_Cell}align="left">{row.phoneNumber}</TableCell>
@@ -610,7 +612,7 @@ class EmployeeManager extends Component {
                         className="modal-add"
                     >
                         <div onClick={() => {this.props.changeUpdateEmployeeStatus();}} 
-                            className="moFixedCalendar"
+                            className="modal-overlay"
                         />
                         <UpdateEmployeeModal
                             style={{
