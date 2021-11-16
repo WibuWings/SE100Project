@@ -34,28 +34,25 @@ class LoginWithEmployee extends Component {
             })
                 .then(res => {
                     console.log(res);
-                    switch (res.status) {
-                        case 200:
-                            localStorage.setItem('token', res.data.token);
-                            //this.props.updateProfile(res.data.data);
-                            //this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
-                            this.props.changeLoginStatus();
-                            this.props.hideAlert();
-                            this.props.showAlert(res.data.message, "success");
-                            break;
-                        case -1:
-                            this.props.hideAlert();
-                            this.props.showAlert(res.data.message, "error");
-                            break;
-                        default:
-                            break;
+                    if (res.status === 200) {
+                        localStorage.setItem('token', res.data.token);
+                        console.log("res.data.data.employee[0]",res.data.data.employee[0])
+                        this.props.setProfile(res.data.data.employee[0]);
+
+                        //this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+                        this.props.changeLoginStatus();
+                        this.props.hideAlert();
+                        this.props.showAlert(res.data.message, "success");
                     }
                 })
                 .catch(err => {
                     console.log(err)
                     this.props.hideAlert();
-                    this.props.showAlert("Error system", "error");
+                    this.props.showAlert("The email IS NOT registered or you entered the WRONG password.", "error");
+                    return;
                 })
+            // Get các thông tin để thêm vào redux
+            
         }
     }
 
@@ -199,6 +196,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         updateProfile: (data) => {
             dispatch({
                 type: "UPDATA_DATA_USER",
+                data: data,
+            })
+        },
+        setProfile: (data) => {
+            dispatch({
+                type: "SET_DATA_USER",
                 data: data,
             })
         },

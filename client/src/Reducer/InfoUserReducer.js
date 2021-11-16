@@ -49,6 +49,9 @@ const infoUserInitialState = {
                     ...state,
                     avatar: action.avatar
                 }
+            case "SET_DATA_USER":
+                console.log("action.data", action.data);
+                return action.data;
             default:
                 return state
         }
