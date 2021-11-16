@@ -339,7 +339,7 @@ class AddEmployeeModal extends Component {
                                         <div className="input-label"style={{width: '114px'}}>ID CARD</div>
                                         <StyledTextField
                                             classname='input-box'   
-                                            type="text" 
+                                            type="number" 
                                             name="cardID" 
                                             style = {{width: '70%'}} 
                                             fullWidth

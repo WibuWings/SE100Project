@@ -32,16 +32,18 @@ class UpdateEmployeeModal extends Component {
     cancel = () => {
         
     }
+
     findIndexInListEmployee(employeeID) {
-        for(var i = 0; i < this.props.listEmployee.length ; i++)
+        for(var i = 0; i < this.props.listEmployee.employees.length ; i++)
         {
-            if(this.props.listEmployee[i]._id.employeeID == employeeID)
+            if(this.props.listEmployee.employees[i]._id.employeeID == employeeID)
             {
                 return i;
             }
         }
         return -1;
     }
+
     checkConstraint() {
         //Constraint 2: Password không được có dưới 6 ký tự
         var password = document.querySelector('input[name="password"]').value.trim();
@@ -126,7 +128,12 @@ class UpdateEmployeeModal extends Component {
         alert("Đã check hết các constraint")
         return true;
     }
-    updateEmployee = () => {
+
+    isGreater(dateString1, dateString2){
+        return (new Date(dateString1).getTime() - new Date(dateString2).getTime()) > 0;
+    }
+
+    async updateEmployee(){
         if(this.checkConstraint() == false) return;
         const data = {
             token: localStorage.getItem('token'),
@@ -147,15 +154,17 @@ class UpdateEmployeeModal extends Component {
                 startDate: document.querySelector('input[name="startDate"]').value,
             }   
         }
+        console.log("index", this.findIndexInListEmployee(this.id));
         console.log(data);
-        axios.put(`http://localhost:5000/api/employee`, data)
+        await axios.put(`http://localhost:5000/api/employee`, data)
             .then(res => {
                 console.log("Update success");
+                
             })
             .catch(err => {
                 console.log(err);
             })
-        this.props.updateEmployee(data, )
+        this.props.updateEmployeeRedux(data.employee, this.findIndexInListEmployee(this.id))
         this.props.changeUpdateEmployeeStatus();
     }
 
@@ -302,7 +311,7 @@ class UpdateEmployeeModal extends Component {
                                         <div className="input-label"style={{width: '114px'}}>ID CARD</div>
                                         <StyledTextField
                                             classname='input-box'   
-                                            type="text" 
+                                            type="number" 
                                             name="cardID" 
                                             style = {{width: '70%'}} 
                                             fullWidth
@@ -318,7 +327,7 @@ class UpdateEmployeeModal extends Component {
                                         <div className="input-label"style={{width: '114px'}}>PhoneNumber</div>
                                         <StyledTextField
                                             classname='input-box'   
-                                            type="text" 
+                                            type="number" 
                                             name="phoneNumber"
                                             style = {{width: '70%'}} 
                                             fullWidth
@@ -432,7 +441,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_UPDATE_EMPLOYEE_STATUS",
             });
         },
-        updateEmployeeVal: (data, index) => {
+        updateEmployeeRedux: (data, index) => {
             dispatch({
                 type: "UPDATE_EMPLOYEE",
                 data: data,

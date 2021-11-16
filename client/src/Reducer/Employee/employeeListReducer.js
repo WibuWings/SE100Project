@@ -30,6 +30,26 @@ const  listEmployeeReducer = (state = listEmployeeInitialState, action) => {
                 return {
                     employees : [...state.employees, action.employees ]
                 }
+            case "UPDATE_EMPLOYEE":
+                {
+                    var newState = [];
+                    for(var i = 0 ; i < state.employees.length ; i ++)
+                    {
+                        if(i != action.index)
+                        {
+                            newState.push(state.employees[i]);
+                        }
+                        else 
+                        {
+                            newState.push(action.data);
+                        }
+                    }
+                    console.log("newState", newState);
+                    return {
+                        employees : newState
+                    }
+
+                }
             default:
                 return state
         }
