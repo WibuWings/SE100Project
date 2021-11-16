@@ -1,15 +1,15 @@
 const infoUserInitialState = {
     avatar: "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg",
-    firstName: "Phước",
-    lastName: "Lương",
-    email: "aaaa",
-    old: "21",
-    gender: "male",
-    storeName: "Phước Coffee",
-    tel: "0387527010",
-    province: "tinh_an_giang",
-    district: "huyen_chau_phu",
-    address: "43 QL 91, TT Cái Dầu",
+    firstName: "NAME",
+    lastName: "NO",
+    email: "",
+    old: "",
+    gender: "",
+    storeName: "",
+    tel: "",
+    province: "",
+    district: "",
+    address: "",
     _id: ""
 },
 
@@ -29,6 +29,18 @@ const infoUserInitialState = {
                     province: action.data.manager.province,
                     district: action.data.manager.district, 
                     address: action.data.manager.address,    
+                }
+            case "UPDATA_DATA_EMPLOYEE":
+                return {
+                    ...state,
+                    firstName: action.data.firstName,
+                    lastName: action.data.lastName,
+                    cardID: action.data.cardID,
+                    address: action.data.address,
+                    tel : action.data.phoneNumber,
+                    email: action.data.email,
+                    managerID: action.data.managerID,
+                    employeeID: action.data._id.employeeID,
                 }
             case "UPDATA_PROFILE_DATA_USER":
                 return {
