@@ -41,6 +41,7 @@ const infoUserInitialState = {
                     email: action.data.email,
                     managerID: action.data.managerID,
                     employeeID: action.data._id.employeeID,
+                    password: action.data.password,  
                 }
             case "UPDATA_PROFILE_DATA_USER":
                 return {
@@ -54,7 +55,8 @@ const infoUserInitialState = {
                     tel: action.data.phoneNumber,
                     province: action.data.province,
                     district: action.data.district, 
-                    address: action.data.address,   
+                    address: action.data.address,
+ 
                 }
             case "UPDATE_AVATAR":
                 return {
