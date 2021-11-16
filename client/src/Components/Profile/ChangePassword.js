@@ -53,7 +53,6 @@ class ChangePassword extends Component {
             console.log(data);
             axios.put(`http://localhost:5000/api/employee`, data)
             .then(res => {
-                console.log("Update pass success");
                 this.props.hideAlert();
                 this.props.showAlert("Change password success", "success");
             })
