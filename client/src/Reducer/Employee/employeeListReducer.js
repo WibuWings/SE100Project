@@ -28,7 +28,7 @@ const  listEmployeeReducer = (state = listEmployeeInitialState, action) => {
                 return state;
             case "ADD_EMPLOYEE":
                 return {
-                    employees : [action.employees, ...state.employees]
+                    employees : [...state.employees, action.employees ]
                 }
             default:
                 return state

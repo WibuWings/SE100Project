@@ -190,6 +190,7 @@ class AddNextWeekTimeKeepingModal extends Component {
                             storeID: this.props.infoUser.email,
                         },
                     },
+                    realDate: document.querySelector('input[name="realDate"]').value,
                 },
                 alternativeEmployee: {
                     _id: {
@@ -197,10 +198,11 @@ class AddNextWeekTimeKeepingModal extends Component {
                         storeID: this.props.infoUser.email,
                     },
                 },
-                realDate: document.querySelector('input[name="realDate"]').value,
+                
             };
             
             this.props.addNewChange(data);
+            console.log("nextweek", this.props.nextWeekTimeKeeping);
             this.props.changeAddNextWeekTimeKeepingStatus();
           })
           .catch(err => {

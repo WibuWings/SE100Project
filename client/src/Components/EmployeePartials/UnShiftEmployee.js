@@ -39,6 +39,7 @@ class UnShiftEmployee extends Component {
       change: false
     }
     this.getAllNextWeekTimeKeeping();
+    console.log("nextweek", this.props.nextWeekTimeKeeping);
   }
 
   async getAllNextWeekTimeKeeping()
@@ -147,7 +148,7 @@ class UnShiftEmployee extends Component {
                               <TableCell className={classes.goodTable_Cell}>{item._id.dateInWeek}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{this.getShiftNameAndTime(item._id.shiftType._id.shiftID)}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>
-                                  {item._id.realDate ? item._id.realDate.substring(0,item._id.realDate.indexOf('T') ) : ""}
+                                  {item._id.realDate.indexOf('T') !=-1 ? item._id.realDate.substring(0,item._id.realDate.indexOf('T') ) : item._id.realDate}
                               </TableCell>
                               <TableCell className={classes.goodTable_Cell}>{item._id.employee._id.employeeID}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item._id.employee._id.employeeID)}</TableCell>
