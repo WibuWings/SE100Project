@@ -32,7 +32,6 @@ class ChangePassword extends Component {
                 this.props.showAlert("Not a correct pass", "error");
                 return;
             }
-            console.log("this.props.infoUser", this.props.infoUser);
             const data = {
                 token: localStorage.getItem('token'),
                 employee: {
@@ -50,7 +49,6 @@ class ChangePassword extends Component {
                     cardID: this.props.infoUser.cardID,
                 }   
             }
-            console.log(data);
             axios.put(`http://localhost:5000/api/employee`, data)
             .then(res => {
                 this.props.hideAlert();

@@ -18,6 +18,25 @@ class ProfileDetail extends Component {
 
     SaveDetailsEmployee = async () => {
         // của employee tại đây
+        const data = {
+            token: localStorage.getItem('token'),
+            employee: {
+                _id: {
+                    employeeID: this.props.infoUser.employeeID,
+                    storeID: this.props.infoUser.managerID,
+                },
+                firstName: document.querySelector('input[name="firstName"]').value,
+                lastName: document.querySelector('input[name="lastName"]').value,
+            }   
+        }
+        axios.put(`http://localhost:5000/api/employee`, data)
+            .then(res => {
+                this.props.hideAlert();
+                this.props.showAlert("Update success", "success");
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     SaveDetails = async () => {
