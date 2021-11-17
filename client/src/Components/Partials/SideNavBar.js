@@ -95,11 +95,12 @@ class SideNavBar extends Component {
     attendance = () => {
         var time = new Date();
         let a = ((time.getHours() > 12) ? time.getHours() - 12 : time.getHours()) + ":" + time.getMinutes() +" "+ ((time.getHours() > 12) ? "PM" : "AM");
-        axios.post('http://localhost:5000/attendance-employee',{
+        let b = "5:30 PM"
+        axios.post('http://localhost:5000/api/employee/time-keeping',{
             token: localStorage.getItem('token'),
-            email: this.props.infoUser.employeeID,
             data: {
-                time: a
+                email: this.props.infoUser.employeeID,
+                time: b,
             }
         })
         this.setState({
