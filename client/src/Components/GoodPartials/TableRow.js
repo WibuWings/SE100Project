@@ -98,10 +98,10 @@ class GoodRow extends Component{
         for(var i = 0 ; i < allJoinMatch.length; i++)
         {
             allProductJoin.push({
-                productID: row.id,
+                productID: row._id.productID,
                 typeID: allJoinMatch[i]._id.typeID,
                 importDate: allJoinMatch[i]._id.importDate,
-                storeID: row.storeID,
+                storeID: row._id.storeID,
             });
         }
         const dataJoin = {
