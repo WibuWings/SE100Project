@@ -54,6 +54,6 @@ const TimeKeeping = new Schema({
         endDate: Date,
     },
     isPaidSalary: Boolean,
-});
+},{ versionKey: false });
 
 module.exports = mongoose.model('TimeKeeping', TimeKeeping);

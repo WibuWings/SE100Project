@@ -39,7 +39,7 @@ function getTimeFromTimeString(timeString) {
 
     var date = new Date();
 
-    var returnDate = new Date(date.getUTCFullYear(),date.getUTCMonth() + 1,date.getUTCDate(),parseInt(splitedHourAndMinute[0]) + difference,parseInt(splitedHourAndMinute[1]), 0);
+    var returnDate = new Date(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),parseInt(splitedHourAndMinute[0]) + difference,parseInt(splitedHourAndMinute[1]), 0);
     return returnDate;
 }
 function dateEquals(dateClient, dateServer) {

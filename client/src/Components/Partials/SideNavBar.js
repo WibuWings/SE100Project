@@ -100,7 +100,7 @@ class SideNavBar extends Component {
             token: localStorage.getItem('token'),
             data: {
                 email: this.props.infoUser.employeeID,
-                time: b,
+                time: a,
             }
         })
         this.setState({

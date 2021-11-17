@@ -11,6 +11,6 @@ const ShiftType = new Schema({
     timeFrom: String,
     timeEnd: String,
     salary: Number,
-});
+},{ versionKey: false });
 
 module.exports = mongoose.model('ShiftType', ShiftType);
