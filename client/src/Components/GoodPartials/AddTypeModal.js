@@ -14,8 +14,8 @@ class AddTypeModal extends Component {
         this.state= {
             change: 'false'
         }
-        this.loadInitialData();
         this.getAllTypeList();
+        listTypeInfor = this.props.typeProduct;
     }
     storeID = "";
     typeList = [];
@@ -82,15 +82,9 @@ class AddTypeModal extends Component {
         {
             if(listTypeInfor[i].name==typeName)
             {
-                if(!this.props.isAddTypeStatus && typeName.trim()==this.props.typeProductValue.name)
-                {
-                    alert("Không đổi tên à anh zai");
-                    return false;
-                }
                 alert("Trùng tên rồi anh chai");
                 return false;
             }
-            
         }        
         // Constraint 2: Not blank
         if(typeName.length==0)
@@ -106,10 +100,7 @@ class AddTypeModal extends Component {
     }
 
     handle = () => {
-        if (this.props.isAddTypeStatus)
-            this.addType();
-        else 
-            this.editType();
+        this.addType();
     }
 
     editType = () => {
@@ -140,16 +131,6 @@ class AddTypeModal extends Component {
         this.props.changeEditTypeStatus();
     }
     typeName = "";
-    loadInitialData = () => {
-        if (this.props.isAddTypeStatus) {
-            
-        }
-        else
-        {
-            this.typeName = this.props.typeProductValue.name;
-            this.setState({change: true});
-        } 
-    }
 
     changeTypeName(e)
     {
@@ -161,7 +142,7 @@ class AddTypeModal extends Component {
                 <Card>
                     <CardHeader 
                         style={{ color: 'blue', backgroundColor: '#efeeef', textAlign: 'center' }} 
-                        title={this.props.isAddTypeStatus? "Add Type" : "Edit Type"}
+                        title={"Add Type"}
                         />
                     <Divider />
                     <CardContent>
@@ -197,12 +178,11 @@ class AddTypeModal extends Component {
                     <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2 }}>
                         <Button 
                             style={{ backgroundColor: 'yellowgreen' }} 
-                            // onClick={() => this.addShift()} 
                             onClick={() => this.handle()}
                             variant="contained" 
                             startIcon={<BiPlusMedical />}
                         >
-                            Xác nhận
+                            Add type
                         </Button>
                         <Button 
                             style={{ backgroundColor: 'red' }} 
@@ -223,9 +203,9 @@ class AddTypeModal extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         addTypeStatus: state.addTypeStatus,
-        isAddTypeStatus: state.isAddTypeStatus,
         infoUser: state.infoUser,
-        typeProductValue: state.typeProductValue
+        typeProductValue: state.typeProductValue,
+        typeProduct: state.typeProduct,
     }
 }
 

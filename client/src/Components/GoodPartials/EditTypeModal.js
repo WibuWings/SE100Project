@@ -6,7 +6,7 @@ import { TiDelete } from "react-icons/ti";
 import Stack from '@mui/material/Stack';
 import { GiCancel } from 'react-icons/gi'
 import axios from 'axios';
-import AddTypeModal from './AddTypeModal';
+import UpdateTypeModal from './UpdateTypeModal';
 
 var productTypes =[];
 var listTypeInfor = [];
@@ -28,10 +28,10 @@ class EditTypeModal extends Component {
         this.props.changeEditTypeStatus();
     }
     edit = (type) => {
-        this.props.changeAddTypeStatus();
-        this.props.setEditTypeStatus();
+        // this.props.setEditTypeStatus();
         this.props.typeToUpdate(type);
-        this.props.changeEditTypeStatus();
+        // this.props.changeEditTypeStatus();
+        this.props.changeStatusUpdateType();
     }
     async delete(type){
         const data = {
@@ -172,12 +172,6 @@ class EditTypeModal extends Component {
                         </Button>
                     </Box>
                 </Card>
-                {/* {this.props.addTypeStatus ? (
-                        <div className="modal-add">
-                            <div onClick={() => {this.props.changeAddTypeStatus();}} className="modal-overlay"></div>
-                            <AddTypeModal></AddTypeModal>
-                        </div>
-                    ): null} */}
             </form>
         );
     }
@@ -224,7 +218,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 },
                 name: data.name
             })
-        }
+        },
+        changeStatusUpdateType: () => {
+            dispatch({
+                type: "CHANGE_UPDATE_TYPE_STATUS",
+            }); 
+        },
     }
 }
 

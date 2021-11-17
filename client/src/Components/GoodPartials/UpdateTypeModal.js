@@ -8,7 +8,7 @@ import axios from 'axios';
 
 var listTypeInfor = [];
 
-class AddTypeModal extends Component {
+class UpdateTypeModal extends Component {
     constructor(props) {
         super(props);
         this.state= {
@@ -82,7 +82,7 @@ class AddTypeModal extends Component {
         {
             if(listTypeInfor[i].name==typeName)
             {
-                if(!this.props.isAddTypeStatus && typeName.trim()==this.props.typeProductValue.name)
+                if(typeName.trim()==this.props.typeProductValue.name)
                 {
                     alert("Không đổi tên à anh zai");
                     return false;
@@ -102,14 +102,11 @@ class AddTypeModal extends Component {
 
     }
     cancel = () => {
-        this.props.changeAddTypeStatus();
+        this.props.changeStatusUpdateType();
     }
 
     handle = () => {
-        if (this.props.isAddTypeStatus)
-            this.addType();
-        else 
-            this.editType();
+        this.editType();
     }
 
     editType = () => {
@@ -136,19 +133,13 @@ class AddTypeModal extends Component {
                 console.log(err);
                 alert("Lỗi gì cmnr")
             })
-        this.props.changeAddTypeStatus();
-        this.props.changeEditTypeStatus();
+        this.props.changeStatusUpdateType();
+        // this.props.changeEditTypeStatus();
     }
     typeName = "";
     loadInitialData = () => {
-        if (this.props.isAddTypeStatus) {
-            
-        }
-        else
-        {
-            this.typeName = this.props.typeProductValue.name;
-            this.setState({change: true});
-        } 
+        this.typeName = this.props.typeProductValue.name;
+        this.setState({change: true});
     }
 
     changeTypeName(e)
@@ -161,7 +152,7 @@ class AddTypeModal extends Component {
                 <Card>
                     <CardHeader 
                         style={{ color: 'blue', backgroundColor: '#efeeef', textAlign: 'center' }} 
-                        title={this.props.isAddTypeStatus? "Add Type" : "Edit Type"}
+                        title={"Update Type"}
                         />
                     <Divider />
                     <CardContent>
@@ -222,7 +213,6 @@ class AddTypeModal extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        addTypeStatus: state.addTypeStatus,
         typeProduct: state.typeProduct,
         infoUser: state.infoUser,
         typeProductValue: state.typeProductValue
@@ -247,7 +237,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 data: data,
             });
         },
+         changeStatusUpdateType: () => {
+            dispatch({
+                type: "CHANGE_UPDATE_TYPE_STATUS",
+            }); 
+        },
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddTypeModal);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateTypeModal);

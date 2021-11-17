@@ -12,6 +12,8 @@ import UpdateGoodModal from './GoodPartials/UpdateGoodModal';
 import EditTypeModal from './GoodPartials/EditTypeModal';
 import AddGoodModal from './GoodPartials/AddGoodModal';
 import axios from 'axios';
+import UpdateTypeModal from './GoodPartials/UpdateTypeModal';
+
 
 class GoodManager extends Component {
     constructor(props) {
@@ -121,10 +123,22 @@ class GoodManager extends Component {
                             <EditTypeModal></EditTypeModal>
                         </div>
                     ): null}
+                    {this.props.editTypeStatus ? (
+                        <div className="modal-add">
+                            <div onClick={() => {this.props.changeEditTypeStatus();}} className="modal-overlay"></div>
+                            <EditTypeModal></EditTypeModal>
+                        </div>
+                    ): null}
                     {this.props.statusAddGood ? (
                         <div className="modal-add">
                             <div onClick={() => {this.props.changeStatusAddGood();}} className="modal-overlay"></div>
                             <AddGoodModal></AddGoodModal>
+                        </div>
+                    ): null}
+                    {this.props.statusUpdateType ? (
+                        <div className="modal-add">
+                            <div onClick={() => {this.props.changeStatusUpdateType();}} className="modal-overlay"></div>
+                            <UpdateTypeModal></UpdateTypeModal>
                         </div>
                     ): null}
                 </div>
@@ -143,6 +157,7 @@ const mapStateToProps = (state, ownProps) => {
         isAddTypeStatus: state.isAddTypeStatus,
         statusAddGood: state.statusAddGood,
         infoUser: state.infoUser,
+        statusUpdateType: state.statusUpdateType,
     }
 }
 
@@ -193,6 +208,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "GET_PRODUCT_TYPE",
                 data: data
             });
+        },
+        changeStatusUpdateType: () => {
+            dispatch({
+                type: "CHANGE_UPDATE_TYPE_STATUS",
+            }); 
         },
     }
 }
