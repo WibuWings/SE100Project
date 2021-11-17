@@ -11,8 +11,36 @@ import ConfirmModal from './GoodPartials/ConfirmModal';
 import UpdateGoodModal from './GoodPartials/UpdateGoodModal';
 import EditTypeModal from './GoodPartials/EditTypeModal';
 import AddGoodModal from './GoodPartials/AddGoodModal';
+import axios from 'axios';
+
 class GoodManager extends Component {
-    
+    constructor(props) {
+        super(props);
+        this.loadAllType(); 
+        // this.loadAllGood();
+    }
+    async loadAllType() {
+        var result = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+            }   
+        }
+
+        await axios.get(`http://localhost:5000/api/product/type`, 
+        {
+            params: {...data}
+        })
+            .then(res => {
+                result = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        this.props.getProductType(result);
+    }
     handleAdd() {
         this.props.changeAddTypeStatus();
         this.props.setAddTypeStatus();
@@ -74,9 +102,6 @@ class GoodManager extends Component {
                             <ConfirmModal></ConfirmModal>
                         </div>
                     ): null}
-                    {
-
-                    }
                     {this.props.updateGoodStatus ? (
                         <div 
                             className="modal-add"
@@ -117,6 +142,7 @@ const mapStateToProps = (state, ownProps) => {
         editTypeStatus: state.editTypeStatus,
         isAddTypeStatus: state.isAddTypeStatus,
         statusAddGood: state.statusAddGood,
+        infoUser: state.infoUser,
     }
 }
 
@@ -161,7 +187,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_ADD_GOOD_STATUS",
             }); 
-        }
+        },
+        getProductType: (data) => {
+            dispatch({
+                type: "GET_PRODUCT_TYPE",
+                data: data
+            });
+        },
     }
 }
 export default connect(mapStateToProps , mapDispatchToProps)(GoodManager);

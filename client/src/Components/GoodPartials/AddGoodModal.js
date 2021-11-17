@@ -21,10 +21,6 @@ import { GiConsoleController } from 'react-icons/gi';
 import {
     Link
 } from "react-router-dom";
-// Use for save type
-var productTypes =[];
-
-var listProductInfor = [];
 
 // Use for choose type:
 var typeSet = [];
@@ -60,7 +56,14 @@ class AddGoodModal extends Component {
 
         this.currentDateTime = this.getCurrentDateTime();
         typeSet = [];
-        console.log("typeProduct", this.props.typeProduct);
+        // console.log("typeProduct", this.props.typeProduct);
+        var listProductInfor = this.props.listProduct.state;
+        console.log("listProduct",this.props.listProduct.state)
+        if(listProductInfor.length > 0)
+        {
+            this.generatedID = parseInt(listProductInfor[listProductInfor.length-1]._id.productID) + 1;
+        } 
+        this.setState({change: !this.state.change})
     }
     
     getCurrentDateTime()
@@ -269,42 +272,7 @@ class AddGoodModal extends Component {
         return true;
     }
 
-    // async loadAllType() {
-    //     var result = [];
-    //     const data = {
-    //         token: localStorage.getItem('token'),
-    //         filter: {
-    //             "_id.storeID": this.props.infoUser.email,
-    //         }   
-    //     }
-
-    //     await axios.get(`http://localhost:5000/api/product/type`, 
-    //     {
-    //         params: {...data}
-    //     })
-    //         .then(res => {
-    //             result = res.data.data;
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //             alert(err);
-    //         })
-    //     //Get data và lưu các tên Type vào bảng
-    //     listTypeInfor=[];
-    //     for(var i=0; i < result.length ; i++)
-    //     {
-    //         listTypeInfor.push(result[i]);
-    //     }
-    //     productTypes=[];
-    //     for(var i=0 ; i< listTypeInfor.length ; i ++)
-    //     {
-    //         productTypes.push(listTypeInfor[i].name);
-    //     }
-
-    //     this.props.getProductType(result);
-    //     console.log("listType", this.props.typeProduct.state);
-    //     this.setState({change: true});
-    // }
+    
 
     // async loadAllGood() {
     //     var result = [];
@@ -570,6 +538,7 @@ class AddGoodModal extends Component {
                                                         // this.props.typeProduct.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
                                                         this.props.typeProduct.map((type) =>
                                                             // this.foundTypeInSet(type) ? null :
+
                                                             <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
                                                         )
                                                     }   

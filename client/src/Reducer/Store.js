@@ -14,7 +14,6 @@ import statusDeleteConfirmReducer from './Status/StatusDeleteConfirmReducer';
 import statusUpdateGoodReducer from './Status/StatusUpdateGoodReducer';
 import statusEditTypeReducer from './Status/StatusEditTypeReducer';
 import statusAddTypeReducer from './Status/StatusAddTypeReducer';
-import statusIsAddTypeReducer from './Status/StatusIsAddTypeReducer';
 import roleReducer from './RoleReducer';
 import confirmModalReducer from './ConfirmModalReducer';
 import statusYesConfirmReducer from './Status/StatusYesConfirmReducer';
@@ -63,7 +62,6 @@ const allReducers = redux.combineReducers({
     deleteStatus: statusDeleteConfirmReducer,
     editTypeStatus: statusEditTypeReducer,
     addTypeStatus: statusAddTypeReducer,
-    isAddTypeStatus: statusIsAddTypeReducer,
     updateGoodStatus: statusUpdateGoodReducer,
     infoUpdate: infoGoodReducer,
     infoUser: infoUserReducer,
