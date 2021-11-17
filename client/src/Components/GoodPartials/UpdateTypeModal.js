@@ -134,6 +134,7 @@ class UpdateTypeModal extends Component {
                 alert("Lỗi gì cmnr")
             })
         this.props.changeStatusUpdateType();
+        this.props.updateNameToRedux(data.productType);
         // this.props.changeEditTypeStatus();
     }
     typeName = "";
@@ -242,6 +243,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_UPDATE_TYPE_STATUS",
             }); 
         },
+        updateNameToRedux: (data) => {
+            dispatch({
+                type: "UPDATE_TYPE",
+                data: data,
+            });
+            
+        }
     }
 }
 

@@ -272,44 +272,6 @@ class AddGoodModal extends Component {
         return true;
     }
 
-    
-
-    // async loadAllGood() {
-    //     var result = [];
-    //     const data = {
-    //         token: localStorage.getItem('token'),
-    //         filter: {
-    //             "_id.storeID": this.props.infoUser.email,
-    //         }   
-    //     }
-    //     await axios.get(`http://localhost:5000/api/product/`, {
-    //         params: {...data}
-    //     })
-    //         .then(res => {
-    //             // alert("Lấy hết đc product ròi anh chai");
-    //             result = res.data.data;
-    //             console.log(res.data.data);
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //             alert(err)
-    //         })
-    //     // Get data và lưu các tên Type vào dữ liệU
-    //     //Get data và lưu các tên Type vào bảng
-    //     listProductInfor=[];
-    //     for(var i=0; i < result.length ; i++)
-    //     {
-    //         listProductInfor.push(result[i]);
-    //     }
-    //     if(listProductInfor.length>0)
-    //     {
-    //         this.generatedID = parseInt(listProductInfor[listProductInfor.length-1]._id.productID) + 1;
-    //     } 
-    //     else this.generatedID = 0;
-    //     this.props.getProductToReducer(listProductInfor);
-    //     this.setState({change: false});
-    // }
-
     generatedID = 0;
 
     getTypeNamebyTypeID (typeID) {
@@ -326,10 +288,10 @@ class AddGoodModal extends Component {
     }
 
     foundTypeInSet(typeID) {
-        // for(var i = 0 ; i < typeSet.length; i++)
-        // {
-        //     if(typeSet[i]==typeID._id.typeID) return true;
-        // }
+        for(var i = 0 ; i < typeSet.length; i++)
+        {
+            if(typeSet[i]==typeID._id.typeID) return true;
+        }
         return false;
     }
     
@@ -535,10 +497,9 @@ class AddGoodModal extends Component {
                                                     }}
                                                 >
                                                     {
-                                                        // this.props.typeProduct.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
+                                                        this.props.typeProduct.length== 0 ? <MenuItem value={'none'}>None</MenuItem>:
                                                         this.props.typeProduct.map((type) =>
-                                                            // this.foundTypeInSet(type) ? null :
-
+                                                            this.foundTypeInSet(type) ? null :
                                                             <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
                                                         )
                                                     }   

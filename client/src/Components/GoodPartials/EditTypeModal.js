@@ -6,15 +6,10 @@ import { TiDelete } from "react-icons/ti";
 import Stack from '@mui/material/Stack';
 import { GiCancel } from 'react-icons/gi'
 import axios from 'axios';
-import UpdateTypeModal from './UpdateTypeModal';
-
-var productTypes =[];
-var listTypeInfor = [];
 
 class EditTypeModal extends Component {
     constructor(props) {
         super(props);
-        this.loadAllType();
         this.state = {
             change: false
         }
@@ -101,44 +96,7 @@ class EditTypeModal extends Component {
             .catch(err => {
                 alert(err);
             })
-
-        this.loadAllType();
         this.setState({change: !this.state.change})
-    }
-    
-
-
-    async loadAllType() {
-        var result = [];
-        const data = {
-            token: localStorage.getItem('token'),
-            filter: {
-                "_id.storeID": this.props.infoUser.email,
-            }   
-        }
-        await axios.get(`http://localhost:5000/api/product/type`, 
-        {
-            params: {...data}
-        })
-            .then(res => {
-                result = res.data.data;
-            })
-            .catch(err => {
-                console.log(err);
-                alert(err); // 401 ở đây
-            })
-        //Get data và lưu các tên Type vào bảng
-        listTypeInfor=[];
-        for(var i=0; i < result.length ; i++)
-        {
-            listTypeInfor.push(result[i]);
-        }
-        productTypes=[];
-        for(var i=0 ; i< listTypeInfor.length ; i ++)
-        {
-            productTypes.push(listTypeInfor[i].name);
-        }
-        this.setState({change: true});
     }
 
     render() {
@@ -150,7 +108,7 @@ class EditTypeModal extends Component {
                     <CardContent>
                         <Grid container spacing={2}>
                             <Grid container item md={12} xs={12} spacing={0}>
-                                { listTypeInfor.map((type) => (
+                                { this.props.typeProduct.map((type) => (
                                     <Grid item md={3} style={{border:'1px solid #333', padding: 4}}>
                                         <span>{type.name}</span>
                                         <BiEdit onClick={() => this.edit(type)}/>
@@ -184,6 +142,7 @@ const mapStateToProps = (state, ownProps) => {
         isAddTypeStatus: state.isAddTypeStatus,
         infoUser: state.infoUser,
         typeProductValue: state.typeProductValue,
+        typeProduct: state.typeProduct,
     }
 }
 
