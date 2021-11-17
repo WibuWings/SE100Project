@@ -270,29 +270,27 @@ class Authentication {
 
     refreshUI = async (req, res) => {
         var decoded = res.locals.decoded;
-        if (decoded._id) decoded.email = decoded._id;
 
-        getAllData(decoded.email)
-            .then((data) => {
-                res.status(200).send(
-                    JSON.stringify({
-                        status: STATUS.SUCCESS,
-                        message: MESSAGES.SIGN_IN_SUCCESS,
-                        token: res.locals.newToken,
-                        email: decoded.email,
-                        data,
-                    })
-                );
-            })
-            .catch((err) => {
-                res.status(404).send(
-                    JSON.stringify({
-                        err,
-                        status: STATUS.FAILURE,
-                        message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
-                    })
-                );
-            });
+        getAllData(decoded.email).then((data) => {
+            res.status(200).send(
+                JSON.stringify({
+                    status: STATUS.SUCCESS,
+                    message: MESSAGES.SIGN_IN_SUCCESS,
+                    token: res.locals.newToken,
+                    email: decoded.email,
+                    data,
+                })
+            );
+        })
+        .catch((err) => {
+            res.status(404).send(
+                JSON.stringify({
+                    err,
+                    status: STATUS.FAILURE,
+                    message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
+                })
+            );
+        });
     };
 
     authSignInRegularEmployee = async (req, res) => {
@@ -329,58 +327,43 @@ class Authentication {
 }
 
 async function getAllData(email) {
-    var manager = await Manager.findOne({ email: email });
-    var employee;
+    var newManager = await Manager.findOne({ email: email }).exec();
+    if (newManager) {
+        var manager = newManager;
+        var store = await Store.findOne({ _id: manager.storeID });
+        if (store == null) {
+            return manager;
+        }
 
-    if (manager) {
-    } else {
-        employee = await Employee.findOne({ employeeID: email });
-        var manager = await Manager.findOne({ email: employee.managerID });
-    }
-
-    const store = await Store.findOne({ _id: manager.storeID });
-    if (store == null) {
-        return manager;
-    }
-
-    const [
-        coupons,
-        employees,
-        products,
-        productTypes,
-        productJoinTypes,
-        revenues,
-        receipts,
-        returnProducts,
-        shiftAssigns,
-        shiftTypes,
-        regulation,
-        timeKeeping,
-        nextWeekTimeKeeping,
-    ] = await Promise.all([
-        Coupon.find({ "_id.storeID": store._id }).exec(),
-        Employee.find({ managerID: store._id }).exec(),
-        Product.find({ "_id.storeID": store._id }).exec(),
-        ProductType.find({ "_id.storeID": store._id }).exec(),
-        ProductJoinType.find({ "_id.storeID": store._id }).exec(),
-        Revenue.find({ "_id.storeID": store._id }).exec(),
-        Receipt.findWithDeleted({ "_id.storeID": store._id }).exec(),
-        ReturnProduct.find({ "_id.storeID": store._id }).exec(),
-        ShiftAssign.find({ "_id.storeID": store._id }).exec(),
-        ShiftType.find({ "_id.storeID": store._id }).exec(),
-        Regulation.find({ "_id.storeID": store._id }).exec(),
-        TimeKeeping.find({ "_id.storeID": store._id }).exec(),
-        NextWeekTimeKeeping.find({ "_id.storeID": store._id }).exec(),
-    ]);
-
-    if (employee) {
-        return {
-            employee,
-            receipts,
+        var [
+            coupons,
+            employees,
             products,
-            store,
-        };
-    } else {
+            productTypes,
+            productJoinTypes,
+            revenues,
+            receipts,
+            returnProducts,
+            shiftAssigns,
+            shiftTypes,
+            regulation,
+            timeKeeping,
+            nextWeekTimeKeeping,
+        ] = await Promise.all([
+            Coupon.find({ "_id.storeID": store._id }).exec(),
+            Employee.find({ managerID: store._id }).exec(),
+            Product.find({ "_id.storeID": store._id }).exec(),
+            ProductType.find({ "_id.storeID": store._id }).exec(),
+            ProductJoinType.find({ "_id.storeID": store._id }).exec(),
+            Revenue.find({ "_id.storeID": store._id }).exec(),
+            Receipt.findWithDeleted({ "_id.storeID": store._id }).exec(),
+            ReturnProduct.find({ "_id.storeID": store._id }).exec(),
+            ShiftAssign.find({ "_id.storeID": store._id }).exec(),
+            ShiftType.find({ "_id.storeID": store._id }).exec(),
+            Regulation.find({ "_id.storeID": store._id }).exec(),
+            TimeKeeping.find({ "_id.storeID": store._id }).exec(),
+            NextWeekTimeKeeping.find({ "_id.storeID": store._id }).exec(),
+        ]);
         return {
             manager,
             store,
@@ -397,20 +380,39 @@ async function getAllData(email) {
             regulation,
             timeKeeping,
             nextWeekTimeKeeping,
+            isEmployee: false,
         };
+    } else {
+        const username = email;
+        const employees = await Employee.findOne({
+            "_id.employeeID": username,
+        });
+        const [employee, receipts, products, store, manager] =
+            await Promise.all([
+                Employee.find({ "_id.employeeID": username }).exec(),
+                Receipt.findWithDeleted({
+                    "EmployeeID._id.employeeID": username,
+                }).exec(),
+                Product.find({ "_id.storeID": employees._id.storeID }).exec(),
+                Store.find({ _id: employees._id.storeID }).exec(),
+                Manager.find({ _id: employees.managerID }).exec(),
+            ]);
+        return { employee, receipts, products, store, manager };
     }
 }
+
 async function getAllDataEmployee(username) {
     const employees = await Employee.findOne({ "_id.employeeID": username });
-    const [employee, receipts, products, store] = await Promise.all([
+    const [employee, receipts, products, store, manager] = await Promise.all([
         Employee.find({ "_id.employeeID": username }).exec(),
         Receipt.findWithDeleted({
             "EmployeeID._id.employeeID": username,
         }).exec(),
         Product.find({ "_id.storeID": employees._id.storeID }).exec(),
         Store.find({ _id: employees._id.storeID }).exec(),
+        Manager.find({ _id: employees.managerID }).exec(),
     ]);
-    return { employee, receipts, products, store };
+    return { employee, receipts, products, store, manager };
 }
 
 module.exports = new Authentication();
