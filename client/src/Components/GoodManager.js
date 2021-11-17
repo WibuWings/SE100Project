@@ -10,7 +10,7 @@ import '../css/GoodManager.css';
 import ConfirmModal from './GoodPartials/ConfirmModal';
 import UpdateGoodModal from './GoodPartials/UpdateGoodModal';
 import EditTypeModal from './GoodPartials/EditTypeModal';
-
+import AddGoodModal from './GoodPartials/AddGoodModal';
 class GoodManager extends Component {
     
     handleAdd() {
@@ -37,7 +37,7 @@ class GoodManager extends Component {
                 <div style={{height: '100%', width: '100%', marginTop: '40px', marginBottom: '40px', paddingBottom: '40px' }}>
                     <div style={{display: 'flex'}}>
                         <Button variant="contained">
-                            <NavLink style={{color: '#fff', textDecoration: 'none'}} to="/goodmanager/import">Import</NavLink>
+                            <Button style={{color: '#fff', textDecoration: 'none'}} onClick={() => this.props.changeStatusAddGood()}>Import</Button>
                         </Button>
                         <SearchBar style={{height: '120px'}}/>
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleAdd()} variant="contained">
@@ -61,6 +61,7 @@ class GoodManager extends Component {
                     <GoodTable />
 
                     {/* Đây là phần modal */}
+
                     {this.props.addTypeStatus ? (
                         <div className="modal-add">
                             <div onClick={() => {this.props.changeAddTypeStatus();}} className="modal-overlay"></div>
@@ -73,6 +74,9 @@ class GoodManager extends Component {
                             <ConfirmModal></ConfirmModal>
                         </div>
                     ): null}
+                    {
+
+                    }
                     {this.props.updateGoodStatus ? (
                         <div 
                             className="modal-add"
@@ -92,6 +96,12 @@ class GoodManager extends Component {
                             <EditTypeModal></EditTypeModal>
                         </div>
                     ): null}
+                    {this.props.statusAddGood ? (
+                        <div className="modal-add">
+                            <div onClick={() => {this.props.changeStatusAddGood();}} className="modal-overlay"></div>
+                            <AddGoodModal></AddGoodModal>
+                        </div>
+                    ): null}
                 </div>
             </div>
         );
@@ -106,6 +116,7 @@ const mapStateToProps = (state, ownProps) => {
         updateGoodStatus: state.updateGoodStatus,
         editTypeStatus: state.editTypeStatus,
         isAddTypeStatus: state.isAddTypeStatus,
+        statusAddGood: state.statusAddGood,
     }
 }
 
@@ -146,7 +157,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "SET_CONFIRM_DELETE_GOOD",
             }); 
         },
-        
+        changeStatusAddGood: () => {
+            dispatch({
+                type: "CHANGE_ADD_GOOD_STATUS",
+            }); 
+        }
     }
 }
 export default connect(mapStateToProps , mapDispatchToProps)(GoodManager);

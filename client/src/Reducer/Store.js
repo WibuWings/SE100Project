@@ -49,7 +49,7 @@ import typeByDateReducer from './RecieptManager/TypeByDate';
 import statusSelectAllReducer from './RecieptManager/StatusSelectAll'
 import listRecieptDeleteReducer from './RecieptManager/ListRecieptDelete';
 import searchReducer from './RecieptManager/SearchReducer';
-
+import statusAddGoodReducer from './GoodManager/AddGoodStatus';
 
 var redux = require('redux');
 
@@ -94,6 +94,7 @@ const allReducers = redux.combineReducers({
     statusDarkmode: statusDarkmodeReducer,
     statusConfirmPassword: statusModalConfirmPasswordReducer,
     //Hàng hoá
+    statusAddGood: statusAddGoodReducer,
     typeProductValue: typeProductValueReducer,
     listProduct: listProductReducer,
     typeProduct: typeProductReducer,

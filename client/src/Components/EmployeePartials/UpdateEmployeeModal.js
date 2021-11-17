@@ -27,7 +27,35 @@ class UpdateEmployeeModal extends Component {
         }; 
         this.loadInitialData();
     }
+    imgUrl = 'none';
+    finishUpImage = true;
     
+    async profileImageChange(fileChangeEvent) {
+        this.setState({
+            imageSelect: fileChangeEvent.target.files[0],
+        })
+        this.finishUpImage = false;
+        const file = fileChangeEvent.target.files[0];
+        const { type } = file;
+        if (!(type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg') || type.endsWith('gif'))) {
+        } else {
+            const formData = new FormData();
+            formData.append("file", fileChangeEvent.target.files[0])
+            formData.append("upload_preset", "qqqhcaa3");
+            await axios.post(`https://api.cloudinary.com/v1_1/databaseimg/image/upload`, formData)
+                .then(res => {
+                    this.imgUrl=res.data.url;
+                    this.setState({
+                        change: 'true'
+                    });
+                })
+                .catch(err => {
+                    console.log("Thất bại");
+                })
+        }
+        this.finishUpImage = true;
+    }
+
 
     cancel = () => {
         
@@ -123,7 +151,12 @@ class UpdateEmployeeModal extends Component {
             alert("Ngày sinh không thể lớn hơn ngày bất đầu làm");
             return false;
         }
-
+        // Constraint 11: Check đã up ảnh xong chưa
+        if(this.finishUpImage == false)
+        {
+            alert("Ảnh chưa được upload xong");
+            return false;
+        }
 
         alert("Đã check hết các constraint")
         return true;
@@ -152,6 +185,7 @@ class UpdateEmployeeModal extends Component {
                 address: document.querySelector('input[name="adress"]').value,
                 cardID: document.querySelector('input[name="cardID"]').value,
                 startDate: document.querySelector('input[name="startDate"]').value,
+                imgUrl: this.imgUrl,
             }   
         }
         console.log("index", this.findIndexInListEmployee(this.id));

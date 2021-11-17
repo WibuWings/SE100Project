@@ -143,8 +143,7 @@ class GoodRow extends Component{
                 </TableCell>
             </TableRow>
             {
-                // this.isOpen ?
-                true ?
+                this.isOpen ?
                 <TableRow>
                     <TableCell className={classes.goodTable_Cell} style={{ padding: 0, height: 100}} colSpan={8}>
                         {/* <Collapse in={open} timeout="auto" unmountOnExit> */}

@@ -19,13 +19,9 @@ const typeProductInitialState = [
     typeProductReducer = (state = typeProductInitialState, action) => {
         switch (action.type) {
             case "GET_PRODUCT_TYPE":
-                return {
-                    state: action.data
-                }
+                return action.data;
             case "ADD_TYPE":
-                return {
-                    state: [...state, action.data]
-                }
+                return [...state, action.data];
             default:
                 return state
         }
