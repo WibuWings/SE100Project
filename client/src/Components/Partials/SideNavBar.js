@@ -87,6 +87,7 @@ class SideNavBar extends Component {
 
     logOut = () => {
         this.props.resetInfoUser()
+        this.props.resetInfoUser()
         this.props.changeLoginStatus()
     }
 
@@ -251,6 +252,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "HIDE_ALERT",
             })
         },
+        resetInfoUser: () => {
+            dispatch({
+                type: "RESET_INFO_USER"
+            })
+        }
     }
 }
 

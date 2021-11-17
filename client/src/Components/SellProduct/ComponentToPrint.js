@@ -122,8 +122,7 @@ class ComponentToPrint extends React.PureComponent {
                                 <td>{value.quantity * value.product.sellPrice}</td>
                             </tr>
                         ))
-                            : 'Không có gì'}
-
+                        : null}
                     </tbody>
                 </table>
                 <div style={{marginTop: '20px'}} className="col-12">
