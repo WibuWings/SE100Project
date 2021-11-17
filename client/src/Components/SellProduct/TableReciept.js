@@ -336,7 +336,6 @@ export default function CollapsibleTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {console.log(listReciept)}
                     {listReciept ?
                         listReciept.map((row) => (
                             <Row key={row.MAHD} row={row} />

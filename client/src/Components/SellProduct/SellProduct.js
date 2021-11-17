@@ -22,10 +22,12 @@ class SellProduct extends Component {
             change: false,
             test1: true,
         }
+        this.storeID = this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email;
         this.loadAllType();
         this.loadAllGood();
-    }
 
+    }
+    storeID = "";
     bull = (
         <Box
             component="span"
@@ -36,29 +38,33 @@ class SellProduct extends Component {
     );
 
     AddProduct = (value) => {
-        var isCheck = false;
-        var currentQuantity;
-        var maxQuantity;
-        this.props.shoppingBags.map(value1 => {
-            if (value1.product.name === value.name) {
-                isCheck = true;
-                currentQuantity = value1.quantity
-                maxQuantity = value.quantity
-            } 
-            return value;
-        })
-        if (isCheck) {
-            if (currentQuantity < maxQuantity) {
-                this.props.raiseQuantity(value.name);
-            }
+        console.log(value)
+        if (value.quantity === 0) {
+            this.props.showAlert('Shout out !', 'warning')
         } else {
-            const newProduct = {
-                product: value,
-                quantity: 1,
+            var isCheck = false;
+            var currentQuantity;
+            var maxQuantity;
+            this.props.shoppingBags.map(value1 => {
+                if (value1.product.name === value.name) {
+                    isCheck = true;
+                    currentQuantity = value1.quantity
+                    maxQuantity = value.quantity
+                }
+                return value;
+            })
+            if (isCheck) {
+                if (currentQuantity < maxQuantity) {
+                    this.props.raiseQuantity(value.name);
+                }
+            } else {
+                const newProduct = {
+                    product: value,
+                    quantity: 1,
+                }
+                this.props.addNewProductToShoppingBags(newProduct);
             }
-            this.props.addNewProductToShoppingBags(newProduct);
         }
-
     }
 
     async loadAllType() {
@@ -66,7 +72,7 @@ class SellProduct extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                "_id.storeID": this.props.infoUser.email,
+                "_id.storeID": this.storeID,
             }
         }
 
@@ -79,7 +85,6 @@ class SellProduct extends Component {
                 localStorage.getItem('token', res.data.token);
             })
             .catch(err => {
-                console.log(err);
                 alert(err);
             })
         //Get data và lưu các tên Type vào bảng
@@ -93,10 +98,11 @@ class SellProduct extends Component {
 
     async loadAllGood() {
         var resultProduct = [];
+        console.log("infoUser", this.props.infoUser);
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                "_id.storeID": this.props.infoUser.email,
+                "_id.storeID": this.storeID,
             }
         }
         await axios.get(`http://localhost:5000/api/product/`, {
@@ -106,7 +112,6 @@ class SellProduct extends Component {
                 resultProduct = res.data.data;
             })
             .catch(err => {
-                console.log(err);
                 alert(err)
             })
         // Get hết từ cái productjoinType
@@ -114,8 +119,8 @@ class SellProduct extends Component {
         const data1 = {
             token: localStorage.getItem('token'),
             filter: {
-                "_id.storeID": this.props.infoUser.email,
-            }   
+                "_id.storeID": this.storeID,
+            }
         }
         await axios.get(`http://localhost:5000/api/product/join`, {
             params: { ...data1 }
@@ -125,7 +130,6 @@ class SellProduct extends Component {
                 localStorage.getItem('token', res.data.token);
             })
             .catch(err => {
-                console.log(err);
                 alert(err)
             })
         // Lấy các cái jointype
@@ -133,7 +137,6 @@ class SellProduct extends Component {
         for (let i = 0; i < result.length; i++) {
             joinTypeInfor.push(result[i]);
         }
-        console.log("joinTypeInfor", joinTypeInfor);
 
         var listProductInfor = [];
         for (let i = 0; i < resultProduct.length; i++) {
@@ -151,17 +154,16 @@ class SellProduct extends Component {
                     typeIDList: typeIDList
                 });
         }
-        console.log("listProductInfor: ", listProductInfor);
         this.props.getProductToReducer(listProductInfor);
         this.setState({ change: !this.state.change });
     }
 
-    
+
 
     render() {
         return (
             <div className="sell-product" >
-                <Container style={{marginBottom: '20px'}} maxWidth="xl">
+                <Container style={{ marginBottom: '20px' }} maxWidth="xl">
                     <Grid container spacing={2}>
                         <Grid item lg={8} md={12} sm={12}>
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden' }}>
@@ -182,25 +184,40 @@ class SellProduct extends Component {
                                                 <Grid item lg={3} md={4} sm={4} xs={4}>
                                                     <Card onClick={() => this.AddProduct(value)}>
                                                         <CardActionArea>
-                                                            {
-                                                                value.imgUrl === "none"
-                                                                    ? <CardMedia
-                                                                        component="img"
-                                                                        height="140"
-                                                                        image={exampleImg}
-                                                                        alt="green iguana"
-                                                                    />
+                                                            <CardMedia
+                                                                style={{ display: (value.quantity === 0) ? 'block' : 'none' }}
+                                                                component="img"
+                                                                height="140"
+                                                                image='https://res.cloudinary.com/databaseimg/image/upload/v1637083732/aqd37xtgxukcq3x9eb4q.png'
+                                                                alt="green iguana"
+                                                            />
 
-                                                                    : <CardMedia
-                                                                        component="img"
-                                                                        height="140"
-                                                                        image={value.imgUrl}
-                                                                        alt="green iguana"
-                                                                    />
-                                                            }
+                                                            <div  style={{ display: (value.quantity !== 0) ? 'block' : 'none' }}>
+                                                                {
+                                                                    value.imgUrl === "none"
+                                                                        ? <CardMedia
+                                                                            component="img"
+                                                                            height="140"
+                                                                            image={exampleImg}
+                                                                            alt="green iguana"
+                                                                        />
+                                                                        : <CardMedia
+                                                                            component="img"
+                                                                            height="140"
+                                                                            image={value.imgUrl}
+                                                                            alt="green iguana"
+                                                                        />
+                                                                }
+                                                            </div>
+                                                            
                                                             <CardContent style={{ padding: '5px' }}>
                                                                 <Typography style={{ textAlign: 'center' }} gutterBottom variant="h6" component="div">
                                                                     {value.name}
+                                                                </Typography>
+                                                            </CardContent>
+                                                            <CardContent  style={{ textAlign: 'center', margin:'0', padding: '0'}}>
+                                                                <Typography style={{ textAlign: 'center', margin:'0', padding: '0', fontSize:'0.7rem', fontWeight: '700', color: '#00000080'}} gutterBottom variant="h6" component="div">
+                                                                Quantity: {value.quantity}
                                                                 </Typography>
                                                             </CardContent>
                                                         </CardActionArea>
@@ -299,6 +316,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "RAISE_QUANTITY_SHOPPING_BAGS",
                 name: name,
             })
+        },
+        showAlert: (message, typeMessage) => {
+          dispatch({
+            type: "SHOW_ALERT",
+            message: message,
+            typeMessage: typeMessage,
+          })
+        },
+        hideAlert: () => {
+          dispatch({
+            type: "HIDE_ALERT",
+          })
         }
     }
 }

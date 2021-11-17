@@ -11,6 +11,7 @@ class Printf extends React.PureComponent {
     this.state = {
       percentDiscount: 0,
       infoReciept: [],
+      code: '', 
       date: new Date(),
       MAHD: "HD" + this.makeCode(6),
     }
@@ -81,17 +82,19 @@ class Printf extends React.PureComponent {
     return result;
   }
 
-  code = ''
 
   addReciept = async () => {
     if (this.props.shoppingBags.length === 0) {
       this.props.hideAlert()
       this.props.showAlert("Cart empty ", "warning")
     } else {
-      this.code = this.makeCode(8)
+      let code = this.makeCode(8)
+      this.setState({
+        code: code
+      })
       const data = {
-        MAHD: this.code,
-        idUser: this.props.infoUser._id,
+        MAHD: code,
+        idUser: this.props.infoUser.employeeID ? this.props.infoUser.employeeID : this.props.infoUser._id,
         name: this.props.infoUser.lastName + " " + this.props.infoUser.firstName,
         date: this.dateFunction(),
         discount: this.state.percentDiscount,
@@ -103,13 +106,11 @@ class Printf extends React.PureComponent {
         oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
       }
       axios.post('http://localhost:5000/api/sell-product/add-reciept', {
-        email: this.props.infoUser.email,
+        email: this.props.infoUser.managerID? this.props.infoUser.managerID : this.props.infoUser.email,
         token: localStorage.getItem('token'),
         data: data,
       })
         .then(res => {
-          console.log('Thành công!')
-          console.log(res)
           if (res.status === 200) {
             localStorage.setItem('token', res.data.token)
             if (this.props.statusEditInfoBill) {
@@ -119,11 +120,10 @@ class Printf extends React.PureComponent {
               infoReciept: this.props.shoppingBags,
             })
             this.props.hideAlert()
-            this.props.showAlert("In bill success", "success")
+            this.props.showAlert("Print bill success", "success")
             this.props.resetShoppingBag();
             this.props.addRecieptToHistory(data);
           }
-
         })
         .catch(err => {
           this.props.changeLoginStatus();
@@ -187,10 +187,10 @@ class Printf extends React.PureComponent {
             <p onClick={() => this.props.changeStatusHistoryReciept()} style={{ cursor: 'pointer' }}>(*) Receipt history</p>
           </div>
         </div>
-
+              {console.log(this.props.shoppingBags)}
         {/* Ẩn đi */}
         <div style={{ display: 'none' }}>
-          <ComponentToPrint MAHD={this.code} percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.state.infoReciept} ref={el => (this.componentRef = el)} />
+          <ComponentToPrint MAHD={this.state.code} percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
         </div>
       </div>
     );

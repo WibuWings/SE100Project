@@ -184,7 +184,7 @@ function DataReciept(props) {
                                     <div className="form-check">
                                         <input onClick={() => selectType()} style={{ transform: 'translateY(70%)' }} className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" defaultChecked />
                                         <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                            <InputLabel id="demo-simple-select-label">Group by</InputLabel>
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"

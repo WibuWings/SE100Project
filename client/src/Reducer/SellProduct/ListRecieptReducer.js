@@ -5,7 +5,7 @@ const listRecieptInitialState = [],
                 action.listReciept.map(value => {
                     let data = {
                         MAHD: value._id.receiptID,
-                        name: value.employeeID.name,
+                        name:  value.employeeID.name,
                         idUser: value.employeeID._id.employeeID ? value.employeeID._id.employeeID : '',
                         date: value.createAt,
                         discount: value.discount,
@@ -15,7 +15,7 @@ const listRecieptInitialState = [],
                         time: value.timeCreate,
                         isEdit: value.isEdit,
                         oldBill: value.oldBill,
-                        isDelete: value.isDelete ? value.isDelete : false,
+                        deleted: value.deleted ? value.deleted : false,
                     }
                     state.push(data)
                 })
@@ -44,21 +44,16 @@ const listRecieptInitialState = [],
                 })
             case "DELETE_MAHD_SELECTED_RECIEPT":
                 return state.filter(value => {
-                    let isCheck = false
                     action.listMAHD.map(value1 => {
-                        if (value.MAHD == value1) {
-                            if (value.deleted) {
-                                isCheck = true;
-                            } else {
-                                value.deleted = true
-                            }
+                        if (value.MAHD === value1) {
+                            value.deleted = true
                         }
                     })
-                    if (!isCheck) return value
+                    return value
                 })
             case "DELETE_MAHD_INVOICE_RECIEPT":
                 return state.filter(value => {
-                    return !value.isDelete
+                    return !value.deleted
                 })
             case "RESTONE_ONE_RECIEPT":
                 return state.filter(value => {
@@ -77,6 +72,8 @@ const listRecieptInitialState = [],
                     value.deleted = true
                     return value;
                 })
+            case "RESET_ALL_RECIEPT_USER":
+                return [];
             default:
                 return state
         }

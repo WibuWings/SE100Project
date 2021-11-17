@@ -17,15 +17,15 @@ const NextWeekTimeKeeping = new Schema({
                 storeID: String,
             },
         },
+        realDate: Date,
     },
-    isAttending: Boolean,
     alternativeEmployee: {
         _id: {
             employeeID: String,
             storeID: String,
         },
     },
-    realDate: Date,
+    
 });
 
 module.exports = mongoose.model("NextWeekTimeKeeping", NextWeekTimeKeeping);

@@ -35,6 +35,15 @@ import statusShowHistoryReciept from './SellProduct/StatusShowHistoryRecieptRedu
 import listRecieptReducer from './SellProduct/ListRecieptReducer';
 import statusEditInfomationBill from './SellProduct/StatusEditInfomationBill';
 import InfomationBillEditReducer from './SellProduct/InfomationBillEdit';
+import nextWeekTimeKeepingReducer from './Employee/nextWeekTimeKeepingReducer';
+import statusAddNextWeekTimeKeepingReducer from './Employee/addNextWeekTimeKeepingStatus';
+import statusUpdateNextWeekTimeKeepingReducer from './Employee/updateNextWeekTimeKeepingStatus';
+import updateNextWeekTimeKeepingValueReducer from './Employee/updateNextWeekTimeKeepingValue';
+import listShiftAssignReducer from './Employee/listShiftAssignReducer';
+import listTimeKeepingReducer from './Employee/listTimeKeepingReducer';
+import statusAddTimeKeepingReducer from './Employee/addTimeKeepingStatus';
+import statusUpdateTimeKeepingReducer from './Employee/updateTimeKeepingStatus';
+import updateTimeKeepingValueReducer from './Employee/updateTimeKeeperValue';
 import typeRecieptReducer from './RecieptManager/TypeReciept';
 import typeByDateReducer from './RecieptManager/TypeByDate';
 import statusSelectAllReducer from './RecieptManager/StatusSelectAll'
@@ -62,16 +71,29 @@ const allReducers = redux.combineReducers({
     role: roleReducer,
     confirmCode: confirmModalReducer,
     yesConfirm: statusYesConfirmReducer,
+    // Nhân viên
     listEmployee: listEmployeeReducer,
     listSackedEmployee: listSackedEmployeeReducer,
     currentEditEmployee: currentEditEmployeeReducer, 
     addEmployeeStatus: statusAddEmployeeReducer,
     payEmployeeStatus: statusPayEmployeeReducer,
     updateEmpoyeeStatus: statusUpdateEmployeeReducer,
+    updateNextWeekTimeKeepingValue : updateNextWeekTimeKeepingValueReducer ,
+    listShiftAssign: listShiftAssignReducer,
+    listTimeKeeping: listTimeKeepingReducer,
+    // Chấm công các kiểu
+    nextWeekTimeKeeping: nextWeekTimeKeepingReducer,
+    statusAddNextWeekTimeKeeping: statusAddNextWeekTimeKeepingReducer,
+    statusUpdateNextWeekTimeKeeping: statusUpdateNextWeekTimeKeepingReducer,
+    statusAddTimeKeeping: statusAddTimeKeepingReducer,
+    statusUpdateTimeKeeping: statusUpdateTimeKeepingReducer,
+    updateTimeKeepingValue: updateTimeKeepingValueReducer, 
+    // Ca
     editShiftStatus: statusEditShiftReducer,
     objectEditShift: objectEditShiftReducer,
     statusDarkmode: statusDarkmodeReducer,
     statusConfirmPassword: statusModalConfirmPasswordReducer,
+    //Hàng hoá
     typeProductValue: typeProductValueReducer,
     listProduct: listProductReducer,
     typeProduct: typeProductReducer,

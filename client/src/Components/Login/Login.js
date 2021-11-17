@@ -73,6 +73,7 @@ class Login extends Component {
                             this.props.updateShiftTypes(res.data.data.shiftTypes);
                             this.props.updateRecieptUser(res.data.data.receipts);
                             this.props.changeLoginStatus();
+                            this.props.getEmployee(res.data.data.employees);
                             this.props.hideAlert();
                             this.props.showAlert(res.data.message, "success");
                             break;
@@ -272,6 +273,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "HIDE_ALERT",
             })
         },
+        getEmployee: (data) => {
+            dispatch({
+                type: "GET_EMPLOYEE",
+                employees: data,
+            });
+          },
         updateShiftTypes: (shiftTypes) => {
             dispatch({
                 type: "UPDATE_DATA_SHIFT_USER",

@@ -13,6 +13,8 @@ const Product = require("../models/product");
 const Employee = require("../models/employee");
 const Coupon = require("../models/coupon");
 const Regulation = require("../models/regulation");
+const TimeKeeping = require("../models/timeKeeping");
+const NextWeekTimeKeeping = require("../models/nextWeekTimeKeeping");
 const {JWTAuthToken} = require("../helper/JWT");
 
 const MESSAGES = {
@@ -343,6 +345,8 @@ async function getAllData(email) {
         shiftAssigns,
         shiftTypes,
         regulation,
+        timeKeeping,
+        nextWeekTimeKeeping,
     ] = await Promise.all([
         Coupon.find({ "_id.storeID": store._id }).exec(),
         Employee.find({ managerID: store._id }).exec(),
@@ -354,7 +358,9 @@ async function getAllData(email) {
         ReturnProduct.find({ "_id.storeID": store._id }).exec(),
         ShiftAssign.find({ "_id.storeID": store._id }).exec(),
         ShiftType.find({  "_id.storeID": store._id }).exec(),
-        Regulation.find({ _id: store._id }).exec(),
+        Regulation.find({ "_id.storeID": store._id }).exec(),
+        TimeKeeping.find({ "_id.storeID": store._id }).exec(),
+        NextWeekTimeKeeping.find({ "_id.storeID": store._id }).exec(),
     ]);
 
     return {
@@ -371,6 +377,8 @@ async function getAllData(email) {
         shiftTypes,
         revenues,
         regulation,
+        timeKeeping,
+        nextWeekTimeKeeping,
     };
 }
 async function getAllDataEmployee(username){

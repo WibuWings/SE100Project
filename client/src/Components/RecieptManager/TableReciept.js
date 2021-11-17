@@ -70,24 +70,36 @@ function Row(props) {
                 MAHD: MAHD
             })
                 .then(res => {
-                    console.log('Xóa thành công')
+                    if (res.data.status === 1) {
+                        localStorage.setItem('token', res.data.token)
+                        dispatch({
+                            type: "DELETE_RECIEPT",
+                            MAHD: MAHD,
+                        })
+                        dispatch({
+                            type: "HIDE_ALERT",
+                        })
+                        dispatch({
+                            type: "SHOW_ALERT",
+                            message: 'Delete success',
+                            typeMessage: 'success',
+                        })
+                    }
                 })
                 .catch(err => {
-                    console.log('Xóa thất bại')
+                    dispatch({
+                        type: "CHANGE_LOGIN_STATUS",
+                    });
+                    dispatch({
+                        type: "HIDE_ALERT",
+                    })
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: 'Login timeout, signin again',
+                        typeMessage: 'warning',
+                    })
                 })
             setOpen(!open)
-            dispatch({
-                type: "DELETE_RECIEPT",
-                MAHD: MAHD,
-            })
-            dispatch({
-                type: "HIDE_ALERT",
-            })
-            dispatch({
-                type: "SHOW_ALERT",
-                message: 'Delete success',
-                typeMessage: 'success',
-            })
         }
     }
 
@@ -99,32 +111,45 @@ function Row(props) {
             MAHD: MAHD
         })
             .then(res => {
-                console.log('Xóa thành công')
+                if (res.data.status === 1) {
+                    localStorage.setItem('token', res.data.token)
+                    dispatch({
+                        type: "DELETE_ONE_RECIEPT",
+                        MAHD: MAHD,
+                    })
+                    dispatch({
+                        type: "HIDE_ALERT",
+                    })
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: 'Delete success',
+                        typeMessage: 'success',
+                    })
+                }
             })
             .catch(err => {
-                console.log('Xóa thất bại')
+                dispatch({
+                    type: "CHANGE_LOGIN_STATUS",
+                });
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: 'Login timeout, signin again',
+                    typeMessage: 'warning',
+                })
             })
-
-        dispatch({
-            type: "DELETE_ONE_RECIEPT",
-            MAHD: MAHD,
-        })
-        dispatch({
-            type: "HIDE_ALERT",
-        })
-        dispatch({
-            type: "SHOW_ALERT",
-            message: 'Delete success',
-            typeMessage: 'success',
-        })
         setOpenModal(false)
     }
 
-    const TypeReciept = (isEdit, isDelete) => {
+    const TypeReciept = (isEdit, isDelete, oldBill) => {
         if (isDelete) {
             return red[400]
         } else if (isEdit) {
             return '#f4f492'
+        } else if (oldBill){
+            return '#00897b'
         } else {
             return '#a6ffa6'
         }
@@ -140,30 +165,42 @@ function Row(props) {
         }
     }
 
-    const RestoneReciept = (MAHD) => {
-        axios.post('http://localhost:5000/api/sell-product/restone-receipt', {
+    const RestoneReciept =  async (MAHD) => {
+        await axios.post('http://localhost:5000/api/sell-product/restone-receipt', {
             token: localStorage.getItem('token'),
             email: infoUser.email,
             MAHD: MAHD
         })
             .then(res => {
-                console.log('Restone thành công')
+                localStorage.setItem('token', res.data.token)
+                if(res.data.status === 1) {
+                    dispatch({
+                        type: 'RESTONE_ONE_RECIEPT',
+                        MAHD: MAHD
+                    })
+                    dispatch({
+                        type: "HIDE_ALERT",
+                    })
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: 'Restone success',
+                        typeMessage: 'success',
+                    })
+                }
             })
             .catch(err => {
-                console.log('Restone thất bại')
+                dispatch({
+                    type: "CHANGE_LOGIN_STATUS",
+                });
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: 'Login timeout, signin again',
+                    typeMessage: 'warning',
+                })
             })
-        dispatch({
-            type: 'RESTONE_ONE_RECIEPT',
-            MAHD: MAHD
-        })
-        dispatch({
-            type: "HIDE_ALERT",
-        })
-        dispatch({
-            type: "SHOW_ALERT",
-            message: 'Restone success',
-            typeMessage: 'success',
-        })
         setOpen(false);
     }
 
@@ -186,7 +223,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted), borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted, row.oldBill), borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <Checkbox {...label} checked={statusSelectReplace} onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
                 </TableCell>
@@ -417,13 +454,11 @@ export default function CollapsibleTable() {
     const listReciept = useSelector(state => state.listReciept)
     const typeByDate = useSelector(state => state.typeByDate)
     const [listRecieptReplace, setListRecieptReplace] = React.useState(listReciept);
-    const listRecieptDelete = useSelector(state => state.listRecieptDelete)
     const statusSelectAll = useSelector(state => state.statusSelectAll)
     const search = useSelector(state => state.search)
     const dispatch = useDispatch()
     let listMAHD = []
     React.useEffect(() => {
-        console.log(typeReciept)
         var list = typeReciept.length === 0 ? listReciept : listReciept.filter(value => {
             for (var i = 0; i < typeReciept.length; i++) {
                 if (typeReciept[i] === 'delete') {

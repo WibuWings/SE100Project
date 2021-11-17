@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button, InputLabel } from '@mui/material';
+import { Card, CardHeader, Table, Grid, TextField, 
+    TableCell, TableContainer, Button, InputLabel,
+    Paper, TableRow, TableHead } from '@mui/material';
 import { connect } from 'react-redux'
 import { BiPlusMedical, BiEdit } from 'react-icons/bi';
 import Stack from '@mui/material/Stack';
@@ -23,7 +25,25 @@ var productTypes =[
 ];
 
 var typeSet = [];
-
+const styles = theme =>  ({
+    goodTable: {                                     
+        borderWidth: '1px',
+        borderColor: '#ccc',
+        borderStyle: 'solid'
+    },
+    goodTable_Cell_Header: {                                     
+        borderWidth: '1px',
+        borderColor: '#ccc',
+        borderStyle: 'solid',
+        height: '40px',
+    },
+    goodTable_Cell: {                                     
+        borderWidth: '1px',
+        borderColor: '#ccc',
+        borderStyle: 'solid',
+        height: '40px',
+    } 
+})
 const StyledTextField = withStyles((theme) => ({
     root: {
       "& .MuiInputBase-root": {
@@ -36,6 +56,7 @@ const StyledTextField = withStyles((theme) => ({
     }
   }))(TextField);
 
+
 class PayEmployeeModal extends Component {
     constructor(props) {
         super(props);
@@ -47,17 +68,43 @@ class PayEmployeeModal extends Component {
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         }; 
+        console.log("listTimeKeeper", this.props.listTimeKeeper);
+    }
+
+    getShiftInforByID(shiftID)
+    {
+        var listShift = this.props.listShift;
+        for(var i = 0 ; i < listShift.length; i++)
+        {
+            if(listShift[i]._id.shiftID == shiftID)
+            {
+                return listShift[i].name + ' (' + listShift[i].timeFrom + '-' + listShift[i].timeEnd + ')';
+            }
+        }
+        return "Can't get shift";
+    }
+
+    getEmployeeFullNameByID(employeeID)
+    {
+            for(var i = 0 ; i < this.props.listEmployee.employees.length; i++)
+            {
+                var currentEmployee = this.props.listEmployee.employees[i];
+                if(currentEmployee._id.employeeID==employeeID)
+                {
+                        return currentEmployee.lastName + ' ' + currentEmployee.firstName;
+                }
+            }
+        return "Can't get name";
+    }
+
+    payEmployee(){
+        alert("Confirm password");
+        // viết api để trả lương ở đây
+        this.props.changePayEmployeeStatus();
     }
     
-
-    cancel = () => {
-        this.props.changeAddEmployeeStatus();
-    }
-
-    addEmployee = () => {
-        this.props.changeAddEmployeeStatus();
-    }
     render() {
+        const { classes } = this.props;
         return (
             <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
@@ -77,171 +124,53 @@ class PayEmployeeModal extends Component {
                                 marginTop: '0px'
                             }}
                         >   
-                            <label className="profile-header__avatar" for="profile-header-update-avatar" style={{ overflow: 'hidden' }}>
+                            {/* <label className="profile-header__avatar" for="profile-header-update-avatar" style={{ overflow: 'hidden' }}>
                                 <Image style={{width: '150px',height: '150px' }} cloudName="databaseimg" publicId={this.imgUrl=='none' ? 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png' : this.imgUrl}></Image>
                             </label>
-                            {/* Ẩn đi */}
-                            <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input>
+                            <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input> */}
                         </Grid>
                         <Grid item md={12}>
 
                             <Card>
                                 
                                 <Grid container md={12}>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div 
-                                            className="input-label"
-                                            style={{
-                                                width: '116px'
-                                            }}
-                                        >
-                                            ID
-                                        </div>
-                                        <StyledTextField
-                                            classname='input-box' 
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth 
-                                            size="small" 
-                                            variant="outlined" 
-                                            readOnly={true}
-                                            disabled={true}
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>First Name</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>Last Name</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>ID CARD</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label" style={{width: '114px'}}>Old</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>Gender</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>Province</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>PhoneNumber</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '100%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>Email</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} 
-                                        className='input-item'
-                                    >
-                                        <div className="input-label"style={{width: '114px'}}>BirthDay</div>
-                                        <StyledTextField
-                                            classname='input-box'   
-                                            type="text" 
-                                            // class="input-val" 
-                                            style = {{width: '70%'}} 
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={9}></Grid>
+                                     <TableContainer component={Paper}>
+                                            <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='180px'>Day</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Date Of Week</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" >Shift</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center">Salary</TableCell>
+                                                        {/* <TableCell className={classes.goodTable_Cell_Header} align="center"></TableCell> */}
+                                                    </TableRow>
+                                                    {
+                                                        this.props.listTimeKeeper.map((timeKeeper)=>
+                                                            (
+                                                            <TableRow>
+                                                                <TableCell className={classes.goodTable_Cell}>{timeKeeper.realDate}</TableCell>
+                                                                <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.dateInWeek}</TableCell>
+                                                                <TableCell className={classes.goodTable_Cell}>{this.getShiftInforByID(timeKeeper._id.shiftType._id.shiftID)}</TableCell>
+                                                                <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.employee._id.employeeID}</TableCell>
+                                                                <TableCell className={classes.goodTable_Cell}>
+                                                                    {this.getEmployeeFullNameByID(timeKeeper._id.employee._id.employeeID)}
+                                                                </TableCell>
+                                                                <TableCell className={classes.goodTable_Cell}>
+                                                                    Salary
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            )
+                                                        )
+                                                    }
+                                                </TableHead>
+                                            </Table>
+                                    </TableContainer>
                                     <Grid item md={3}
                                         className='input-item'
                                     >
-                                        <Button variant="contained" onClick={() => this.props.changePayEmployeeStatus()}>
+                                        <Button variant="contained" onClick={() => this.payEmployee()}>
                                             Pay employee
                                         </Button>
                                     </Grid>
@@ -261,7 +190,10 @@ class PayEmployeeModal extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-
+        listTimeKeeper: state.listTimeKeeping,
+        listShift: state.listShift,
+        listEmployee: state.listEmployee,
+        infoUser: state.infoUser
     }
 }
 
@@ -275,6 +207,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PayEmployeeModal);
+export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, {withTheme: true}))(PayEmployeeModal));
 
                
