@@ -143,11 +143,13 @@ function Row(props) {
         setOpenModal(false)
     }
 
-    const TypeReciept = (isEdit, isDelete) => {
+    const TypeReciept = (isEdit, isDelete, oldBill) => {
         if (isDelete) {
             return red[400]
         } else if (isEdit) {
             return '#f4f492'
+        } else if (oldBill){
+            return '#00897b'
         } else {
             return '#a6ffa6'
         }
@@ -221,7 +223,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted), borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted, row.oldBill), borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <Checkbox {...label} checked={statusSelectReplace} onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
                 </TableCell>

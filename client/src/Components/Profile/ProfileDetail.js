@@ -16,6 +16,29 @@ class ProfileDetail extends Component {
         }
     }
 
+    SaveDetailsEmployee = async () => {
+        // của employee tại đây
+        const data = {
+            token: localStorage.getItem('token'),
+            employee: {
+                _id: {
+                    employeeID: this.props.infoUser.employeeID,
+                    storeID: this.props.infoUser.managerID,
+                },
+                firstName: document.querySelector('input[name="firstName"]').value,
+                lastName: document.querySelector('input[name="lastName"]').value,
+            }   
+        }
+        axios.put(`http://localhost:5000/api/employee`, data)
+            .then(res => {
+                this.props.hideAlert();
+                this.props.showAlert("Update success", "success");
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
     SaveDetails = async () => {
         if (this.state.isTel && this.state.isOld) {
             const data = {
@@ -166,13 +189,13 @@ class ProfileDetail extends Component {
 
     render() {
         return (
-            <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}} autoComplete="off" noValidate>
+            <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Profile" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode ? '#0091ea' : 'white', backgroundColor: !this.props.statusDarkmode ? '#efeeef' : '#455a64' }} title="Profile" />
                     <Divider />
                     <CardContent>
                         <Grid container spacing={3}>
-                            <Grid  item md={6} xs={12}>
+                            <Grid item md={6} xs={12}>
                                 <Box >
                                     <TextField
                                         id="outlined-basic"
@@ -202,6 +225,26 @@ class ProfileDetail extends Component {
                                 <TextField
                                     fullWidth
                                     disabled
+                                    label="EmployeeID"
+                                    defaultValue={this.props.infoUser.employeeID}
+                                    name="email"
+                                    variant="outlined"
+                                />
+                            </Grid>
+                            <Grid item md={6} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    disabled
+                                    label="ManagerID"
+                                    defaultValue={this.props.infoUser.managerID}
+                                    name="email"
+                                    variant="outlined"
+                                />
+                            </Grid>
+                            <Grid item md={6} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    disabled
                                     label="Email Address"
                                     defaultValue={this.props.infoUser.email}
                                     name="email"
@@ -211,42 +254,57 @@ class ProfileDetail extends Component {
                             <Grid item md={6} xs={12}>
                                 <TextField
                                     fullWidth
-                                    label="Old"
-                                    name="old"
-                                    defaultValue={this.props.infoUser.old}
-                                    required
-                                    error={!this.state.isOld}
-                                    onBlur={(e) => this.blurOld(e)}
+                                    disabled
+                                    label="cardID"
+                                    defaultValue={this.props.infoUser.cardID}
+                                    name="email"
                                     variant="outlined"
                                 />
                             </Grid>
-                            <Grid item md={6} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Gender"
-                                    name="gender"
-                                    onBlur={(e) => this.blurAll(e)}
-                                    required
-                                    defaultValue={this.props.infoUser.gender}
-                                    variant="outlined"
-                                    select
-                                    SelectProps={{ native: true }}
-                                >
-                                    <option value="0">
-                                        --Select gender--
-                                    </option>
-                                    <option value="male">
-                                        Male
-                                    </option>
-                                    <option value="female">
-                                        Female
-                                    </option>
-                                </TextField>
-                            </Grid>
+                            {!this.props.role ? null : (
+                                <Grid item md={6} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="Old"
+                                        name="old"
+                                        defaultValue={this.props.infoUser.old}
+                                        required
+                                        error={!this.state.isOld}
+                                        onBlur={(e) => this.blurOld(e)}
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                            )}
+                            {!this.props.role ? null : (
+                                <Grid item md={6} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="Gender"
+                                        name="gender"
+                                        onBlur={(e) => this.blurAll(e)}
+                                        required
+                                        defaultValue={this.props.infoUser.gender}
+                                        variant="outlined"
+                                        select
+                                        SelectProps={{ native: true }}
+                                    >
+                                        <option value="0">
+                                            --Select gender--
+                                        </option>
+                                        <option value="male">
+                                            Male
+                                        </option>
+                                        <option value="female">
+                                            Female
+                                        </option>
+                                    </TextField>
+                                </Grid>
+                            )}
                             <Grid item md={6} xs={12}>
                                 <TextField
                                     fullWidth
                                     label="Store Name"
+                                    disabled={this.props.role ? false : true}
                                     onBlur={(e) => this.blurAll(e)}
                                     defaultValue={this.props.infoUser.storeName}
                                     name="storeName"
@@ -260,66 +318,96 @@ class ProfileDetail extends Component {
                                     fullWidth
                                     label="Tel"
                                     defaultValue={this.props.infoUser.tel}
+                                    disabled={this.props.role ? false : true}
                                     error={!this.state.isTel}
                                     name="tel"
                                     variant="outlined"
                                     onBlur={(e) => this.blurTel(e)}
                                 />
                             </Grid>
-
-                            <Grid item md={6} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Select province"
-                                    name="province"
-                                    required
-                                    defaultValue={this.props.infoUser.province}
-                                    value={this.state.nameProvince}
-                                    onChange={(e) => this.changeCountry(e)}
-                                    select
-                                    SelectProps={{ native: true }}
-                                    variant="outlined"
-                                >
-                                    <option value="0">--Select province--</option>
-                                    {(this.props.country.length !== 0) ? this.props.country[0].map(item => {
-                                        return (
-                                            <option value={item.codename}>
-                                                {item.name}
-                                            </option>
-                                        )
-                                    }) : null}
-                                </TextField>
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Select district"
-                                    name="district"
-                                    defaultValue={this.props.infoUser.district}
-                                    value={this.state.nameDistrict}
-                                    onChange={(e) => this.changeDistrict(e)}
-                                    required
-                                    select
-                                    SelectProps={{ native: true }}
-                                    variant="outlined"
-                                >
-                                    <option value="0">--Select district--</option>
-                                    {(this.props.district.length !== 0) ? this.props.district.map(item => {
-                                        return (
-                                            <option value={item.codename}>
-                                                {item.name}
-                                            </option>
-                                        )
-                                    }) : null}
-                                </TextField>
-                            </Grid>
-                            <Grid item md={6} xs={12}>
+                            {!this.props.role ? null : (
+                                <Grid item md={6} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="Select district"
+                                        name="district"
+                                        defaultValue={this.props.infoUser.district}
+                                        value={this.state.nameDistrict}
+                                        onChange={(e) => this.changeDistrict(e)}
+                                        required
+                                        select
+                                        SelectProps={{ native: true }}
+                                        variant="outlined"
+                                    >
+                                        <option value="0">--Select district--</option>
+                                        {(this.props.district.length !== 0) ? this.props.district.map(item => {
+                                            return (
+                                                <option value={item.codename}>
+                                                    {item.name}
+                                                </option>
+                                            )
+                                        }) : null}
+                                    </TextField>
+                                </Grid>
+                            )}
+                            {!this.props.role ? null : (
+                                <Grid item md={6} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="Select province"
+                                        name="province"
+                                        required
+                                        defaultValue={this.props.infoUser.province}
+                                        value={this.state.nameProvince}
+                                        onChange={(e) => this.changeCountry(e)}
+                                        select
+                                        SelectProps={{ native: true }}
+                                        variant="outlined"
+                                    >
+                                        <option value="0">--Select province--</option>
+                                        {(this.props.country.length !== 0) ? this.props.country[0].map(item => {
+                                            return (
+                                                <option value={item.codename}>
+                                                    {item.name}
+                                                </option>
+                                            )
+                                        }) : null}
+                                    </TextField>
+                                </Grid>
+                            )}
+                            {!this.props.role ? null : (
+                                <Grid item md={6} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="Select district"
+                                        name="district"
+                                        defaultValue={this.props.infoUser.district}
+                                        value={this.state.nameDistrict}
+                                        onChange={(e) => this.changeDistrict(e)}
+                                        required
+                                        select
+                                        SelectProps={{ native: true }}
+                                        variant="outlined"
+                                    >
+                                        <option value="0">--Select district--</option>
+                                        {(this.props.district.length !== 0) ? this.props.district.map(item => {
+                                            return (
+                                                <option value={item.codename}>
+                                                    {item.name}
+                                                </option>
+                                            )
+                                        }) : null}
+                                    </TextField>
+                                </Grid>
+                            )}
+                            <Grid item md={this.props.role ? 6 : 12} xs={12}>
                                 <TextField
                                     fullWidth
                                     label="Adress details"
                                     defaultValue={this.props.infoUser.address}
                                     name="address"
                                     required
+                                    disabled={this.props.role ? false : true}
                                     variant="outlined"
                                     onBlur={(e) => this.blurAll(e)}
                                 />
@@ -328,7 +416,11 @@ class ProfileDetail extends Component {
                     </CardContent>
                     <Divider />
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
-                        <Button onClick={() => this.SaveDetails()} disabled={!this.state.isSave} color="primary" variant="contained">Save details</Button>
+                        {this.props.role ? (
+                            <Button onClick={() => this.SaveDetails()} disabled={!this.state.isSave} color="primary" variant="contained">Save details</Button>)
+                            :
+                            (<Button onClick={() => this.SaveDetailsEmployee()} disabled={!this.state.isSave} color="primary" variant="contained">Save details</Button>)
+                        }
                     </Box>
                 </Card>
             </div>
@@ -342,6 +434,7 @@ const mapStateToProps = (state, ownProps) => {
         district: state.district,
         infoUser: state.infoUser,
         statusDarkmode: state.statusDarkmode,
+        role: state.role,
     }
 }
 

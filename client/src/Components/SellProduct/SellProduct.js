@@ -22,10 +22,12 @@ class SellProduct extends Component {
             change: false,
             test1: true,
         }
+        this.storeID = this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email;
         this.loadAllType();
         this.loadAllGood();
+        
     }
-
+    storeID = "";
     bull = (
         <Box
             component="span"
@@ -66,7 +68,7 @@ class SellProduct extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                "_id.storeID": this.props.infoUser.email,
+                "_id.storeID": this.storeID,
             }
         }
 
@@ -92,10 +94,11 @@ class SellProduct extends Component {
 
     async loadAllGood() {
         var resultProduct = [];
+        console.log("infoUser", this.props.infoUser);
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                "_id.storeID": this.props.infoUser.email,
+                "_id.storeID": this.storeID,
             }
         }
         await axios.get(`http://localhost:5000/api/product/`, {
@@ -112,7 +115,7 @@ class SellProduct extends Component {
         const data1 = {
             token: localStorage.getItem('token'),
             filter: {
-                "_id.storeID": this.props.infoUser.email,
+                "_id.storeID": this.storeID,
             }   
         }
         await axios.get(`http://localhost:5000/api/product/join`, {
