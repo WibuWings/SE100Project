@@ -291,6 +291,7 @@ class Authentication {
             )
         })
     }
+    
     authSignInRegularEmployee = async (req, res) => {
         const username = req.body.email;
         const password = req.body.password;
