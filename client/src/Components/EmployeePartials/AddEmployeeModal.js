@@ -29,6 +29,7 @@ var listUsers = [];
 class AddEmployeeModal extends Component {
 
     genID = 0;
+    imgUrl = 'none';
 
     constructor(props) {
         super(props);
@@ -90,6 +91,33 @@ class AddEmployeeModal extends Component {
 
     isGreater(dateString1, dateString2){
         return (new Date(dateString1).getTime() - new Date(dateString2).getTime()) > 0;
+    }
+
+    finishUpImage = true;
+    async profileImageChange(fileChangeEvent) {
+        this.setState({
+            imageSelect: fileChangeEvent.target.files[0],
+        })
+        this.finishUpImage = false;
+        const file = fileChangeEvent.target.files[0];
+        const { type } = file;
+        if (!(type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg') || type.endsWith('gif'))) {
+        } else {
+            const formData = new FormData();
+            formData.append("file", fileChangeEvent.target.files[0])
+            formData.append("upload_preset", "qqqhcaa3");
+            await axios.post(`https://api.cloudinary.com/v1_1/databaseimg/image/upload`, formData)
+                .then(res => {
+                    this.imgUrl=res.data.url;
+                    this.setState({
+                        change: 'true'
+                    });
+                })
+                .catch(err => {
+                    console.log("Thất bại");
+                })
+        }
+        this.finishUpImage = true;
     }
 
     checkConstraint() {
@@ -196,7 +224,12 @@ class AddEmployeeModal extends Component {
             alert("Ngày sinh không thể lớn hơn ngày bất đầu làm");
             return false;
         }
-
+        // Constraint 11: Check đã up ảnh xong chưa
+        if(this.finishUpImage == false)
+        {
+            alert("Ảnh chưa được upload xong");
+            return false;
+        }
 
         alert("Đã check hết các constraint")
         return true;
@@ -222,6 +255,7 @@ class AddEmployeeModal extends Component {
                 cardID: document.querySelector('input[name="cardID"]').value,
                 startDate: document.querySelector('input[name="startDate"]').value,
                 // endDate: "2021-11-31T00:00:00.000Z",
+                imgUrl: this.imgUrl,
             }   
         }
         console.log(data);
@@ -259,7 +293,7 @@ class AddEmployeeModal extends Component {
                         }}
                     >   
                     <Grid className="import-container" container >
-                        {/* <Grid item md={12}  
+                        <Grid item md={12}  
                             style={{
                                 display: 'flex', 
                                 justifyContent:'center', 
@@ -272,7 +306,7 @@ class AddEmployeeModal extends Component {
                                 <Image style={{width: '150px',height: '150px' }} cloudName="databaseimg" publicId={this.imgUrl=='none' ? 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png' : this.imgUrl}></Image>
                             </label>
                             <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input>
-                        </Grid> */}
+                        </Grid>
                         <Grid item md={12}>
 
                             <Card>
