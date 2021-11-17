@@ -32,24 +32,25 @@ function getDayInWeek(date) {
 }
 
 function getTimeFromTimeString(timeString) {
+    var splitedHourAndType = timeString.split(" ");
+    var splitedHourAndMinute = splitedHourAndType[0].split(":");
+
+    var difference = splitedHourAndType[1] === "AM" ? 0 : 12;
+
     var date = new Date();
-        var dateString =
-            date.getUTCFullYear() +
-            " " +
-            (date.getUTCMonth() + 1) +
-            " " +
-            date.getUTCDate() +
-            " " +
-            timeString;
-        return Date(dateString);
+
+    date.setHours = parseInt(splitedHourAndMinute[0]) + difference;
+    date.setMinutes = parseInt(splitedHourAndMinute[1]);
+    console.log(date.toString())
+    return date;
 }
 function dateEquals(dateClient, dateServer) {
     if (dateClient.getFullYear() == dateServer.getFullYear() && dateClient.getMonth() == dateServer.getMonth()
-    && dateClient.getDate() == dateServer.getDate()) {
+        && dateClient.getDate() == dateServer.getDate()) {
         return true;
     } else {
         return false;
     }
 }
 
-module.exports = { getCurrentDateTimeString, getDayInWeek, getTimeFromTimeString, dateEquals};
+module.exports = { getCurrentDateTimeString, getDayInWeek, getTimeFromTimeString, dateEquals };

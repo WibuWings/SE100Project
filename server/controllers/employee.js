@@ -288,23 +288,24 @@ class EmployeeTab {
     };
 
     createTimeKeeping = async (req, res) => {
-        var employeeID = req.body.employeeID;
-        var timeString = req.body.time;
+        var employeeID = req.body.data.email;
+        var timeString = req.body.data.time;
         var time = getTimeFromTimeString(timeString);
-
+        console.log(timeString)
+        console.log(time)
+        console.log(new Date())
         var employee = await Employee.findOne({
-            employeeID: employeeID,
+            "_id.employeeID": employeeID,
         }).exec();
         var dateInWeek = getDayInWeek(time.toString());
         var storeID = employee._id.storeID;
-        var shiftTypes = await ShiftType.findOne({ storeID }).exec();
+        var shiftTypes = await ShiftType.find({ "_id.storeID": storeID }).exec();
         var currentShiftType = shiftTypes.find((shift) => {
             return (
                 getTimeFromTimeString(shift.timeFrom) - time <= 0 &&
                 getTimeFromTimeString(shift.timeEnd) - time >= 0
             );
         });
-
         if (currentShiftType) {
             ShiftAssign.findOne({
                 _id: {
