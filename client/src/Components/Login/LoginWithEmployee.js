@@ -38,6 +38,7 @@ class LoginWithEmployee extends Component {
                         localStorage.setItem('token', res.data.token);
                         this.props.updateProfile(res.data.data.employee[0]);
                         this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+                        this.props.updateRecieptUser(res.data.data.reciept);
                         this.props.changeLoginStatus();
                         this.props.hideAlert();
                         this.props.showAlert(res.data.message, "success");
@@ -207,6 +208,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "UPDATE_AVATAR",
                 avatar: avatar,
+            })
+        },
+        updateRecieptUser: (data) => {
+            dispatch({
+                type: "UPDATE_RECIEPT_USER",
+                listReciept: data,
             })
         },
     }

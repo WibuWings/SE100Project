@@ -64,6 +64,8 @@ const infoUserInitialState = {
             case "SET_DATA_USER":
                 console.log("action.data", action.data);
                 return action.data;
+            case "RESET_INFO_USER":
+                return {}
             default:
                 return state
         }
