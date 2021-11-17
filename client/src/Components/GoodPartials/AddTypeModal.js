@@ -110,7 +110,7 @@ class AddTypeModal extends Component {
 
     render() {
         return (
-            <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
+            <form style={{ zIndex: '11', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader 
                         style={{ color: 'blue', backgroundColor: '#efeeef', textAlign: 'center' }} 
