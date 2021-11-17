@@ -272,6 +272,7 @@ class Authentication {
             
             res.status(200).send(
                 JSON.stringify({
+                    status: STATUS.SUCCESS,
                     message: MESSAGES.SIGN_IN_SUCCESS,
                     token: res.locals.newToken,
                     email: decoded.email,
@@ -284,6 +285,8 @@ class Authentication {
             res.status(404).send(
                 JSON.stringify({
                     err,
+                    status: STATUS.FAILURE,
+                    message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
                 })
             )
         })
@@ -351,7 +354,7 @@ async function getAllData(email) {
         ProductType.find({ "_id.storeID": store._id }).exec(),
         ProductJoinType.find({ "_id.storeID": store._id }).exec(),
         Revenue.find({ "_id.storeID": store._id }).exec(),
-        Receipt.find({ "_id.storeID": store._id }).exec(),
+        Receipt.findWithDeleted({ "_id.storeID": store._id }).exec(),
         ReturnProduct.find({ "_id.storeID": store._id }).exec(),
         ShiftAssign.find({ "_id.storeID": store._id }).exec(),
         ShiftType.find({  "_id.storeID": store._id }).exec(),
@@ -380,11 +383,13 @@ async function getAllData(email) {
 }
 async function getAllDataEmployee(username){
     const employees = await Employee.findOne({"_id.employeeID" : username});
-    const [employee,reciept,product] = await Promise.all(
+    const [employee,reciept,product,manager,store] = await Promise.all(
         [Employee.find({ "_id.employeeID" : username}).exec(),
-        Receipt.find({"EmployeeID._id.employeeID" : username}).exec(),
-        Product.find({"_id.storeID" : employees._id.storeID}).exec()]);
-    return {employee,reciept,product}
+        Receipt.findWithDeleted({"EmployeeID._id.employeeID" : username}).exec(),
+        Product.find({"_id.storeID" : employees._id.storeID}).exec(),
+        Manager.find({storeID : employees._id.storeID}).exec(),
+        Store.find({_id : employees._id.storeID}).exec()]);
+    return {employee,reciept,product,manager,store}
 }
 
 module.exports = new Authentication();

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
+const mongooseDelete = require('mongoose-delete');
 const Receipt = new Schema({
     _id: {
         storeID: String,
@@ -45,5 +45,6 @@ const Receipt = new Schema({
     deleteAt: Date,
     restoreAt: Date,
 });
-
+Receipt.plugin(mongooseDelete,
+    {overrideMethods: 'all', deletedAt : true});
 module.exports = mongoose.model("Receipt", Receipt);
