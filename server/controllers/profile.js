@@ -327,19 +327,19 @@ class meProfile {
 
         Manager.deleteOne({ _id: manager._id }).exec();
         Store.deleteOne({ _id: storeID }).exec();
-        Coupon.deleteMany({ storeID: storeID }).exec(),
-        Employee.deleteMany({ managerID: storeID }).exec(),
-        Product.deleteMany({ storeID: storeID }).exec(),
-        ProductType.deleteMany({ storeID: storeID }).exec(),
-        ProductJoinType.deleteMany({ storeID: storeID }).exec(),
+        Coupon.deleteMany({ "_id.storeID": storeID }).exec(),
+        Employee.deleteMany({ "_id.storeID": storeID }).exec(),
+        Product.deleteMany({ "_id.storeID": storeID }).exec(),
+        ProductType.deleteMany({ "_id.storeID": storeID }).exec(),
+        ProductJoinType.deleteMany({ "_id.storeID": storeID }).exec(),
         Revenue.deleteMany({ storeID: storeID }).exec(),
-        Receipt.deleteMany({ storeID: storeID }).exec(),
-        ReturnProduct.deleteMany({ storeID: storeID }).exec(),
-        ShiftAssign.deleteMany({ storeID: storeID }).exec(),
-        ShiftType.deleteMany({  storeID: storeID }).exec(),
+        Receipt.deleteMany({ "_id.storeID": storeID }).exec(),
+        ReturnProduct.deleteMany({ "_id.storeID": storeID }).exec(),
+        ShiftAssign.deleteMany({ "_id.storeID": storeID }).exec(),
+        ShiftType.deleteMany({  "_id.storeID": storeID }).exec(),
         Regulation.deleteMany({ storeID }).exec(),
-        TimeKeeping.deleteMany({ storeID }).exec(),
-        NextWeekTimeKeeping.deleteMany({ storeID }).exec(),
+        TimeKeeping.deleteMany({ "_id.storeID":storeID }).exec(),
+        NextWeekTimeKeeping.deleteMany({ "_id.storeID":storeID }).exec(),
 
         res.status(200).send("Delete account successfully!");
     }
