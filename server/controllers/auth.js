@@ -270,7 +270,6 @@ class Authentication {
 
     refreshUI = async (req, res) => {
         var decoded = res.locals.decoded;
-        if (decoded._id) decoded.email = decoded._id;
 
         getAllData(decoded.email).then((data) => {
             res.status(200).send(
@@ -328,11 +327,10 @@ class Authentication {
 }
 
 async function getAllData(email) {
-    var manager = await Manager.findOne({ email: email });
-    var employee;
-    var store;
-    if (manager) {
-        store = await Store.findOne({ _id: manager.storeID });
+    var newManager = await Manager.findOne({ email: email }).exec();
+    if (newManager) {
+        var manager = newManager;
+        var store = await Store.findOne({ _id: manager.storeID });
         if (store == null) {
             return manager;
         }
@@ -385,36 +383,21 @@ async function getAllData(email) {
             isEmployee: false,
         };
     } else {
-        employee = await Employee.findOne({ "_id.employeeID": email });
-        manager = await Manager.findOne({ email: employee.managerID });
-        store = await Store.findOne({ _id: manager.storeID });
-        if (store == null) {
-            return manager;
-        }
-
-        const newEmployee = { ...employee.toObject() };
-        const employees = newEmployee;
-        const username = employees._id.employeeID;
+        const username = email;
+        const employees = await Employee.findOne({
+            "_id.employeeID": username,
+        });
         const [employee, receipts, products, store, manager] =
             await Promise.all([
                 Employee.find({ "_id.employeeID": username }).exec(),
                 Receipt.findWithDeleted({
                     "EmployeeID._id.employeeID": username,
                 }).exec(),
-                Product.find({
-                    "_id.storeID": employees._id.storeID,
-                }).exec(),
+                Product.find({ "_id.storeID": employees._id.storeID }).exec(),
                 Store.find({ _id: employees._id.storeID }).exec(),
                 Manager.find({ _id: employees.managerID }).exec(),
             ]);
-        return {
-            employee,
-            receipts,
-            products,
-            store,
-            manager,
-            isEmployee: true,
-        };
+        return { employee, receipts, products, store, manager };
     }
 }
 

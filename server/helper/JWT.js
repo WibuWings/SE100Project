@@ -2,6 +2,11 @@ const jwt = require("jsonwebtoken"); // authentication & authorization
 const PRIVATE_KEY = require("../privateKey"); // temp private key
 
 function JWTAuthToken(data) {
+    if(data._id != null){
+        data.email = data._id
+    }
+    delete data._id
+
     return (token = jwt.sign(
         { ...data },
         PRIVATE_KEY,
