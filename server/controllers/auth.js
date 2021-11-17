@@ -375,11 +375,12 @@ async function getAllData(email) {
 }
 async function getAllDataEmployee(username){
     const employees = await Employee.findOne({"_id.employeeID" : username});
-    const [employee,reciept,product] = await Promise.all(
+    const [employee,reciept,product,manager] = await Promise.all(
         [Employee.find({ "_id.employeeID" : username}).exec(),
         Receipt.findWithDeleted({"EmployeeID._id.employeeID" : username}).exec(),
-        Product.find({"_id.storeID" : employees._id.storeID}).exec()]);
-    return {employee,reciept,product}
+        Product.find({"_id.storeID" : employees._id.storeID}).exec(),
+        Manager.find({storeID : employees._id.storeID}).exec()]);
+    return {employee,reciept,product,manager}
 }
 
 module.exports = new Authentication();
