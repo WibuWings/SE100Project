@@ -108,6 +108,16 @@ class AddEmployeeModal extends Component {
                 return false;
             }
         }
+        // Trùng ID sa thải
+        for(var i = 0; i < this.props.listSackedEmployee.employees.length ; i++)
+        {
+            if(this.props.listSackedEmployee.employees[i]._id.employeeID == id)
+            {
+                alert("ID đã bị trùng với nhân viên đã sai thải");
+                return false;
+            }
+        }
+
         //Constraint 2: Password không được có dưới 6 ký tự
         var password = document.querySelector('input[name="password"]').value.trim();
         if(password.length == 0)
@@ -339,7 +349,7 @@ class AddEmployeeModal extends Component {
                                         <div className="input-label"style={{width: '114px'}}>ID CARD</div>
                                         <StyledTextField
                                             classname='input-box'   
-                                            type="text" 
+                                            type="number" 
                                             name="cardID" 
                                             style = {{width: '70%'}} 
                                             fullWidth
@@ -354,7 +364,7 @@ class AddEmployeeModal extends Component {
                                         <div className="input-label"style={{width: '114px'}}>PhoneNumber</div>
                                         <StyledTextField
                                             classname='input-box'   
-                                            type="text" 
+                                            type="number" 
                                             name="phoneNumber"
                                             style = {{width: '70%'}} 
                                             fullWidth
@@ -448,6 +458,7 @@ const mapStateToProps = (state, ownProps) => {
         confirmStatus: state.confirmStatus,
         infoUser: state.infoUser,
         listEmployee: state.listEmployee,
+        listSackedEmployee: state.listSackedEmployee,
     }
 }
 

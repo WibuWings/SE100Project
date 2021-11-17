@@ -37,52 +37,18 @@ var listDayInWeek = [
 class AddNextWeekTimeKeepingModal extends Component {
 
     genID = 0;
-
+    dayChosed = '';
     constructor(props) {
         super(props);
-        
+        this.dayChosed = this.getDayInWeek(this.getCurrentDateTime());
         this.state = {
             change: false,
             withdrawID: '',
             alterID: '',
-            dayChosed: '',
+            dayChosed: this.getDayInWeek(this.getCurrentDateTime()),
             shiftID: '',
         };
-    }
-
-    // Thêm nhân viên
-    async addEmployeeToDatabase()
-    {
-        const data = {
-            token: localStorage.getItem('token'),
-            employee: {
-                _id: {
-                    employeeID: document.querySelector('input[name="ID"]').value,
-                    storeID: this.props.infoUser.email,
-                },
-                managerID: this.props.infoUser.email,
-                password: document.querySelector('input[name="password"]').value,
-                firstName: document.querySelector('input[name="firstName"]').value,
-                lastName: document.querySelector('input[name="lastName"]').value,
-                phoneNumber: document.querySelector('input[name="phoneNumber"]').value,
-                dateOfBirth: document.querySelector('input[name="birthDay"]').value,
-                email: document.querySelector('input[name="email"]').value,
-                address: document.querySelector('input[name="adress"]').value,
-                cardID: document.querySelector('input[name="cardID"]').value,
-                startDate: document.querySelector('input[name="startDate"]').value,
-                // endDate: "2021-11-31T00:00:00.000Z",
-            }   
-        }
-        console.log(data);
-        await axios.post(`http://localhost:5000/api/employee`, data)
-            .then(res => {
-                console.log("Save success");
-                alert("Lưu thành công")
-            })
-            .catch(err => {
-                alert(err);
-                console.log(err);
-            })
+        
     }
 
     cancel = () => {
@@ -110,6 +76,10 @@ class AddNextWeekTimeKeepingModal extends Component {
         return new Date().getFullYear() + '-' + month + '-' + day;
     }
 
+    isGreater(dateString1, dateString2){
+        return (new Date(dateString1).getTime() - new Date(dateString2).getTime()) > 0;
+    }
+
     checkContraint() {
         if(this.state.dayChosed.length == 0)
         {
@@ -132,12 +102,31 @@ class AddNextWeekTimeKeepingModal extends Component {
             alert("Chưa chọn nhân viên nào thay thế");
             return false;
         }
+        if(!this.isGreater(document.querySelector('input[name="realDate"]').value, this.getCurrentDateTime() ))
+        {
+            alert("Ngày nhập phải nhỏ hơn ngày báo nghỉ");
+            return false;
+        }   
+
         // Có CSDL thì báo xem có trùng với cái cũ ko nữa
         
         alert("Đã check hết constraint");
         return true;
     }
-
+    getDayInWeek(date) {
+        const d = new Date(date);
+    
+        const weekday = new Array(7);
+        weekday[0] = "Sunday";
+        weekday[1] = "Monday";
+        weekday[2] = "Tuesday";
+        weekday[3] = "Wednesday";
+        weekday[4] = "Thursday";
+        weekday[5] = "Friday";
+        weekday[6] = "Saturday";
+    
+        return weekday[d.getDay()];
+    }
 
     async addChange() {
         if(this.checkContraint()==false) return ;
@@ -190,6 +179,7 @@ class AddNextWeekTimeKeepingModal extends Component {
                             storeID: this.props.infoUser.email,
                         },
                     },
+                    realDate: document.querySelector('input[name="realDate"]').value,
                 },
                 alternativeEmployee: {
                     _id: {
@@ -197,15 +187,20 @@ class AddNextWeekTimeKeepingModal extends Component {
                         storeID: this.props.infoUser.email,
                     },
                 },
-                realDate: document.querySelector('input[name="realDate"]').value,
+                
             };
             
             this.props.addNewChange(data);
+            console.log("nextweek", this.props.nextWeekTimeKeeping);
             this.props.changeAddNextWeekTimeKeepingStatus();
           })
           .catch(err => {
-              alert(err);
-              console.log(err);
+                console.log("err.response.data.message", err.response.data.message);
+                if(err.response.data.message)
+                {
+                    alert(err.response.data.message);
+                }
+                console.log(err);
           })
         
         // console.log(this.props.nextWeekTimeKeeping)
@@ -249,6 +244,10 @@ class AddNextWeekTimeKeepingModal extends Component {
                                             size="small" 
                                             variant="outlined"
                                             defaultValue={this.getCurrentDateTime()}
+                                            onChange={(event) => {
+                                                this.dayChosed = this.getDayInWeek(event.target.value);
+                                                this.setState({dayChosed: this.getDayInWeek(event.target.value)});
+                                            }}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -260,15 +259,13 @@ class AddNextWeekTimeKeepingModal extends Component {
                                         <FormControl sx={{ minWidth: 120 }}>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
                                             <Select
-                                                // value={this.state.type}
+                                                value={this.dayChosed}
                                                 onChange={(event) => {
+                                                    this.dayChosed = event.target.value;
                                                     this.setState({dayChosed: event.target.value});
-                                                    // if(!typeSet.includes(event.target.value))
-                                                    // {
-                                                    //     typeSet.push(event.target.value);
-                                                    // }
-                                                    // this.setState({change: !this.state.change})
+
                                                 }}
+                                                readOnly={true}
                                                 style={{
                                                     height: 36,
                                                 }}

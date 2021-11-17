@@ -55,6 +55,11 @@ class EmployeeMoreMenu extends Component {
         .catch(err => {
             alert(err);
         })
+    
+    // Delete redux
+    this.props.deleteEmployeeRedux(this.props.data);
+    //Move to sacked
+    this.props.deleteEmployeeToSackRedux(this.currentEmployee)
   }
 
   getEmployeeByID(employeeID) {
@@ -65,7 +70,7 @@ class EmployeeMoreMenu extends Component {
       if(employeeID == listEmployee[i]._id.employeeID)
       {
         this.currentEmployee = listEmployee[i];
-        return;
+        return listEmployee[i];
       }
     }
   }
@@ -149,6 +154,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch({
           type: "SET_UPDATE_EMPLOYEE",
           data: currentEmployee
+        });
+      }, 
+      deleteEmployeeRedux: (id) => {
+        dispatch({
+          type: "DELETE_EMPLOYEE",
+          id: id
+        });
+      },
+      deleteEmployeeToSackRedux: (data) => {
+        dispatch({
+          type: "DELETE_EMPLOYEE_SACKED",
+          data: data
         });
       }
   }

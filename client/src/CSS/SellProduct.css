@@ -70,6 +70,18 @@ input::-webkit-inner-spin-button {
     height: 80%;
     border-radius: 4px;
     z-index: 2;
+    animation: animationHistoryReceipt ease-in-out 0.5s;
+    animation-timing-function:cubic-bezier(0.68, -0.55, 0.265, 1.55)
+}
+
+@keyframes animationHistoryReceipt {
+    from {
+        transform: translateY(20%);
+        opacity: 0;
+    } to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .css-1ygcj2i-MuiTableCell-root{

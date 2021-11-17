@@ -17,52 +17,41 @@ class LoginWithEmployee extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            statusFailed: false,
-            statusSucces: false,
+
         }
     }
 
-    message = "Login success";
 
-    // Out Alert
-    OutAlert = () => {
-        this.setState({
-            statusFailed: false,
-            statusSucces: false,
-        })
-    }
+
 
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = async (e) => {
-        this.props.setRole()
-        await axios.post(`http://localhost:5000/sign-in-with-gmail-password`, {
+        this.props.setRole();
+        if (this.blurEmail() && this.blurPassword()) {
+            await axios.post(`http://localhost:5000/sign-in-employee`, {
                 email: document.querySelector('#username').value,
                 password: document.getElementById('password').value,
             })
                 .then(res => {
-                    console.log(res.data);
-                    switch (res.data.status) {
-                        case 1:
-                            localStorage.setItem('token', res.data.token);
-                            this.props.changeLoginStatus();
-                            this.props.updateProfile(res.data.data);
-                            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
-                            this.props.updateShiftTypes(res.data.data.shiftTypes);
-                            this.props.hideAlert();
-                            this.props.showAlert(res.data.message, "success");
-                            break;
-                        case -1:
-                            this.props.hideAlert();
-                            this.props.showAlert(res.data.message, "error");
-                            break;
-                        default:
-                            break;
+                    console.log(res);
+                    if (res.status === 200) {
+                        localStorage.setItem('token', res.data.token);
+                        this.props.updateProfile(res.data.data.employee[0]);
+                        this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+                        this.props.changeLoginStatus();
+                        this.props.hideAlert();
+                        this.props.showAlert(res.data.message, "success");
                     }
                 })
                 .catch(err => {
-                    //this.props.hideAlert();
-                    //this.props.showAlert("Error system", "error");
+                    console.log(err)
+                    this.props.hideAlert();
+                    this.props.showAlert("The email IS NOT registered or you entered the WRONG password.", "error");
+                    return;
                 })
+            // Get các thông tin để thêm vào redux
+            
+        }
     }
 
 
@@ -167,8 +156,6 @@ class LoginWithEmployee extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.statusSucces ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="success">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
-                {this.state.statusFailed ? <Alert onClick={() => this.OutAlert()} className="message-error" severity="error">{this.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
             </div>
         );
     }
@@ -191,7 +178,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "EMPLOYEE_ROLE",
             });
-            localStorage.setItem('role', 'employee');
         },
         showAlert: (message, typeMessage) => {
             dispatch({
@@ -207,7 +193,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         updateProfile: (data) => {
             dispatch({
-                type: "UPDATA_DATA_USER",
+                type: "UPDATA_DATA_EMPLOYEE",
+                data: data,
+            })
+        },
+        setProfile: (data) => {
+            dispatch({
+                type: "SET_DATA_USER",
                 data: data,
             })
         },

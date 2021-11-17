@@ -22,10 +22,12 @@ class SellProduct extends Component {
             change: false,
             test1: true,
         }
+        this.storeID = this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email;
         this.loadAllType();
         this.loadAllGood();
+        
     }
-
+    storeID = "";
     bull = (
         <Box
             component="span"
@@ -66,7 +68,7 @@ class SellProduct extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                "_id.storeID": this.props.infoUser.email,
+                "_id.storeID": this.storeID,
             }
         }
 
@@ -79,7 +81,6 @@ class SellProduct extends Component {
                 localStorage.getItem('token', res.data.token);
             })
             .catch(err => {
-                console.log(err);
                 alert(err);
             })
         //Get data và lưu các tên Type vào bảng
@@ -93,10 +94,11 @@ class SellProduct extends Component {
 
     async loadAllGood() {
         var resultProduct = [];
+        console.log("infoUser", this.props.infoUser);
         const data = {
             token: localStorage.getItem('token'),
             filter: {
-                "_id.storeID": this.props.infoUser.email,
+                "_id.storeID": this.storeID,
             }
         }
         await axios.get(`http://localhost:5000/api/product/`, {
@@ -106,7 +108,6 @@ class SellProduct extends Component {
                 resultProduct = res.data.data;
             })
             .catch(err => {
-                console.log(err);
                 alert(err)
             })
         // Get hết từ cái productjoinType
@@ -114,7 +115,7 @@ class SellProduct extends Component {
         const data1 = {
             token: localStorage.getItem('token'),
             filter: {
-                "_id.storeID": this.props.infoUser.email,
+                "_id.storeID": this.storeID,
             }   
         }
         await axios.get(`http://localhost:5000/api/product/join`, {
@@ -125,7 +126,6 @@ class SellProduct extends Component {
                 localStorage.getItem('token', res.data.token);
             })
             .catch(err => {
-                console.log(err);
                 alert(err)
             })
         // Lấy các cái jointype
@@ -133,7 +133,6 @@ class SellProduct extends Component {
         for (let i = 0; i < result.length; i++) {
             joinTypeInfor.push(result[i]);
         }
-        console.log("joinTypeInfor", joinTypeInfor);
 
         var listProductInfor = [];
         for (let i = 0; i < resultProduct.length; i++) {
@@ -151,8 +150,6 @@ class SellProduct extends Component {
                     typeIDList: typeIDList
                 });
         }
-
-        console.log("listProductInfor: ", listProductInfor);
         this.props.getProductToReducer(listProductInfor);
         this.setState({ change: !this.state.change });
     }
@@ -160,12 +157,11 @@ class SellProduct extends Component {
     
 
     render() {
-        console.log("ĐÃ reset");
         return (
             <div className="sell-product" >
-                <Container maxWidth="xl">
+                <Container style={{marginBottom: '20px'}} maxWidth="xl">
                     <Grid container spacing={2}>
-                        <Grid item md={8} sm={12}  >
+                        <Grid item lg={8} md={12} sm={12}>
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden' }}>
                                 <div style={{ overflow: 'hidden', marginBottom: '5px' }}>
                                     <Tabs></Tabs>
@@ -181,7 +177,7 @@ class SellProduct extends Component {
                                                     return value;
                                                 }
                                             }).map(value => (
-                                                <Grid item md={3} sm={3}>
+                                                <Grid item lg={3} md={4} sm={4} xs={4}>
                                                     <Card onClick={() => this.AddProduct(value)}>
                                                         <CardActionArea>
                                                             {
@@ -218,7 +214,7 @@ class SellProduct extends Component {
                                 </Container>
                             </div>
                         </Grid>
-                        <Grid item md={4} lg={4} >
+                        <Grid item lg={4} md={12}>
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden', overflowX: 'hidden' }}>
                                 <div id="choses-product" style={{ backgroundColor: '#ebebeb', height: '60%', margin: '10px', overflowY: 'scroll', overflowX: 'hidden' }} >
                                     <Grid sty container spacing={0}>

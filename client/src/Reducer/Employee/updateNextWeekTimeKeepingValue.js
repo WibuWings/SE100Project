@@ -28,9 +28,7 @@ const updateNextWeekTimeKeepingValueInitialState =
 const updateNextWeekTimeKeepingValueReducer = (state = updateNextWeekTimeKeepingValueInitialState, action) => {
         switch (action.type) {
             case "SET_UPDATE_NEXT_WEEK_TIMEKEEPER_VALUE":
-                return{
-                    state: action.data
-                }
+                return action.data;
             default:
                 return state
         }

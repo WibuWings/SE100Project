@@ -241,6 +241,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_ADD_TYPE_STATUS",
             });
         },
+        addTypeToReducer: (data) => {
+            dispatch({
+                type: "ADD_TYPE",
+                data: data,
+            });
+        },
     }
 }
 

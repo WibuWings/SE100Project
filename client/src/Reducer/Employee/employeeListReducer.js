@@ -27,8 +27,48 @@ const  listEmployeeReducer = (state = listEmployeeInitialState, action) => {
                 state.employees = action.employees;
                 return state;
             case "ADD_EMPLOYEE":
-                state.employees = state.employees.push(action.employees);
-                return state;
+                return {
+                    employees : [...state.employees, action.employees ]
+                }
+            case "UPDATE_EMPLOYEE":
+                {
+                    var newState = [];
+                    for(var i = 0 ; i < state.employees.length ; i ++)
+                    {
+                        if(i != action.index)
+                        {
+                            newState.push(state.employees[i]);
+                        }
+                        else 
+                        {
+                            newState.push(action.data);
+                        }
+                    }
+                    console.log("newState", newState);
+                    return {
+                        employees : newState
+                    }
+
+                }
+                case "DELETE_EMPLOYEE":
+                {
+                    console.log("action", action);
+                    var newState = [];
+                    for(var i = 0 ; i < state.employees.length ; i ++)
+                    {
+                        if(state.employees[i]._id.employeeID !== action.id)
+                        {
+                            newState.push(state.employees[i]);
+                        }
+                        else {
+                            console.log("Kiếm đc cái xoá rồi")
+                        }
+                    }
+                    return {
+                        employees : newState
+                    }
+
+                }
             default:
                 return state
         }

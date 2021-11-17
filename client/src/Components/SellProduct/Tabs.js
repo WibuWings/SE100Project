@@ -10,7 +10,6 @@ export default function IconLabelTabs() {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-        console.log(newValue);
         var index;
         if (newValue === 0) {
             index = 'all'

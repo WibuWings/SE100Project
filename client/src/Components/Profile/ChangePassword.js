@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardHeader, Divider, Grid, TextField, Box, Button, CardContent } from '@mui/material';
 import axios from 'axios';
 import {connect} from 'react-redux'
+import { FaCommentsDollar } from 'react-icons/fa';
 var bcrypt = require('bcryptjs');
 
 class ChangePassword extends Component {
@@ -24,30 +25,67 @@ class ChangePassword extends Component {
 
     // Gọi api change password
     changePassword = async () => {
-        const form = document.getElementById('form-change-password');
-        const data = {
-            token: localStorage.getItem('token'),
-            email: this.props.infoUser.email,
-            curPass: this.curPass,
-            newPass: this.hash(this.newPass),
-        }
-        await axios.post(`http://localhost:5000/api/profile/change-password`,data)
-        .then(res => {
-            if (res.data.status === -1) {
+        if(this.props.role == false){ 
+            if(this.curPass != this.props.infoUser.password)
+            {
                 this.props.hideAlert();
-                this.props.showAlert(res.data.message, "error");
-            } else {
-                form.reset();
-                localStorage.setItem('token', res.data.token);
+                this.props.showAlert("Not a correct pass", "error");
+                return;
+            }
+            const data = {
+                token: localStorage.getItem('token'),
+                employee: {
+                    _id: {
+                        employeeID: this.props.infoUser.employeeID,
+                        storeID: this.props.infoUser.managerID,
+                    },
+                    managerID: this.props.infoUser.managerID,
+                    password: this.newPass,
+                    firstName: this.props.infoUser.firstName,
+                    lastName: this.props.infoUser.lastName,
+                    phoneNumber: this.props.infoUser.tel,
+                    email: this.props.infoUser.email,
+                    address: this.props.infoUser.address,
+                    cardID: this.props.infoUser.cardID,
+                }   
+            }
+            axios.put(`http://localhost:5000/api/employee`, data)
+            .then(res => {
                 this.props.hideAlert();
                 this.props.showAlert("Change password success", "success");
+                this.props.setEmployeePass(this.newPass);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }
+        else {
+            const form = document.getElementById('form-change-password');
+            const data = {
+                token: localStorage.getItem('token'),
+                email: this.props.infoUser.email,
+                curPass: this.curPass,
+                newPass: this.hash(this.newPass),
             }
-        })
-        .catch(err => {
-            this.props.changeLoginStatus();
-            this.props.hideAlert();
-            this.props.showAlert("Login timeout, signin again", "warning");
-        })
+            await axios.post(`http://localhost:5000/api/profile/change-password`,data)
+            .then(res => {
+                if (res.data.status === -1) {
+                    this.props.hideAlert();
+                    this.props.showAlert(res.data.message, "error");
+                } else {
+                    form.reset();
+                    localStorage.setItem('token', res.data.token);
+                    this.props.hideAlert();
+                    this.props.showAlert("Change password success", "success");
+                }
+            })
+            .catch(err => {
+                this.props.changeLoginStatus();
+                this.props.hideAlert();
+                this.props.showAlert("Login timeout, signin again", "warning");
+            })
+        }
+        
     }
 
     // hash
@@ -137,7 +175,7 @@ class ChangePassword extends Component {
         return (
             <form id="form-change-password" style={{marginBottom: '15px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Change Password" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Change Password" />
                     <Divider />
                     <CardContent>
                         <Grid container spacing={2}>
@@ -195,6 +233,8 @@ class ChangePassword extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         infoUser: state.infoUser,
+        statusDarkmode: state.statusDarkmode,
+        role: state.role,
     }
 }
 
@@ -215,6 +255,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         hideAlert: () => {
             dispatch({
                 type: "HIDE_ALERT",
+            })
+        },
+        setEmployeePass: (password) => {
+            dispatch({
+                type: "SET_EMPLOYEE_PASS",
+                password: password
             })
         }
     }

@@ -23,8 +23,10 @@ class App extends Component {
           console.log("Thành công");
           console.log(res.data);
           if (res.status === 200) {
+            this.props.setRole()
             localStorage.setItem('token', res.data.token);
             this.props.updateProfile(res.data.data);
+            this.props.updateRecieptUser(res.data.data.receipts)
             this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
             this.props.updateShiftTypes(res.data.data.shiftTypes)
             this.props.changeLoginStatus();
@@ -33,6 +35,7 @@ class App extends Component {
         })
         .catch(err => {
           console.log("thất bại");
+          console.log(err)
         })
     }
   }
@@ -46,7 +49,7 @@ class App extends Component {
       <Router>
         <DirectionURL></DirectionURL>
         {this.props.alertReducer.status ? this.autoHideAlert() : null}
-        {this.props.alertReducer.status ? <Alert onClick={() => this.props.hideAlert()} className="message-error" severity={this.props.alertReducer.typeMessage}>{this.props.alertReducer.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
+        {this.props.alertReducer.status ? <Alert style={{ cursor: 'pointer' }} onClick={() => this.props.hideAlert()} className="message-error" severity={this.props.alertReducer.typeMessage}>{this.props.alertReducer.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
       </Router>
     );
   }
@@ -70,6 +73,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "UPDATE_DATA",
         data: data,
+      })
+    },
+    updateRecieptUser: (data) => {
+      dispatch({
+        type: "UPDATE_RECIEPT_USER",
+        listReciept: data,
       })
     },
     updateProfile: (data) => {
@@ -101,6 +110,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           employees: data,
       });
     },
+    setRole: () => {
+      dispatch({
+          type: "ADMIN_ROLE"
+      });
+  },
   }
 }
 
