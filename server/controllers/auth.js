@@ -284,15 +284,15 @@ class Authentication {
                     })
                 );
             })
-            .catch((err) => {
-                res.status(404).send(
-                    JSON.stringify({
-                        err,
-                        status: STATUS.FAILURE,
-                        message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
-                    })
-                );
-            });
+            // .catch((err) => {
+            //     res.status(404).send(
+            //         JSON.stringify({
+            //             err,
+            //             status: STATUS.FAILURE,
+            //             message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
+            //         })
+            //     );
+            // });
     };
 
     authSignInRegularEmployee = async (req, res) => {
@@ -331,19 +331,20 @@ class Authentication {
 async function getAllData(email) {
     var manager = await Manager.findOne({ email: email });
     var employee;
-
+    var store;
+    
     if (manager) {
     } else {
-        employee = await Employee.findOne({ employeeID: email });
-        var manager = await Manager.findOne({ email: employee.managerID });
+        employee = await Employee.findOne({ "_id.employeeID": email });
+        manager = await Manager.findOne({ email: employee.managerID });
+        store = await Store.findOne({ _id: manager.storeID });
+        if (store == null) {
+            return manager;
+        }
+        console.log(employee)
     }
-
-    const store = await Store.findOne({ _id: manager.storeID });
-    if (store == null) {
-        return manager;
-    }
-
-    const [
+    
+    var [
         coupons,
         employees,
         products,
@@ -372,14 +373,20 @@ async function getAllData(email) {
         TimeKeeping.find({ "_id.storeID": store._id }).exec(),
         NextWeekTimeKeeping.find({ "_id.storeID": store._id }).exec(),
     ]);
-
-    if (employee) {
-        return {
-            employee,
-            receipts,
-            products,
-            store,
-        };
+    const newEmployee = {...employee.toObject()}
+    if (newEmployee) {
+        const employees = newEmployee
+        const username = employees._id.employeeID
+        const [employee, receipts, products, store, manager] = await Promise.all([
+            Employee.find({ "_id.employeeID": username }).exec(),
+            Receipt.findWithDeleted({
+                "EmployeeID._id.employeeID": username,
+            }).exec(),
+            Product.find({ "_id.storeID": employees._id.storeID }).exec(),
+            Store.find({ _id: employees._id.storeID }).exec(),
+            Manager.find({ _id: employees.managerID }).exec(),
+        ]);
+        return { employee, receipts, products, store, manager, isEmployee: true };
     } else {
         return {
             manager,
@@ -397,20 +404,23 @@ async function getAllData(email) {
             regulation,
             timeKeeping,
             nextWeekTimeKeeping,
+            isEmployee: false,
         };
     }
 }
+
 async function getAllDataEmployee(username) {
     const employees = await Employee.findOne({ "_id.employeeID": username });
-    const [employee, receipts, products, store] = await Promise.all([
+    const [employee, receipts, products, store, manager] = await Promise.all([
         Employee.find({ "_id.employeeID": username }).exec(),
         Receipt.findWithDeleted({
             "EmployeeID._id.employeeID": username,
         }).exec(),
         Product.find({ "_id.storeID": employees._id.storeID }).exec(),
         Store.find({ _id: employees._id.storeID }).exec(),
+        Manager.find({ _id: employees.managerID }).exec(),
     ]);
-    return { employee, receipts, products, store };
+    return { employee, receipts, products, store, manager };
 }
 
 module.exports = new Authentication();

@@ -305,7 +305,6 @@ class EmployeeTab {
                 getTimeFromTimeString(shift.timeEnd) - time >= 0
             );
         });
-        currentShiftType = currentShiftType.toObject();
         employee = employee.toObject();
         var realDate = new Date();
         realDate = new Date(
@@ -318,6 +317,7 @@ class EmployeeTab {
         );
 
         if (currentShiftType) {
+            currentShiftType = currentShiftType.toObject();
             ShiftAssign.findOne({
                 _id: {
                     dateInWeek,
@@ -511,7 +511,7 @@ class EmployeeTab {
         });
     };
 
-    deleteTimeKeeping = async (req, res) => {};
+    deleteTimeKeeping = async (req, res) => { };
     //
 
     // ofday
@@ -616,7 +616,7 @@ class EmployeeTab {
         });
     };
 
-    updateOffDay = async (req, res) => {};
+    updateOffDay = async (req, res) => { };
 
     deleteOffDay = async (req, res) => {
         const deletedOffDay = req.body.offDay;

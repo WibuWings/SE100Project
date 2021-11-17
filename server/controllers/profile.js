@@ -322,7 +322,7 @@ class meProfile {
     }
 
     deleteAccount = async (req, res) => {
-        const manager = await Manager.findOne({_id: req.body._id}).exec();
+        const manager = await Manager.findOne({email: req.body.email}).exec();
         const storeID = manager.storeID;
 
         Manager.deleteOne({ _id: manager._id }).exec();
