@@ -87,8 +87,10 @@ class SideNavBar extends Component {
     }
 
     logOut = () => {
+        localStorage.setItem('token', null)
         this.props.resetInfoUser()
-        this.props.resetInfoUser()
+        this.props.resetRecieptUser()
+        this.props.resetShiftUser()
         this.props.changeLoginStatus()
     }
 
@@ -247,7 +249,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_LOGIN_STATUS",
             })
         },
-        resetInfoUser: () => {
+        resetShiftUser: () => {
+            dispatch({
+                type:"RESET_SHIFT_USER"
+            })
+        },
+        resetRecieptUser: () => {
             dispatch({
                 type: "RESET_ALL_RECIEPT_USER",
             })

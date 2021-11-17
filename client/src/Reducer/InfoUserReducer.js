@@ -17,7 +17,6 @@ const infoUserInitialState = {
         switch (action.type) {
             case "UPDATA_DATA_USER":
                 return {
-                    ...state, 
                     _id: action.data.manager._id,
                     email: action.data.manager.email,
                     firstName: action.data.manager.firstName, 
@@ -32,7 +31,6 @@ const infoUserInitialState = {
                 }
             case "UPDATA_DATA_EMPLOYEE":
                 return {
-                    ...state,
                     firstName: action.data.firstName,
                     lastName: action.data.lastName,
                     cardID: action.data.cardID,
