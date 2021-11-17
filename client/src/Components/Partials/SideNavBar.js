@@ -23,6 +23,7 @@ import { GiSellCard } from 'react-icons/gi'
 import Avatar from '../../img/avatar_default.jpg';
 import { NavLink } from 'react-router-dom';
 import '../../css/SideNavBar.css';
+import axios from 'axios';
 
 class SideNavBar extends Component {
     constructor(props) {
@@ -82,13 +83,28 @@ class SideNavBar extends Component {
             attendance: true,
         })
         this.props.hideAlert()
-        this.props.showAlert('Attendanced success' , 'success')
+        this.props.showAlert('Attendanced success', 'success')
     }
 
     logOut = () => {
         this.props.resetInfoUser()
         this.props.resetInfoUser()
         this.props.changeLoginStatus()
+    }
+
+    attendance = () => {
+        var time = new Date();
+        let a = ((time.getHours() > 12) ? time.getHours() - 12 : time.getHours()) + ":" + time.getMinutes() +" "+ ((time.getHours() > 12) ? "PM" : "AM");
+        axios.post('http://localhost:5000/attendance-employee',{
+            token: localStorage.getItem('token'),
+            email: this.props.infoUser.employeeID,
+            data: {
+                time: a
+            }
+        })
+        this.setState({
+            attendance: true
+        })
     }
 
     render() {
@@ -117,7 +133,7 @@ class SideNavBar extends Component {
                         {
                             this.props.role == true ? (null)
                                 : (<div style={{ justifyContent: 'center', display: 'flex', marginBottom: '10px' }}>
-                                    <Button onClick={() => this.attendance()} style={{ backgroundColor: this.state.attendance? '#b9f6ca':'#e0e0e0', color: '#424242' }}>
+                                    <Button onClick={() => this.attendance()} style={{ backgroundColor: this.state.attendance ? '#b9f6ca' : '#e0e0e0', color: '#424242' }}>
                                         {!this.state.attendance ? (<ImCheckboxUnchecked style={{ marginRight: '10px' }}></ImCheckboxUnchecked>)
                                             : (<ImCheckboxChecked style={{ marginRight: '10px', color: '#1b5e20' }}></ImCheckboxChecked>)
                                         }

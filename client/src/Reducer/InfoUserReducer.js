@@ -36,12 +36,16 @@ const infoUserInitialState = {
                     firstName: action.data.firstName,
                     lastName: action.data.lastName,
                     cardID: action.data.cardID,
-                    address: action.data.address,
+                    address1: action.data.address,
                     tel : action.data.phoneNumber,
                     email: action.data.email,
                     managerID: action.data.managerID,
                     employeeID: action.data._id.employeeID,
                     password: action.data.password,  
+                    address: action.data1.address,
+                    province: action.data1.province,
+                    district: action.data1.district,
+                    storeName: action.storeName, 
                 }
             case "UPDATA_PROFILE_DATA_USER":
                 return {
@@ -56,7 +60,6 @@ const infoUserInitialState = {
                     province: action.data.province,
                     district: action.data.district, 
                     address: action.data.address,
- 
                 }
             case "UPDATE_AVATAR":
                 return {
