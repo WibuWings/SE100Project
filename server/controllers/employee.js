@@ -52,6 +52,7 @@ class EmployeeTab {
             cardID: employee.cardID,
             startDate: employee.startDate,
             isEmployee: true,
+            imgUrl: employee.imgUrl
         });
         employees
             .save()
@@ -89,6 +90,7 @@ class EmployeeTab {
                     address: employee.address,
                     cardID: employee.cardID,
                     startDate: employee.startDate,
+                    imgUrl: employee.imgUrl
                 },
             },
             {
