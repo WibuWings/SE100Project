@@ -18,6 +18,7 @@ const Employee = new Schema({
     cardID: String,
     startDate: Date,
     isEmployee :Boolean,
+    imgUrl: String,
 });
 Employee.plugin(mongooseDelete,
     {overrideMethods: 'all', deletedAt : true});
