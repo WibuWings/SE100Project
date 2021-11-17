@@ -58,7 +58,6 @@ class AddGoodModal extends Component {
         typeSet = [];
         // console.log("typeProduct", this.props.typeProduct);
         var listProductInfor = this.props.listProduct.state;
-        console.log("listProduct",this.props.listProduct.state)
         if(listProductInfor.length > 0)
         {
             this.generatedID = parseInt(listProductInfor[listProductInfor.length-1]._id.productID) + 1;
@@ -115,70 +114,90 @@ class AddGoodModal extends Component {
 
     async importGood(e) {
         // Ngăn chuyển trang
+
         var isContinue = this.checkConstraint();
         if(!isContinue)
         {
             e.preventDefault();
             return;
         }
-        // Thêm hàng hoá
-        const data = {
-            token: localStorage.getItem('token'),
-            product: {
-                _id: {
-                    productID: this.generatedID,
-                    importDate: document.querySelector('input[name="importDate"]').value,
-                    storeID: this.props.infoUser.email,
-                },
-                name: document.querySelector('input[name="goodName"]').value,
-                quantity: document.querySelector('input[name="goodQuantity"]').value,
-                remain: document.querySelector('input[name="goodQuantity"]').value,
-                importPrice: document.querySelector('input[name="originalPrice"]').value,
-                sellPrice: document.querySelector('input[name="sellPrice"]').value,
-                expires: document.querySelector('input[name="expiredDate"]').value,
-                imgUrl: this.imgUrl,
-                unit: document.querySelector('input[name="unit"]').value,
-            }   
-        }
-        console.log(data);
-
-        axios.post(`http://localhost:5000/api/product`, data)
-            .then(res => {
-                console.log("Save success");
-                alert("Lưu thành công")
-            })
-            .catch(err => {
-                alert(err);
-                console.log(err);
-            })
-
-        //Thêm vào bảng joinType nữa
-
-        // Giờ thêm nhiều type thì phải làm cái này nhiều lần
-        for(var i = 0 ; i < typeSet.length ; i++)
-        {
-            const data1 = {
-                token: localStorage.getItem('token'),
-                productJoinType: {
-                    _id : {
-                        productID: this.generatedID,
-                        typeID: typeSet[i], 
-                        importDate: document.querySelector('input[name="importDate"]').value,
-                        storeID: this.props.infoUser.email,
-                    }
-                }
-            }
-            axios.post(`http://localhost:5000/api/product/join`, data1)
-                .then(res => {
-                    console.log("lưu vô bảng join thành công");
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        }
-        this.props.changeStatusAddGood();
-
+        // // Thêm hàng hoá
+        // const data = {
+        //     token: localStorage.getItem('token'),
+        //     product: {
+        //         _id: {
+        //             productID: this.generatedID,
+        //             importDate: document.querySelector('input[name="importDate"]').value,
+        //             storeID: this.props.infoUser.email,
+        //         },
+        //         name: document.querySelector('input[name="goodName"]').value,
+        //         quantity: document.querySelector('input[name="goodQuantity"]').value,
+        //         remain: document.querySelector('input[name="goodQuantity"]').value,
+        //         importPrice: document.querySelector('input[name="originalPrice"]').value,
+        //         sellPrice: document.querySelector('input[name="sellPrice"]').value,
+        //         expires: document.querySelector('input[name="expiredDate"]').value,
+        //         imgUrl: this.imgUrl,
+        //         unit: document.querySelector('input[name="unit"]').value,
+        //     }   
+        // }
         // console.log(data);
+
+        // axios.post(`http://localhost:5000/api/product`, data)
+        //     .then(res => {
+        //         console.log("Save success");
+        //         alert("Lưu thành công")
+        //     })
+        //     .catch(err => {
+        //         alert(err);
+        //         console.log(err);
+        //     })
+
+        // //Thêm vào bảng joinType nữa
+
+        // // Giờ thêm nhiều type thì phải làm cái này nhiều lần
+        // for(var i = 0 ; i < typeSet.length ; i++)
+        // {
+        //     const data1 = {
+        //         token: localStorage.getItem('token'),
+        //         productJoinType: {
+        //             _id : {
+        //                 productID: this.generatedID,
+        //                 typeID: typeSet[i], 
+        //                 importDate: document.querySelector('input[name="importDate"]').value,
+        //                 storeID: this.props.infoUser.email,
+        //             }
+        //         }
+        //     }
+        //     axios.post(`http://localhost:5000/api/product/join`, data1)
+        //         .then(res => {
+        //             console.log("lưu vô bảng join thành công");
+        //         })
+        //         .catch(err => {
+        //             console.log(err);
+        //         })
+        // }
+        // this.props.changeStatusAddGood();
+        // Thêm vào redux
+        var dataRedux = {
+            _id: {
+                productID: this.generatedID,
+                importDate: document.querySelector('input[name="importDate"]').value,
+                storeID: this.props.infoUser.email,
+            },
+            name: document.querySelector('input[name="goodName"]').value,
+            quantity: document.querySelector('input[name="goodQuantity"]').value,
+            remain: document.querySelector('input[name="goodQuantity"]').value,
+            importPrice: document.querySelector('input[name="originalPrice"]').value,
+            sellPrice: document.querySelector('input[name="sellPrice"]').value,
+            expires: document.querySelector('input[name="expiredDate"]').value,
+            imgUrl: this.imgUrl,
+            unit: document.querySelector('input[name="unit"]').value,
+            typeIDList: typeSet,
+        }
+        // console.log("dataRedux", dataRedux); 
+        this.props.addProductToRedux(dataRedux);
+        // console.log(data);
+        console.log("this.props.listProduct.state", this.props.listProduct.state)
     }
     
     checkConstraint = () => {
@@ -647,7 +666,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_ADD_GOOD_STATUS",
             }); 
-        }
+        },
+        addProductToRedux: (data) => {
+            dispatch({
+                type: "ADD_PRODUCT",
+                data: data,
+            }); 
+        },
     }
 }
 

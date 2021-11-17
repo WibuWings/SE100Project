@@ -29,9 +29,26 @@ const typeProductInitialState = [
                         newState.push(action.data);
                     }
                 }
-                console.log("newState", newState);
                 return newState;
             }
+            case "DELETE_TYPE":
+            {
+                console.log("action.data", action.data);
+                var newState = [];
+                for(var i = 0 ; i < state.length ; i ++)
+                {
+                    if(state[i]._id.typeID != action.data.typeID)
+                    {
+                        newState.push(state[i]);
+                    }
+                    else 
+                    {
+                        console.log("Xoá được ")
+                    }
+                }
+                return newState;
+            }
+
             default:
                 return state
         }

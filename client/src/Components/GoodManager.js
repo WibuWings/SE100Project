@@ -19,8 +19,90 @@ class GoodManager extends Component {
     constructor(props) {
         super(props);
         this.loadAllType(); 
-        // this.loadAllGood();
+        this.loadAllGood();
     }
+
+    async loadAllGood() {
+        var resultProduct = [];
+        const data = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+            }
+        }
+        await axios.get(`http://localhost:5000/api/product/`, {
+            params: { ...data }
+        })
+            .then(res => {
+                resultProduct = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+        // Get hết từ cái productjoinType
+        var result = [];
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, {
+            params: { ...data1 }
+        })
+            .then(res => {
+                result = res.data.data;
+                localStorage.getItem('token', res.data.token);
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+        // Lấy các cái jointype
+        var joinTypeInfor = [];
+        for (let i = 0; i < result.length; i++) {
+            joinTypeInfor.push(result[i]);
+        }
+        console.log("joinTypeInfor", joinTypeInfor);
+
+        var listProductInfor = [];
+        for (let i = 0; i < resultProduct.length; i++) {
+            var typeIDList = [];
+            var joinType = '';
+            for (var j = 0; j < joinTypeInfor.length; j++) {
+                if (resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID &&
+                    resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) 
+                {
+                    typeIDList.push(joinTypeInfor[j]._id.typeID);
+                    joinType = joinType + ' ' + this.getTypeNamebyTypeID(joinTypeInfor[j]._id.typeID);
+                }
+            }
+
+            listProductInfor.push(
+                {
+                    ...resultProduct[i],
+                    typeIDList: typeIDList,
+                    joinType: joinType
+                });
+        }
+        this.props.getProductToReducer(listProductInfor);
+    }
+
+    getTypeNamebyTypeID (typeID) {
+        var typeName="Null";
+        console.log("typeList", this.props.typeProduct);
+        for(var i = 0; i < this.props.typeProduct.length;i++)
+        {   
+            if(this.props.typeProduct[i]._id.typeID == typeID)
+            {
+                typeName = this.props.typeProduct[i].name;
+                break;
+            }
+        }
+        return typeName;
+    }
+
     async loadAllType() {
         var result = [];
         const data = {
@@ -158,6 +240,7 @@ const mapStateToProps = (state, ownProps) => {
         statusAddGood: state.statusAddGood,
         infoUser: state.infoUser,
         statusUpdateType: state.statusUpdateType,
+        typeProduct: state.typeProduct,
     }
 }
 
@@ -213,6 +296,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_UPDATE_TYPE_STATUS",
             }); 
+        },
+        getProductToReducer: (data) => {
+            dispatch({
+                type: "GET_PRODUCT_AND_TYPE",
+                data: data
+            });
         },
     }
 }

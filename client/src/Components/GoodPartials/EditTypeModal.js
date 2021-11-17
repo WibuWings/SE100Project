@@ -48,8 +48,12 @@ class EditTypeModal extends Component {
                 alert(err);
                 // alert("Lỗi gì cmnr")
             })
+        this.props.deleteTypeFromRedux(data.productTypes[0]);
+
         // Ở đây mình phải cập nhật join nữa
         // Phải get tất cả cái join mà có cái type là type hiện tại
+
+
         var allJoinMatch = [];
         const data1 = {
             token: localStorage.getItem('token'),
@@ -183,6 +187,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_UPDATE_TYPE_STATUS",
             }); 
         },
+        deleteTypeFromRedux: (data) => {
+            dispatch({
+                type: "DELETE_TYPE",
+                data: data
+            });
+            
+        }
     }
 }
 

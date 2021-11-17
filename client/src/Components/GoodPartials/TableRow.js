@@ -121,10 +121,28 @@ class GoodRow extends Component{
         // Tạm thời
         // window.location.reload();
     }
+
+    getTypeList(typeList)
+    {
+        var joinType = '';
+        for(var i = 0 ; i < typeList.length; i++)
+        {
+            for(var j = 0 ; j < this.props.typeProduct.length; i++)
+            {
+                if(this.props.typeProduct[j]._id.typeID == typeList[i])
+                {
+                    joinType += " " + this.props.typeProduct[j].name;
+                    break;
+                }
+            }
+        }
+        return joinType;
+    }
+
     render () {
         const { classes } = this.props;
         const row = this.props.data;
-        console.log(row);
+        // console.log(row);
         return (
             <React.Fragment>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -134,7 +152,7 @@ class GoodRow extends Component{
                 <TableCell className={classes.goodTable_Cell} align="right">{row.sellPrice}</TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">
                     {/* {row.importTime == null ? '' : row.importTime.substring(0,row.importTime.indexOf('T'))} */}
-                    {row._id.importDate == null ? '': row._id.importDate.substring(0,row._id.importDate.indexOf('T'))}
+                    {row._id.importDate == null ? '': row._id.importDate.indexOf('T')==-1 ? row._id.importDate: row._id.importDate.substring(0,row._id.importDate.indexOf('T'))}
                 </TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">
                     <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!this.isOpen)}>
@@ -173,11 +191,11 @@ class GoodRow extends Component{
                                             <TableRow>
                                                 <TableCell className={classes.goodTable_Cell} component="th" scope="row">
                                                     {/* {row.hidden.expires == null ? '': row.hidden.expires.substring(0,row.hidden.expires.indexOf('T'))} */}
-                                                    {row.expires == null ? '': row.expires.substring(0,row.expires.indexOf('T'))}
+                                                    {row.expires == null ? '': row.expires.indexOf('T') ==-1 ? row.expires : row.expires.substring(0,row.expires.indexOf('T'))}
                                                 </TableCell>
                                                 <TableCell className={classes.goodTable_Cell}>{row.importPrice}</TableCell>
                                                 <TableCell className={classes.goodTable_Cell}>{row.remain}</TableCell>
-                                                <TableCell className={classes.goodTable_Cell}>{row.joinType}</TableCell>
+                                                <TableCell className={classes.goodTable_Cell}>{this.getTypeList(row.typeIDList)}</TableCell>
                                                 <TableCell className={classes.goodTable_Cell}>{row.unit}</TableCell>
                                             </TableRow>
                                         </TableBody>
@@ -221,6 +239,7 @@ const mapStateToProps = (state, ownProps) => {
         isAddTypeStatus: state.isAddTypeStatus,
         confirmStatus: state.confirmStatus,
         listProduct: state.listProduct,
+        typeProduct: state.typeProduct,
     }
 }
 

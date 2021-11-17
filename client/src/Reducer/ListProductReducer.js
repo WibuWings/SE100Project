@@ -24,6 +24,11 @@ const listProductInitialState = [
                 return {
                     state: action.data
                 }
+            case "ADD_PRODUCT":
+                // console.log(state)
+                return {
+                    state: [...state.state, action.data]
+                }
             default:
                 return state
         }
