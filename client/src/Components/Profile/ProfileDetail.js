@@ -404,7 +404,7 @@ class ProfileDetail extends Component {
                                 <TextField
                                     fullWidth
                                     label="Adress details"
-                                    defaultValue={this.props.infoUser.address}
+                                    defaultValue={this.props.role ? this.props.infoUser.address :  this.props.infoUser.address1}
                                     name="address"
                                     required
                                     disabled={this.props.role ? false : true}

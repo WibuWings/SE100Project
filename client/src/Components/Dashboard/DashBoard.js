@@ -3,12 +3,7 @@ import '../../css/Dashboard.css'
 import { Container, Grid } from '@mui/material';
 import { Typography } from '@mui/material';
 import { DiApple } from 'react-icons/di'
-import StaticDateRangePickerDemo from './Calendar'
 import AppWebsiteVisits from './Statistic';
-import SplitButton from './GroupButton';
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
-import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 
 
 class DashBoard extends Component {
@@ -73,24 +68,6 @@ class DashBoard extends Component {
                                 <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
                                     Error receipt
                                 </Typography>
-                            </div>
-                        </Grid>
-                        <Grid className="dashboard-item" item md={12} sm={12} >
-                            <div style={{ borderRadius: '20px' }}>
-                                <StaticDateRangePickerDemo></StaticDateRangePickerDemo>
-                            </div>
-                        </Grid>
-                        <Grid className="dashboard-item" item md={12} sm={12} >
-                            <div style={{ borderRadius: '20px' }}>
-                                <FullCalendar
-                                    plugins={[ dayGridPlugin, interactionPlugin ]}
-                                    initialView="dayGridMonth"
-                                    weekends={true}
-                                    events={[
-                                        { title: 'event 1', date: '2021-10-18' },
-                                        { title: 'event 2', date: '2021-10-18' }
-                                    ]}
-                                />
                             </div>
                         </Grid>
                         <Grid className="dashboard-item" item md={12} sm={12} >
