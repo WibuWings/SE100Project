@@ -21,6 +21,7 @@ class EmployeeMoreMenu extends Component {
       change: 'false'
     }
     this.myRef = React.createRef();
+    this.getEmployeeByID(this.props.data);
   }
   setIsOpen(val) {
     this.isOpen = val;
@@ -56,10 +57,11 @@ class EmployeeMoreMenu extends Component {
             alert(err);
         })
     
-    // Delete redux
-    this.props.deleteEmployeeRedux(this.props.data);
     //Move to sacked
     this.props.deleteEmployeeToSackRedux(this.currentEmployee)
+    // Delete redux
+    this.props.deleteEmployeeRedux(this.props.data);
+    
   }
 
   getEmployeeByID(employeeID) {

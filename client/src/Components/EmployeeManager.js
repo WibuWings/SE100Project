@@ -537,6 +537,9 @@ class EmployeeManager extends Component {
                             >
                             {
                                 this.props.listSackedEmployee.employees.map((row) => {
+                                    
+                                    // console.log("row", row);
+                                    // if(row == {} || row == null) return (<div></div>);
                                 return (
                                     <TableRow
                                         hover
