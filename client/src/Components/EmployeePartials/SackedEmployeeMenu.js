@@ -87,6 +87,10 @@ class EmployeeMoreMenu extends Component {
             .catch(err => {
                 alert(err);
             })
+
+        // To redux
+        var employeeID = this.props.data;
+        this.props.deletePermantlyEmployee(employeeID);
     }
 
     isOpen=false;
@@ -159,6 +163,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 employees: data,
             });
         },
+        deletePermantlyEmployee: (employeeID) => {
+            dispatch({
+                type: "DELETE_PERMANTLY_EMPLOYEE",
+                employeeID: employeeID,
+            });
+        }
     }
 }
 
