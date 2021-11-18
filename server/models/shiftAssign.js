@@ -1,24 +1,24 @@
 
+const {getCurrentDateTimeString} = require('../helper/DateTime');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const ShiftAssign = new Shema({
+const ShiftAssign = new Schema({
     _id: {
-        date: Date,
+        dateInWeek: String,
         storeID: String,
         shiftType: {
-            type: Schema.Types.ObjectId,
-            ref: "ShiftType",
+            _id: {
+                shiftID: String,
+                storeID: String,
+            },
         },
         employee: {
-            type: Schema.Types.ObjectId,
-            ref: "Employee",
+            _id: {
+                employeeID: String,
+                storeID: String,
+            },
         },
-    },
-    isOff: Boolean,
-    alternativeEmployee: {
-        type: Schema.Types.ObjectId,
-        ref: "Employee",
     },
     createdAt: Date,
 });

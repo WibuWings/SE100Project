@@ -1,11 +1,122 @@
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        hello SE100
-      </header>
-    </div>
-  );
+import React, { Component } from 'react';
+import {
+  BrowserRouter as Router,
+} from "react-router-dom";
+import DirectionURL from './Router/DirectionURL';
+import './css/App.css'
+import { connect } from 'react-redux'
+import axios from 'axios';
+import Alert from '@mui/material/Alert';
+import { FiChevronRight, FiXSquare } from "react-icons/fi";
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  async componentWillMount() {
+    if (localStorage.getItem('token') && localStorage.getItem('token') !== "") {
+      axios.post(`http://localhost:5000/refresh`, {
+        token: localStorage.getItem('token'),
+      })
+        .then(res => {
+          console.log("Thành công");
+          console.log(res.data);
+          if (res.status === 200) {
+            this.props.setRole()
+            localStorage.setItem('token', res.data.token);
+            this.props.updateProfile(res.data.data);
+            this.props.updateRecieptUser(res.data.data.receipts)
+            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+            this.props.updateShiftTypes(res.data.data.shiftTypes)
+            this.props.changeLoginStatus();
+            this.props.getEmployee(res.data.data.employees);
+          }
+        })
+        .catch(err => {
+          console.log("thất bại");
+          console.log(err)
+        })
+    }
+  }
+
+  autoHideAlert = () => {
+    setTimeout(() => this.props.hideAlert(), 4000);
+  }
+
+  render() {
+    return (
+      <Router>
+        <DirectionURL></DirectionURL>
+        {this.props.alertReducer.status ? this.autoHideAlert() : null}
+        {this.props.alertReducer.status ? <Alert style={{ cursor: 'pointer' }} onClick={() => this.props.hideAlert()} className="message-error" severity={this.props.alertReducer.typeMessage}>{this.props.alertReducer.message} — check it out! <FiXSquare></FiXSquare></Alert> : null}
+      </Router>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    isLogin: state.loginStatus,
+    alertReducer: state.alert,
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    changeLoginStatus: () => {
+      dispatch({
+        type: "CHANGE_LOGIN_STATUS",
+      });
+    },
+    updateProvince: (data) => {
+      dispatch({
+        type: "UPDATE_DATA",
+        data: data,
+      })
+    },
+    updateRecieptUser: (data) => {
+      dispatch({
+        type: "UPDATE_RECIEPT_USER",
+        listReciept: data,
+      })
+    },
+    updateProfile: (data) => {
+      dispatch({
+        type: "UPDATA_DATA_USER",
+        data: data,
+      })
+    },
+    updateAvatar: (avatar) => {
+      dispatch({
+        type: "UPDATE_AVATAR",
+        avatar: avatar,
+      })
+    },
+    updateShiftTypes: (shiftTypes) => {
+      dispatch({
+        type: "UPDATE_DATA_SHIFT_USER",
+        shiftTypes: shiftTypes,
+      })
+    },
+    hideAlert: () => {
+      dispatch({
+        type: "HIDE_ALERT",
+      })
+    },
+    getEmployee: (data) => {
+      dispatch({
+          type: "GET_EMPLOYEE",
+          employees: data,
+      });
+    },
+    setRole: () => {
+      dispatch({
+          type: "ADMIN_ROLE"
+      });
+  },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+
