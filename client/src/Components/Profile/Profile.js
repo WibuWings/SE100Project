@@ -16,7 +16,7 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isFindPassword: this.props.infoUser._id.includes("_Google") ? true : false,
+            isFindPassword: (this.props.infoUser._id == null) ? false : (this.props.infoUser._id.includes("_Google") ? true : false),
         }
     }
 
@@ -39,7 +39,7 @@ class Profile extends Component {
     }
     render() {
         return (
-            <div className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
+            <div id="scroll-bar" className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
                 <ProfileHeader></ProfileHeader>
                 <Container style={{ marginBottom: '20px' }} maxWidth="xl">
                     <Grid className="profile-body" container spacing={2}>

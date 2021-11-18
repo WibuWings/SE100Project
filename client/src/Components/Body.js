@@ -18,7 +18,7 @@ class Body extends Component {
                         position: 'fixed', top: 0, right: 0, backgroundColor: !this.props.statusDarkmode ?  '#e3f2fd' : '#263238', borderLeft: '2px solid #99999975',
                     }}
                 >
-                    <DashboardURL></DashboardURL>
+                    <DashboardURL ></DashboardURL>
                 </div>
                 {this.props.statusConfirmPassword ?
                     <div className="modal-comfirm-password">

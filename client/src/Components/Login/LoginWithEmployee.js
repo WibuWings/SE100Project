@@ -36,11 +36,12 @@ class LoginWithEmployee extends Component {
                     console.log(res);
                     if (res.status === 200) {
                         localStorage.setItem('token', res.data.token);
-                        this.props.updateProfile(res.data.data.employee[0]);
+                        this.props.updateProfile(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);
                         this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+                        this.props.updateRecieptUser(res.data.data.receipts);
                         this.props.changeLoginStatus();
                         this.props.hideAlert();
-                        this.props.showAlert(res.data.message, "success");
+                        this.props.showAlert("Login successfully", "success");
                     }
                 })
                 .catch(err => {
@@ -191,10 +192,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "HIDE_ALERT",
             })
         },
-        updateProfile: (data) => {
+        updateProfile: (data, data1, storeName) => {
             dispatch({
                 type: "UPDATA_DATA_EMPLOYEE",
                 data: data,
+                data1: data1,
+                storeName: storeName,
             })
         },
         setProfile: (data) => {
@@ -207,6 +210,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "UPDATE_AVATAR",
                 avatar: avatar,
+            })
+        },
+        updateRecieptUser: (data) => {
+            dispatch({
+                type: "UPDATE_RECIEPT_USER",
+                listReciept: data,
             })
         },
     }

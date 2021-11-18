@@ -21,16 +21,27 @@ class App extends Component {
       })
         .then(res => {
           console.log("Thành công");
-          console.log(res.data);
+          console.log(res);
           if (res.status === 200) {
-            this.props.setRole()
-            localStorage.setItem('token', res.data.token);
-            this.props.updateProfile(res.data.data);
-            this.props.updateRecieptUser(res.data.data.receipts)
-            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
-            this.props.updateShiftTypes(res.data.data.shiftTypes)
-            this.props.changeLoginStatus();
-            this.props.getEmployee(res.data.data.employees);
+            if (res.data.data.isEmployee === false) {
+              this.props.setRole()
+              localStorage.setItem('token', res.data.token);
+              this.props.updateProfile(res.data.data);
+              this.props.updateRecieptUser(res.data.data.receipts)
+              this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+              this.props.updateShiftTypes(res.data.data.shiftTypes)
+              this.props.changeLoginStatus();
+              this.props.getEmployee(res.data.data.employees);
+            } else {
+              this.props.setRoleEmployee()
+              localStorage.setItem('token', res.data.token);
+              this.props.updateProfileEployee(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);
+              this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+              this.props.updateRecieptUser(res.data.data.receipts);
+              this.props.changeLoginStatus();
+              this.props.showAlert(res.data.message, "success");
+            }
+
           }
         })
         .catch(err => {
@@ -106,15 +117,28 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     getEmployee: (data) => {
       dispatch({
-          type: "GET_EMPLOYEE",
-          employees: data,
+        type: "GET_EMPLOYEE",
+        employees: data,
       });
     },
     setRole: () => {
       dispatch({
-          type: "ADMIN_ROLE"
+        type: "ADMIN_ROLE"
       });
-  },
+    },
+    updateProfileEployee: (data, data1, storeName) => {
+      dispatch({
+        type: "UPDATA_DATA_EMPLOYEE",
+        data: data,
+        data1: data1,
+        storeName: storeName,
+      })
+    },
+    setRoleEmployee: () => {
+      dispatch({
+        type: "EMPLOYEE_ROLE",
+      });
+    },
   }
 }
 

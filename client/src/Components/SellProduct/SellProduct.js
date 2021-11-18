@@ -25,7 +25,7 @@ class SellProduct extends Component {
         this.storeID = this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email;
         this.loadAllType();
         this.loadAllGood();
-        
+
     }
     storeID = "";
     bull = (
@@ -38,29 +38,32 @@ class SellProduct extends Component {
     );
 
     AddProduct = (value) => {
-        var isCheck = false;
-        var currentQuantity;
-        var maxQuantity;
-        this.props.shoppingBags.map(value1 => {
-            if (value1.product.name === value.name) {
-                isCheck = true;
-                currentQuantity = value1.quantity
-                maxQuantity = value.quantity
-            } 
-            return value;
-        })
-        if (isCheck) {
-            if (currentQuantity < maxQuantity) {
-                this.props.raiseQuantity(value.name);
-            }
+        if (value.remain === 0) {
+            this.props.showAlert('Shout out !', 'warning')
         } else {
-            const newProduct = {
-                product: value,
-                quantity: 1,
+            var isCheck = false;
+            var currentQuantity;
+            var maxQuantity;
+            this.props.shoppingBags.map(value1 => {
+                if (value1.product.name === value.name) {
+                    isCheck = true;
+                    currentQuantity = value1.quantity
+                    maxQuantity = value.quantity
+                }
+                return value;
+            })
+            if (isCheck) {
+                if (currentQuantity < maxQuantity) {
+                    this.props.raiseQuantity(value.name);
+                }
+            } else {
+                const newProduct = {
+                    product: value,
+                    quantity: 1,
+                }
+                this.props.addNewProductToShoppingBags(newProduct);
             }
-            this.props.addNewProductToShoppingBags(newProduct);
         }
-
     }
 
     async loadAllType() {
@@ -94,7 +97,6 @@ class SellProduct extends Component {
 
     async loadAllGood() {
         var resultProduct = [];
-        console.log("infoUser", this.props.infoUser);
         const data = {
             token: localStorage.getItem('token'),
             filter: {
@@ -116,7 +118,7 @@ class SellProduct extends Component {
             token: localStorage.getItem('token'),
             filter: {
                 "_id.storeID": this.storeID,
-            }   
+            }
         }
         await axios.get(`http://localhost:5000/api/product/join`, {
             params: { ...data1 }
@@ -143,7 +145,6 @@ class SellProduct extends Component {
                     typeIDList.push(joinTypeInfor[j]._id.typeID);
                 }
             }
-
             listProductInfor.push(
                 {
                     ...resultProduct[i],
@@ -154,12 +155,14 @@ class SellProduct extends Component {
         this.setState({ change: !this.state.change });
     }
 
-    
+    componentWillMount() {
+        document.title = 'SellProduct'
+    }
 
     render() {
         return (
-            <div className="sell-product" >
-                <Container style={{marginBottom: '20px'}} maxWidth="xl">
+            <div id="scroll-bar" className="sell-product" >
+                <Container style={{ marginBottom: '20px' }} maxWidth="xl">
                     <Grid container spacing={2}>
                         <Grid item lg={8} md={12} sm={12}>
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden' }}>
@@ -168,7 +171,7 @@ class SellProduct extends Component {
                                 </div>
                                 <Container id="choses-product" style={{ height: '94%', overflowY: 'scroll' }} maxWidth="xl">
                                     <Grid container spacing={2}>
-                                        {this.props.listProduct.state
+                                        {(this.props.listProduct.state !== undefined && this.props.listProduct.state.length !== 0)
                                             ? this.props.listProduct.state.filter(value => {
                                                 if (this.props.chooseTypeProductID === 'all') {
                                                     return value;
@@ -180,25 +183,39 @@ class SellProduct extends Component {
                                                 <Grid item lg={3} md={4} sm={4} xs={4}>
                                                     <Card onClick={() => this.AddProduct(value)}>
                                                         <CardActionArea>
-                                                            {
-                                                                value.imgUrl === "none"
-                                                                    ? <CardMedia
-                                                                        component="img"
-                                                                        height="140"
-                                                                        image={exampleImg}
-                                                                        alt="green iguana"
-                                                                    />
+                                                            <CardMedia
+                                                                style={{ display: (value.remain === 0) ? 'block' : 'none' }}
+                                                                component="img"
+                                                                height="140"
+                                                                image='https://res.cloudinary.com/databaseimg/image/upload/v1637083732/aqd37xtgxukcq3x9eb4q.png'
+                                                                alt="green iguana"
+                                                            />
+                                                            <div style={{ display: (value.remain !== 0) ? 'block' : 'none' }}>
+                                                                {
+                                                                    value.imgUrl === "none"
+                                                                        ? <CardMedia
+                                                                            component="img"
+                                                                            height="140"
+                                                                            image={exampleImg}
+                                                                            alt="green iguana"
+                                                                        />
+                                                                        : <CardMedia
+                                                                            component="img"
+                                                                            height="140"
+                                                                            image={value.imgUrl}
+                                                                            alt="green iguana"
+                                                                        />
+                                                                }
+                                                            </div>
 
-                                                                    : <CardMedia
-                                                                        component="img"
-                                                                        height="140"
-                                                                        image={value.imgUrl}
-                                                                        alt="green iguana"
-                                                                    />
-                                                            }
                                                             <CardContent style={{ padding: '5px' }}>
                                                                 <Typography style={{ textAlign: 'center' }} gutterBottom variant="h6" component="div">
                                                                     {value.name}
+                                                                </Typography>
+                                                            </CardContent>
+                                                            <CardContent style={{ textAlign: 'center', margin: '0', padding: '0' }}>
+                                                                <Typography style={{ textAlign: 'center', margin: '0', padding: '0', fontSize: '0.7rem', fontWeight: '700', color: '#00000080' }} gutterBottom variant="h6" component="div">
+                                                                    Quantity: {value.remain}
                                                                 </Typography>
                                                             </CardContent>
                                                         </CardActionArea>
@@ -209,7 +226,9 @@ class SellProduct extends Component {
                                                         </CardActions>
                                                     </Card>
                                                 </Grid>
-                                            )) : (null)}
+                                            )) : (<div style={{ width: '100%', height: '100%', textAlign: 'center', marginTop: '100px' }}>
+                                                <h3>Không có gì</h3>
+                                            </div>)}
                                     </Grid>
                                 </Container>
                             </div>
@@ -296,6 +315,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "RAISE_QUANTITY_SHOPPING_BAGS",
                 name: name,
+            })
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
             })
         }
     }

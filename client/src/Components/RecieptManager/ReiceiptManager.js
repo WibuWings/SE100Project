@@ -8,9 +8,14 @@ import '../../css/RecieptManager.css'
 import SearchReceipt from './SearchReceipt';
 
 class ReceiptManager extends Component {
+
+    componentWillMount() {
+        document.title = 'ReiceiptManager'
+    }
+
     render() {
         return (
-            <div className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
+            <div id="scroll-bar" className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
                 <Container style={{ marginBottom: '20px', marginTop: '20px' }} maxWidth="xl">
                     <Grid className="profile-body" container spacing={2}>
                         <Grid item  lg={3} md={12} sm={12}>

@@ -23,6 +23,7 @@ import { GiSellCard } from 'react-icons/gi'
 import Avatar from '../../img/avatar_default.jpg';
 import { NavLink } from 'react-router-dom';
 import '../../css/SideNavBar.css';
+import axios from 'axios';
 
 class SideNavBar extends Component {
     constructor(props) {
@@ -82,16 +83,39 @@ class SideNavBar extends Component {
             attendance: true,
         })
         this.props.hideAlert()
-        this.props.showAlert('Attendanced success' , 'success')
+        this.props.showAlert('Attendanced success', 'success')
     }
 
     logOut = () => {
+        localStorage.setItem('token', null)
         this.props.resetInfoUser()
+        this.props.resetRecieptUser()
+        this.props.resetShiftUser()
         this.props.changeLoginStatus()
     }
 
-    render() {
+    attendance = () => {
+        var time = new Date();
+        let a = ((time.getHours() > 12) ? time.getHours() - 12 : time.getHours()) + ":" + time.getMinutes() +" "+ ((time.getHours() > 12) ? "PM" : "AM");
+        axios.post('http://localhost:5000/api/employee/time-keeping',{
+            token: localStorage.getItem('token'),
+            data: {
+                email: this.props.infoUser.employeeID,
+                time: a,
+            }
+        }).then(res => {
+            console.log(res)
+            localStorage.setItem('token', res.data.token)
+            this.props.showAlert(res.data.message, 'success')
+            this.setState({
+                attendance: true
+            })
+        }).catch(err => {
+            this.props.showAlert(err.response.data.message, 'error')
+        })
+    }
 
+    render() {
         const navbarContainer = document.querySelector('.navbar-container');
         return (
             <div
@@ -116,7 +140,7 @@ class SideNavBar extends Component {
                         {
                             this.props.role == true ? (null)
                                 : (<div style={{ justifyContent: 'center', display: 'flex', marginBottom: '10px' }}>
-                                    <Button onClick={() => this.attendance()} style={{ backgroundColor: this.state.attendance? '#b9f6ca':'#e0e0e0', color: '#424242' }}>
+                                    <Button onClick={() => this.attendance()} style={{ backgroundColor: this.state.attendance ? '#b9f6ca' : '#e0e0e0', color: '#424242' }}>
                                         {!this.state.attendance ? (<ImCheckboxUnchecked style={{ marginRight: '10px' }}></ImCheckboxUnchecked>)
                                             : (<ImCheckboxChecked style={{ marginRight: '10px', color: '#1b5e20' }}></ImCheckboxChecked>)
                                         }
@@ -136,7 +160,6 @@ class SideNavBar extends Component {
                                     <span className="nav-item-lable">Dashboard</span>
                                 </NavLink>) : (null)
                         }
-
                         <NavLink to="/profile" className={"nav-item " + this.active[1]} href="#"
                             onClick={() => this.changeIndex(1)}
                         >
@@ -229,7 +252,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_LOGIN_STATUS",
             })
         },
-        resetInfoUser: () => {
+        resetShiftUser: () => {
+            dispatch({
+                type:"RESET_SHIFT_USER"
+            })
+        },
+        resetRecieptUser: () => {
             dispatch({
                 type: "RESET_ALL_RECIEPT_USER",
             })
@@ -251,6 +279,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "HIDE_ALERT",
             })
         },
+        resetInfoUser: () => {
+            dispatch({
+                type: "RESET_INFO_USER"
+            })
+        }
     }
 }
 

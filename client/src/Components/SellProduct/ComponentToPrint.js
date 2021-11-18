@@ -65,7 +65,6 @@ class ComponentToPrint extends React.PureComponent {
         
         return (
             <div className="row">
-                {this.reduceTotalMoney()}
                 <div className="col-12">
                     <h1 style={{ textAlign: 'center' }}>{this.props.infoUser.storeName}</h1>
                 </div>
@@ -122,8 +121,7 @@ class ComponentToPrint extends React.PureComponent {
                                 <td>{value.quantity * value.product.sellPrice}</td>
                             </tr>
                         ))
-                            : 'Không có gì'}
-
+                        : null}
                     </tbody>
                 </table>
                 <div style={{marginTop: '20px'}} className="col-12">
