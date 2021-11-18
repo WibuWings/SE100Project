@@ -76,6 +76,14 @@ class EmployeeTab {
             });
             }
         })
+        .catch((err) => {
+            res.send(
+                JSON.stringify({
+                    status: STATUS.FAILURE,
+                    message: MESSAGES.EMAIL_HAS_BEEN_USED,
+                })
+            );
+        });
         
     };
 
