@@ -105,7 +105,7 @@ class Printf extends React.PureComponent {
         isEdit: false,
         oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
       }
-      axios.post('http://localhost:5000/api/sell-product/add-reciept', {
+      await axios.post('http://localhost:5000/api/sell-product/add-reciept', {
         email: this.props.infoUser.managerID? this.props.infoUser.managerID : this.props.infoUser.email,
         token: localStorage.getItem('token'),
         data: data,
