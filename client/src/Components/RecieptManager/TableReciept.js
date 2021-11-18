@@ -148,7 +148,7 @@ function Row(props) {
             return red[400]
         } else if (isEdit) {
             return '#f4f492'
-        } else if (oldBill){
+        } else if (oldBill) {
             return '#00897b'
         } else {
             return '#a6ffa6'
@@ -165,7 +165,7 @@ function Row(props) {
         }
     }
 
-    const RestoneReciept =  async (MAHD) => {
+    const RestoneReciept = async (MAHD) => {
         await axios.post('http://localhost:5000/api/sell-product/restone-receipt', {
             token: localStorage.getItem('token'),
             email: infoUser.email,
@@ -173,7 +173,7 @@ function Row(props) {
         })
             .then(res => {
                 localStorage.setItem('token', res.data.token)
-                if(res.data.status === 1) {
+                if (res.data.status === 1) {
                     dispatch({
                         type: 'RESTONE_ONE_RECIEPT',
                         MAHD: MAHD
@@ -244,7 +244,7 @@ function Row(props) {
                 <TableCell align="right">{row.discount}</TableCell>
                 <TableCell align="right">{row.totalFinalMoney.toLocaleString()}</TableCell>
             </TableRow>
-            <TableRow style={{ borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae' }}>
+            <TableRow style={{borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae' }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
@@ -542,7 +542,7 @@ export default function CollapsibleTable() {
     }, [typeReciept, typeByDate, listReciept, statusSelectAll, search])
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer style={{overflowX: 'hidden'}} component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow style={{ backgroundColor: 'black', color: 'white' }}>

@@ -322,7 +322,7 @@ export default function CollapsibleTable() {
     const listReciept = useSelector(state => state.listReciept)
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer  style={{overflowX: 'hidden'}} component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow style={{ backgroundColor: 'black', color: 'white' }}>

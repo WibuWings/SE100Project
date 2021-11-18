@@ -97,7 +97,6 @@ class SideNavBar extends Component {
     attendance = () => {
         var time = new Date();
         let a = ((time.getHours() > 12) ? time.getHours() - 12 : time.getHours()) + ":" + time.getMinutes() +" "+ ((time.getHours() > 12) ? "PM" : "AM");
-        let b = "5:30 PM"
         axios.post('http://localhost:5000/api/employee/time-keeping',{
             token: localStorage.getItem('token'),
             data: {
@@ -112,7 +111,7 @@ class SideNavBar extends Component {
                 attendance: true
             })
         }).catch(err => {
-            this.props.showAlert("you don't belong to this shift", 'error')
+            this.props.showAlert(err.response.data.message, 'error')
         })
     }
 
@@ -161,7 +160,6 @@ class SideNavBar extends Component {
                                     <span className="nav-item-lable">Dashboard</span>
                                 </NavLink>) : (null)
                         }
-
                         <NavLink to="/profile" className={"nav-item " + this.active[1]} href="#"
                             onClick={() => this.changeIndex(1)}
                         >

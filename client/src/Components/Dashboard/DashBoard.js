@@ -23,7 +23,7 @@ class DashBoard extends Component {
 
     render() {
         return (
-            <div className="dashboard" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
+            <div id="scroll-bar" className="dashboard" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
                 <Container style={{ marginTop: '40px' }} maxWidth="xl">
                     <Grid container spacing={3}>
                         <Grid className="dashboard-item" item md={3} sm={12} >
