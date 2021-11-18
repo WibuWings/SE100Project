@@ -33,7 +33,7 @@ class LoginWithEmployee extends Component {
                 password: document.getElementById('password').value,
             })
                 .then(res => {
-                    console.log(res.data);
+                    console.log(res);
                     if (res.status === 200) {
                         localStorage.setItem('token', res.data.token);
                         this.props.updateProfile(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);

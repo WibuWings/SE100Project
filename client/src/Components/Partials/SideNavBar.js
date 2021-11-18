@@ -104,14 +104,19 @@ class SideNavBar extends Component {
                 email: this.props.infoUser.employeeID,
                 time: a,
             }
-        })
-        this.setState({
-            attendance: true
+        }).then(res => {
+            console.log(res)
+            localStorage.setItem('token', res.data.token)
+            this.props.showAlert(res.data.message, 'success')
+            this.setState({
+                attendance: true
+            })
+        }).catch(err => {
+            this.props.showAlert("you don't belong to this shift", 'error')
         })
     }
 
     render() {
-
         const navbarContainer = document.querySelector('.navbar-container');
         return (
             <div
