@@ -172,6 +172,7 @@ class SellProduct extends Component {
                                 </div>
                                 <Container id="choses-product" style={{ height: '94%', overflowY: 'scroll' }} maxWidth="xl">
                                     <Grid container spacing={2}>
+                                        {console.log(this.props.listProduct.state)}
                                         {this.props.listProduct.state
                                             ? this.props.listProduct.state.filter(value => {
                                                 if (this.props.chooseTypeProductID === 'all') {
@@ -192,7 +193,7 @@ class SellProduct extends Component {
                                                                 alt="green iguana"
                                                             />
 
-                                                            <div  style={{ display: (value.quantity !== 0) ? 'block' : 'none' }}>
+                                                            <div style={{ display: (value.quantity !== 0) ? 'block' : 'none' }}>
                                                                 {
                                                                     value.imgUrl === "none"
                                                                         ? <CardMedia
@@ -209,15 +210,15 @@ class SellProduct extends Component {
                                                                         />
                                                                 }
                                                             </div>
-                                                            
+
                                                             <CardContent style={{ padding: '5px' }}>
                                                                 <Typography style={{ textAlign: 'center' }} gutterBottom variant="h6" component="div">
                                                                     {value.name}
                                                                 </Typography>
                                                             </CardContent>
-                                                            <CardContent  style={{ textAlign: 'center', margin:'0', padding: '0'}}>
-                                                                <Typography style={{ textAlign: 'center', margin:'0', padding: '0', fontSize:'0.7rem', fontWeight: '700', color: '#00000080'}} gutterBottom variant="h6" component="div">
-                                                                Quantity: {value.quantity}
+                                                            <CardContent style={{ textAlign: 'center', margin: '0', padding: '0' }}>
+                                                                <Typography style={{ textAlign: 'center', margin: '0', padding: '0', fontSize: '0.7rem', fontWeight: '700', color: '#00000080' }} gutterBottom variant="h6" component="div">
+                                                                    Quantity: {value.quantity}
                                                                 </Typography>
                                                             </CardContent>
                                                         </CardActionArea>
@@ -228,7 +229,9 @@ class SellProduct extends Component {
                                                         </CardActions>
                                                     </Card>
                                                 </Grid>
-                                            )) : (null)}
+                                            )) : (<div style={{ width: '100%', height: '100%', textAlign: 'center', marginTop: '100px' }}>
+                                                <h3>Không có gì</h3>
+                                            </div>)}
                                     </Grid>
                                 </Container>
                             </div>
@@ -318,16 +321,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             })
         },
         showAlert: (message, typeMessage) => {
-          dispatch({
-            type: "SHOW_ALERT",
-            message: message,
-            typeMessage: typeMessage,
-          })
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
         },
         hideAlert: () => {
-          dispatch({
-            type: "HIDE_ALERT",
-          })
+            dispatch({
+                type: "HIDE_ALERT",
+            })
         }
     }
 }
