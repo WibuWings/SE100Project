@@ -8,6 +8,11 @@ import '../../css/RecieptManager.css'
 import SearchReceipt from './SearchReceipt';
 
 class ReceiptManager extends Component {
+
+    componentWillMount() {
+        document.title = 'ReiceiptManager'
+    }
+
     render() {
         return (
             <div className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>

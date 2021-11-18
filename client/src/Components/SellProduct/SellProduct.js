@@ -158,7 +158,9 @@ class SellProduct extends Component {
         this.setState({ change: !this.state.change });
     }
 
-
+    componentWillMount() {
+        document.title = 'SellProduct'
+    }
 
     render() {
         return (
