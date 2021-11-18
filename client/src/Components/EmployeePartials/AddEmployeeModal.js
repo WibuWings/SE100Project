@@ -237,6 +237,7 @@ class AddEmployeeModal extends Component {
     // Thêm nhân viên
     async addEmployeeToDatabase()
     {
+        var isAddOK = true;
         const data = {
             token: localStorage.getItem('token'),
             employee: {
@@ -266,10 +267,16 @@ class AddEmployeeModal extends Component {
             })
             .catch(err => {
                 alert(err);
+                if(err.response.data.message)
+                {
+                    alert(err.response.data.message);
+                }
                 console.log(err);
+                isAddOK = false;
             })
         // Thêm vào redux
-        this.props.addEmployee(data.employee);
+        if(isAddOK)
+            this.props.addEmployee(data.employee);
         
     }
 
