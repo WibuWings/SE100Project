@@ -36,7 +36,14 @@ class EmployeeTab {
     createEmployee = async (req, res) => {
         const employee = req.body.employee;
         const id = req.body.employee._id;
-        const employees = new Employee({
+        Employee.findOne({ "_id.employeeID": id.employeeID })
+        .exec()
+        .then((data) =>     {
+            if (data) {
+                throw new Error();
+
+            } else {
+                const employees = new Employee({
             _id: {
                 employeeID: id.employeeID,
                 storeID: id.storeID,
@@ -68,6 +75,9 @@ class EmployeeTab {
             .catch((err) => {
                 res.status(404).send(err);
             });
+            }
+        })
+        
     };
 
     updateEmployee = async (req, res) => {
