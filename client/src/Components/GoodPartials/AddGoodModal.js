@@ -111,7 +111,6 @@ class AddGoodModal extends Component {
         }
         this.finishUpImage = true;
     }
-
     async importGood(e) {
         // Ngăn chuyển trang
 
@@ -180,8 +179,8 @@ class AddGoodModal extends Component {
         // Thêm vào redux
         var dataRedux = {
             _id: {
-                productID: this.generatedID,
-                importDate: document.querySelector('input[name="importDate"]').value,
+                productID: this.generatedID.toString(),
+                importDate: document.querySelector('input[name="importDate"]').value + 'T00:00:00.000+00:00',
                 storeID: this.props.infoUser.email,
             },
             name: document.querySelector('input[name="goodName"]').value,
@@ -189,7 +188,7 @@ class AddGoodModal extends Component {
             remain: document.querySelector('input[name="goodQuantity"]').value,
             importPrice: document.querySelector('input[name="originalPrice"]').value,
             sellPrice: document.querySelector('input[name="sellPrice"]').value,
-            expires: document.querySelector('input[name="expiredDate"]').value,
+            expires: document.querySelector('input[name="expiredDate"]').value + 'T00:00:00.000+00:00',
             imgUrl: this.imgUrl,
             unit: document.querySelector('input[name="unit"]').value,
             typeIDList: typeSet,
