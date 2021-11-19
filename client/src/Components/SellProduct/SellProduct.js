@@ -244,7 +244,6 @@ class SellProduct extends Component {
                                                     #
                                                 </Grid>
                                                 <Grid item md={1} sm={1}>
-
                                                 </Grid>
                                                 <Grid item md={4} sm={4}>
                                                     Name

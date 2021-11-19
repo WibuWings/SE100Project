@@ -8,19 +8,25 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import {BiCaretDown} from 'react-icons/bi'
+import { useDispatch } from 'react-redux';
 
-const options = ['Day', 'Weak', 'Month', 'Year'];
+const options = ['Weak', 'Last Weak','Month', 'Last Month', 'Year', 'Last Year'];
 
 export default function SplitButton() {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
+  const dispatch = useDispatch()
   const [selectedIndex, setSelectedIndex] = React.useState(1);
 
   const handleClick = () => {
     console.info(`You clicked ${options[selectedIndex]}`);
   };
 
-  const handleMenuItemClick = (event, index) => {
+  const handleMenuItemClick = (event, index, option) => {
+    dispatch({
+      type: "TYPE_TIME_DASHBOARD",
+      typeDashboard: option,
+    })
     setSelectedIndex(index);
     setOpen(false);
   };
@@ -74,7 +80,7 @@ export default function SplitButton() {
                     <MenuItem
                       key={option}
                       selected={index === selectedIndex}
-                      onClick={(event) => handleMenuItemClick(event, index)}
+                      onClick={(event) => handleMenuItemClick(event, index, option)}
                     >
                       {option}
                     </MenuItem>

@@ -4,7 +4,7 @@ import { Container, Grid } from '@mui/material';
 import { Typography } from '@mui/material';
 import { DiApple } from 'react-icons/di'
 import AppWebsiteVisits from './Statistic';
-
+import DaiLyMoneyTracking from './DaiLyMoneyTracking';
 
 class DashBoard extends Component {
 
@@ -23,7 +23,7 @@ class DashBoard extends Component {
 
     render() {
         return (
-            <div id="scroll-bar" className="dashboard" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
+            <div id="scroll-bar" className="dashboard" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh'}}>
                 <Container style={{ marginTop: '40px' }} maxWidth="xl">
                     <Grid container spacing={3}>
                         <Grid className="dashboard-item" item md={3} sm={12} >
@@ -72,6 +72,9 @@ class DashBoard extends Component {
                         </Grid>
                         <Grid className="dashboard-item" item md={12} sm={12} >
                             <AppWebsiteVisits></AppWebsiteVisits>
+                        </Grid>
+                        <Grid item md={12} sm={12}>
+                            <DaiLyMoneyTracking></DaiLyMoneyTracking>
                         </Grid>
                     </Grid>
                 </Container>

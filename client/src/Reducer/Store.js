@@ -49,7 +49,7 @@ import typeByDateReducer from './RecieptManager/TypeByDate';
 import statusSelectAllReducer from './RecieptManager/StatusSelectAll'
 import listRecieptDeleteReducer from './RecieptManager/ListRecieptDelete';
 import searchReducer from './RecieptManager/SearchReducer';
-
+import typeTimeDashboard from './Dashboard/TypeTimeDashboard';
 
 var redux = require('redux');
 
@@ -99,6 +99,7 @@ const allReducers = redux.combineReducers({
     typeProduct: typeProductReducer,
     chooseTypeProduct: chooseTypeProductReducer,
     alert: alertReducer,
+    //Hóa đơn
     shoppingBags: shoppingBagsReducer,
     statusShowHistoryReciept: statusShowHistoryReciept,
     listReciept: listRecieptReducer,
@@ -109,6 +110,8 @@ const allReducers = redux.combineReducers({
     statusSelectAll: statusSelectAllReducer,
     listRecieptDelete: listRecieptDeleteReducer,
     search: searchReducer,
+    //Dashboard
+    typeTimeDashboard: typeTimeDashboard,
 })
 
 

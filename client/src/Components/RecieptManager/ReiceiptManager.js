@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Grid, Button } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import CollapsibleTable from './TableReciept'
 import StatusReceiptType from './StatusReceiptType';
 import DateReciept from './DateReciept';
