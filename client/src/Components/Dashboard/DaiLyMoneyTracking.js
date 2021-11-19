@@ -27,11 +27,9 @@ function DaiLyMoneyTracking(props) {
             data = data.replace(/\s/g, "");
             data = data.split("/");
             if (data[0] == day && data[1] == month && data[2] == year) {
-                console.log(data)
                 return value
             }
         })
-        console.log(arrListReciept)
         setDailiListReciept(arrListReciept)
     }, [value])
 
@@ -54,11 +52,14 @@ function DaiLyMoneyTracking(props) {
                         dailyListReciept.map(value => (
                             <li style={{ borderBottom: '1px #0000004d solid', marginBottom: '5px', paddingBottom: '5px' }}>
                                 <Grid container spacing={2}>
-                                    <Grid item md={8}>
+                                    <Grid item sm={6} md={6}>
                                         <div>{value.deleted? "Hủy hóa đơn" : "Thành công"}</div>
                                         <div style={{ fontWeight: '700', color: value.deleted? "red" : "green"}}>{value.deleted? "-" : "+"} {value.totalFinalMoney}</div>
                                     </Grid>
-                                    <Grid style={{ display: 'flex', justifyContent: 'center' }} item md={4}>
+                                    <Grid style={{ display: 'flex', justifyContent: 'center' }} item sm={6} md={3}>
+                                        <div style={{ color: '#00000075', paddingLeft: '10px', fontSize: '1rem' }}>{value.name}</div>
+                                    </Grid>
+                                    <Grid style={{ display: 'flex', justifyContent: 'center' }} item sm={6} md={3}>
                                         <div style={{ color: '#00000075', paddingLeft: '10px', fontSize: '1rem' }}>{value.time}</div>
                                     </Grid>
                                 </Grid>

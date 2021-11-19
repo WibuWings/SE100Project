@@ -69,22 +69,91 @@ export default function AppWebsiteVisits() {
     if (type === 'Weak') {
       // Weak
       if (nowTime.getDay() === 0) {
-
-      } else {
-        for (let i = 0; i < nowTime.getDay(); i++) {
-          arrCurrentWeak.push((nowTime.getDate() - i) + " " + currentMonth + " " + nowTime.getFullYear())
+        //Xử lý nếu CN từ ngày 7 trở lên
+        if (nowTime.getDate() >= 7) {
+          for (let i = 0; i < 7; i++) {
+            arrCurrentWeak.push((nowTime.getDate() - i) + " " + currentMonth + " " + nowTime.getFullYear())
+          }
+          return arrCurrentWeak
         }
-        return arrCurrentWeak
+        //NGƯỢC LẠI
+        else {
+          for (let i = 0; i < nowTime.getDate(); i++) {
+            arrCurrentWeak.push((nowTime.getDate() - i) + " " + currentMonth + " " + nowTime.getFullYear())
+          }
+          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
+          for (let i = 0; i < 7 - nowTime.getDate(); i++) {
+            arrCurrentWeak.push((maxDayInLastMonth - i) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
+          }
+          return arrCurrentWeak
+        }
+      } else {
+        if (nowTime.getDate() >= nowTime.getDay()) {
+          for (let i = 0; i < nowTime.getDay(); i++) {
+            arrCurrentWeak.push((nowTime.getDate() - i) + " " + currentMonth + " " + nowTime.getFullYear())
+          }
+          console.log(arrCurrentWeak)
+          return arrCurrentWeak
+        } else {
+          for (let i = 0; i < nowTime.getDate(); i++) {
+            arrCurrentWeak.push((nowTime.getDate() - i) + " " + currentMonth + " " + nowTime.getFullYear())
+          }
+          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
+          for (let i = 0; i < nowTime.getDay() - nowTime.getDate(); i++) {
+            arrCurrentWeak.push((maxDayInLastMonth - i) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
+          }
+          console.log(arrCurrentWeak)
+          return arrCurrentWeak
+        }
       }
+
+      //////LAST WEAK // 
     } else {
       // Last Weak
       if (nowTime.getDay() === 0) {
-
-      } else {
-        for (let i = 0; i < 7; i++) {
-          arrLastWeak.push((nowTime.getDate() - i - nowTime.getDay()) + " " + currentMonth + " " + nowTime.getFullYear())
+        if (nowTime.getDate() >= 14) {
+          for (let i = 0; i < 7; i++) {
+            arrCurrentWeak.push((nowTime.getDate() - i - 7) + " " + currentMonth + " " + nowTime.getFullYear())
+          }
+          return arrCurrentWeak
+        } else {
+          for (let i = 0; i < nowTime.getDate() - 7; i++) {
+            arrCurrentWeak.push((nowTime.getDate() - 7 - i) + " " + currentMonth + " " + nowTime.getFullYear())
+          }
+          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
+          for (let i = 0; i < 14 - nowTime.getDate(); i++) {
+            arrCurrentWeak.push((maxDayInLastMonth - i) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
+          }
+          return arrCurrentWeak
         }
-        return arrLastWeak
+      }
+      else {
+        //
+        if (nowTime.getDate() - nowTime.getDay() >= 7) {
+          for (let i = 0; i < 7; i++) {
+            arrLastWeak.push((nowTime.getDate() - i - nowTime.getDay()) + " " + currentMonth + " " + nowTime.getFullYear())
+          }
+          return arrLastWeak
+        } else if (nowTime.getDate() <= nowTime.getDay()) {
+          let a = nowTime.getDay() - nowTime.getDate();
+          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
+          for(let i = 0;i< 7; i++) {
+            arrLastWeak.push((maxDayInLastMonth - i - a) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
+          }
+          console.log(arrLastWeak)
+          return arrLastWeak
+        }
+        else {
+          for (let i = 0; i < nowTime.getDate() - nowTime.getDay(); i++) {
+            arrCurrentWeak.push((nowTime.getDate() - i - nowTime.getDay()) + " " + currentMonth + " " + nowTime.getFullYear())
+          }
+          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
+          for (let i = 0; i < 7 - (nowTime.getDate() - nowTime.getDay()); i++) {
+            arrCurrentWeak.push((maxDayInLastMonth - i) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
+          }
+          console.log(arrCurrentWeak)
+          return arrCurrentWeak
+        }
       }
     }
   }
@@ -276,6 +345,8 @@ export default function AppWebsiteVisits() {
 
   }
 
+
+  ////// YEAR
   const DateInYear = (type) => {
     let arrDoanhThu = []
     let arrTienGoc = []
