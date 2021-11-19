@@ -153,17 +153,23 @@ class Printf extends React.PureComponent {
                     remain: this.props.shoppingBags[i].product.remain - this.props.shoppingBags[i].quantity,
                 }
               }
-            console.log(i, data);
             axios.put(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Update success", i);
+                // Xử lý ở redux
+                const dataRedux = data.product;
+                this.props.decreaseRemainProduct(dataRedux);
             })
             .catch(err => {
                 console.log(err);
             })
           }
+          
+          
           this.props.resetShoppingBag();
         }
+
+
         
     }
 
@@ -279,7 +285,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
           type: "CHANGE_LOGIN_STATUS",
       });
-  },
+    },
+    decreaseRemainProduct: (data) => {
+      dispatch({
+          type: "DECREASE_REMAIN_PRODUCT",
+          data: data,
+      });
+    },
   }
 }
 

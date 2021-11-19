@@ -60,6 +60,26 @@ const listProductInitialState = [
                 return {
                     state: newState
                 }
+            case "DECREASE_REMAIN_PRODUCT": 
+            {
+                var newState = [];
+                for(var i = 0 ; i < state.state.length; i++)
+                {
+                    if(state.state[i]._id.productID != action.data._id.productID)
+                    {
+                        newState.push(state.state[i]);
+                    }
+                    else 
+                    {
+                        var decreaseVal = state.state[i];
+                        decreaseVal.remain = action.data.remain;
+                        newState.push(decreaseVal);
+                    }
+                }
+                return {
+                    state: newState
+                }
+            }
             default:
                 return state
         }
