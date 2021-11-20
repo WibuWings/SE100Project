@@ -3,11 +3,11 @@ import { Typography } from '@mui/material';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { useSelector } from 'react-redux'
 
-
 function TotalMoney(props) {
     const typeHeaderDashboard = useSelector(state => state.typeHeaderDashboard);
     const listReciept = useSelector(state => state.listReciept)
     const [totalMoney, setTotalMoney] = React.useState('')
+
     let nowTime = new Date()
 
     React.useEffect(() => {
@@ -73,7 +73,8 @@ function TotalMoney(props) {
             <div className="dashboard-item-img" style={{ marginBottom: '30px' }}>
                 <RiMoneyDollarCircleFill className="dashboard-item-icon"></RiMoneyDollarCircleFill>
             </div>
-            <Typography style={{ marginBottom: '10px' }} variant="h5">{totalMoney.toLocaleString()} VNĐ</Typography>
+            <Typography style={{ marginBottom: '10px' }} variant="h6">{totalMoney.toLocaleString()} VNĐ  
+            </Typography>
             <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
                 Total money
             </Typography>
