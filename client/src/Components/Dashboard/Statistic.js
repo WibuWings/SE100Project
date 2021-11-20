@@ -116,7 +116,16 @@ export default function AppWebsiteVisits() {
             arrCurrentWeak.push((nowTime.getDate() - i - 7) + " " + currentMonth + " " + nowTime.getFullYear())
           }
           return arrCurrentWeak
-        } else {
+        } else if (nowTime.getDate() <= 7) {
+          let a = 7 - nowTime.getDate();
+          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
+          for (let i = 0; i < 7; i++) {
+            arrLastWeak.push((maxDayInLastMonth - i - a) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
+          }
+          console.log(arrLastWeak)
+          return arrLastWeak
+        }
+        else {
           for (let i = 0; i < nowTime.getDate() - 7; i++) {
             arrCurrentWeak.push((nowTime.getDate() - 7 - i) + " " + currentMonth + " " + nowTime.getFullYear())
           }
@@ -137,7 +146,7 @@ export default function AppWebsiteVisits() {
         } else if (nowTime.getDate() <= nowTime.getDay()) {
           let a = nowTime.getDay() - nowTime.getDate();
           let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
-          for(let i = 0;i< 7; i++) {
+          for (let i = 0; i < 7; i++) {
             arrLastWeak.push((maxDayInLastMonth - i - a) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
           }
           console.log(arrLastWeak)
@@ -214,6 +223,7 @@ export default function AppWebsiteVisits() {
       //Month
       let data = new Date(year, month + 1, 0).getDate() + '/' + monthCurrent
       arrCurrentMonth.push(data)
+      console.log(arrCurrentMonth)
       return arrCurrentMonth
     } else {
       //Last month
@@ -232,7 +242,7 @@ export default function AppWebsiteVisits() {
       newArr = arrDate.filter(value => {
         let data = value.replace(/\s/g, "")
         data = value.split("/");
-        if (nowTime.getDate() > data[0]) {
+        if (nowTime.getDate() >= data[0]) {
           return value
         }
       })
@@ -241,6 +251,7 @@ export default function AppWebsiteVisits() {
         let a = nowTime.getDate() + "/" + month
         newArr.push(a)
       }
+      console.log(newArr)
       setTypeData(newArr)
     } else {
       setTypeData(arrDate)
@@ -248,7 +259,7 @@ export default function AppWebsiteVisits() {
 
 
     if (type === 'Month') {
-      for (let i = 1; i < nowTime.getDate() / 4; i++) {
+      for (let i = 1; i <= nowTime.getDate() / 4; i++) {
         let year = nowTime.getFullYear();
         let date = newArr[i].replace(/\s/g, "");
         date = date.split("/")
