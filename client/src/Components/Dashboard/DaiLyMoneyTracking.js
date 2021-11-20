@@ -49,12 +49,12 @@ function DaiLyMoneyTracking(props) {
             <div id="choses-product" style={{ backgroundColor: 'white', height: '500px', width: '80%', overflow: 'hidden', margin: 'auto', overflowY: 'scroll', marginTop: '20px' }}>
                 <ul style={{ textDecoration: 'none', listStyle: 'none', paddingLeft: '0' }}>
                     {
-                        dailyListReciept.map(value => (
+                        dailyListReciept.length !== 0 ? dailyListReciept.map(value => (
                             <li style={{ borderBottom: '1px #0000004d solid', marginBottom: '5px', paddingBottom: '5px' }}>
                                 <Grid container spacing={2}>
                                     <Grid item sm={6} md={6}>
-                                        <div>{value.deleted? "Hủy hóa đơn" : "Thành công"}</div>
-                                        <div style={{ fontWeight: '700', color: value.deleted? "red" : "green"}}>{value.deleted? "-" : "+"} {value.totalFinalMoney}</div>
+                                        <div>{value.deleted ? "Hủy hóa đơn" : "Thành công"}</div>
+                                        <div style={{ fontWeight: '700', color: value.deleted ? "red" : "green" }}>{value.deleted ? "-" : "+"} {value.totalFinalMoney}</div>
                                     </Grid>
                                     <Grid style={{ display: 'flex', justifyContent: 'center' }} item sm={6} md={3}>
                                         <div style={{ color: '#00000075', paddingLeft: '10px', fontSize: '1rem' }}>{value.name}</div>
@@ -64,7 +64,13 @@ function DaiLyMoneyTracking(props) {
                                     </Grid>
                                 </Grid>
                             </li>
-                        ))
+                        )) : (
+                            <div style={{ justifyContent: 'center', display: 'flex', marginTop: '100px', color: 'rgba(0,0,0,0.5)' }}>
+                                <h2>
+                                    You have not sold any invoices today
+                                </h2>
+                            </div>
+                        )
                     }
                 </ul>
             </div>

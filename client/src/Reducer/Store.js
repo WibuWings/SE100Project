@@ -50,6 +50,8 @@ import statusSelectAllReducer from './RecieptManager/StatusSelectAll'
 import listRecieptDeleteReducer from './RecieptManager/ListRecieptDelete';
 import searchReducer from './RecieptManager/SearchReducer';
 import typeTimeDashboard from './Dashboard/TypeTimeDashboard';
+import typeHeaderDashboard from './Dashboard/TypeHeaderDashboard'
+
 
 var redux = require('redux');
 
@@ -112,6 +114,7 @@ const allReducers = redux.combineReducers({
     search: searchReducer,
     //Dashboard
     typeTimeDashboard: typeTimeDashboard,
+    typeHeaderDashboard: typeHeaderDashboard,
 })
 
 
