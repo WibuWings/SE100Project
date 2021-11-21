@@ -65,6 +65,18 @@ class UnShiftEmployee extends Component {
         })
   }
 
+  findShift(shiftID) {
+      var shifts= this.props.listShift;
+        for(var i = 0 ; i < shifts.length ; i++)
+        {
+            if(shifts[i]._id.shiftID == shiftID)
+            {
+                return true;
+            }
+        }
+        return false;
+  }
+
   getShiftNameAndTime(shiftID)
   {
       var shifts= this.props.listShift;
@@ -154,7 +166,8 @@ class UnShiftEmployee extends Component {
                         {
                           this.props.nextWeekTimeKeeping.map((item) =>
                           this.findEmployeeNameByID(item._id.employee._id.employeeID) == false 
-                          // || this.findEmployeeNameByID(item.alternativeEmployee._id.employeeID) == false 
+                          // || this.findEmployeeNameByID(item.alternativeEmployee._id.employeeID) == false
+                          || this.findShift(item._id.shiftType._id.shiftID) == false
                           ? (null) :
                           <TableRow
                               style={{

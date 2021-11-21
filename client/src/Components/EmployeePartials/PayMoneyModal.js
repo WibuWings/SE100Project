@@ -98,9 +98,31 @@ class PayEmployeeModal extends Component {
     }
 
     payEmployee(){
-        alert("Confirm password");
+        // alert("Confirm password");
         // viết api để trả lương ở đây
-        this.props.changePayEmployeeStatus();
+        // this.props.changePayEmployeeStatus();
+        // Thử api
+        const data = {
+            token: localStorage.getItem('token'),
+            updatedTimeKeeping: {
+                _id: this.props.listTimeKeeper[0]._id,
+                isPaidSalary: true,
+            }
+        };
+        console.log("tính lương", data);
+        axios.put(`http://localhost:5000/api/employee/time-keeping`, data)
+            .then(res => {
+                console.log("Update success");
+                alert('Đã update thành công sản phẩm');
+                
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+
+        // Cập nhật redux trạng thái trả lương nhiều cái cùng lúc
+
     }
     
     render() {
@@ -150,15 +172,20 @@ class PayEmployeeModal extends Component {
                                                         this.props.listTimeKeeper.map((timeKeeper)=>
                                                             (
                                                             <TableRow>
-                                                                <TableCell className={classes.goodTable_Cell}>{timeKeeper.realDate}</TableCell>
+                                                                <TableCell className={classes.goodTable_Cell}>
+                                                                    {timeKeeper._id.realDate.substring(0,timeKeeper._id.realDate.indexOf('T') )}
+                                                                </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.dateInWeek}</TableCell>
-                                                                <TableCell className={classes.goodTable_Cell}>{this.getShiftInforByID(timeKeeper._id.shiftType._id.shiftID)}</TableCell>
+                                                                <TableCell className={classes.goodTable_Cell}>
+                                                                    {timeKeeper._id.shiftType.name + " ("+ timeKeeper._id.shiftType.timeFrom + 
+                                                                    ' - '+  timeKeeper._id.shiftType.timeEnd +')'}
+                                                                </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.employee._id.employeeID}</TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
-                                                                    {this.getEmployeeFullNameByID(timeKeeper._id.employee._id.employeeID)}
+                                                                    {timeKeeper._id.employee.firstName + " " + timeKeeper._id.employee.lastName}
                                                                 </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
-                                                                    Salary
+                                                                    {timeKeeper.isPaidSalary.toString()}
                                                                 </TableCell>
                                                             </TableRow>
                                                             )
