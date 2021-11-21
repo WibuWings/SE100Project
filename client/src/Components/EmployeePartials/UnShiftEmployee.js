@@ -88,7 +88,7 @@ class UnShiftEmployee extends Component {
             return currentEmployee.firstName;
           }
       }
-      return "Can't get name";
+      return "This employee was sacked";
   }
 
   reload()
@@ -109,6 +109,19 @@ class UnShiftEmployee extends Component {
       this.openOption = true;
       alert("Ấn vào mở rồi")
       this.setState({change: !this.state.change});
+  }
+
+  findEmployeeNameByID(employeeID)
+  {
+      for(var i = 0 ; i < this.props.listEmployee.employees.length; i++)
+      {
+          var currentEmployee = this.props.listEmployee.employees[i];
+          if(currentEmployee._id.employeeID==employeeID)
+          {
+            return true;
+          }
+      }
+      return false;
   }
 
   render() {
@@ -139,7 +152,10 @@ class UnShiftEmployee extends Component {
                             <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
                         </TableRow>
                         {
-                          this.props.nextWeekTimeKeeping.map((item) => 
+                          this.props.nextWeekTimeKeeping.map((item) =>
+                          this.findEmployeeNameByID(item._id.employee._id.employeeID) == false 
+                          // || this.findEmployeeNameByID(item.alternativeEmployee._id.employeeID) == false 
+                          ? (null) :
                           <TableRow
                               style={{
                                 position: 'relative',

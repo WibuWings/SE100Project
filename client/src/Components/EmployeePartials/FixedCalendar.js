@@ -56,6 +56,8 @@ class FixedCalendar extends Component {
             alert(err)
         })
   }
+  
+
   render() {
     const { classes } = this.props;
     return (

@@ -276,7 +276,11 @@ class AddEmployeeModal extends Component {
             })
         // Thêm vào redux
         if(isAddOK)
+        {
             this.props.addEmployee(data.employee);
+            this.props.changeAddEmployeeStatus();
+        }
+            
         
     }
 
@@ -287,7 +291,7 @@ class AddEmployeeModal extends Component {
     addEmployee = () => {
         if(this.checkConstraint()==false) return;
         this.addEmployeeToDatabase();
-        this.props.changeAddEmployeeStatus();
+        
     }
     render() {
         return (
