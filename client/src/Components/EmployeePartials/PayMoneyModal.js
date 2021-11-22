@@ -68,7 +68,8 @@ class PayEmployeeModal extends Component {
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         }; 
-        console.log("listTimeKeeper", this.props.listTimeKeeper);
+        // console.log("listTimeKeeper", this.props.listTimeKeeper);
+        // console.log("this.props.employeeID", this.props.employeeID);
     }
 
     getShiftInforByID(shiftID)
@@ -170,6 +171,7 @@ class PayEmployeeModal extends Component {
                                                     </TableRow>
                                                     {
                                                         this.props.listTimeKeeper.map((timeKeeper)=>
+                                                        timeKeeper._id.employee._id.employeeID != this.props.employeeID.id ? (null) :
                                                             (
                                                             <TableRow>
                                                                 <TableCell className={classes.goodTable_Cell}>
@@ -220,7 +222,8 @@ const mapStateToProps = (state, ownProps) => {
         listTimeKeeper: state.listTimeKeeping,
         listShift: state.listShift,
         listEmployee: state.listEmployee,
-        infoUser: state.infoUser
+        infoUser: state.infoUser,
+        employeeID: state.currentEmployeeViewValue,
     }
 }
 

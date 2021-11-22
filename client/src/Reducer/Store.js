@@ -50,7 +50,7 @@ import statusSelectAllReducer from './RecieptManager/StatusSelectAll'
 import listRecieptDeleteReducer from './RecieptManager/ListRecieptDelete';
 import searchReducer from './RecieptManager/SearchReducer';
 import statusAddGoodReducer from './GoodManager/AddGoodStatus';
-
+import currentEmployeeViewValueReducer from './Employee/currentEmployeeViewValue';
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -77,6 +77,7 @@ const allReducers = redux.combineReducers({
     addEmployeeStatus: statusAddEmployeeReducer,
     payEmployeeStatus: statusPayEmployeeReducer,
     updateEmpoyeeStatus: statusUpdateEmployeeReducer,
+    currentEmployeeViewValue: currentEmployeeViewValueReducer,
     updateNextWeekTimeKeepingValue : updateNextWeekTimeKeepingValueReducer ,
     listShiftAssign: listShiftAssignReducer,
     listTimeKeeping: listTimeKeepingReducer,

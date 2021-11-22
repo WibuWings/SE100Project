@@ -77,6 +77,13 @@ class EmployeeMoreMenu extends Component {
     }
   }
 
+  viewEmployee()
+  {
+      console.log("this.props.data", this.props.data)
+      this.props.setIDView(this.props.data);
+      this.props.changePayEmployeeStatus();
+  }
+
   isOpen=false;
   render() {
     return (
@@ -118,7 +125,7 @@ class EmployeeMoreMenu extends Component {
             <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
           <MenuItem sx={{ color: 'text.secondary' }}
-            onClick={()=> this.props.changePayEmployeeStatus()}
+            onClick={()=> this.viewEmployee()}
           >
             <ListItemIcon>
               <GiPayMoney size={24}/> 
@@ -168,6 +175,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch({
           type: "DELETE_EMPLOYEE_SACKED",
           data: data
+        });
+      },
+      setIDView: (id) => {
+        dispatch({
+          type: "SET_ID_EMPLOYEE",
+          id: id
         });
       }
   }
