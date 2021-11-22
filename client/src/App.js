@@ -32,6 +32,8 @@ class App extends Component {
               this.props.updateShiftTypes(res.data.data.shiftTypes)
               this.props.changeLoginStatus();
               this.props.getEmployee(res.data.data.employees);
+              // Phi
+              this.props.getTimeKeeping(res.data.data.timeKeeping);
             } else {
               this.props.setRoleEmployee()
               localStorage.setItem('token', res.data.token);
@@ -138,6 +140,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "EMPLOYEE_ROLE",
       });
+    },
+    getTimeKeeping: (data) => {
+      dispatch({
+        type: "GET_TIMEKEEPER",
+        data: data
+      });  
     },
   }
 }

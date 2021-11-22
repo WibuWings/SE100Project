@@ -98,6 +98,10 @@ class PayEmployeeModal extends Component {
         return "Can't get name";
     }
 
+    exit() {
+        this.props.changePayEmployeeStatus();  
+    }
+
     payEmployee(){
         // alert("Confirm password");
         // viết api để trả lương ở đây
@@ -121,7 +125,7 @@ class PayEmployeeModal extends Component {
                 console.log(err);
             })
 
-
+        this.props.changePayEmployeeStatus();    
         // Cập nhật redux trạng thái trả lương nhiều cái cùng lúc
 
     }
@@ -196,9 +200,16 @@ class PayEmployeeModal extends Component {
                                                 </TableHead>
                                             </Table>
                                     </TableContainer>
-                                    <Grid item md={3}
+                                    <Grid item md={12}
                                         className='input-item'
+                                        style ={{
+                                            display: 'flex',
+                                            justifyContent: 'space-evenly'
+                                        }}
                                     >
+                                        <Button variant="contained" onClick={() => this.exit()}>
+                                            Exit
+                                        </Button>
                                         <Button variant="contained" onClick={() => this.payEmployee()}>
                                             Pay employee
                                         </Button>
