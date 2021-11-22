@@ -51,6 +51,10 @@ import listRecieptDeleteReducer from './RecieptManager/ListRecieptDelete';
 import searchReducer from './RecieptManager/SearchReducer';
 import statusAddGoodReducer from './GoodManager/AddGoodStatus';
 import currentEmployeeViewValueReducer from './Employee/currentEmployeeViewValue';
+import typeTimeDashboard from './Dashboard/TypeTimeDashboard';
+import typeHeaderDashboard from './Dashboard/TypeHeaderDashboard'
+
+
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -101,6 +105,7 @@ const allReducers = redux.combineReducers({
     chooseTypeProduct: chooseTypeProductReducer,
     statusUpdateType: statusUpdateTypeReducer,
     alert: alertReducer,
+    //Hóa đơn
     shoppingBags: shoppingBagsReducer,
     statusShowHistoryReciept: statusShowHistoryReciept,
     listReciept: listRecieptReducer,
@@ -111,6 +116,9 @@ const allReducers = redux.combineReducers({
     statusSelectAll: statusSelectAllReducer,
     listRecieptDelete: listRecieptDeleteReducer,
     search: searchReducer,
+    //Dashboard
+    typeTimeDashboard: typeTimeDashboard,
+    typeHeaderDashboard: typeHeaderDashboard,
 })
 
 

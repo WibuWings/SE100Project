@@ -20,6 +20,7 @@
     width: 100%;
     padding-top: 30px;
     padding-bottom: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 .dashboard-item-img{
@@ -94,3 +95,6 @@
     z-index: 200;
 }
 
+.css-dr3dyz-MuiButtonGroup-root.button-group-customize{
+    margin: 0 !important;
+}

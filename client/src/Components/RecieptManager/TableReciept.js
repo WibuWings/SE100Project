@@ -542,7 +542,7 @@ export default function CollapsibleTable() {
     }, [typeReciept, typeByDate, listReciept, statusSelectAll, search])
 
     return (
-        <TableContainer style={{overflowX: 'hidden'}} component={Paper}>
+        <TableContainer style={{overflowX: 'hidden',  boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow style={{ backgroundColor: 'black', color: 'white' }}>
