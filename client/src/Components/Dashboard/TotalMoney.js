@@ -3,11 +3,14 @@ import { Typography } from '@mui/material';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { useSelector } from 'react-redux'
 
+
+
 function TotalMoney(props) {
     const typeHeaderDashboard = useSelector(state => state.typeHeaderDashboard);
     const listReciept = useSelector(state => state.listReciept)
     const [totalMoney, setTotalMoney] = React.useState('')
 
+    // console.log("ListReceipt", listReciept);
     let nowTime = new Date()
 
     React.useEffect(() => {
