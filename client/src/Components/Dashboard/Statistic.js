@@ -417,10 +417,8 @@ export default function AppWebsiteVisits() {
         listReciept.map(value => {
           let valueDate = value.date.replace(/\s/g, "")
           valueDate = valueDate.split("/")
-          if (item[0] == valueDate[0] || item[1] == valueDate[1] || item[2] == value[2]) {
-            if (!value.deleted) {
+          if (item[0] === valueDate[0] && item[1] === valueDate[1] && item[2] === valueDate[2]) {
               moneyCurrent += value.totalFinalMoney
-            }
           }
         })
       })
@@ -430,13 +428,15 @@ export default function AppWebsiteVisits() {
         listReciept.map(value => {
           let valueDate = value.date.replace(/\s/g, "")
           valueDate = valueDate.split("/")
-          if (item[0] == valueDate[0] || item[1] == valueDate[1] || item[2] == value[2]) {
-            if (!value.deleted) {
+          if (item[0] === valueDate[0] && item[1] === valueDate[1] && item[2] === valueDate[2]) {
               moneyLast += value.totalFinalMoney
-            }
           }
         })
       })
+      console.log(moneyLast)
+      console.log(arrLast)
+      console.log(moneyLast)
+      console.log(arrCurrent)
       if (moneyLast == 0 && moneyCurrent == 0) {
         setGrowth('(+0%) than Last Weak')
       } else if (moneyLast == 0) {

@@ -235,10 +235,10 @@ class SellProduct extends Component {
                         </Grid>
                         <Grid item lg={4} md={12}>
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden', overflowX: 'hidden' }}>
-                                <div id="choses-product" style={{ backgroundColor: '#ebebeb', height: '60%', margin: '10px', overflowY: 'scroll', overflowX: 'hidden' }} >
+                                <div id="choses-product" style={{ backgroundColor: '#e0e0e0', height: '60%', margin: '10px', overflowY: 'scroll', overflowX: 'hidden' }} >
                                     <Grid sty container spacing={0}>
                                         {/* Table */}
-                                        <Grid item className="customizeTable" style={{ backgroundColor: 'rgba(20,20,20,0.4)', alignContent: 'center', justifyContent: 'center', borderBottom: '2px solic black' }} md={12} sm={12}>
+                                        <Grid item className="customizeTable" style={{ backgroundColor: '#bdbdbd', alignContent: 'center', justifyContent: 'center', borderBottom: '2px solic black' }} md={12} sm={12}>
                                             <Grid style={{ textAlign: 'center', alignItems: 'center', justifyItems: 'center', fontWeight: 'bold' }} container spacing={0}>
                                                 <Grid item md={1} sm={1}>
                                                     #
