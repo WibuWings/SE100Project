@@ -69,13 +69,9 @@ function ProductStatis(props) {
     }, [typeHeaderDashboard])
 
     return (
-        <div className="dashboard-css"
-            style={{
-                backgroundColor: 'rgb(208, 242, 255)'
-            }}
-        >
-            <div className="dashboard-item-img" style={{ marginBottom: '30px' }}>
-                <RiMoneyDollarCircleFill className="dashboard-item-icon"></RiMoneyDollarCircleFill>
+        <div className="dashboard-css imported-good">
+            <div className="dashboard-item-img imported-good" style={{ marginBottom: '30px' }}>
+                <RiMoneyDollarCircleFill className="dashboard-item-icon imported-good"></RiMoneyDollarCircleFill>
             </div>
             <Typography style={{ marginBottom: '10px' }} variant="h6">{totalMoney.toLocaleString()} VNĐ  
             </Typography>

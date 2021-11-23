@@ -2,6 +2,8 @@ import React from 'react';
 import { Typography } from '@mui/material';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { useSelector } from 'react-redux'
+import { BsCashCoin } from "react-icons/bs";
+import { IoCashSharp } from "react-icons/io5";
 
 function calculateTime(timeFrom, timeEnd)
 {
@@ -23,7 +25,7 @@ function calculateTime(timeFrom, timeEnd)
         minuteEnd += 60;
     }
 
-    return timeDiff + (minuteEnd - minuteFrom) / 60.0;
+    return Math.round(timeDiff + (minuteEnd - minuteFrom) / 60.0);
 }
 
 function calculateSalary(shift){
@@ -43,80 +45,127 @@ function SalaryStats(props) {
     let nowTime = new Date();
 
     React.useEffect(() => {
-        let salary = 0;
+        
         let money = 0;
         let currentMonth = nowTime.getMonth() + 1;
 
         console.log("listTimeKeeping",listTimeKeeping )
-        console.log(calculateSalary(listTimeKeeping[0]));
+        // if(listTimeKeeping.length>0)
+        //     console.log(calculateSalary(listTimeKeeping[0]));
 
+        
         if (typeHeaderDashboard == 'Today') {
-            listReciept.map(value => {
-                let date = value.date.replace(/\s/g, "");
-                date = date.split("/");
-                if (date[0] == nowTime.getDate() && date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
-                    if(!value.deleted) {
-                        money += value.totalFinalMoney
-                    }
+            let salary = 0;
+            for(var i = 0 ; i < listTimeKeeping.length; i++)
+            {
+                var realDate = listTimeKeeping[i]._id.realDate.substring(0,listTimeKeeping[i]._id.realDate.indexOf('T'));
+                var date = realDate.split('-');
+                console.log(date);
+                console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
+                if (date[2] == nowTime.getDate() - 1 && date[1] == currentMonth && date[0] == nowTime.getFullYear()) {
+                    salary += calculateSalary(listTimeKeeping[i])
                 }
-            })
-            setTotalMoney(money)
+            }
+            setTotalSalary(salary);
+            // listReciept.map(value => {
+            //     let date = value.date.replace(/\s/g, "");
+            //     date = date.split("/");
+            //     if (date[0] == nowTime.getDate() && date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
+            //         if(!value.deleted) {
+            //             money += value.totalFinalMoney
+            //         }
+            //     }
+            // })
+            // setTotalMoney(money)
         } else if (typeHeaderDashboard == 'Yesterday') {
-            listReciept.map(value => {
-                let date = value.date.replace(/\s/g, "");
-                date = date.split("/");
-                if (date[0] == nowTime.getDate() - 1 && date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
-                    if(!value.deleted){
-                        money += value.totalFinalMoney
-                    }
+            let salary = 0;
+            for(var i = 0 ; i < listTimeKeeping.length; i++)
+            {
+                var realDate = listTimeKeeping[i]._id.realDate.substring(0,listTimeKeeping[i]._id.realDate.indexOf('T'));
+                var date = realDate.split('-');
+                console.log(date);
+                console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
+                if (date[2] == nowTime.getDate() - 2 && date[1] == currentMonth && date[0] == nowTime.getFullYear()) {
+                    salary += calculateSalary(listTimeKeeping[i])
                 }
-            })
-            setTotalMoney(money)
+            }
+            setTotalSalary(salary);
+            // listReciept.map(value => {
+            //     let date = value.date.replace(/\s/g, "");
+            //     date = date.split("/");
+            //     if (date[0] == nowTime.getDate() - 1 && date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
+            //         if(!value.deleted){
+            //             money += value.totalFinalMoney
+            //         }
+            //     }
+            // })
+            // setTotalMoney(money)
         } else if (typeHeaderDashboard == 'Month') {
-            listReciept.map(value => {
-                let date = value.date.replace(/\s/g, "");
-                date = date.split("/");
-                if (date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
-                    if(!value.deleted) {
-                        money += value.totalFinalMoney
-                    }
+            let salary = 0;
+            for(var i = 0 ; i < listTimeKeeping.length; i++)
+            {
+                var realDate = listTimeKeeping[i]._id.realDate.substring(0,listTimeKeeping[i]._id.realDate.indexOf('T'));
+                var date = realDate.split('-');
+                console.log(date);
+                console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
+                if (date[2] == nowTime.getDate() - 1 && date[1] == currentMonth && date[0] == nowTime.getFullYear()) {
+                    salary += calculateSalary(listTimeKeeping[i])
                 }
-            })
-            setTotalMoney(money)
+            }
+            setTotalSalary(salary);
+            // listReciept.map(value => {
+            //     let date = value.date.replace(/\s/g, "");
+            //     date = date.split("/");
+                
+            //     if (date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
+            //         if(!value.deleted) {
+            //             money += value.totalFinalMoney
+            //         }
+            //     }
+            // })
+            // setTotalMoney(money)
         } else if (typeHeaderDashboard == 'Year') {
-            listReciept.map(value => {
-                let date = value.date.replace(/\s/g, "");
-                date = date.split("/");
-                if (date[2] == nowTime.getFullYear()) {
-                    if(!value.deleted) {
-                        money += value.totalFinalMoney
-                    }
+            let salary = 0;
+            for(var i = 0 ; i < listTimeKeeping.length; i++)
+            {
+                var realDate = listTimeKeeping[i]._id.realDate.substring(0,listTimeKeeping[i]._id.realDate.indexOf('T'));
+                var date = realDate.split('-');
+                console.log(date);
+                console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
+                if (date[0] == nowTime.getFullYear()) {
+                    salary += calculateSalary(listTimeKeeping[i])
                 }
-            })
-            setTotalMoney(money)
+            }
+            setTotalSalary(salary);
+            // listReciept.map(value => {
+            //     let date = value.date.replace(/\s/g, "");
+            //     date = date.split("/");
+            //     if (date[2] == nowTime.getFullYear()) {
+            //         if(!value.deleted) {
+            //             money += value.totalFinalMoney
+            //         }
+            //     }
+            // })
+            // setTotalMoney(money)
         } else if (typeHeaderDashboard == 'All') {
-            listReciept.map(value => {
-                if(!value.deleted) {
-                    money += value.totalFinalMoney
-                }
-            })
-            setTotalMoney(money)
+            let salary = 0;
+            for(var i = 0 ; i < listTimeKeeping.length; i++)
+            {
+                salary += calculateSalary(listTimeKeeping[i])
+            }
+            setTotalSalary(salary);
         }
     }, [typeHeaderDashboard])
 
     return (
-        <div className="dashboard-css"
-            style={{
-                backgroundColor: 'rgb(255, 247, 205)'
-            }}
-        >
-            <div className="dashboard-item-img" style={{ marginBottom: '30px' }}>
-                <RiMoneyDollarCircleFill className="dashboard-item-icon"></RiMoneyDollarCircleFill>
+        <div className="dashboard-css sold-good">
+            <div className="dashboard-item-img sold-good" style={{ marginBottom: '30px'}}>
+                <IoCashSharp className="dashboard-item-icon sold-good"></IoCashSharp>
             </div>
-            <Typography style={{ marginBottom: '10px' }} variant="h6">{totalMoney.toLocaleString()} VNĐ  
+            <Typography style={{ marginBottom: '10px' }} variant="h6">{totalSalary.toLocaleString()} VNĐ  
             </Typography>
             <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-                Total money
+                Total salary
             </Typography>
         </div>
     );

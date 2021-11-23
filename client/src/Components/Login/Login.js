@@ -38,6 +38,7 @@ class Login extends Component {
                         this.props.updateShiftTypes(res.data.data.shiftTypes);
                         this.props.updateRecieptUser(res.data.data.receipts);
                         this.props.changeLoginStatus();
+                        this.props.getTimeKeeping(res.data.data.timeKeeping);
                         this.props.hideAlert();
                         this.props.showAlert(res.data.message, "success");
                         break;
@@ -74,6 +75,7 @@ class Login extends Component {
                             this.props.updateRecieptUser(res.data.data.receipts);
                             this.props.changeLoginStatus();
                             this.props.getEmployee(res.data.data.employees);
+                            this.props.getTimeKeeping(res.data.data.timeKeeping);
                             this.props.hideAlert();
                             this.props.showAlert(res.data.message, "success");
                             break;
@@ -291,6 +293,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 listReciept: data,
             })
         },
+        getTimeKeeping: (data) => {
+            dispatch({
+              type: "GET_TIMEKEEPER",
+              data: data
+            });  
+          },
     }
 }
 
