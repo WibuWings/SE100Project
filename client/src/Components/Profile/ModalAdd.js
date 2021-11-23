@@ -70,7 +70,6 @@ class ModalAdd extends Component {
         } else {
             this.timeFrom = hourse.toString() + ":" + minutes.toString() + " AM"
         }
-        console.log(this.timeFrom);
         this.setState({
             timeFrom: e,
         })
@@ -85,7 +84,6 @@ class ModalAdd extends Component {
         } else {
             this.timeTo = hourse.toString() + ":" + minutes.toString() + " AM"
         }
-        console.log(this.timeTo);
         this.setState({
             timeTo: e,
         })

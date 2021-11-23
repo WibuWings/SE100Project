@@ -461,18 +461,22 @@ export default function CollapsibleTable() {
     React.useEffect(() => {
         var list = typeReciept.length === 0 ? listReciept : listReciept.filter(value => {
             for (var i = 0; i < typeReciept.length; i++) {
-                if (typeReciept[i] === 'delete') {
-                    if (value.deleted) {
-                        return value;
-                    }
-                } else if (typeReciept[i] === 'return') {
-                    if (!value.deleted && value.isEdit) {
-                        return value;
-                    }
-                } else {
-                    if (!value.deleted && !value.isEdit) {
-                        return value;
-                    }
+                switch (typeReciept[i]) {
+                    case 'delete':
+                        if (value.deleted) {
+                            return value;
+                        }
+                        break;
+                    case 'return':
+                        if (!value.deleted && value.isEdit) {
+                            return value;
+                        }
+                        break;
+                    default:
+                        if (!value.deleted && !value.isEdit) {
+                            return value;
+                        }
+                        break;
                 }
             }
         })
@@ -525,7 +529,6 @@ export default function CollapsibleTable() {
             })
         }
 
-
         list.map(value => {
             listMAHD.push(value.MAHD)
         })
@@ -536,11 +539,8 @@ export default function CollapsibleTable() {
         }) : dispatch({
             type: "RESET_MAHD_RECIEPT"
         })
-
-
         setListRecieptReplace(list)
     }, [typeReciept, typeByDate, listReciept, statusSelectAll, search])
-
     return (
         <TableContainer style={{overflowX: 'hidden',  boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
             <Table aria-label="collapsible table">

@@ -28,8 +28,6 @@ class Login extends Component {
         this.props.setRole();
         await axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
-                console.log("thành công");
-                console.log(res.data);
                 switch (res.data.status) {
                     case 1:
                         localStorage.setItem('token', res.data.token);
@@ -64,7 +62,6 @@ class Login extends Component {
                 password: document.getElementById('password').value,
             })
                 .then(res => {
-                    console.log(res.data);
                     switch (res.data.status) {
                         case 1:
                             localStorage.setItem('token', res.data.token);

@@ -11,7 +11,7 @@ class Printf extends React.PureComponent {
     this.state = {
       percentDiscount: 0,
       infoReciept: [],
-      code: '', 
+      code: '',
       date: new Date(),
       MAHD: "HD" + this.makeCode(6),
     }
@@ -106,7 +106,7 @@ class Printf extends React.PureComponent {
         oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
       }
       await axios.post('http://localhost:5000/api/sell-product/add-reciept', {
-        email: this.props.infoUser.managerID? this.props.infoUser.managerID : this.props.infoUser.email,
+        email: this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email,
         token: localStorage.getItem('token'),
         data: data,
       })
@@ -140,7 +140,22 @@ class Printf extends React.PureComponent {
     return "  " + this.state.date.getDate() + " / " + month + " / " + this.state.date.getFullYear()
   }
 
+  componentDidMount() {
+    
+  }
+  
+
   render() {
+    const PrintBill = this.addReciept
+    document.onkeydown = function (e) {
+      switch (e.key.charCodeAt()) {
+        case 70:
+          PrintBill()
+          break;
+        default:
+          break;
+      }
+    }
     return (
       <div>
         <div style={{ margin: '0px' }} className="row">
@@ -187,7 +202,6 @@ class Printf extends React.PureComponent {
             <p onClick={() => this.props.changeStatusHistoryReciept()} style={{ cursor: 'pointer' }}>(*) Receipt history</p>
           </div>
         </div>
-              {console.log(this.props.shoppingBags)}
         {/* Ẩn đi */}
         <div style={{ display: 'none' }}>
           <ComponentToPrint MAHD={this.state.code} percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
@@ -243,9 +257,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     changeLoginStatus: () => {
       dispatch({
-          type: "CHANGE_LOGIN_STATUS",
+        type: "CHANGE_LOGIN_STATUS",
       });
-  },
+    },
   }
 }
 

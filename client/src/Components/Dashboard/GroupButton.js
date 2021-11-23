@@ -43,6 +43,12 @@ export default function SplitButton() {
     setOpen(false);
   };
 
+  React.useEffect(() => {
+    dispatch({
+      type: "RESET_TYPE_TIME_DASHBOARD"
+    })
+  }, [])
+
   return (
     <React.Fragment>
       <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">

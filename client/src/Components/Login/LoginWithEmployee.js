@@ -33,7 +33,6 @@ class LoginWithEmployee extends Component {
                 password: document.getElementById('password').value,
             })
                 .then(res => {
-                    console.log(res);
                     if (res.status === 200) {
                         localStorage.setItem('token', res.data.token);
                         this.props.updateProfile(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);
@@ -45,7 +44,6 @@ class LoginWithEmployee extends Component {
                     }
                 })
                 .catch(err => {
-                    console.log(err)
                     this.props.hideAlert();
                     this.props.showAlert("The email IS NOT registered or you entered the WRONG password.", "error");
                     return;

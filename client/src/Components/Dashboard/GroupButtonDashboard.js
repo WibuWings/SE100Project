@@ -23,9 +23,8 @@ export default function SplitButton() {
     };
 
     const handleMenuItemClick = (event, index, option) => {
-        console.log(option)
         dispatch({
-            type:"TYPE_HEADER_DASHBOARD",
+            type: "TYPE_HEADER_DASHBOARD",
             typeDashboard: option
         })
         setSelectedIndex(index);
@@ -43,6 +42,12 @@ export default function SplitButton() {
 
         setOpen(false);
     };
+
+    React.useEffect(() => {
+        dispatch({
+            type: "RESET_TYPE_HEADER_DASHBOARD"
+        })
+    }, [])
 
     return (
         <React.Fragment>

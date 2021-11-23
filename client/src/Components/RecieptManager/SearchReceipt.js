@@ -3,9 +3,7 @@ import { BiSearchAlt } from 'react-icons/bi'
 import { useDispatch , useSelector } from 'react-redux'
 
 function SearchReceipt(props) {
-    const search = useSelector(state => state.search)
     const dispatch = useDispatch();
-
 
     React.useEffect(() => {
         dispatch({

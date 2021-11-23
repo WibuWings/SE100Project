@@ -26,10 +26,8 @@ class Profile extends Component {
             token: localStorage.getItem('token'),
         })
             .then(res => {
-                console.log('Thành công')
             })
             .catch(err => {
-                console.log('Thất bại')
             })
     }
 

@@ -417,8 +417,11 @@ export default function AppWebsiteVisits() {
         listReciept.map(value => {
           let valueDate = value.date.replace(/\s/g, "")
           valueDate = valueDate.split("/")
-          if (item[0] === valueDate[0] && item[1] === valueDate[1] && item[2] === valueDate[2]) {
+          if (!value.deleted) {
+            if (item[0] == valueDate[0] && item[1] == valueDate[1] && item[2] == valueDate[2]) {
+              console.log(value)
               moneyCurrent += value.totalFinalMoney
+            }
           }
         })
       })
@@ -428,15 +431,14 @@ export default function AppWebsiteVisits() {
         listReciept.map(value => {
           let valueDate = value.date.replace(/\s/g, "")
           valueDate = valueDate.split("/")
-          if (item[0] === valueDate[0] && item[1] === valueDate[1] && item[2] === valueDate[2]) {
+          if (!value.deleted) {
+            if (item[0] == valueDate[0] && item[1] == valueDate[1] && item[2] == valueDate[2]) {
               moneyLast += value.totalFinalMoney
+            }
           }
         })
       })
-      console.log(moneyLast)
-      console.log(arrLast)
-      console.log(moneyLast)
-      console.log(arrCurrent)
+
       if (moneyLast == 0 && moneyCurrent == 0) {
         setGrowth('(+0%) than Last Weak')
       } else if (moneyLast == 0) {
@@ -444,7 +446,7 @@ export default function AppWebsiteVisits() {
       } else if (moneyCurrent == 0) {
         setGrowth('(+0%) than Last Weak')
       } else {
-        let percent = (moneyLast / moneyCurrent) * 100
+        let percent = (moneyCurrent / moneyLast) * 100
         if (percent >= 100) {
           setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Weak`)
         } else {
@@ -476,7 +478,7 @@ export default function AppWebsiteVisits() {
       } else if (moneyCurrent == 0) {
         setGrowth('(+0%) than Last Month')
       } else {
-        let percent = (moneyLast / moneyCurrent) * 100
+        let percent = (moneyCurrent / moneyLast) * 100
         if (percent >= 100) {
           setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Month`)
         } else {
@@ -507,7 +509,7 @@ export default function AppWebsiteVisits() {
       } else if (moneyCurrent == 0) {
         setGrowth('(+0%) than Last Year')
       } else {
-        let percent = (moneyLast / moneyCurrent) * 100
+        let percent = (moneyCurrent / moneyLast) * 100
         if (percent >= 100) {
           setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Year`)
         } else {

@@ -77,7 +77,7 @@ input::-webkit-inner-spin-button {
 @keyframes animationHistoryReceipt {
     from {
         transform: translateY(20%);
-        opacity: 0;
+        opacity: 0.5;
     } to {
         transform: translateY(0);
         opacity: 1;
