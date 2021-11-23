@@ -342,6 +342,10 @@ class EmployeeManager extends Component {
             })
     }
 
+    componentWillMount() {
+        document.title = 'Employee Manager'
+    }
+
     render() {
         const { classes } = this.props;
         return (

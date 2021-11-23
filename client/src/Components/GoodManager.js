@@ -143,6 +143,12 @@ class GoodManager extends Component {
     handleEditType() {
         this.props.changeEditTypeStatus();
     }
+
+    componentWillMount() {
+        document.title = 'Product Manager'
+    }
+
+
     render() {
         return (
             <div>
