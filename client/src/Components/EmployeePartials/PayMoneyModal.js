@@ -106,25 +106,28 @@ class PayEmployeeModal extends Component {
         // alert("Confirm password");
         // viết api để trả lương ở đây
         // this.props.changePayEmployeeStatus();
-        // Thử api
-        const data = {
-            token: localStorage.getItem('token'),
-            updatedTimeKeeping: {
-                _id: this.props.listTimeKeeper[0]._id,
-                isPaidSalary: true,
-            }
-        };
-        console.log("tính lương", data);
-        axios.put(`http://localhost:5000/api/employee/time-keeping`, data)
-            .then(res => {
-                console.log("Update success");
-                alert('Đã update thành công sản phẩm');
-                
-            })
-            .catch(err => {
-                console.log(err);
-            })
-
+        for(var i =0; i< this.props.listTimeKeeper.length; i++)
+        {
+            if(this.props.listTimeKeeper[i]._id.employee._id.employeeID != this.props.employeeID.id) continue;
+            // Thử api
+            const data = {
+                token: localStorage.getItem('token'),
+                updatedTimeKeeping: {
+                    _id: this.props.listTimeKeeper[i]._id,
+                    isPaidSalary: true,
+                }
+            };
+            axios.put(`http://localhost:5000/api/employee/time-keeping`, data)
+                .then(res => {
+                    console.log("Update success");
+                    alert('Đã update thành công sản phẩm');
+                    
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        
         this.props.changePayEmployeeStatus();    
         // Cập nhật redux trạng thái trả lương nhiều cái cùng lúc
 

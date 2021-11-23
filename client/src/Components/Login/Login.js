@@ -177,7 +177,14 @@ class Login extends Component {
         document.onkeydown = function (e) {
             switch (e.which) {
                 case 13:
-                    enterPress(e);
+                    try
+                    {
+                        enterPress(e);
+                    }
+                    catch(err) 
+                    {
+                        console.log("Alo lỗi mẹ rồi")
+                    }
                     break;
                 default:
                     break;

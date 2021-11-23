@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography } from '@mui/material';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { useSelector } from 'react-redux'
-
+import moment from 'moment';
 
 
 function TotalMoney(props) {
@@ -11,7 +11,9 @@ function TotalMoney(props) {
     const [totalMoney, setTotalMoney] = React.useState('')
 
     // console.log("ListReceipt", listReciept);
-    let nowTime = new Date()
+    let nowTime = new Date();
+
+    console.log("nowTime.getMonth",moment().subtract(24, 'days').format('l'));
 
     React.useEffect(() => {
         let money = 0;
