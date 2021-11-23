@@ -36,7 +36,6 @@ class Login extends Component {
                     resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) 
                 {
                     typeIDList.push(joinTypeInfor[j]._id.typeID);
-                    joinType = joinType + ' ' + this.getTypeNamebyTypeID(joinTypeInfor[j]._id.typeID);
                 }
             }
     
@@ -44,7 +43,6 @@ class Login extends Component {
                 {
                     ...resultProduct[i],
                     typeIDList: typeIDList,
-                    joinType: joinType
                 });
         }
         this.props.getProductToReducer(listProductInfor);

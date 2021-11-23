@@ -88,7 +88,7 @@ function SalaryStats(props) {
                 var date = realDate.split('-');
                 console.log(date);
                 console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
-                if (date[2] == nowTime.getDate() - 1 && date[1] == currentMonth && date[0] == nowTime.getFullYear()) {
+                if (date[1] == currentMonth && date[0] == nowTime.getFullYear()) {
                     salary += calculateSalary(listTimeKeeping[i])
                 }
             }

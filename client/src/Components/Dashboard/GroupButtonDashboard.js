@@ -76,12 +76,13 @@ export default function SplitButton() {
                     >
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
-                                <MenuList id="split-button-menu">
+                                <MenuList id="split-button-menu" style={{zIndex: 500}}>
                                     {options.map((option, index) => (
                                         <MenuItem
                                             key={option}
                                             selected={index === selectedIndex}
                                             onClick={(event) => handleMenuItemClick(event, index, option)}
+                                            style={{zIndex: 500}}
                                         >
                                             {option}
                                         </MenuItem>
