@@ -1,33 +1,6 @@
 
 const listShiftInitialState = [
-    {
-        description: "Ca 1",
-        from: "0:36 PM",
-        id: "V8GOL1",
-        to: "3:36 PM",
-        salary: 20000,
-    },
-    {
-        description: "Ca 2",
-        from: "0:36 PM",
-        id: "V8GOc1",
-        to: "3:36 PM",
-        salary: 20000,
-    },
-    {
-        description: "Ca 3",
-        from: "0:36 PM",
-        id: "V8sOL1",
-        to: "3:36 PM",
-        salary: 20000,
-    },
-    {
-        description: "Ca 4",
-        from: "0:36 PM",
-        id: "V8cOL1",
-        to: "3:36 PM",
-        salary: 20000,
-    }
+    
 ],
 
     listShiftReducer = (state = listShiftInitialState, action) => {
@@ -47,10 +20,12 @@ const listShiftInitialState = [
                 })
                 return state
             case "UPDATE_DATA_SHIFT_USER":
-                if (action.shiftTypes !== []){
+                if (action.shiftTypes.length !== 0){
                     state = action.shiftTypes
                 }
                 return state
+            case "RESET_SHIFT_USER":
+                return []
             default:
                 return state
         }

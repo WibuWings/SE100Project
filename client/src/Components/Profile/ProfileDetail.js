@@ -18,6 +18,25 @@ class ProfileDetail extends Component {
 
     SaveDetailsEmployee = async () => {
         // của employee tại đây
+        const data = {
+            token: localStorage.getItem('token'),
+            employee: {
+                _id: {
+                    employeeID: this.props.infoUser.employeeID,
+                    storeID: this.props.infoUser.managerID,
+                },
+                firstName: document.querySelector('input[name="firstName"]').value,
+                lastName: document.querySelector('input[name="lastName"]').value,
+            }
+        }
+        axios.put(`http://localhost:5000/api/employee`, data)
+            .then(res => {
+                this.props.hideAlert();
+                this.props.showAlert("Update success", "success");
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     SaveDetails = async () => {
@@ -202,26 +221,30 @@ class ProfileDetail extends Component {
                                     id="outlined-basic"
                                 />
                             </Grid>
-                            <Grid item md={6} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    disabled
-                                    label="EmployeeID"
-                                    defaultValue={this.props.infoUser.employeeID}
-                                    name="email"
-                                    variant="outlined"
-                                />
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    disabled
-                                    label="ManagerID"
-                                    defaultValue={this.props.infoUser.managerID}
-                                    name="email"
-                                    variant="outlined"
-                                />
-                            </Grid>
+                            {this.props.role ? null : (
+                                <Grid item md={6} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        disabled
+                                        label="EmployeeID"
+                                        defaultValue={this.props.infoUser.employeeID}
+                                        name="employeeID"
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                            )}
+                            {this.props.role ? null : (
+                                <Grid item md={6} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        disabled
+                                        label="ManagerID"
+                                        defaultValue={this.props.infoUser.managerID}
+                                        name="managerID"
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                            )}
                             <Grid item md={6} xs={12}>
                                 <TextField
                                     fullWidth
@@ -232,16 +255,18 @@ class ProfileDetail extends Component {
                                     variant="outlined"
                                 />
                             </Grid>
-                            <Grid item md={6} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    disabled
-                                    label="cardID"
-                                    defaultValue={this.props.infoUser.cardID}
-                                    name="email"
-                                    variant="outlined"
-                                />
-                            </Grid>
+                            {this.props.role ? null : (
+                                <Grid item md={6} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        disabled
+                                        label="cardID"
+                                        defaultValue={this.props.infoUser.cardID}
+                                        name="cardID"
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                            )}
                             {!this.props.role ? null : (
                                 <Grid item md={6} xs={12}>
                                     <TextField
@@ -356,36 +381,11 @@ class ProfileDetail extends Component {
                                     </TextField>
                                 </Grid>
                             )}
-                            {!this.props.role ? null : (
-                                <Grid item md={6} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label="Select district"
-                                        name="district"
-                                        defaultValue={this.props.infoUser.district}
-                                        value={this.state.nameDistrict}
-                                        onChange={(e) => this.changeDistrict(e)}
-                                        required
-                                        select
-                                        SelectProps={{ native: true }}
-                                        variant="outlined"
-                                    >
-                                        <option value="0">--Select district--</option>
-                                        {(this.props.district.length !== 0) ? this.props.district.map(item => {
-                                            return (
-                                                <option value={item.codename}>
-                                                    {item.name}
-                                                </option>
-                                            )
-                                        }) : null}
-                                    </TextField>
-                                </Grid>
-                            )}
                             <Grid item md={this.props.role ? 6 : 12} xs={12}>
                                 <TextField
                                     fullWidth
                                     label="Adress details"
-                                    defaultValue={this.props.infoUser.address}
+                                    defaultValue={this.props.role ? this.props.infoUser.address : this.props.infoUser.address1}
                                     name="address"
                                     required
                                     disabled={this.props.role ? false : true}

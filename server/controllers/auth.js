@@ -1,4 +1,4 @@
-const bcrypt = require("bcryptjs");// decode
+const bcrypt = require("bcryptjs"); // decode
 
 const Manager = require("../models/manager"); // db model
 const Store = require("../models/store"); //
@@ -15,7 +15,7 @@ const Coupon = require("../models/coupon");
 const Regulation = require("../models/regulation");
 const TimeKeeping = require("../models/timeKeeping");
 const NextWeekTimeKeeping = require("../models/nextWeekTimeKeeping");
-const {JWTAuthToken} = require("../helper/JWT");
+const { JWTAuthToken } = require("../helper/JWT");
 
 const MESSAGES = {
     SIGN_IN_SUCCESS: "Sign-in successfully.",
@@ -62,7 +62,9 @@ class Authentication {
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
                                         message: MESSAGES.SIGN_IN_SUCCESS,
-                                        token: JWTAuthToken({email:result.email}),
+                                        token: JWTAuthToken({
+                                            email: result.email,
+                                        }),
                                         email: result.email,
                                         _id: result._id,
                                         data,
@@ -70,11 +72,10 @@ class Authentication {
                                 );
                             });
                         } else {
-                            newManager.save()
-                            .then(result => {
+                            newManager.save().then((result) => {
                                 const newStore = new Store({
                                     _id: result.storeID,
-                                })
+                                });
                                 newStore.save();
 
                                 getAllData(result.email).then((data) => {
@@ -82,14 +83,16 @@ class Authentication {
                                         JSON.stringify({
                                             status: STATUS.SUCCESS,
                                             message: MESSAGES.SIGN_IN_SUCCESS,
-                                            token: JWTAuthToken({email:result.email}),
+                                            token: JWTAuthToken({
+                                                email: result.email,
+                                            }),
                                             email: req.body.email,
                                             _id: req.body.email,
                                             data,
                                         })
                                     );
                                 });
-                            })
+                            });
                         }
                     });
                 }
@@ -118,7 +121,7 @@ class Authentication {
                             JSON.stringify({
                                 status: STATUS.SUCCESS,
                                 message: MESSAGES.SIGN_IN_SUCCESS,
-                                token: JWTAuthToken({email: req.body.email}),
+                                token: JWTAuthToken({ email: req.body.email }),
                                 email: req.body.email,
                                 _id: req.body.email,
                                 data,
@@ -144,7 +147,7 @@ class Authentication {
 
         Manager.findOne({ _id: email })
             .exec()
-            .then((data) =>     {
+            .then((data) => {
                 if (data) {
                     throw new Error();
                 } else {
@@ -182,7 +185,9 @@ class Authentication {
                                     JSON.stringify({
                                         status: STATUS.SUCCESS,
                                         message: MESSAGES.SIGN_IN_SUCCESS,
-                                        token: JWTAuthToken({email: data.email}),
+                                        token: JWTAuthToken({
+                                            email: data.email,
+                                        }),
                                         email: data.email,
                                         _id: data.email,
                                         data: result,
@@ -234,7 +239,6 @@ class Authentication {
                         })
                     );
                 } else {
-
                     Manager.findOne({ email: email }).then((data) => {
                         if (data) {
                             res.send(
@@ -251,7 +255,7 @@ class Authentication {
                                 })
                             );
                         }
-                    })
+                    });
                 }
             })
             .catch((err) => {
@@ -262,14 +266,12 @@ class Authentication {
                     })
                 );
             });
-
     };
-    
+
     refreshUI = async (req, res) => {
         var decoded = res.locals.decoded;
 
         getAllData(decoded.email).then((data) => {
-            
             res.status(200).send(
                 JSON.stringify({
                     status: STATUS.SUCCESS,
@@ -281,17 +283,16 @@ class Authentication {
             );
         })
         .catch((err) => {
-            console.error(err);
             res.status(404).send(
                 JSON.stringify({
                     err,
                     status: STATUS.FAILURE,
                     message: MESSAGES.PASSWORD_OR_ACCOUNT_ERROR,
                 })
-            )
-        })
-    }
-    
+            );
+        });
+    };
+
     authSignInRegularEmployee = async (req, res) => {
         const username = req.body.email;
         const password = req.body.password;
@@ -304,7 +305,7 @@ class Authentication {
                     getAllDataEmployee(username).then((data) => {
                         res.status(200).send(
                             JSON.stringify({
-                                token: JWTAuthToken({_id: req.body.email}),
+                                token: JWTAuthToken({ _id: req.body.email }),
                                 _id: req.body.email,
                                 data,
                             })
@@ -322,75 +323,96 @@ class Authentication {
                     })
                 );
             });
-    }
-    
+    };
 }
 
 async function getAllData(email) {
-    const manager = await Manager.findOne({ email: email});
+    var newManager = await Manager.findOne({ email: email }).exec();
+    if (newManager) {
+        var manager = newManager;
+        var store = await Store.findOne({ _id: manager.storeID });
+        if (store == null) {
+            return manager;
+        }
 
-    const store = await Store.findOne({ _id: manager.storeID });
-    if (store == null) {
-        return manager;
+        var [
+            coupons,
+            employees,
+            products,
+            productTypes,
+            productJoinTypes,
+            revenues,
+            receipts,
+            returnProducts,
+            shiftAssigns,
+            shiftTypes,
+            regulation,
+            timeKeeping,
+            nextWeekTimeKeeping,
+        ] = await Promise.all([
+            Coupon.find({ "_id.storeID": store._id }).exec(),
+            Employee.find({ managerID: store._id }).exec(),
+            Product.find({ "_id.storeID": store._id }).exec(),
+            ProductType.find({ "_id.storeID": store._id }).exec(),
+            ProductJoinType.find({ "_id.storeID": store._id }).exec(),
+            Revenue.find({ "_id.storeID": store._id }).exec(),
+            Receipt.findWithDeleted({ "_id.storeID": store._id }).exec(),
+            ReturnProduct.find({ "_id.storeID": store._id }).exec(),
+            ShiftAssign.find({ "_id.storeID": store._id }).exec(),
+            ShiftType.find({ "_id.storeID": store._id }).exec(),
+            Regulation.find({ "_id.storeID": store._id }).exec(),
+            TimeKeeping.find({ "_id.storeID": store._id }).exec(),
+            NextWeekTimeKeeping.find({ "_id.storeID": store._id }).exec(),
+        ]);
+        return {
+            manager,
+            store,
+            employees,
+            coupons,
+            products,
+            productTypes,
+            productJoinTypes,
+            receipts,
+            returnProducts,
+            shiftAssigns,
+            shiftTypes,
+            revenues,
+            regulation,
+            timeKeeping,
+            nextWeekTimeKeeping,
+            isEmployee: false,
+        };
+    } else {
+        const username = email;
+        const employees = await Employee.findOne({
+            "_id.employeeID": username,
+        });
+        const [employee, receipts, products, store, manager] =
+            await Promise.all([
+                Employee.find({ "_id.employeeID": username }).exec(),
+                Receipt.findWithDeleted({
+                    "EmployeeID._id.employeeID": username,
+                }).exec(),
+                Product.find({ "_id.storeID": employees._id.storeID }).exec(),
+                Store.find({ _id: employees._id.storeID }).exec(),
+                Manager.find({ _id: employees.managerID }).exec(),
+            ]);
+        return { employee, receipts, products, store, manager ,isEmployee: true};
     }
-
-    const [
-        coupons,
-        employees,
-        products,
-        productTypes,
-        productJoinTypes,
-        revenues,
-        receipts,
-        returnProducts,
-        shiftAssigns,
-        shiftTypes,
-        regulation,
-        timeKeeping,
-        nextWeekTimeKeeping,
-    ] = await Promise.all([
-        Coupon.find({ "_id.storeID": store._id }).exec(),
-        Employee.find({ managerID: store._id }).exec(),
-        Product.find({ "_id.storeID": store._id }).exec(),
-        ProductType.find({ "_id.storeID": store._id }).exec(),
-        ProductJoinType.find({ "_id.storeID": store._id }).exec(),
-        Revenue.find({ "_id.storeID": store._id }).exec(),
-        Receipt.findWithDeleted({ "_id.storeID": store._id }).exec(),
-        ReturnProduct.find({ "_id.storeID": store._id }).exec(),
-        ShiftAssign.find({ "_id.storeID": store._id }).exec(),
-        ShiftType.find({  "_id.storeID": store._id }).exec(),
-        Regulation.find({ "_id.storeID": store._id }).exec(),
-        TimeKeeping.find({ "_id.storeID": store._id }).exec(),
-        NextWeekTimeKeeping.find({ "_id.storeID": store._id }).exec(),
-    ]);
-
-    return {
-        manager,
-        store,
-        employees,
-        coupons,
-        products,
-        productTypes,
-        productJoinTypes,
-        receipts,
-        returnProducts,
-        shiftAssigns,
-        shiftTypes,
-        revenues,
-        regulation,
-        timeKeeping,
-        nextWeekTimeKeeping,
-    };
 }
-async function getAllDataEmployee(username){
-    const employees = await Employee.findOne({"_id.employeeID" : username});
-    const [employee,reciept,product,manager,store] = await Promise.all(
-        [Employee.find({ "_id.employeeID" : username}).exec(),
-        Receipt.findWithDeleted({"EmployeeID._id.employeeID" : username}).exec(),
-        Product.find({"_id.storeID" : employees._id.storeID}).exec(),
-        Manager.find({storeID : employees._id.storeID}).exec(),
-        Store.find({_id : employees._id.storeID}).exec()]);
-    return {employee,reciept,product,manager,store}
+
+async function getAllDataEmployee(username) {
+    const employees = await Employee.findOne({ "_id.employeeID": username });
+    const [employee, receipts, products, store, manager] = await Promise.all([
+        Employee.find({ "_id.employeeID": username }).exec(),
+        Receipt.findWithDeleted({
+            "EmployeeID._id.employeeID": username,
+        }).exec(),
+        Product.find({ "_id.storeID": employees._id.storeID }).exec(),
+        Store.find({ _id: employees._id.storeID }).exec(),
+        Manager.find({ _id: employees.managerID }).exec(),
+    ]);
+    return { employee, receipts, products, store, manager };
 }
 
 module.exports = new Authentication();
