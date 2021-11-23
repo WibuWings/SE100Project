@@ -352,50 +352,6 @@ class EmployeeManager extends Component {
             <div
                 style={{display: 'block', overflowY: 'auto', height: '100vh'}}
             >
-                <div>
-                    <Button
-                        onClick={() => {this.getAllEmployee()}}
-                        variant="contained"
-                    >
-                        Get Employee
-                    </Button>
-                    {/* <Button
-                        onClick={() => this.addEmployeeToDatabase()}
-                        variant="contained"
-                    >
-                        Add Employee
-                    </Button>
-                    <Button
-                        onClick={() => this.updateEmployee()}
-                        variant="contained"
-                    >
-                        Update Employee
-                    </Button>
-                    <Button
-                        onClick={() => this.deleteEmployeeFromDatabase()}
-                        variant="contained"
-                    >
-                        Delete Employee
-                    </Button> */}
-                    <Button
-                        onClick={() => this.getSackedEmployee()}
-                        variant="contained"
-                    >
-                        Get Sacked Employee
-                    </Button>
-                    {/* <Button
-                        onClick={() => this.backToWork()}
-                        variant="contained"
-                    >
-                        Back To Work
-                    </Button>
-                    <Button
-                        onClick={() => this.deleteEmployeePermantlyFromDatabase()}
-                        variant="contained"
-                    >
-                        Delete Permantly
-                    </Button> */}
-                </div>
                 <Container
                     style={{marginTop: 20, }}
                 >

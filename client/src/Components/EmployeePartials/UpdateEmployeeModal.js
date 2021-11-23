@@ -188,7 +188,7 @@ class UpdateEmployeeModal extends Component {
                 imgUrl: this.imgUrl,
             }   
         }
-        console.log("index", this.findIndexInListEmployee(this.id));
+        // console.log("index", this.findIndexInListEmployee(this.id));
         console.log(data);
         await axios.put(`http://localhost:5000/api/employee`, data)
             .then(res => {
@@ -216,7 +216,7 @@ class UpdateEmployeeModal extends Component {
 
     loadInitialData() {
         var currentEmployee = this.props.currentEditEmployee.state;
-        console.log("currentEmployee", currentEmployee);
+        // console.log("currentEmployee", currentEmployee);
         this.id = currentEmployee._id.employeeID;
         this.password = currentEmployee.password;
         this.firstName = currentEmployee.firstName;
