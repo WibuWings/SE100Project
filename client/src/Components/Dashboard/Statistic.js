@@ -5,19 +5,21 @@ import { Card, CardHeader, Box } from '@mui/material';
 //
 import BaseOptionChart from './BaseOptionChart';
 import SplitButton from './GroupButton';
+import OptionYear from './OptionYear';
+import OptionMonth from './OptionMonth';
 // ----------------------------------------------------------------------
 import { useSelector, useDispatch } from 'react-redux';
 import React from 'react';
-import { date } from 'faker';
-
+import moment from 'moment'
 
 export default function AppWebsiteVisits() {
   const [typeDate, setTypeData] = React.useState(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sartuday', 'Sunday']);
-  const [title, setTitle] = React.useState('last weak')
+  const [title, setTitle] = React.useState('last Week')
   const [tienGoc, setTienGoc] = React.useState([])
   const [tienDoanhThu, setTienDoanhThu] = React.useState([])
   const [tienLai, setTienLai] = React.useState([])
-  const [growth, setGrowth] = React.useState('(+100%) than Last Weak')
+  const [growth, setGrowth] = React.useState('(+100%) than Last Week')
+  const [showOption, setShowOption] = React.useState(false);
   var CHART_DATA = [
     {
       name: 'Tiền gốc',
@@ -37,14 +39,14 @@ export default function AppWebsiteVisits() {
   ];
   const typeTimeDashboard = useSelector(state => state.typeTimeDashboard)
   const listReciept = useSelector(state => state.listReciept)
+  const typeMonth = useSelector(state => state.monthSelectDashboard)
+  const typeYear = useSelector(state => state.yearSelectDashboard)
+
   let nowTime = new Date()
   const chartOptions = merge(BaseOptionChart(), {
     stroke: { width: [1, 2, 3] },
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
     fill: { type: ['solid', 'gradient', 'solid'] },
-    // xaxis: {
-    //   categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-    // },
     xaxis: {
       categories: typeDate,
     },
@@ -62,114 +64,47 @@ export default function AppWebsiteVisits() {
     }
   });
 
-  const DateInWeak = (type) => {
-    let arrCurrentWeak = [];
-    let arrLastWeak = []
-    let currentMonth = nowTime.getMonth() + 1
-
-    if (type === 'Weak') {
-      // Weak
+  const DateInWeek = (type) => {
+    let Week = [];
+    if (type === 'Week') {
+      // Week
       if (nowTime.getDay() === 0) {
-        //Xử lý nếu CN từ ngày 7 trở lên
-        if (nowTime.getDate() >= 7) {
-          for (let i = 0; i < 7; i++) {
-            arrCurrentWeak.push((nowTime.getDate() - i) + " " + currentMonth + " " + nowTime.getFullYear())
-          }
-          return arrCurrentWeak
+        for (let i = 0; i < 7; i++) {
+          let nowDate = new Date(moment().subtract(i, 'days'))
+          let date = nowDate.getDate() + " " + (nowDate.getMonth() + 1) + " " + nowDate.getFullYear();
+          Week.push(date)
         }
-        //NGƯỢC LẠI
-        else {
-          for (let i = 0; i < nowTime.getDate(); i++) {
-            arrCurrentWeak.push((nowTime.getDate() - i) + " " + currentMonth + " " + nowTime.getFullYear())
-          }
-          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
-          for (let i = 0; i < 7 - nowTime.getDate(); i++) {
-            arrCurrentWeak.push((maxDayInLastMonth - i) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
-          }
-          return arrCurrentWeak
-        }
+        return Week
       } else {
-        if (nowTime.getDate() >= nowTime.getDay()) {
-          for (let i = 0; i < nowTime.getDay(); i++) {
-            arrCurrentWeak.push((nowTime.getDate() - i) + " " + currentMonth + " " + nowTime.getFullYear())
-          }
-          console.log(arrCurrentWeak)
-          return arrCurrentWeak
-        } else {
-          for (let i = 0; i < nowTime.getDate(); i++) {
-            arrCurrentWeak.push((nowTime.getDate() - i) + " " + currentMonth + " " + nowTime.getFullYear())
-          }
-          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
-          for (let i = 0; i < nowTime.getDay() - nowTime.getDate(); i++) {
-            arrCurrentWeak.push((maxDayInLastMonth - i) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
-          }
-          console.log(arrCurrentWeak)
-          return arrCurrentWeak
+        for (let i = 0; i < nowTime.getDay(); i++) {
+          let nowDate = new Date(moment().subtract(i, 'days'))
+          let date = nowDate.getDate() + " " + (nowDate.getMonth() + 1) + " " + nowDate.getFullYear();
+          Week.push(date)
         }
+        return Week
       }
 
-      //////LAST WEAK // 
     } else {
-      // Last Weak
       if (nowTime.getDay() === 0) {
-        if (nowTime.getDate() >= 14) {
-          for (let i = 0; i < 7; i++) {
-            arrCurrentWeak.push((nowTime.getDate() - i - 7) + " " + currentMonth + " " + nowTime.getFullYear())
-          }
-          return arrCurrentWeak
-        } else if (nowTime.getDate() <= 7) {
-          let a = 7 - nowTime.getDate();
-          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
-          for (let i = 0; i < 7; i++) {
-            arrLastWeak.push((maxDayInLastMonth - i - a) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
-          }
-          console.log(arrLastWeak)
-          return arrLastWeak
+        for (let i = 0; i < 7; i++) {
+          let nowDate = new Date(moment().subtract(i + 7, 'days'))
+          let date = nowDate.getDate() + " " + (nowDate.getMonth() + 1) + " " + nowDate.getFullYear();
+          Week.push(date)
         }
-        else {
-          for (let i = 0; i < nowTime.getDate() - 7; i++) {
-            arrCurrentWeak.push((nowTime.getDate() - 7 - i) + " " + currentMonth + " " + nowTime.getFullYear())
-          }
-          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
-          for (let i = 0; i < 14 - nowTime.getDate(); i++) {
-            arrCurrentWeak.push((maxDayInLastMonth - i) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
-          }
-          return arrCurrentWeak
+        return Week
+      } else {
+        for (let i = 0; i < 7; i++) {
+          let nowDate = new Date(moment().subtract(i + nowTime.getDay(), 'days'))
+          let date = nowDate.getDate() + " " + (nowDate.getMonth() + 1) + " " + nowDate.getFullYear();
+          Week.push(date)
         }
-      }
-      else {
-        //
-        if (nowTime.getDate() - nowTime.getDay() >= 7) {
-          for (let i = 0; i < 7; i++) {
-            arrLastWeak.push((nowTime.getDate() - i - nowTime.getDay()) + " " + currentMonth + " " + nowTime.getFullYear())
-          }
-          return arrLastWeak
-        } else if (nowTime.getDate() <= nowTime.getDay()) {
-          let a = nowTime.getDay() - nowTime.getDate();
-          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
-          for (let i = 0; i < 7; i++) {
-            arrLastWeak.push((maxDayInLastMonth - i - a) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
-          }
-          console.log(arrLastWeak)
-          return arrLastWeak
-        }
-        else {
-          for (let i = 0; i < nowTime.getDate() - nowTime.getDay(); i++) {
-            arrCurrentWeak.push((nowTime.getDate() - i - nowTime.getDay()) + " " + currentMonth + " " + nowTime.getFullYear())
-          }
-          let maxDayInLastMonth = new Date(nowTime.getFullYear(), nowTime.getMonth(), 0).getDate()
-          for (let i = 0; i < 7 - (nowTime.getDate() - nowTime.getDay()); i++) {
-            arrCurrentWeak.push((maxDayInLastMonth - i) + " " + nowTime.getMonth() + " " + nowTime.getFullYear())
-          }
-          console.log(arrCurrentWeak)
-          return arrCurrentWeak
-        }
+        return Week
       }
     }
   }
 
-  ///////Weak
-  const totalMoneyInWeak = (arrDate, type) => {
+  ///////Week
+  const totalMoneyInWeek = (arrDate, type) => {
     let arrDoanhThu = []
     let arrTienGoc = []
     let arrLai = []
@@ -201,36 +136,37 @@ export default function AppWebsiteVisits() {
 
   ///////Month
 
-  const DateInMonth = (type) => {
+  const DateInMonth = (month123, year123, currentMonth) => {
     let arrCurrentMonth = [];
     let arrLastMonth = []
-    let month = nowTime.getMonth();
+    let month = new Date(moment().subtract(1, 'months'))
+    let lastMonth = month.getMonth() + 1;
     let year = nowTime.getFullYear();
-    let monthCurrent = month + 1
+    let monthCurrent = nowTime.getMonth() + 1;
+
     for (let i = 0; i < 8; i++) {
       let data
       if (i === 0) {
         data = '1/' + monthCurrent
         arrCurrentMonth.push(data)
-        data = '1/' + month
+        data = '1/' + month123
         arrLastMonth.push(data)
       } else {
         data = i * 4 + '/' + monthCurrent
         arrCurrentMonth.push(data)
-        data = i * 4 + '/' + month
+        data = i * 4 + '/' + month123
         arrLastMonth.push(data)
       }
     }
 
-    if (type === 'Month') {
+    if (currentMonth === true) {
       //Month
-      let data = new Date(year, month + 1, 0).getDate() + '/' + monthCurrent
+      let data = new Date(year, nowTime.getMonth() + 1, 0).getDate() + '/' + monthCurrent
       arrCurrentMonth.push(data)
-      console.log(arrCurrentMonth)
       return arrCurrentMonth
     } else {
       //Last month
-      let data = new Date(year, month, 0).getDate() + '/' + month
+      let data = new Date(year123, month123, 0).getDate() + '/' + lastMonth
       arrLastMonth.push(data)
       return arrLastMonth
     }
@@ -239,12 +175,12 @@ export default function AppWebsiteVisits() {
 
 
 
-  const totalMoneyInMonth = (arrDate, type) => {
+  const totalMoneyInMonth = (arrDate, currentMonth, month123, year123) => {
     var newArr
     let arrDoanhThu = [0]
     let arrTienGoc = [0]
     let arrLai = [0]
-    if (type === 'Month') {
+    if (currentMonth) {
       newArr = arrDate.filter(value => {
         let data = value.replace(/\s/g, "")
         data = value.split("/");
@@ -257,14 +193,13 @@ export default function AppWebsiteVisits() {
         let a = nowTime.getDate() + "/" + month
         newArr.push(a)
       }
-      console.log(newArr)
       setTypeData(newArr)
     } else {
       setTypeData(arrDate)
     }
 
 
-    if (type === 'Month') {
+    if (currentMonth) {
       for (let i = 1; i <= nowTime.getDate() / 4; i++) {
         let year = nowTime.getFullYear();
         let date = newArr[i].replace(/\s/g, "");
@@ -316,8 +251,7 @@ export default function AppWebsiteVisits() {
       setTienDoanhThu(arrDoanhThu)
       setTienLai(arrLai)
     } else {
-      let month = nowTime.getMonth()
-      let year = nowTime.getFullYear();
+
       for (let i = 1; i <= 7; i++) {
         let date = arrDate[i].replace(/\s/g, "");
         date = date.split("/")
@@ -327,7 +261,7 @@ export default function AppWebsiteVisits() {
           let dateReciept = reciept.date.replace(/\s/g, "");
           dateReciept = dateReciept.split("/")
           if (date[0] == dateReciept[0] || date[0] - 1 == dateReciept[0] || date[0] - 2 == dateReciept[0] || date[0] - 3 == dateReciept[0]) {
-            if (month == dateReciept[1] && year == dateReciept[2]) {
+            if (month123 == dateReciept[1] && year123 == dateReciept[2]) {
               if (!reciept.deleted) {
                 moneyDoanhThu += reciept.totalFinalMoney;
                 reciept.listProduct.map(value => {
@@ -342,14 +276,14 @@ export default function AppWebsiteVisits() {
         arrLai.push(moneyDoanhThu - moneyTienGoc)
       }
 
-      if (new Date(year, month, 0).getDate() > 28) {
+      if (new Date(year123, month123, 0).getDate() > 28) {
         let moneyDoanhThu = 0;
         let moneyTienGoc = 0;
-        for (let i = 29; i <= new Date(year, month, 0).getDate(); i++) {
+        for (let i = 29; i <= new Date(year123, month123, 0).getDate(); i++) {
           listReciept.map(reciept => {
             let dateReciept = reciept.date.replace(/\s/g, "");
             dateReciept = dateReciept.split("/")
-            if (i == dateReciept[0] && month == dateReciept[1] && year == dateReciept[2]) {
+            if (i == dateReciept[0] && month123 == dateReciept[1] && year123 == dateReciept[2]) {
               if (!reciept.deleted) {
                 moneyDoanhThu += reciept.totalFinalMoney;
                 reciept.listProduct.map(value => {
@@ -372,23 +306,17 @@ export default function AppWebsiteVisits() {
 
 
   ////// YEAR
-  const DateInYear = (type) => {
+  const DateInYear = (year) => {
     let arrDoanhThu = []
     let arrTienGoc = []
     let arrLai = []
-    var currentYear
-    if (type === 'Year') {
-      currentYear = nowTime.getFullYear();
-    } else {
-      currentYear = nowTime.getFullYear() - 1;
-    }
     for (let i = 1; i <= 12; i++) {
       let moneyDoanhThu = 0;
       let moneyTienGoc = 0;
       listReciept.map(reciept => {
         let dateReciept = reciept.date.replace(/\s/g, "");
         dateReciept = dateReciept.split("/")
-        if (i == dateReciept[1] && currentYear == dateReciept[2]) {
+        if (i == dateReciept[1] && year == dateReciept[2]) {
           if (!reciept.deleted) {
             moneyDoanhThu += reciept.totalFinalMoney;
             reciept.listProduct.map(value => {
@@ -400,103 +328,27 @@ export default function AppWebsiteVisits() {
       arrDoanhThu.push(moneyDoanhThu);
       arrTienGoc.push(moneyTienGoc)
       arrLai.push(moneyDoanhThu - moneyTienGoc)
+      setTienGoc(arrTienGoc)
+      setTienDoanhThu(arrDoanhThu)
+      setTienLai(arrLai)
     }
-    setTienGoc(arrTienGoc)
-    setTienDoanhThu(arrDoanhThu)
-    setTienLai(arrLai)
   }
 
-
   // // Tắng trưởng của công ty
-  const GrowthPercent = (type, arrCurrent, arrLast) => {
+  const GrowthPercent = (month, year, type, arrCurrent, arrLast) => {
     let moneyLast = 0;
     let moneyCurrent = 0;
-    if (type === 'Weak' || type === 'Last Weak') {
-      arrCurrent.map(date => {
-        let item = date.split(" ");
-        listReciept.map(value => {
-          let valueDate = value.date.replace(/\s/g, "")
-          valueDate = valueDate.split("/")
-          if (!value.deleted) {
-            if (item[0] == valueDate[0] && item[1] == valueDate[1] && item[2] == valueDate[2]) {
-              console.log(value)
-              moneyCurrent += value.totalFinalMoney
-            }
-          }
-        })
-      })
 
-      arrLast.map(date => {
-        let item = date.split(" ");
-        listReciept.map(value => {
-          let valueDate = value.date.replace(/\s/g, "")
-          valueDate = valueDate.split("/")
-          if (!value.deleted) {
-            if (item[0] == valueDate[0] && item[1] == valueDate[1] && item[2] == valueDate[2]) {
-              moneyLast += value.totalFinalMoney
-            }
-          }
-        })
-      })
-
-      if (moneyLast == 0 && moneyCurrent == 0) {
-        setGrowth('(+0%) than Last Weak')
-      } else if (moneyLast == 0) {
-        setGrowth('(+100%) than Last Weak')
-      } else if (moneyCurrent == 0) {
-        setGrowth('(+0%) than Last Weak')
-      } else {
-        let percent = (moneyCurrent / moneyLast) * 100
-        if (percent >= 100) {
-          setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Weak`)
-        } else {
-          setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Weak`)
-        }
-      }
-    } else if (type == 'Month' || type == 'Last Month') {
-      let currentMonth = nowTime.getMonth() + 1
-      let lastMonth = nowTime.getMonth()
-      let year = nowTime.getFullYear()
+    if (month === 0) {
       listReciept.map(value => {
         let date = value.date.replace(/\s/g, "")
         date = date.split("/")
-        if (date[1] == currentMonth && date[2] == year) {
+        if (date[2] == year) {
           if (!value.deleted) {
             moneyCurrent += value.totalFinalMoney
           }
         }
-        if (date[1] == lastMonth && date[2] == year) {
-          if (!value.deleted) {
-            moneyLast += value.totalFinalMoney
-          }
-        }
-      })
-      if (moneyLast == 0 && moneyCurrent == 0) {
-        setGrowth('(+0%) than Last Month')
-      } else if (moneyLast == 0) {
-        setGrowth('(+100%) than Last Month')
-      } else if (moneyCurrent == 0) {
-        setGrowth('(+0%) than Last Month')
-      } else {
-        let percent = (moneyCurrent / moneyLast) * 100
-        if (percent >= 100) {
-          setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Month`)
-        } else {
-          setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Month`)
-        }
-      }
-    } else {
-      let currentYear = nowTime.getFullYear()
-      let lastYear = currentYear - 1;
-      listReciept.map(value => {
-        let date = value.date.replace(/\s/g, "")
-        date = date.split("/")
-        if (date[2] == currentYear) {
-          if (!value.deleted) {
-            moneyCurrent += value.totalFinalMoney
-          }
-        }
-        if (date[2] == lastYear) {
+        if (date[2] == year - 1) {
           if (!value.deleted) {
             moneyLast += value.totalFinalMoney
           }
@@ -516,40 +368,286 @@ export default function AppWebsiteVisits() {
           setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Year`)
         }
       }
+    } else if (month !== 0 && month == nowTime.getMonth() + 1 && year == nowTime.getFullYear()) {
+      if (type === 'Week' || type === 'Last Week') {
+        arrCurrent.map(date => {
+          let item = date.split(" ");
+          listReciept.map(value => {
+            let valueDate = value.date.replace(/\s/g, "")
+            valueDate = valueDate.split("/")
+            if (!value.deleted) {
+              if (item[0] == valueDate[0] && item[1] == valueDate[1] && item[2] == valueDate[2]) {
+                moneyCurrent += value.totalFinalMoney
+              }
+            }
+          })
+        })
+
+        arrLast.map(date => {
+          let item = date.split(" ");
+          listReciept.map(value => {
+            let valueDate = value.date.replace(/\s/g, "")
+            valueDate = valueDate.split("/")
+            if (!value.deleted) {
+              if (item[0] == valueDate[0] && item[1] == valueDate[1] && item[2] == valueDate[2]) {
+                moneyLast += value.totalFinalMoney
+              }
+            }
+          })
+        })
+
+        if (moneyLast == 0 && moneyCurrent == 0) {
+          setGrowth('(+0%) than Last Week')
+        } else if (moneyLast == 0) {
+          setGrowth('(+100%) than Last Week')
+        } else if (moneyCurrent == 0) {
+          setGrowth('(+0%) than Last Week')
+        } else {
+          let percent = (moneyCurrent / moneyLast) * 100
+          if (percent >= 100) {
+            setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Week`)
+          } else {
+            setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Week`)
+          }
+        }
+      } else {
+        let lastMonth = month == 1 ? 12 : month - 1
+        let yearOfLastMonth = month == 1 ? year -1  : year
+        listReciept.map(value => {
+          let date = value.date.replace(/\s/g, "")
+          date = date.split("/")
+          if (date[1] == month && date[2] == year) {
+            if (!value.deleted) {
+              moneyCurrent += value.totalFinalMoney
+            }
+          }
+          if (date[1] == lastMonth && date[2] == yearOfLastMonth) {
+            if (!value.deleted) {
+              moneyLast += value.totalFinalMoney
+            }
+          }
+        })
+
+
+        if (moneyLast == 0 && moneyCurrent == 0) {
+          setGrowth('(+0%) than Last Month')
+        } else if (moneyLast == 0) {
+          setGrowth('(+100%) than Last Month')
+        } else if (moneyCurrent == 0) {
+          setGrowth('(+0%) than Last Month')
+        } else {
+          let percent = (moneyCurrent / moneyLast) * 100
+          if (percent >= 100) {
+            setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Month`)
+          } else {
+            setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Month`)
+          }
+        }
+      }
+    } else {
+      let lastMonth = month == 1 ? 12 : month - 1
+      let yearOfLastMonth = month == 1 ? year -1  : year
+      listReciept.map(value => {
+        let date = value.date.replace(/\s/g, "")
+        date = date.split("/")
+        if (date[1] == month && date[2] == year) {
+          if (!value.deleted) {
+            moneyCurrent += value.totalFinalMoney
+          }
+        }
+        if (date[1] == lastMonth && date[2] == yearOfLastMonth) {
+          if (!value.deleted) {
+            moneyLast += value.totalFinalMoney
+          }
+        }
+      })
+      if (moneyLast == 0 && moneyCurrent == 0) {
+        setGrowth('(+0%) than Last Month')
+      } else if (moneyLast == 0) {
+        setGrowth('(+100%) than Last Month')
+      } else if (moneyCurrent == 0) {
+        setGrowth('(+0%) than Last Month')
+      } else {
+        let percent = (moneyCurrent / moneyLast) * 100
+        if (percent >= 100) {
+          setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Month`)
+        } else {
+          setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Month`)
+        }
+      }
     }
+
+
+
+
+
+    // if (type === 'Week' || type === 'Last Week') {
+    //   arrCurrent.map(date => {
+    //     let item = date.split(" ");
+    //     listReciept.map(value => {
+    //       let valueDate = value.date.replace(/\s/g, "")
+    //       valueDate = valueDate.split("/")
+    //       if (!value.deleted) {
+    //         if (item[0] == valueDate[0] && item[1] == valueDate[1] && item[2] == valueDate[2]) {
+    //           moneyCurrent += value.totalFinalMoney
+    //         }
+    //       }
+    //     })
+    //   })
+
+    //   arrLast.map(date => {
+    //     let item = date.split(" ");
+    //     listReciept.map(value => {
+    //       let valueDate = value.date.replace(/\s/g, "")
+    //       valueDate = valueDate.split("/")
+    //       if (!value.deleted) {
+    //         if (item[0] == valueDate[0] && item[1] == valueDate[1] && item[2] == valueDate[2]) {
+    //           moneyLast += value.totalFinalMoney
+    //         }
+    //       }
+    //     })
+    //   })
+
+    //   if (moneyLast == 0 && moneyCurrent == 0) {
+    //     setGrowth('(+0%) than Last Week')
+    //   } else if (moneyLast == 0) {
+    //     setGrowth('(+100%) than Last Week')
+    //   } else if (moneyCurrent == 0) {
+    //     setGrowth('(+0%) than Last Week')
+    //   } else {
+    //     let percent = (moneyCurrent / moneyLast) * 100
+    //     if (percent >= 100) {
+    //       setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Week`)
+    //     } else {
+    //       setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Week`)
+    //     }
+    //   }
+    // } else if (type == 'Month' || type == 'Last Month') {
+    //   let currentMonth = nowTime.getMonth() + 1
+    //   let lastMonth = nowTime.getMonth()
+    //   let year = nowTime.getFullYear()
+    //   listReciept.map(value => {
+    //     let date = value.date.replace(/\s/g, "")
+    //     date = date.split("/")
+    //     if (date[1] == currentMonth && date[2] == year) {
+    //       if (!value.deleted) {
+    //         moneyCurrent += value.totalFinalMoney
+    //       }
+    //     }
+    //     if (date[1] == lastMonth && date[2] == year) {
+    //       if (!value.deleted) {
+    //         moneyLast += value.totalFinalMoney
+    //       }
+    //     }
+    //   })
+    //   if (moneyLast == 0 && moneyCurrent == 0) {
+    //     setGrowth('(+0%) than Last Month')
+    //   } else if (moneyLast == 0) {
+    //     setGrowth('(+100%) than Last Month')
+    //   } else if (moneyCurrent == 0) {
+    //     setGrowth('(+0%) than Last Month')
+    //   } else {
+    //     let percent = (moneyCurrent / moneyLast) * 100
+    //     if (percent >= 100) {
+    //       setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Month`)
+    //     } else {
+    //       setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Month`)
+    //     }
+    //   }
+    // } else {
+    //   let currentYear = nowTime.getFullYear()
+    //   let lastYear = currentYear - 1;
+    //   listReciept.map(value => {
+    //     let date = value.date.replace(/\s/g, "")
+    //     date = date.split("/")
+    //     if (date[2] == currentYear) {
+    //       if (!value.deleted) {
+    //         moneyCurrent += value.totalFinalMoney
+    //       }
+    //     }
+    //     if (date[2] == lastYear) {
+    //       if (!value.deleted) {
+    //         moneyLast += value.totalFinalMoney
+    //       }
+    //     }
+    //   })
+    //   if (moneyLast == 0 && moneyCurrent == 0) {
+    //     setGrowth('(+0%) than Last Year')
+    //   } else if (moneyLast == 0) {
+    //     setGrowth('(+100%) than Last Year')
+    //   } else if (moneyCurrent == 0) {
+    //     setGrowth('(+0%) than Last Year')
+    //   } else {
+    //     let percent = (moneyCurrent / moneyLast) * 100
+    //     if (percent >= 100) {
+    //       setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Year`)
+    //     } else {
+    //       setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Year`)
+    //     }
+    //   }
+    // }
   }
 
 
   React.useEffect(() => {
-    console.log(typeTimeDashboard)
-    console.log(listReciept);
 
-    if (typeTimeDashboard === 'Weak' || typeTimeDashboard === 'Last Weak') {
-      let arrCurrent = DateInWeak('Weak')
-      let arrLast = DateInWeak('Last Weak')
-      setTypeData(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sartuday', 'Sunday'])
-      totalMoneyInWeak(DateInWeak(typeTimeDashboard), typeTimeDashboard);
-      GrowthPercent(typeTimeDashboard, arrCurrent, arrLast);
-      setTitle('last weak')
-    } else if (typeTimeDashboard === 'Month' || typeTimeDashboard === 'Last Month') {
-      totalMoneyInMonth(DateInMonth(typeTimeDashboard), typeTimeDashboard)
-      GrowthPercent(typeTimeDashboard);
-      setTitle('last month')
-    } else {
-      DateInYear(typeTimeDashboard)
-      GrowthPercent(typeTimeDashboard);
+    if (typeMonth === 0) {
+      DateInYear(typeYear)
+      GrowthPercent(typeMonth, typeYear, typeTimeDashboard);
       setTypeData(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
+      setShowOption(false);
       setTitle('last year')
+    } else if (typeMonth !== 0 && typeMonth == nowTime.getMonth() + 1 && typeYear == nowTime.getFullYear()) {
+      setShowOption(true);
+      if (typeTimeDashboard === 'Week' || typeTimeDashboard === 'Last Week') {
+        let arrCurrent = DateInWeek('Week')
+        let arrLast = DateInWeek('Last Week')
+        setTypeData(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sartuday', 'Sunday'])
+        totalMoneyInWeek(DateInWeek(typeTimeDashboard), typeTimeDashboard);
+        GrowthPercent(typeMonth, typeYear, typeTimeDashboard, arrCurrent, arrLast);
+        setTitle('last Week')
+      } else {
+        setShowOption(true);
+        totalMoneyInMonth(DateInMonth(typeMonth, typeYear, true), true, typeMonth, typeYear)
+        GrowthPercent(typeMonth, typeYear, typeTimeDashboard, '', '');
+      }
+    } else {
+      setShowOption(false);
+      totalMoneyInMonth(DateInMonth(typeMonth, typeYear, false), false, typeMonth, typeYear)
+      GrowthPercent(typeMonth, typeYear, typeTimeDashboard, '', '');
     }
-  }, [typeTimeDashboard, growth])
+
+    // if (typeTimeDashboard === 'Week' || typeTimeDashboard === 'Last Week') {
+    //   let arrCurrent = DateInWeek('Week')
+    //   let arrLast = DateInWeek('Last Week')
+    //   setTypeData(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sartuday', 'Sunday'])
+    //   totalMoneyInWeek(DateInWeek(typeTimeDashboard), typeTimeDashboard);
+    //   GrowthPercent(typeTimeDashboard, arrCurrent, arrLast);
+    //   setTitle('last Week')
+    // } else if (typeTimeDashboard === 'Month' || typeTimeDashboard === 'Last Month') {
+    //   totalMoneyInMonth(DateInMonth(typeTimeDashboard), typeTimeDashboard)
+    //   GrowthPercent(typeTimeDashboard);
+    //   setTitle('last month')
+    // } else {
+    //   DateInYear(typeTimeDashboard)
+    //   GrowthPercent(typeTimeDashboard);
+    //   setTypeData(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
+    //   setTitle('last year')
+    // }
+  }, [typeTimeDashboard, growth, typeMonth, typeYear])
 
   return (
     <Card>
       <div className="titleStatistic">
         <CardHeader style={{ fontWeight: '800' }} title="Revenue" subheader={growth} />
-        <SplitButton></SplitButton>
+        <div style={{ display: 'flex', justifyContent: 'end' }}>
+          <OptionYear></OptionYear>
+          <OptionMonth></OptionMonth>
+          {showOption ? (
+            <SplitButton></SplitButton>
+          ) : null}
+        </div>
       </div>
-
       <Box sx={{ p: 3, pb: 1 }} dir="ltr">
         <ReactApexChart type="line" series={CHART_DATA} options={chartOptions} height={364} />
       </Box>

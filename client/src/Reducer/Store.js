@@ -51,7 +51,8 @@ import listRecieptDeleteReducer from './RecieptManager/ListRecieptDelete';
 import searchReducer from './RecieptManager/SearchReducer';
 import typeTimeDashboard from './Dashboard/TypeTimeDashboard';
 import typeHeaderDashboard from './Dashboard/TypeHeaderDashboard'
-
+import monthSelectDashboard from './Dashboard/MonthSelectReducer';
+import yearSelectDashboard from './Dashboard/YearSelectReducer';
 
 var redux = require('redux');
 
@@ -115,6 +116,8 @@ const allReducers = redux.combineReducers({
     //Dashboard
     typeTimeDashboard: typeTimeDashboard,
     typeHeaderDashboard: typeHeaderDashboard,
+    monthSelectDashboard: monthSelectDashboard,
+    yearSelectDashboard: yearSelectDashboard,
 })
 
 
