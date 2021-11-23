@@ -165,9 +165,9 @@ class UnShiftEmployee extends Component {
                         </TableRow>
                         {
                           this.props.nextWeekTimeKeeping.map((item) =>
-                          this.findEmployeeNameByID(item._id.employee._id.employeeID) == false 
+                          // this.findEmployeeNameByID(item._id.employee._id.employeeID) == false 
                           // || this.findEmployeeNameByID(item.alternativeEmployee._id.employeeID) == false
-                          || this.findShift(item._id.shiftType._id.shiftID) == false
+                          this.findShift(item._id.shiftType._id.shiftID) == false
                           ? (null) :
                           <TableRow
                               style={{

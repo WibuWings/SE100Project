@@ -74,7 +74,7 @@ class EmployeeMoreMenu extends Component {
           console.log("data1", data1)
           axios.delete(`http://localhost:5000/api/employee/shift-assign`,{data: data1})
           .then(res => {
-              alert("success");
+              // alert("success");
               // Xoá đi trong redux
               this.props.RemoveShiftAssign(data1.shiftAssign);
           })
