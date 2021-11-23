@@ -53,7 +53,6 @@ function SalaryStats(props) {
         // if(listTimeKeeping.length>0)
         //     console.log(calculateSalary(listTimeKeeping[0]));
 
-        
         if (typeHeaderDashboard == 'Today') {
             let salary = 0;
             for(var i = 0 ; i < listTimeKeeping.length; i++)
@@ -67,16 +66,6 @@ function SalaryStats(props) {
                 }
             }
             setTotalSalary(salary);
-            // listReciept.map(value => {
-            //     let date = value.date.replace(/\s/g, "");
-            //     date = date.split("/");
-            //     if (date[0] == nowTime.getDate() && date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
-            //         if(!value.deleted) {
-            //             money += value.totalFinalMoney
-            //         }
-            //     }
-            // })
-            // setTotalMoney(money)
         } else if (typeHeaderDashboard == 'Yesterday') {
             let salary = 0;
             for(var i = 0 ; i < listTimeKeeping.length; i++)
@@ -90,16 +79,7 @@ function SalaryStats(props) {
                 }
             }
             setTotalSalary(salary);
-            // listReciept.map(value => {
-            //     let date = value.date.replace(/\s/g, "");
-            //     date = date.split("/");
-            //     if (date[0] == nowTime.getDate() - 1 && date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
-            //         if(!value.deleted){
-            //             money += value.totalFinalMoney
-            //         }
-            //     }
-            // })
-            // setTotalMoney(money)
+
         } else if (typeHeaderDashboard == 'Month') {
             let salary = 0;
             for(var i = 0 ; i < listTimeKeeping.length; i++)
@@ -113,17 +93,6 @@ function SalaryStats(props) {
                 }
             }
             setTotalSalary(salary);
-            // listReciept.map(value => {
-            //     let date = value.date.replace(/\s/g, "");
-            //     date = date.split("/");
-                
-            //     if (date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
-            //         if(!value.deleted) {
-            //             money += value.totalFinalMoney
-            //         }
-            //     }
-            // })
-            // setTotalMoney(money)
         } else if (typeHeaderDashboard == 'Year') {
             let salary = 0;
             for(var i = 0 ; i < listTimeKeeping.length; i++)
@@ -137,16 +106,6 @@ function SalaryStats(props) {
                 }
             }
             setTotalSalary(salary);
-            // listReciept.map(value => {
-            //     let date = value.date.replace(/\s/g, "");
-            //     date = date.split("/");
-            //     if (date[2] == nowTime.getFullYear()) {
-            //         if(!value.deleted) {
-            //             money += value.totalFinalMoney
-            //         }
-            //     }
-            // })
-            // setTotalMoney(money)
         } else if (typeHeaderDashboard == 'All') {
             let salary = 0;
             for(var i = 0 ; i < listTimeKeeping.length; i++)

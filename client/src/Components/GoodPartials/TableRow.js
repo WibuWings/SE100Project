@@ -46,7 +46,6 @@ class GoodRow extends Component{
     setOpen(value) {
         this.isOpen = value;
         this.setState({change: !this.state.change});
-        console.log("this.isOpen",this.isOpen)
     }
 
     async deleteProduct(row) {
