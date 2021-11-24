@@ -49,7 +49,7 @@ class TimeKeepingTable extends Component {
         })
             .then(res => {
                 result = res.data.data;
-                console.log("điểm danh", res.data.data);
+                // console.log("điểm danh", res.data.data);
             })
             .catch(err => {
                 console.log(err);

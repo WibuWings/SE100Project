@@ -188,7 +188,7 @@ class UpdateEmployeeModal extends Component {
                 imgUrl: this.imgUrl,
             }   
         }
-        console.log("index", this.findIndexInListEmployee(this.id));
+        // console.log("index", this.findIndexInListEmployee(this.id));
         console.log(data);
         await axios.put(`http://localhost:5000/api/employee`, data)
             .then(res => {
@@ -216,7 +216,7 @@ class UpdateEmployeeModal extends Component {
 
     loadInitialData() {
         var currentEmployee = this.props.currentEditEmployee.state;
-        console.log("currentEmployee", currentEmployee);
+        // console.log("currentEmployee", currentEmployee);
         this.id = currentEmployee._id.employeeID;
         this.password = currentEmployee.password;
         this.firstName = currentEmployee.firstName;
@@ -226,12 +226,12 @@ class UpdateEmployeeModal extends Component {
         this.address = currentEmployee.address;
         this.email = currentEmployee.email;
         this.startDate = currentEmployee.startDate;
-        if(this.startDate!=null)
+        if(this.startDate!=null && this.startDate.indexOf('T')!=-1)
         {
             this.startDate = this.startDate.substring(0, this.startDate.indexOf('T'));
         }
         this.birthDay = currentEmployee.dateOfBirth;
-        if(this.birthDay!=null)
+        if(this.birthDay!=null && this.birthDay.indexOf('T')!=-1)
         {
             this.birthDay = this.birthDay.substring(0, this.birthDay.indexOf('T'));
         }

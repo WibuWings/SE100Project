@@ -165,9 +165,9 @@ class UnShiftEmployee extends Component {
                         </TableRow>
                         {
                           this.props.nextWeekTimeKeeping.map((item) =>
-                          this.findEmployeeNameByID(item._id.employee._id.employeeID) == false 
+                          // this.findEmployeeNameByID(item._id.employee._id.employeeID) == false 
                           // || this.findEmployeeNameByID(item.alternativeEmployee._id.employeeID) == false
-                          || this.findShift(item._id.shiftType._id.shiftID) == false
+                          this.findShift(item._id.shiftType._id.shiftID) == false
                           ? (null) :
                           <TableRow
                               style={{
@@ -182,7 +182,9 @@ class UnShiftEmployee extends Component {
                               <TableCell className={classes.goodTable_Cell}>{item._id.employee._id.employeeID}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item._id.employee._id.employeeID)}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{item.alternativeEmployee._id.employeeID}</TableCell>
-                              <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item.alternativeEmployee._id.employeeID)}</TableCell>
+                              <TableCell className={classes.goodTable_Cell} style={{
+                                backgroundColor: this.findEmployeeNameByID(item.alternativeEmployee._id.employeeID) ? '#fff' :'#ff6057' 
+                              }}>{this.getEmployeeNameByID(item.alternativeEmployee._id.employeeID)}</TableCell>
                               <TableCell width={60} className={classes.goodTable_Cell} >
                                   <div style={{display: 'flex'}}>
                                       <AiOutlineEdit size={20} 

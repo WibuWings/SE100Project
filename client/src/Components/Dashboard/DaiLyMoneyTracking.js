@@ -46,7 +46,7 @@ function DaiLyMoneyTracking(props) {
                     />
                 </LocalizationProvider>
             </div>
-            <div id="choses-product" style={{ backgroundColor: 'white', height: '500px', width: '80%', overflow: 'hidden', margin: 'auto', overflowY: 'scroll', marginTop: '20px' }}>
+            <div id="choses-product" style={{ backgroundColor: 'white', height: '500px', width: '80%', overflow: 'hidden', margin: 'auto', overflowY: 'auto', marginTop: '20px' }}>
                 <ul style={{ textDecoration: 'none', listStyle: 'none', paddingLeft: '0' }}>
                     {
                         dailyListReciept.length !== 0 ? dailyListReciept.map(value => (
