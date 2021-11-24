@@ -182,7 +182,9 @@ class UnShiftEmployee extends Component {
                               <TableCell className={classes.goodTable_Cell}>{item._id.employee._id.employeeID}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item._id.employee._id.employeeID)}</TableCell>
                               <TableCell className={classes.goodTable_Cell}>{item.alternativeEmployee._id.employeeID}</TableCell>
-                              <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item.alternativeEmployee._id.employeeID)}</TableCell>
+                              <TableCell className={classes.goodTable_Cell} style={{
+                                backgroundColor: this.findEmployeeNameByID(item.alternativeEmployee._id.employeeID) ? '#fff' :'#ff6057' 
+                              }}>{this.getEmployeeNameByID(item.alternativeEmployee._id.employeeID)}</TableCell>
                               <TableCell width={60} className={classes.goodTable_Cell} >
                                   <div style={{display: 'flex'}}>
                                       <AiOutlineEdit size={20} 
