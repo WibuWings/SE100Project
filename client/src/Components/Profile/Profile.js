@@ -7,8 +7,10 @@ import ChangePassword from './ChangePassword';
 import ListShift from './ListShift';
 import ProfileSetting from './ProfileSetting';
 import ModalAdd from './ModalAdd';
+import ProfileCoupon from './ProfileCoupon';
 import Regulation from './Regulation';
 import { connect } from 'react-redux'
+import ModalAddCoupon from './ModalAddCoupon';
 import axios from 'axios';
 
 class Profile extends Component {
@@ -62,15 +64,30 @@ class Profile extends Component {
                         )}
                         {!this.props.role ? null : (
                             <Grid item sm={12} md={12} >
+                                <ProfileCoupon></ProfileCoupon>
+                            </Grid>
+                        )}
+                        {!this.props.role ? null : (
+                            <Grid item sm={12} md={12} >
                                 <Button onClick={() => this.deleteDataAccout()} style={{ backgroundColor: 'red', width: '100%', color: 'white' }}>Delete Data Account</Button>
                             </Grid>
                         )}
+
                     </Grid>
                 </Container>
                 {this.props.addStatus ? (<div className="modal-add">
                     <div onClick={() => { this.props.changeAddStatus(); if (this.props.editShiftStatus) { this.props.changeEditShiftStatus() } }} className="modal-overlay"></div>
                     <ModalAdd></ModalAdd>
                 </div>) : null}
+                {
+                    this.props.statusModalAddCoupon ? (
+                        <div className="modal-add">
+                            <div onClick={() => {this.props.changeStatusModalAddCoupon() ; if (this.props.statusEditCoupon) { this.props.changeStatusEditCoupon()}}} className="modal-overlay"></div>
+                            <ModalAddCoupon></ModalAddCoupon>
+                        </div>
+                    ) : null
+                }
+
             </div>
         );
     }
@@ -82,7 +99,9 @@ const mapStateToProps = (state, ownProps) => {
         editShiftStatus: state.editShiftStatus,
         infoUser: state.infoUser,
         role: state.role,
-        statusDarkmode: state.statusDarkmode
+        statusDarkmode: state.statusDarkmode,
+        statusModalAddCoupon: state.statusModalAddCoupon,
+        statusEditCoupon: state.statusEditCoupon,
     }
 }
 
@@ -96,6 +115,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         changeEditShiftStatus: () => {
             dispatch({
                 type: "CHANGE_EDIT_SHIFT_STATUS",
+            })
+        },
+        changeStatusModalAddCoupon: () => {
+            dispatch({
+                type: "CHANGE_ADD_COUPON_STATUS"
+            })
+        },
+        changeStatusEditCoupon: () => {
+            dispatch({
+                type: "CHANGE_EDIT_COUPON_STATUS"
             })
         }
     }

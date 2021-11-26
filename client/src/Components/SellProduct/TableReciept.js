@@ -27,6 +27,7 @@ function Row(props) {
     const infoUser = useSelector(state => state.infoUser)
     const statusEditInfoBill = useSelector(state => state.statusEditInfoBill)
     const editReciept = (MAHD) => {
+        
         let objectInfoBill = [];
         listReciept.map(value => {
             if (value.MAHD === MAHD) {

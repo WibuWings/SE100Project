@@ -1,8 +1,5 @@
 
-const listShiftInitialState = [
-    
-],
-
+const listShiftInitialState = [],
     listShiftReducer = (state = listShiftInitialState, action) => {
         switch (action.type) {
             case "DELETE_SHIFT":

@@ -1,0 +1,226 @@
+import React from 'react';
+import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button } from '@mui/material';
+import { BiPlusMedical, BiEdit } from 'react-icons/bi';
+import Stack from '@mui/material/Stack';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import TimePicker from '@mui/lab/TimePicker';
+import { GiCancel } from 'react-icons/gi'
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+
+function ModalAddCoupon(props) {
+    const statusDarkmode = useSelector(state => state.statusDarkmode)
+    const statusEditCoupon = useSelector(state => state.statusEditCoupon)
+    const objectEditCoupon = useSelector(state => state.objectEditCoupon)
+    const [timeFrom, setTimeFrom] = React.useState(statusEditCoupon ? new Date(objectEditCoupon.timeFrom) : new Date());
+    const [timeEnd, settimeEnd] = React.useState(statusEditCoupon ? new Date(objectEditCoupon.timeEnd) : new Date());
+    const [isDescription, setIsDescription] = React.useState(false);
+    const [percent, setPercent] = React.useState(statusEditCoupon ? objectEditCoupon.percent : 100);
+    const [isPercent, setIsPercent] = React.useState(false);
+    const [description, setDiscription] = React.useState(statusEditCoupon ? objectEditCoupon.name : "Discount 2/9")
+    const dispatch = useDispatch()
+
+    const blurDiscription = (e) => {
+        if (e.target.value.length === 0) {
+            setDiscription(e.target.value)
+            setIsDescription(true);
+        } else {
+            setDiscription(e.target.value)
+            setIsDescription(false);
+        }
+    }
+
+    const blurDiscount = (e) => {
+        if (e.target.value > 100 || e.target.value < 0 || e.target.value == "") {
+            setIsPercent(true)
+        }
+        else {
+            setIsPercent(false)
+            setPercent(e.target.value)
+        }
+    }
+
+    const changeTimeFrom = (newValue) => {
+        if (newValue) {
+            setTimeFrom(newValue);
+        }
+    }
+
+    const changetimeEnd = (newValue) => {
+        if (newValue) {
+            settimeEnd(newValue);
+        }
+    }
+
+    const addCoupon = () => {
+        if (timeEnd - timeFrom > 0) {
+            if (!isPercent && !isDescription) {
+                const data = {
+                    idCoupon: makeCode(6),
+                    name: description,
+                    percent: percent,
+                    timeFrom: timeFrom,
+                    timeEnd: timeEnd,
+                }
+                console.log(data)
+                dispatch({
+                    type: "ADD_COUPON",
+                    data: data
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: "Add coupon success",
+                    typeMessage: "success",
+                })
+                dispatch({
+                    type: "CHANGE_ADD_COUPON_STATUS"
+                })
+            }
+        } else {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: "The end date must be greater than the start date",
+                typeMessage: "warning",
+            })
+        }
+    }
+
+    const editCoupon = () => {
+        if (timeEnd - timeFrom > 0) {
+            if (!isPercent && !isDescription) {
+                const data = {
+                    idCoupon: objectEditCoupon.idCoupon,
+                    name: description,
+                    percent: percent,
+                    timeFrom: timeFrom,
+                    timeEnd: timeEnd,
+                }
+                dispatch({
+                    type: "EDIT_COUPON",
+                    data: data
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: "Edit coupon success",
+                    typeMessage: "success",
+                })
+                dispatch({
+                    type: "CHANGE_ADD_COUPON_STATUS"
+                })
+                dispatch({
+                    type:"RESET_EDIT_COUPON_STATUS"
+                })
+            }
+        } else {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: "The end date must be greater than the start date",
+                typeMessage: "warning",
+            })
+        }
+    }
+
+    const hanhleCancel = () => {
+        dispatch({
+            type: "CHANGE_ADD_COUPON_STATUS"
+        })
+        dispatch({
+            type:"RESET_EDIT_COUPON_STATUS"
+        })
+    }
+
+    const makeCode = (length) => {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() *
+                charactersLength));
+        }
+        return result;
+    }
+
+    return (
+        <form className="modal-add-shift" style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
+            <Card>
+                <CardHeader style={{ color: !statusDarkmode ? '#0091ea' : 'white', backgroundColor: !statusDarkmode ? '#efeeef' : '#455a64' }} title="Create coupon" />
+                <Divider />
+                <CardContent>
+                    <Grid container spacing={2}>
+                        <Grid item md={12} xs={12}>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                fullWidth
+                                id="outlined-error-helper-text"
+                                onBlur={(e) => blurDiscription(e)}
+                                label="Coupon description"
+                                defaultValue={description}
+                                error={isDescription}
+                                helperText={isDescription ? "Enter something" : ""}
+                                required
+                                type="text"
+                                name="disciption"
+                            />
+                        </Grid>
+                        <Grid item md={12} xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                onBlur={(e) => blurDiscount(e)}
+                                label="Discount"
+                                defaultValue={percent}
+                                error={isPercent}
+                                helperText={isPercent ? "Enter greater than 0 and less than 100" : ""}
+                                type="number"
+                                id="outlined-error-helper-text"
+                                name="discount"
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item md={12} xs={12}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <Stack spacing={3}>
+                                    <DesktopDatePicker
+                                        label="From"
+                                        value={timeFrom}
+                                        minDate={new Date('2017-01-01')}
+                                        onChange={(newValue) => changeTimeFrom(newValue)}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                    <DesktopDatePicker
+                                        label="To"
+                                        value={timeEnd}
+                                        minDate={new Date('2017-01-01')}
+                                        onChange={(newValue) => changetimeEnd(newValue)}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </Stack>
+                            </LocalizationProvider>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+                <Divider />
+                <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2 }}>
+                    {statusEditCoupon ? (
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => editCoupon()} variant="contained" startIcon={<BiEdit />}>
+                            Save
+                        </Button>) : (
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => addCoupon()} variant="contained" startIcon={<BiPlusMedical />}>
+                            Add
+                        </Button>
+                    )}
+
+
+                    <Button style={{ backgroundColor: 'red' }} onClick={(e) => hanhleCancel(e)} variant="contained" startIcon={<GiCancel />}>
+                        Cancel
+                    </Button>
+                </Box>
+            </Card>
+        </form >
+    );
+}
+
+export default ModalAddCoupon;
