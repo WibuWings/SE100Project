@@ -8,7 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import { Grid, Box } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import {red} from '@mui/material/colors'
+import { red } from '@mui/material/colors'
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -26,67 +26,50 @@ function Row(props) {
     const listReciept = useSelector(state => state.listReciept)
     const infoUser = useSelector(state => state.infoUser)
     const statusEditInfoBill = useSelector(state => state.statusEditInfoBill)
-    const editReciept = (MAHD) => {
-        
-        let objectInfoBill = [];
-        listReciept.map(value => {
-            if (value.MAHD === MAHD) {
-                objectInfoBill = value
-            }
-            return value;
-        })
-        if (!statusEditInfoBill) {
-            axios.post('http://localhost:5000/api/sell-product/edit-reciept',{
-                MAHD: MAHD,
-                token: localStorage.getItem('token'),
-                email: infoUser.email,
-            }).then(res => {
-                if (res.status === 200) {
-                    localStorage.setItem('token', res.data.token)
-                    dispatch({
-                        type: "EDIT_SHOPPING_BAGS",
-                        MAHD: MAHD,
-                    })
-                    dispatch({
-                        type: "INFO_SHOPPING_BAGS_EDIT",
-                        listProduct: objectInfoBill.listProduct,
-                    })
-                    dispatch({
-                        type: "ADD_INFO_BILL_EDIT",
-                        InfoBill: objectInfoBill,
-                    })
-                    dispatch({
-                        type: "CHANGE_EDIT_INFOMATION_STATUS",
-                    })
-                    dispatch({
-                        type: "CHANGE_HISTORY_RECIEPT_STATUS"
-                    })
-                }
-            }).catch(err => {
-                dispatch({
-                    type: "CHANGE_LOGIN_STATUS",
-                })
-                dispatch({
-                    type: "HIDE_ALERT",
-                })
-                dispatch({
-                    type: "SHOW_ALERT",
-                    message: 'Login timeout, signin again',
-                    typeMessage: 'warning',
-                })
-            })
-            
-        } else {
+    const editReciept = (MAHD, coupon) => {
+        if(coupon) {
             dispatch({
                 type: "HIDE_ALERT",
             })
             dispatch({
                 type: "SHOW_ALERT",
-                message: "Con` don hang` cho` !",
+                message: "This bill has used to discount!",
                 typeMessage: "warning"
             })
+        } else {
+            let objectInfoBill = [];
+            listReciept.map(value => {
+                if (value.MAHD === MAHD) {
+                    objectInfoBill = value
+                }
+                return value;
+            })
+            if (!statusEditInfoBill) {
+                dispatch({
+                    type: "INFO_SHOPPING_BAGS_EDIT",
+                    listProduct: objectInfoBill.listProduct,
+                })
+                dispatch({
+                    type: "ADD_INFO_BILL_EDIT",
+                    InfoBill: objectInfoBill,
+                })
+                dispatch({
+                    type: "CHANGE_EDIT_INFOMATION_STATUS",
+                })
+                dispatch({
+                    type: "CHANGE_HISTORY_RECIEPT_STATUS"
+                })
+            } else {
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: "You are editing another bill!",
+                    typeMessage: "warning"
+                })
+            }
         }
-
     }
 
     const TypeReciept = (isEdit, isDelete) => {
@@ -98,6 +81,7 @@ function Row(props) {
             return '#a6ffa6'
         }
     }
+
 
     const StatusTypeReciept = (isEdit, isDelete) => {
         if (isDelete) {
@@ -125,7 +109,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted), borderWidth: open ? '2px' : null, borderStyle:'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae'  }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted), borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -144,13 +128,13 @@ function Row(props) {
                 <TableCell align="right">{row.totalFinalMoney}</TableCell>
                 <TableCell>
                     {!showEdit(row.isEdit, row.deleted) ? (
-                        <IconButton onClick={() => editReciept(row.MAHD)} color="secondary" aria-label="fingerprint">
+                        <IconButton onClick={() => editReciept(row.MAHD, row.coupon)} color="secondary" aria-label="fingerprint">
                             <FiEdit />
                         </IconButton>
                     ) : null}
                 </TableCell>
             </TableRow>
-            <TableRow style={{borderWidth: open ? '2px' : null, borderStyle:'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae'  }}>
+            <TableRow style={{ borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae' }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
@@ -158,7 +142,7 @@ function Row(props) {
                                 Detail Recipet
                             </Typography>
                             <Grid container spacing={3}>
-                                <Grid item  lg={6} md={12} xs={12}>
+                                <Grid item lg={6} md={12} xs={12}>
                                     <Table size="small" aria-label="purchases">
                                         <TableHead>
                                             <TableRow>
@@ -186,7 +170,7 @@ function Row(props) {
                                         </TableBody>
                                     </Table>
                                 </Grid>
-                                <Grid style={{borderLeft: '1px solid black', marginTop: '15px'}} item lg={6} md={12} xs={12}>
+                                <Grid style={{ borderLeft: '1px solid black', marginTop: '15px' }} item lg={6} md={12} xs={12}>
                                     <Grid container spacing={3}>
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
@@ -271,6 +255,26 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Mã coupon:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.coupon? row.coupon.idCoupon : "Không áp dụng"}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Tiền giảm:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{(row.totalFinalMoney - row.totalMoney).toLocaleString()}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>Giảm giá (%):</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
@@ -323,7 +327,7 @@ export default function CollapsibleTable() {
     const listReciept = useSelector(state => state.listReciept)
 
     return (
-        <TableContainer  style={{overflowX: 'hidden'}} component={Paper}>
+        <TableContainer style={{ overflowX: 'hidden' }} component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow style={{ backgroundColor: 'black', color: 'white' }}>

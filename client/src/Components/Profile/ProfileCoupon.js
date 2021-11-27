@@ -89,6 +89,7 @@ function ProfileCoupon(props) {
                                 <TableRow>
                                     <StyledTableCell>Coupon name</StyledTableCell>
                                     <StyledTableCell align="center">Discount</StyledTableCell>
+                                    <StyledTableCell align="center">Min Total</StyledTableCell>
                                     <StyledTableCell align="center">From</StyledTableCell>
                                     <StyledTableCell align="center">To</StyledTableCell>
                                     <StyledTableCell align="center">Edit</StyledTableCell>
@@ -101,6 +102,7 @@ function ProfileCoupon(props) {
                                         <StyledTableRow key="abc">
                                             <StyledTableCell component="th" scope="row">{item.name}</StyledTableCell>
                                             <StyledTableCell align="center">{item.percent}</StyledTableCell>
+                                            <StyledTableCell align="center">{item.minTotal.toLocaleString()}</StyledTableCell>
                                             <StyledTableCell align="center">{convertTime(item.timeFrom)}</StyledTableCell>
                                             <StyledTableCell align="center">{convertTime(item.timeEnd)}</StyledTableCell>
                                             <StyledTableCell align="center">

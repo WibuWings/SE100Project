@@ -5,7 +5,7 @@ const listRecieptInitialState = [],
                 action.listReciept.map(value => {
                     let data = {
                         MAHD: value._id.receiptID,
-                        name:  value.employeeID.name,
+                        name: value.employeeID.name,
                         idUser: value.employeeID._id.employeeID ? value.employeeID._id.employeeID : '',
                         date: value.createAt,
                         discount: value.discount,
@@ -16,6 +16,7 @@ const listRecieptInitialState = [],
                         isEdit: value.isEdit,
                         oldBill: value.oldBill,
                         deleted: value.deleted ? value.deleted : false,
+                        coupon: value.coupon ? value.coupon : null
                     }
                     state.push(data)
                 })

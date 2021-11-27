@@ -14,12 +14,15 @@ function ModalAddCoupon(props) {
     const statusDarkmode = useSelector(state => state.statusDarkmode)
     const statusEditCoupon = useSelector(state => state.statusEditCoupon)
     const objectEditCoupon = useSelector(state => state.objectEditCoupon)
+    const infoUser = useSelector(state => state.infoUser)
     const [timeFrom, setTimeFrom] = React.useState(statusEditCoupon ? new Date(objectEditCoupon.timeFrom) : new Date());
     const [timeEnd, settimeEnd] = React.useState(statusEditCoupon ? new Date(objectEditCoupon.timeEnd) : new Date());
     const [isDescription, setIsDescription] = React.useState(false);
     const [percent, setPercent] = React.useState(statusEditCoupon ? objectEditCoupon.percent : 100);
     const [isPercent, setIsPercent] = React.useState(false);
     const [description, setDiscription] = React.useState(statusEditCoupon ? objectEditCoupon.name : "Discount 2/9")
+    const [minTotal, setMinTotal] = React.useState(statusEditCoupon ? objectEditCoupon.minTotal : 10000)
+    const [isMinTotal, setIsMinTotal] = React.useState(false)
     const dispatch = useDispatch()
 
     const blurDiscription = (e) => {
@@ -42,6 +45,15 @@ function ModalAddCoupon(props) {
         }
     }
 
+    const blurMinTotal = (e) => {
+        if(e.target.value < 0 || e.target.value == "") {
+            setIsMinTotal(true)
+        } else {
+            setIsMinTotal(false)
+            setMinTotal(e.target.value)
+        }
+    }
+
     const changeTimeFrom = (newValue) => {
         if (newValue) {
             setTimeFrom(newValue);
@@ -54,16 +66,26 @@ function ModalAddCoupon(props) {
         }
     }
 
-    const addCoupon = () => {
+    const addCoupon = async () => {
         if (timeEnd - timeFrom > 0) {
-            if (!isPercent && !isDescription) {
+            if (!isPercent && !isDescription && !isMinTotal) {
                 const data = {
                     idCoupon: makeCode(6),
                     name: description,
                     percent: percent,
+                    minTotal: minTotal,
                     timeFrom: timeFrom,
                     timeEnd: timeEnd,
                 }
+                await axios.post(`http://localhost:5000/api/profile/add-coupon`, {
+                    token: localStorage.getItem('token'),
+                    email: infoUser.email,
+                    data: data,
+                }).then(res => {
+
+                }).catch(err => {
+                    
+                })
                 console.log(data)
                 dispatch({
                     type: "ADD_COUPON",
@@ -93,6 +115,7 @@ function ModalAddCoupon(props) {
                 const data = {
                     idCoupon: objectEditCoupon.idCoupon,
                     name: description,
+                    minTotal: minTotal,
                     percent: percent,
                     timeFrom: timeFrom,
                     timeEnd: timeEnd,
@@ -174,6 +197,21 @@ function ModalAddCoupon(props) {
                                 defaultValue={percent}
                                 error={isPercent}
                                 helperText={isPercent ? "Enter greater than 0 and less than 100" : ""}
+                                type="number"
+                                id="outlined-error-helper-text"
+                                name="discount"
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item md={12} xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                onBlur={(e) => blurMinTotal(e)}
+                                label="Minimum Total Amount"
+                                defaultValue={minTotal}
+                                error={isMinTotal}
+                                helperText={isMinTotal ? "Enter greater than 0" : ""}
                                 type="number"
                                 id="outlined-error-helper-text"
                                 name="discount"

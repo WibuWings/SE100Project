@@ -11,6 +11,7 @@ listCouponReducer = (state = listCouponInitialState, action) => {
                 if(value.idCoupon == action.data.idCoupon) {
                     value.name = action.data.name
                     value.percent = action.data.percent
+                    value.minTotal = action.data.minTotal
                     value.timeFrom = action.data.timeFrom
                     value.timeEnd = action.data.timeEnd
                 }

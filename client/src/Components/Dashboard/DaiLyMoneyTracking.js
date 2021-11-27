@@ -87,7 +87,7 @@ function DaiLyMoneyTracking(props) {
             </div>
             <div style={{ height: 'auto', width: '100%', paddingTop: '20px' }}>
                 <Grid container spacing={2}>
-                    <Grid style={{ display: 'flex', justifyContent: 'end' }} item md={7}>
+                    <Grid style={{ display: 'flex', justifyContent: 'end' }} item md={2}>
                         <h5>TOTAL : </h5>
                     </Grid>
                     <Grid style={{ display: 'flex', justifyContent: 'start' }} item md={5}>

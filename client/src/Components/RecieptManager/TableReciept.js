@@ -366,6 +366,26 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Mã coupon:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.coupon? row.coupon.idCoupon : "Không áp dụng"}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Tiền giảm:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{(row.totalFinalMoney - row.totalMoney).toLocaleString()}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid> 
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>Giảm giá (%):</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
@@ -541,6 +561,8 @@ export default function CollapsibleTable() {
         })
         setListRecieptReplace(list)
     }, [typeReciept, typeByDate, listReciept, statusSelectAll, search])
+
+
     return (
         <TableContainer style={{overflowX: 'hidden',  boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
             <Table aria-label="collapsible table">
