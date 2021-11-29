@@ -106,6 +106,7 @@ class EmployeeTab {
                     address: employee.address,
                     cardID: employee.cardID,
                     startDate: employee.startDate,
+                    imgUrl: employee.imgUrl
                 },
             },
             {
@@ -266,6 +267,10 @@ class EmployeeTab {
 
     deleteShiftAssign = async (req, res) => {
         const deletedShiftAssign = req.body.shiftAssign;
+
+        console.log("deletedShiftAssign._id", deletedShiftAssign);
+        // var newI = await ShiftAssign.findOne({_id: deletedShiftAssign._id});
+        // console.log("newI", newI);
 
         ShiftAssign.deleteOne({ _id: deletedShiftAssign._id })
             .then((data) => {
