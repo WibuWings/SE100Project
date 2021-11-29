@@ -13,7 +13,7 @@ import EditTypeModal from './GoodPartials/EditTypeModal';
 import AddGoodModal from './GoodPartials/AddGoodModal';
 import axios from 'axios';
 import UpdateTypeModal from './GoodPartials/UpdateTypeModal';
-
+import XLSX from 'xlsx';
 
 class GoodManager extends Component {
     constructor(props) {
@@ -146,8 +146,35 @@ class GoodManager extends Component {
 
     componentWillMount() {
         document.title = 'Product Manager'
-    }
+    }   
 
+    uploadExcel(e){
+        e.preventDefault();
+        var f;
+        try {
+            // console.log("e", e.target.files[0]);
+            f = e.target.files[0];
+        }
+        catch(e) {
+            console.log(e);
+            return;
+        }   
+        var name = f.name;
+        const reader = new FileReader();
+        reader.onload = (evt) => { // evt = on_file_select event
+            /* Parse data */
+            const bstr = evt.target.result;
+            const wb = XLSX.read(bstr, {type:'binary'});
+            /* Get first worksheet */
+            const wsname = wb.SheetNames[0];
+            const ws = wb.Sheets[wsname];
+            /* Convert array of arrays */
+            const data = XLSX.utils.sheet_to_csv(ws, {header:1});
+            /* Update state */
+            console.log("Data>>>"+data);
+        };
+        reader.readAsBinaryString(f);
+    }
 
     render() {
         return (
@@ -164,6 +191,10 @@ class GoodManager extends Component {
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleEditType()} variant="contained">
                             edit type
                         </Button>
+                        <label for="upload-excel">
+                            Load Excel
+                        </label>
+                        <input id="upload-excel" type="file" style={{display: 'none'}} accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onChange={(e) => this.uploadExcel(e)}></input>
                         {/* <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirmDelete()} variant="contained">
                             Delete
                         </Button>

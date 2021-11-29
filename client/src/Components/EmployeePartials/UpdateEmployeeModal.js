@@ -189,7 +189,7 @@ class UpdateEmployeeModal extends Component {
             }   
         }
         // console.log("index", this.findIndexInListEmployee(this.id));
-        console.log(data);
+        console.log("updateEmployee", data);
         await axios.put(`http://localhost:5000/api/employee`, data)
             .then(res => {
                 console.log("Update success");
@@ -197,6 +197,9 @@ class UpdateEmployeeModal extends Component {
             })
             .catch(err => {
                 console.log(err);
+                this.props.changeLoginStatus();
+                this.props.hideAlert();
+                this.props.showAlert("Login timeout, signin again", "warning");
             })
         this.props.updateEmployeeRedux(data.employee, this.findIndexInListEmployee(this.id))
         this.props.changeUpdateEmployeeStatus();
@@ -226,6 +229,7 @@ class UpdateEmployeeModal extends Component {
         this.address = currentEmployee.address;
         this.email = currentEmployee.email;
         this.startDate = currentEmployee.startDate;
+        this.imgUrl = currentEmployee.imgUrl;
         if(this.startDate!=null && this.startDate.indexOf('T')!=-1)
         {
             this.startDate = this.startDate.substring(0, this.startDate.indexOf('T'));
