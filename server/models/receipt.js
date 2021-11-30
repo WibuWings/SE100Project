@@ -28,16 +28,7 @@ const Receipt = new Schema({
     totalFinalMoney: Number,
     totalProducts: Number,
     discount:Number,
-    coupon: {
-        _id: {
-            storeID: String,
-            couponID: String,
-        },
-        percent: Number,
-        from: Date,
-        expire: Date,
-        createdAt: Date,
-    },
+    coupon: {},
     timeCreate : String,
     isEdit: Boolean,
     createAt: String,

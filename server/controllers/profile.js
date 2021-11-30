@@ -327,16 +327,12 @@ class meProfile {
             { _id : req.body.email},
             {
                 $set: {
-                    currency: req.body.currency,
-                    numberEmployees: req.body.numberEmployees,
-                    from :{
-                        hour: req.body.timeEnd.hours,
-                        minutes: req.body.timeEnd.minutes,
-                    },
-                    to :{
-                        hour: req.body.timeStarthours,
-                        minutes: req.body.timeStart.minutes,
-                    },
+                    currency: req.body.regulation.currency,
+                    exchangeRate:req.body.regulation.exchangeRate,
+                    miniumEmployeeAge:req.body.regulation.miniumEmployeeAge,
+                    lessChangeTimeKeepingDay:req.body.regulation.lessChangeTimeKeepingDay,
+                    minExpiredProduct:req.body.regulation.minExpiredProduct,
+                    numberEmployees: req.body.regulation.numberEmployees,
                 }
             }, {
             returnOriginal: false,
