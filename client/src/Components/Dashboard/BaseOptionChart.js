@@ -6,7 +6,6 @@ import { GlobalStyles } from '@mui/material';
 
 export function BaseOptionChartStyle() {
   const theme = useTheme();
-
   const background = {
     backdropFilter: 'blur(6px)',
     WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile

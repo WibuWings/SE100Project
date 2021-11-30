@@ -48,6 +48,23 @@ const  listSackedEmployeeReducer = (state = listSackedEmployeeInitialState, acti
                     employees : newState
                 }
             }
+            case "DELETE_PERMANTLY_EMPLOYEE":
+            {
+                var newState = [];
+                for(var i = 0 ; i < state.employees.length ; i ++)
+                {
+                    if(state.employees[i]._id.employeeID !== action.employeeID)
+                    {
+                        newState.push(state.employees[i]);
+                    }
+                    else {
+                        console.log("Kiếm đc cái xoá rồi")
+                    }
+                }
+                return {
+                    employees : newState
+                }
+            }
             default:
                 return state
         }

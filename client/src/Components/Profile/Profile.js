@@ -39,7 +39,7 @@ class Profile extends Component {
     }
     render() {
         return (
-            <div className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
+            <div id="scroll-bar" className="profile" style={{ overflow: 'scroll', overflowX: 'hidden', height: '100vh' }}>
                 <ProfileHeader></ProfileHeader>
                 <Container style={{ marginBottom: '20px' }} maxWidth="xl">
                     <Grid className="profile-body" container spacing={2}>

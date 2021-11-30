@@ -24,6 +24,62 @@ const listProductInitialState = [
                 return {
                     state: action.data
                 }
+            case "ADD_PRODUCT":
+                return {
+                    state: [...state.state, action.data]
+                }
+            case "UPDATE_PRODUCT":
+                var newState = [];
+                for(var i = 0 ; i < state.state.length; i++)
+                {
+                    if(state.state[i]._id.productID != action.data._id.productID)
+                    {
+                        newState.push(state.state[i]);
+                    }
+                    else 
+                    {
+                        newState.push(action.data);
+                    }
+                }
+                return {
+                    state: newState
+                }
+            case "DELETE_PRODUCT":
+                var newState = [];
+                for(var i = 0 ; i < state.state.length; i++)
+                {
+                    if(state.state[i]._id.productID != action.data._id.productID)
+                    {
+                        newState.push(state.state[i]);
+                    }
+                    else 
+                    {
+                        
+                    }
+                }
+                return {
+                    state: newState
+                }
+            case "DECREASE_REMAIN_PRODUCT": 
+            {
+                var newState = [];
+                for(var i = 0 ; i < state.state.length; i++)
+                {
+                    if(state.state[i]._id.productID != action.data._id.productID)
+                    {
+                        newState.push(state.state[i]);
+                    }
+                    else 
+                    {
+                        var decreaseVal = state.state[i];
+                        decreaseVal.remain = action.data.remain;
+                        newState.push(decreaseVal);
+                    }
+                }
+                return {
+                    state: newState
+                }
+            }
             default:
                 return state
         }

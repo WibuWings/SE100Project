@@ -82,13 +82,17 @@ class Printf extends React.PureComponent {
     return result;
   }
 
+  getProductByID(){
+
+  }
 
   addReciept = async () => {
     if (this.props.shoppingBags.length === 0) {
       this.props.hideAlert()
       this.props.showAlert("Cart empty ", "warning")
     } else {
-      let code = this.makeCode(8)
+      let code = this.makeCode(8);
+      var isContinue = true;
       this.setState({
         code: code
       })
@@ -105,7 +109,7 @@ class Printf extends React.PureComponent {
         isEdit: false,
         oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
       }
-      axios.post('http://localhost:5000/api/sell-product/add-reciept', {
+      await axios.post('http://localhost:5000/api/sell-product/add-reciept', {
         email: this.props.infoUser.managerID? this.props.infoUser.managerID : this.props.infoUser.email,
         token: localStorage.getItem('token'),
         data: data,
@@ -121,7 +125,6 @@ class Printf extends React.PureComponent {
             })
             this.props.hideAlert()
             this.props.showAlert("Print bill success", "success")
-            this.props.resetShoppingBag();
             this.props.addRecieptToHistory(data);
           }
         })
@@ -129,8 +132,45 @@ class Printf extends React.PureComponent {
           this.props.changeLoginStatus();
           this.props.hideAlert();
           this.props.showAlert("Login timeout, signin again", "warning");
+          isContinue = false;
         })
+        if(isContinue)
+        {
+          console.log("Chạy thành công rồi")
+          // Update số lượng sản phẩm ở đây
+          console.log("this.props.shoppingBags", this.props.shoppingBags)
+          for(var i = 0 ; i < this.props.shoppingBags.length;  i++)
+          {
+            const data = {
+                token: localStorage.getItem('token'),
+                product: {
+                    _id: 
+                    {
+                        productID: this.props.shoppingBags[i].product._id.productID,
+                        importDate: this.props.shoppingBags[i].product._id.importDate,
+                        storeID: this.props.shoppingBags[i].product._id.storeID,
+                    },
+                    remain: this.props.shoppingBags[i].product.remain - this.props.shoppingBags[i].quantity,
+                }
+              }
+            axios.put(`http://localhost:5000/api/product`, data)
+            .then(res => {
+                console.log("Update success", i);
+                // Xử lý ở redux
+                const dataRedux = data.product;
+                this.props.decreaseRemainProduct(dataRedux);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+          }
+          
+          
+          this.props.resetShoppingBag();
+        }
 
+
+        
     }
 
   }
@@ -202,7 +242,7 @@ const mapStateToProps = (state, ownProps) => {
     infoUser: state.infoUser,
     shoppingBags: state.shoppingBags,
     statusEditInfoBill: state.statusEditInfoBill,
-    InfomationBillEdit: state.InfomationBillEdit,
+    InfomationBillEdit: state.InfomationBillEdit,   
   }
 }
 
@@ -245,7 +285,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
           type: "CHANGE_LOGIN_STATUS",
       });
-  },
+    },
+    decreaseRemainProduct: (data) => {
+      dispatch({
+          type: "DECREASE_REMAIN_PRODUCT",
+          data: data,
+      });
+    },
   }
 }
 

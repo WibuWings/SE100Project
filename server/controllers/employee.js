@@ -40,7 +40,13 @@ class EmployeeTab {
         .exec()
         .then((data) =>     {
             if (data) {
-                throw new Error();
+                res.status(404).send(
+                    JSON.stringify({
+                        email: res.locals.decoded.email,
+                        token: res.locals.newToken,
+                        message: "ID duplicated",
+                    })
+                );
 
             } else {
                 const employees = new Employee({
@@ -59,6 +65,7 @@ class EmployeeTab {
             cardID: employee.cardID,
             startDate: employee.startDate,
             isEmployee: true,
+            imgUrl: employee.imgUrl
         });
         employees
             .save()
@@ -76,14 +83,6 @@ class EmployeeTab {
             });
             }
         })
-        .catch((err) => {
-            res.send(
-                JSON.stringify({
-                    status: STATUS.FAILURE,
-                    message: MESSAGES.EMAIL_HAS_BEEN_USED,
-                })
-            );
-        });
         
     };
 
@@ -107,6 +106,7 @@ class EmployeeTab {
                     address: employee.address,
                     cardID: employee.cardID,
                     startDate: employee.startDate,
+                    imgUrl: employee.imgUrl
                 },
             },
             {
@@ -268,6 +268,10 @@ class EmployeeTab {
     deleteShiftAssign = async (req, res) => {
         const deletedShiftAssign = req.body.shiftAssign;
 
+        console.log("deletedShiftAssign._id", deletedShiftAssign);
+        // var newI = await ShiftAssign.findOne({_id: deletedShiftAssign._id});
+        // console.log("newI", newI);
+
         ShiftAssign.deleteOne({ _id: deletedShiftAssign._id })
             .then((data) => {
                 res.status(200).send(
@@ -282,6 +286,28 @@ class EmployeeTab {
             });
     };
     //
+
+    //timekeeping
+    getTimeKeeping = async (req, res) => {
+        var filter =
+            typeof req.body.filter === "object"
+                ? req.body.filter
+                : JSON.parse(req.body.filter);
+        TimeKeeping.find(filter)
+            .exec()
+            .then((data) => {
+                res.status(200).send(
+                    JSON.stringify({
+                        email: res.locals.decoded.email,
+                        token: res.locals.newToken,
+                        data,
+                    })
+                );
+            })
+            .catch((err) => {
+                res.status(404).send(err);
+            });
+    };
 
     //timekeeping
     getTimeKeeping = async (req, res) => {
@@ -507,11 +533,28 @@ class EmployeeTab {
     updateTimeKeeping = async (req, res) => {
         var updatedTimeKeeping = req.body.updatedTimeKeeping;
 
+        // console.log("req.body.updatedTimeKeeping.id\n", req.body.updatedTimeKeeping._id);
+
+        var dataEmployee = {...updatedTimeKeeping._id.employee};
+        dataEmployee.startDate = new Date(dataEmployee.startDate);
+        dataEmployee.dateOfBirth = new Date(dataEmployee.dateOfBirth);
+
+        const dataToSearch = {
+            "_id.dateInWeek": updatedTimeKeeping._id.dateInWeek,
+            "_id.storeID": updatedTimeKeeping._id.storeID,
+            "_id.shiftType": updatedTimeKeeping._id.shiftType,
+            "_id.employee": dataEmployee,
+            "_id.realDate": new Date(updatedTimeKeeping._id.realDate),
+        };
+        // console.log("dataSearch", dataToSearch);
+        var newI = await TimeKeeping.findOne(dataToSearch);
+        console.log("newI", newI);
+
         TimeKeeping.findOneAndUpdate(
-            { _id: updatedTimeKeeping._id },
+            { ...dataToSearch },
             {
                 $set: {
-                    ...updatedTimeKeeping,
+                    isPaidSalary: updatedTimeKeeping.isPaidSalary,
                 },
             },
             {
@@ -529,7 +572,7 @@ class EmployeeTab {
         });
     };
 
-    deleteTimeKeeping = async (req, res) => { };
+    deleteTimeKeeping = async (req, res) => {};
     //
 
     // ofday
@@ -634,7 +677,7 @@ class EmployeeTab {
         });
     };
 
-    updateOffDay = async (req, res) => { };
+    updateOffDay = async (req, res) => {};
 
     deleteOffDay = async (req, res) => {
         const deletedOffDay = req.body.offDay;

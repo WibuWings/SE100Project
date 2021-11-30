@@ -36,9 +36,9 @@ function ShoppingBags(props) {
     return (
         <div style={{width: '100%'}}>
             {
-                (shoppingBags === []) ?
+                (shoppingBags.length === 0) ?
                     (<div style={{ width: '100%', height: '100%', textAlign: 'center', marginTop: '100px' }}>
-                        <h3>Không có gì</h3>
+                        <h3>Empty cart</h3>
                     </div>) : shoppingBags.map((value, key) => (
                         <Grid item className="customize-list-table" style={{ backgroundColor: 'white', alignContent: 'center', justifyContent: 'center', paddingTop: '5px', paddingBottom: '5px' }} md={12} sm={12}>
                             <Grid style={{ textAlign: 'center', alignItems: 'center', justifyItems: 'center' }} container spacing={0}>

@@ -23,6 +23,31 @@ class Login extends Component {
         }
     }
 
+    loadAllGood(dataProduct, dataJoin) {
+        var resultProduct = dataProduct;
+        var joinTypeInfor = dataJoin;
+     
+        var listProductInfor = [];
+        for (let i = 0; i < resultProduct.length; i++) {
+            var typeIDList = [];
+            var joinType = '';
+            for (var j = 0; j < joinTypeInfor.length; j++) {
+                if (resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID &&
+                    resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) 
+                {
+                    typeIDList.push(joinTypeInfor[j]._id.typeID);
+                }
+            }
+    
+            listProductInfor.push(
+                {
+                    ...resultProduct[i],
+                    typeIDList: typeIDList,
+                });
+        }
+        this.props.getProductToReducer(listProductInfor);
+      }
+
     // Login with google
     onLoginSuccess = async (res) => {
         this.props.setRole();
@@ -38,6 +63,8 @@ class Login extends Component {
                         this.props.updateShiftTypes(res.data.data.shiftTypes);
                         this.props.updateRecieptUser(res.data.data.receipts);
                         this.props.changeLoginStatus();
+                        this.props.getTimeKeeping(res.data.data.timeKeeping);
+                        this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
                         this.props.hideAlert();
                         this.props.showAlert(res.data.message, "success");
                         break;
@@ -74,6 +101,8 @@ class Login extends Component {
                             this.props.updateRecieptUser(res.data.data.receipts);
                             this.props.changeLoginStatus();
                             this.props.getEmployee(res.data.data.employees);
+                            this.props.getTimeKeeping(res.data.data.timeKeeping);
+                            this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
                             this.props.hideAlert();
                             this.props.showAlert(res.data.message, "success");
                             break;
@@ -148,7 +177,14 @@ class Login extends Component {
         document.onkeydown = function (e) {
             switch (e.which) {
                 case 13:
-                    enterPress(e);
+                    try
+                    {
+                        enterPress(e);
+                    }
+                    catch(err) 
+                    {
+                        console.log("Alo lỗi mẹ rồi")
+                    }
                     break;
                 default:
                     break;
@@ -290,6 +326,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "UPDATE_RECIEPT_USER",
                 listReciept: data,
             })
+        },
+        getTimeKeeping: (data) => {
+            dispatch({
+              type: "GET_TIMEKEEPER",
+              data: data
+            });  
+          },
+        getProductToReducer: (data) => {
+            dispatch({
+                type: "GET_PRODUCT_AND_TYPE",
+                data: data
+            });
         },
     }
 }

@@ -118,49 +118,6 @@ class EmployeeManager extends Component {
     addEmployee () {
         this.props.changeAddEmployeeStatus();
     }
-
-    // Dữ liệu mà Tài sẽ trả về khi get, còn khi post, delete, put thì chỉ trả về email với token thôi
-
-    sampleData = {
-        email: "",
-        token: "",
-        employees: [
-            {
-                _id: {
-                    employeeID: "0",
-                    storeID: "19522006@gm.uit.edu.vn",
-                },
-                managerID: "19522006@gm.uit.edu.vn",
-                password: "abc123",
-                firstName: "Antonio",
-                lastName: "Rudiger",
-                phoneNumber: "03232323232",
-                dateOfBirth: "2021-11-02T00:00:00.000Z",
-                email: "1912@gmail.com",
-                address: "Wherever",
-                cardID: "2511098589",
-                startDate: "2021-11-02T00:00:00.000Z",
-                endDate: "",
-            },
-            {
-                _id: {
-                    employeeID: "1",
-                    storeID: "19522006@gm.uit.edu.vn",
-                },
-                managerID: "19522006@gm.uit.edu.vn",
-                password: "abc123",
-                firstName: "Antonio",
-                lastName: "Rudiger",
-                phoneNumber: "03232323232",
-                dateOfBirth: "2021-11-02T00:00:00.000Z",
-                email: "1911@gmail.com",
-                address: "Wherever",
-                cardID: "25110985819",
-                startDate: "2021-11-02T00:00:00.000Z",
-                endDate: "2021-11-31T00:00:00.000Z",
-            }
-        ]
-    }
     // Lấy danh sách các nhân viên
     async getAllEmployee () {
         var result = [];
@@ -342,56 +299,16 @@ class EmployeeManager extends Component {
             })
     }
 
+    componentWillMount() {
+        document.title = 'Employee Manager'
+    }
+
     render() {
         const { classes } = this.props;
         return (
             <div
                 style={{display: 'block', overflowY: 'auto', height: '100vh'}}
             >
-                <div>
-                    <Button
-                        onClick={() => {this.getAllEmployee()}}
-                        variant="contained"
-                    >
-                        Get Employee
-                    </Button>
-                    {/* <Button
-                        onClick={() => this.addEmployeeToDatabase()}
-                        variant="contained"
-                    >
-                        Add Employee
-                    </Button>
-                    <Button
-                        onClick={() => this.updateEmployee()}
-                        variant="contained"
-                    >
-                        Update Employee
-                    </Button>
-                    <Button
-                        onClick={() => this.deleteEmployeeFromDatabase()}
-                        variant="contained"
-                    >
-                        Delete Employee
-                    </Button> */}
-                    <Button
-                        onClick={() => this.getSackedEmployee()}
-                        variant="contained"
-                    >
-                        Get Sacked Employee
-                    </Button>
-                    {/* <Button
-                        onClick={() => this.backToWork()}
-                        variant="contained"
-                    >
-                        Back To Work
-                    </Button>
-                    <Button
-                        onClick={() => this.deleteEmployeePermantlyFromDatabase()}
-                        variant="contained"
-                    >
-                        Delete Permantly
-                    </Button> */}
-                </div>
                 <Container
                     style={{marginTop: 20, }}
                 >
@@ -527,8 +444,8 @@ class EmployeeManager extends Component {
                                 // order={order}
                                 // orderBy={orderBy}
                                 headLabel={TABLE_HEAD}
-                                rowCount={USERLIST.length}
-                                numSelected={selected.length}
+                                // rowCount={USERLIST.length}
+                                // numSelected={selected.length}
                                 // onRequestSort={handleRequestSort}
                                 // onSelectAllClick={handleSelectAllClick}
                             />
@@ -537,6 +454,9 @@ class EmployeeManager extends Component {
                             >
                             {
                                 this.props.listSackedEmployee.employees.map((row) => {
+                                    
+                                    // console.log("row", row);
+                                    // if(row == {} || row == null) return (<div></div>);
                                 return (
                                     <TableRow
                                         hover
