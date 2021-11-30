@@ -8,9 +8,9 @@ import DaiLyMoneyTracking from './DaiLyMoneyTracking';
 import GroupButtonDashboard from './GroupButtonDashboard';
 import TotalMoney from './TotalMoney';
 import ErrorReceipt from './ErrorReceipt';
-
+import CouponManager from './CouponManager';
 class DashBoard extends Component {
-    
+
     renderEventContent = (eventInfo) => {
         return (
             <>
@@ -65,6 +65,9 @@ class DashBoard extends Component {
                         </Grid>
                         <Grid item md={12} sm={12}>
                             <DaiLyMoneyTracking></DaiLyMoneyTracking>
+                        </Grid>
+                        <Grid item md={12} sm={12}>
+                            <CouponManager></CouponManager>
                         </Grid>
                     </Grid>
                 </Container>

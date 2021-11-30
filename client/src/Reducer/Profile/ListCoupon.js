@@ -14,6 +14,7 @@ listCouponReducer = (state = listCouponInitialState, action) => {
                     value.minTotal = action.data.minTotal
                     value.timeFrom = action.data.timeFrom
                     value.timeEnd = action.data.timeEnd
+                    value.quantity = action.data.quantity
                 }
                 return value
             })

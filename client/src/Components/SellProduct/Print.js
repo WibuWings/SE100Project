@@ -139,8 +139,6 @@ class Printf extends React.PureComponent {
     return "  " + this.state.date.getDate() + " / " + month + " / " + this.state.date.getFullYear()
   }
 
-  
-  
   componentWillReceiveProps(nextProps) {
     let now = new Date()
     let money = this.totalMoney();
@@ -167,7 +165,6 @@ class Printf extends React.PureComponent {
     })
   }
 
-  
   componentWillMount() {
     let now = new Date()
     let money = this.totalMoney();
