@@ -65,8 +65,6 @@ class Regulation extends Component {
             },
         }
         if (!this.state.isNumberEmployees && this.state.isSaveRegulations) {
-              console.log("save");  
-              console.log(data);
             await axios.post(`http://localhost:5000/api/profile/regulation`, data)
             .then(res => {
                 this.props.hideAlert();

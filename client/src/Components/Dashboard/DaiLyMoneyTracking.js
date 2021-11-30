@@ -16,6 +16,17 @@ function DaiLyMoneyTracking(props) {
         }
     }
 
+    const totalMoneyDaily = () => {
+        let money = 0
+        dailyListReciept.map(value => {
+            if (!value.deleted) {
+                money += value.totalFinalMoney
+            } else {
+                money -= value.totalFinalMoney
+            }
+        })
+        return money
+    }
 
     React.useEffect(() => {
         let day = value.getDate()
@@ -46,7 +57,7 @@ function DaiLyMoneyTracking(props) {
                     />
                 </LocalizationProvider>
             </div>
-            <div id="choses-product" style={{ backgroundColor: 'white', height: '500px', width: '80%', overflow: 'hidden', margin: 'auto', overflowY: 'auto', marginTop: '20px' }}>
+            <div id="choses-product" style={{ backgroundColor: 'white', height: '500px', width: '80%', overflow: 'hidden', margin: 'auto', overflowY: 'auto', marginTop: '20px', marginBottom: '20px' }}>
                 <ul style={{ textDecoration: 'none', listStyle: 'none', paddingLeft: '0' }}>
                     {
                         dailyListReciept.length !== 0 ? dailyListReciept.map(value => (
@@ -73,6 +84,20 @@ function DaiLyMoneyTracking(props) {
                         )
                     }
                 </ul>
+            </div>
+            <div style={{ height: 'auto', width: '100%', paddingTop: '20px' }}>
+                <Grid container spacing={2}>
+                    <Grid style={{ display: 'flex', justifyContent: 'end' }} item md={2}>
+                        <h5>TOTAL : </h5>
+                    </Grid>
+                    <Grid style={{ display: 'flex', justifyContent: 'start' }} item md={5}>
+                        {totalMoneyDaily() >= 0 ? (
+                            <h5  style={{color:'green', fontWeight: 'bold'}}>{totalMoneyDaily()} VNĐ</h5>
+                        ) : (
+                            <h5 style={{color:'red', fontWeight: 'bold'}}>{totalMoneyDaily()} VNĐ</h5>
+                        )}
+                    </Grid>
+                </Grid>
             </div>
         </div>
     );

@@ -10,9 +10,64 @@ import MenuList from '@mui/material/MenuList';
 import { BiCaretDown } from 'react-icons/bi'
 import { useDispatch } from 'react-redux';
 
-const options = ['All', 'Today', 'Yesterday', 'Month', 'Year'];
+const options = [
+    {
+        month: 'All',
+        value: 0,
+    },
+    {
+        month: 'Jan',
+        value: 1,
+    },
+    {
+        month: 'Feb',
+        value: 2,
+    },
+    {
+        month: 'Mar',
+        value: 3,
+    },
+    {
+        month: 'Apr',
+        value: 4,
+    },
+    {
+        month: 'May',
+        value: 5,
+    },
+    {
+        month: 'Jun',
+        value: 6,
+    },
+    {
+        month: 'Jul',
+        value: 7,
+    },
+    {
+        month: 'Aug',
+        value: 8,
+    },
+    {
+        month: 'Sep',
+        value: 9,
+    },
+    {
+        month: 'Oct',
+        value: 10,
+    },
+    {
+        month: 'Nov',
+        value: 11,
+    },
+    {
+        month: 'Dec',
+        value: 12,
+    }
+];
 
-export default function SplitButton() {
+
+
+export default function OptionMonth() {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
     const dispatch = useDispatch()
@@ -24,9 +79,9 @@ export default function SplitButton() {
 
     const handleMenuItemClick = (event, index, option) => {
         dispatch({
-            type: "TYPE_HEADER_DASHBOARD",
-            typeDashboard: option
-        })
+            type: "MONTH_SELECT_DASHBOARD",
+            typeDashboard: option,
+          })
         setSelectedIndex(index);
         setOpen(false);
     };
@@ -45,14 +100,14 @@ export default function SplitButton() {
 
     React.useEffect(() => {
         dispatch({
-            type: "RESET_TYPE_HEADER_DASHBOARD"
+            type: "RESET_MONTH_SELECT_DASHBOARD"
         })
     }, [])
 
     return (
         <React.Fragment>
-            <ButtonGroup variant="contained" className="button-group-customize" ref={anchorRef} aria-label="split button">
-                <Button onClick={handleClick}>{options[selectedIndex]}</Button>
+            <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
+                <Button onClick={handleClick}>{options[selectedIndex].month}</Button>
                 <Button
                     size="small"
                     aria-controls={open ? 'split-button-menu' : undefined}
@@ -70,7 +125,6 @@ export default function SplitButton() {
                 role={undefined}
                 transition
                 disablePortal
-                style={{zIndex: 20}}
             >
                 {({ TransitionProps, placement }) => (
                     <Grow
@@ -82,15 +136,14 @@ export default function SplitButton() {
                     >
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
-                                <MenuList id="split-button-menu" style={{zIndex: 500}}>
-                                    {options.map((option, index) => (
+                                <MenuList id="split-button-menu">
+                                    {options.map((item, index) => (
                                         <MenuItem
-                                            key={option}
+                                            key={item.value}
                                             selected={index === selectedIndex}
-                                            onClick={(event) => handleMenuItemClick(event, index, option)}
-                                            style={{zIndex: 500}}
+                                            onClick={(event) => handleMenuItemClick(event, index, item.value)}
                                         >
-                                            {option}
+                                            {item.month}
                                         </MenuItem>
                                     ))}
                                 </MenuList>
