@@ -320,6 +320,45 @@ class meProfile {
                 }
             })
     }
+    regulation = async (req, res) => {
+        Regulation.findOneAndUpdate(
+            { _id : req.body.email},
+            {
+                $set: {
+                    currency: req.body.currency,
+                    numberEmployees: req.body.numberEmployees,
+                    from :{
+                        hour: req.body.timeEnd.hours,
+                        minutes: req.body.timeEnd.minutes,
+                    },
+                    to :{
+                        hour: req.body.timeStarthours,
+                        minutes: req.body.timeStart.minutes,
+                    },
+                }
+            }, {
+            returnOriginal: false,
+        },
+            function (err, doc) {
+                if (err) {
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.FAILURE_UPDATE,
+                        })
+                    );
+                }
+                else {
+                    res.status(200).send(
+                        JSON.stringify({
+                            token: res.locals.newToken,
+                            email: res.locals.decoded.email,
+                            data: doc,
+                        })
+                    )
+                }
+            });
+    }
 
     deleteAccount = async (req, res) => {
         const manager = await Manager.findOne({email: req.body.email}).exec();
