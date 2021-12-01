@@ -48,7 +48,7 @@ class SellProduct extends Component {
                 if (value1.product.name === value.name) {
                     isCheck = true;
                     currentQuantity = value1.quantity
-                    maxQuantity = value.quantity
+                    maxQuantity = value.remain
                 }
                 return value;
             })

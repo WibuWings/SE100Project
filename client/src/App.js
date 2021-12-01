@@ -14,6 +14,31 @@ class App extends Component {
     super(props);
   }
 
+  loadAllGood(dataProduct, dataJoin) {
+    var resultProduct = dataProduct;
+    var joinTypeInfor = dataJoin;
+ 
+    var listProductInfor = [];
+    for (let i = 0; i < resultProduct.length; i++) {
+        var typeIDList = [];
+        var joinType = '';
+        for (var j = 0; j < joinTypeInfor.length; j++) {
+            if (resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID &&
+                resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) 
+            {
+                typeIDList.push(joinTypeInfor[j]._id.typeID);
+            }
+        }
+
+        listProductInfor.push(
+            {
+                ...resultProduct[i],
+                typeIDList: typeIDList,
+            });
+    }
+    this.props.getProductToReducer(listProductInfor);
+  }
+
   async componentWillMount() {
     if (localStorage.getItem('token') && localStorage.getItem('token') !== "") {
       axios.post(`http://localhost:5000/refresh`, {
@@ -30,6 +55,9 @@ class App extends Component {
               this.props.updateShiftTypes(res.data.data.shiftTypes)
               this.props.changeLoginStatus();
               this.props.getEmployee(res.data.data.employees);
+              // Phi
+              this.props.getTimeKeeping(res.data.data.timeKeeping);
+              this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
             } else {
               this.props.setRoleEmployee()
               localStorage.setItem('token', res.data.token);
@@ -135,6 +163,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "EMPLOYEE_ROLE",
       });
     },
+    getTimeKeeping: (data) => {
+      dispatch({
+        type: "GET_TIMEKEEPER",
+        data: data
+      });  
+    },
+    getProductToReducer: (data) => {
+      dispatch({
+          type: "GET_PRODUCT_AND_TYPE",
+          data: data
+      });
+  },
   }
 }
 

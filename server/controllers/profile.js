@@ -162,14 +162,16 @@ class meProfile {
 
 
     updateShift = async (req, res) => {
-        const idUser = req.body.email
-        const idShift = req.body.idShift
+        const idUser = req.body.idUser
+        const idShift = req.body.id
         const newSalary = req.body.salary
         const name = req.body.description
         const from = req.body.from
         const to = req.body.to
+
+        console.log("search", {"_id.shiftID": idShift, "_id.storeID": idUser, });
         ShiftType.findOneAndUpdate(
-            { shiftID: idShift, storeID: idUser, },
+            { "_id.shiftID": idShift, "_id.storeID": idUser, },
             {
                 $set: {
                     name: name,

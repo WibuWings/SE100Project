@@ -26,12 +26,10 @@ const listTimeKeepingInitialState =
 
 const listTimeKeepingReducer = (state = listTimeKeepingInitialState, action) => {
         switch (action.type) {
-            // case "SET_NEXT_WEEK_TIMEKEEPER":
-            //     return{
-            //         state: action.data
-            //     }
+            case "GET_TIMEKEEPER":
+                return action.data;
             case "ADD_NEW_TIME_KEEPER":
-                return [...state, action.data]
+                return [...state, action.data];
             case "UPDATE_TIMEKEEPER":
                 {
                     var newState = [];
