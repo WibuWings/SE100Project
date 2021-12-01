@@ -82,7 +82,7 @@ function ProfileCoupon(props) {
                 <CardHeader style={{ color: !statusDarkmode ? '#0091ea' : 'white', backgroundColor: !statusDarkmode ? '#efeeef' : '#455a64' }} title="Coupon" />
                 <Divider />
                 <CardContent>
-                    <TableContainer component={Paper}>
+                    <TableContainer id="choses-product" component={Paper}>
                         <Table sx={{ minWidth: 700 }} aria-label="customized table">
                             <TableHead>
                                 <TableRow>

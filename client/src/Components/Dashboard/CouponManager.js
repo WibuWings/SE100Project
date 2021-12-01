@@ -155,9 +155,9 @@ function CouponManager(props) {
                         </Grid>
                         <Grid style={{ height: '500px' }} item md={9} sm={9}>
                             <Grid container spacing={3}>
-                                <Grid id="choses-product" style={{ overflowX: 'hidden', overflowY: 'scroll', height: '430px', marginTop: '20px' }} item md={12} sm={12}  >
-                                    <TableContainer component={Paper}>
-                                        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                                <Grid id="choses-product" style={{ overflowX: 'hidden', overflowY: 'auto', height: '430px', marginTop: '20px' }} item md={12} sm={12}  >
+                                    <TableContainer id="choses-product" component={Paper}>
+                                        <Table  sx={{ minWidth: 700 }} aria-label="customized table">
                                             <TableHead>
                                                 <TableRow>
                                                     <StyledTableCell>Name coupon</StyledTableCell>
@@ -166,7 +166,7 @@ function CouponManager(props) {
                                                     <StyledTableCell align="center">Dicount(%)</StyledTableCell>
                                                     <StyledTableCell align="center">Reduce Money</StyledTableCell>
                                                 </TableRow>
-                                            </TableHead>
+                                            </TableHead >
                                             {listReceiptHaveCoupon.map(item => {
                                                 return (
                                                     <TableBody>

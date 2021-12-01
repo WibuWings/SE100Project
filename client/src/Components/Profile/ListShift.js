@@ -84,7 +84,7 @@ class ListShift extends Component {
                     <CardHeader style={{ color: !this.props.statusDarkmode ? '#0091ea' : 'white', backgroundColor: !this.props.statusDarkmode ? '#efeeef' : '#455a64' }} title="List Shift" />
                     <Divider />
                     <CardContent>
-                        <TableContainer component={Paper}>
+                        <TableContainer id="choses-product" component={Paper}>
                             <Table sx={{ minWidth: 700 }} aria-label="customized table">
                                 <TableHead>
                                     <TableRow>

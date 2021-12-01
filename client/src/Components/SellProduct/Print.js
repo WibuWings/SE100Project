@@ -63,7 +63,7 @@ class Printf extends React.PureComponent {
     return result;
   }
 
-  getProductByID(){
+  getProductByID() {
 
   }
 
@@ -138,43 +138,41 @@ class Printf extends React.PureComponent {
           this.props.showAlert("Login timeout, signin again", "warning");
           isContinue = false;
         })
-        if(isContinue)
-        {
-          console.log("Chạy thành công rồi")
-          // Update số lượng sản phẩm ở đây
-          console.log("this.props.shoppingBags", this.props.shoppingBags)
-          for(var i = 0 ; i < this.props.shoppingBags.length;  i++)
-          {
-            const data = {
-                token: localStorage.getItem('token'),
-                product: {
-                    _id: 
-                    {
-                        productID: this.props.shoppingBags[i].product._id.productID,
-                        importDate: this.props.shoppingBags[i].product._id.importDate,
-                        storeID: this.props.shoppingBags[i].product._id.storeID,
-                    },
-                    remain: this.props.shoppingBags[i].product.remain - this.props.shoppingBags[i].quantity,
-                }
-              }
-            axios.put(`http://localhost:5000/api/product`, data)
+      if (isContinue) {
+        console.log("Chạy thành công rồi")
+        // Update số lượng sản phẩm ở đây
+        console.log("this.props.shoppingBags", this.props.shoppingBags)
+        for (var i = 0; i < this.props.shoppingBags.length; i++) {
+          const data = {
+            token: localStorage.getItem('token'),
+            product: {
+              _id:
+              {
+                productID: this.props.shoppingBags[i].product._id.productID,
+                importDate: this.props.shoppingBags[i].product._id.importDate,
+                storeID: this.props.shoppingBags[i].product._id.storeID,
+              },
+              remain: this.props.shoppingBags[i].product.remain - this.props.shoppingBags[i].quantity,
+            }
+          }
+          axios.put(`http://localhost:5000/api/product`, data)
             .then(res => {
-                console.log("Update success", i);
-                // Xử lý ở redux
-                const dataRedux = data.product;
-                this.props.decreaseRemainProduct(dataRedux);
+              console.log("Update success", i);
+              // Xử lý ở redux
+              const dataRedux = data.product;
+              this.props.decreaseRemainProduct(dataRedux);
             })
             .catch(err => {
-                console.log(err);
+              console.log(err);
             })
-          }
-          
-          
-          this.props.resetShoppingBag();
         }
 
 
-        
+        this.props.resetShoppingBag();
+      }
+
+
+
     }
   }
 
@@ -196,15 +194,17 @@ class Printf extends React.PureComponent {
     this.props.listCoupon.map(value => {
       let start = new Date(value.timeFrom)
       let end = new Date(value.timeEnd)
-      if (now - start >= 0 && end - now >= 0) {
-        if (money > Number(value.minTotal)) {
-          let index = money * Number(value.percent) / 100;
-          if (index > reduceMoney) {
-            percent = Number(value.percent);
-            reduceMoney = index;
-            this.setState({
-              coupon: value,
-            })
+      if (value.quantity > 0) {
+        if (now - start >= 0 && end - now >= 0) {
+          if (money >= Number(value.minTotal)) {
+            let index = money * Number(value.percent) / 100;
+            if (index >= reduceMoney) {
+              percent = Number(value.percent);
+              reduceMoney = index;
+              this.setState({
+                coupon: value,
+              })
+            }
           }
         }
       }
@@ -216,6 +216,7 @@ class Printf extends React.PureComponent {
 
 
   componentWillMount() {
+    console.log(this.props.listCoupon)
     let now = new Date()
     let money = this.totalMoney();
     let percent = 0;
@@ -223,15 +224,17 @@ class Printf extends React.PureComponent {
     this.props.listCoupon.map(value => {
       let start = new Date(value.timeFrom)
       let end = new Date(value.timeEnd)
-      if (now - start >= 0 && end - now >= 0) {
-        if (money > Number(value.minTotal)) {
-          let index = money * Number(value.percent) / 100;
-          if (index > reduceMoney) {
-            percent = Number(value.percent);
-            reduceMoney = index;
-            this.setState({
-              coupon: value,
-            })
+      if (value.quantity > 0) {
+        if (now - start >= 0 && end - now >= 0) {
+          if (money >= Number(value.minTotal)) {
+            let index = money * Number(value.percent) / 100;
+            if (index >= reduceMoney) {
+              percent = Number(value.percent);
+              reduceMoney = index;
+              this.setState({
+                coupon: value,
+              })
+            }
           }
         }
       }
@@ -240,11 +243,6 @@ class Printf extends React.PureComponent {
       percentDiscount: Number(percent)
     })
   }
-
-  
-  
-
-
 
   render() {
     const PrintBill = this.addReciept
@@ -342,7 +340,7 @@ const mapStateToProps = (state, ownProps) => {
     statusEditInfoBill: state.statusEditInfoBill,
     InfomationBillEdit: state.InfomationBillEdit,
     listCoupon: state.listCoupon,
-    InfomationBillEdit: state.InfomationBillEdit,   
+    InfomationBillEdit: state.InfomationBillEdit,
   }
 }
 
@@ -400,8 +398,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     decreaseRemainProduct: (data) => {
       dispatch({
-          type: "DECREASE_REMAIN_PRODUCT",
-          data: data,
+        type: "DECREASE_REMAIN_PRODUCT",
+        data: data,
       });
     },
   }

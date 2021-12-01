@@ -47,7 +47,7 @@ function StatusReceiptType(props) {
                                                 color: green[600],
                                             },
                                         }} />}
-                                    label="Thành công"
+                                    label="Success"
                                     labelPlacement="end"
                                 />
                             </Grid>
@@ -64,7 +64,7 @@ function StatusReceiptType(props) {
                                                 color: yellow[600],
                                             },
                                         }} />}
-                                    label="Đổi trả"
+                                    label="Exchange"
                                     labelPlacement="end"
                                 />
                             </Grid>
@@ -72,7 +72,7 @@ function StatusReceiptType(props) {
                         <Grid container spacing={2}>
                             <Grid item md={12} sm={12}  >
                                 <FormControlLabel
-                                    value="delete"
+                                    value="Deleted"
                                     onChange={(e) => changeCheckbox(e)}
                                     control={<Checkbox
                                         sx={{
