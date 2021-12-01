@@ -9,6 +9,8 @@ import GroupButtonDashboard from './GroupButtonDashboard';
 import TotalMoney from './TotalMoney';
 import ErrorReceipt from './ErrorReceipt';
 import CouponManager from './CouponManager';
+import ProductStatis from './ProductStatis';
+import SalaryStats from './SalaryStats';
 class DashBoard extends Component {
 
     renderEventContent = (eventInfo) => {
@@ -36,7 +38,7 @@ class DashBoard extends Component {
                             <TotalMoney></TotalMoney>
                         </Grid>
                         <Grid className="dashboard-item" item md={3} sm={12} >
-                            <div className="dashboard-css sold-good">
+                            {/* <div className="dashboard-css sold-good">
                                 <div className="dashboard-item-img sold-good" style={{ marginBottom: '30px' }}>
                                     <DiApple className="dashboard-item-icon sold-good"></DiApple>
                                 </div>
@@ -44,10 +46,11 @@ class DashBoard extends Component {
                                 <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
                                     Sold good
                                 </Typography>
-                            </div>
+                            </div> */}
+                            <ProductStatis></ProductStatis>
                         </Grid>
                         <Grid className="dashboard-item" item md={3} sm={12} >
-                            <div className="dashboard-css imported-good">
+                            {/* <div className="dashboard-css imported-good">
                                 <div className="dashboard-item-img imported-good" style={{ marginBottom: '30px' }}>
                                     <DiApple className="dashboard-item-icon imported-good"></DiApple>
                                 </div>
@@ -55,7 +58,8 @@ class DashBoard extends Component {
                                 <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
                                     Imported good
                                 </Typography>
-                            </div>
+                            </div> */}
+                            <SalaryStats></SalaryStats>
                         </Grid>
                         <Grid className="dashboard-item" item md={3} sm={12} >
                             <ErrorReceipt></ErrorReceipt>

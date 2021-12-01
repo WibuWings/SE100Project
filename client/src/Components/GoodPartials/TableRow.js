@@ -46,85 +46,103 @@ class GoodRow extends Component{
     setOpen(value) {
         this.isOpen = value;
         this.setState({change: !this.state.change});
-        console.log("this.isOpen",this.isOpen)
     }
 
-    async deleteProduct() {
+    async deleteProduct(row) {
         // Xoá sản phẩm
-        // const data = {
-        //     token: localStorage.getItem('token'),
-        //     products:
-        //     [
-        //         {
-        //             productID: row.id,
-        //             importDate: row.importTime,
-        //             storeID: row.storeID,
-        //         }
-        //     ]
+        console.log("row", row)
+        const data = {
+            token: localStorage.getItem('token'),
+            products:
+            [
+                {
+                    productID: row._id.productID,
+                    importDate: row._id.importDate,
+                    storeID: row._id.storeID,
+                }
+            ]
             
-        // }
-        // axios.delete(`http://localhost:5000/api/product`,{data: data})
-        //     .then(res => {
-        //         alert("delete product success");
-        //     })
-        //     .catch(err => {
-        //         alert(err);
-        //     })
+        }
+        axios.delete(`http://localhost:5000/api/product`,{data: data})
+            .then(res => {
+                alert("delete product success");
+            })
+            .catch(err => {
+                alert(err);
+            })
         
-        // // Get hết các cái join của sản phẩm
-        // var allJoinMatch = [];
-        // const data1 = {
-        //     token: localStorage.getItem('token'),
-        //     filter: {
-        //         "_id.storeID": row.storeID,
-        //         "_id.productID": row.id,
-        //     }   
-        // }
-        // await axios.get(`http://localhost:5000/api/product/join`, 
-        // {
-        //     params: {...data1}
-        // })
-        //     .then(res => {
-        //         allJoinMatch = res.data.data;
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //         alert(err);
-        //     })
-        // console.log(allJoinMatch);
-        // // Xoá các join liên quan đến sản phẩm
-        // var allProductJoin = [];
-        // for(var i = 0 ; i < allJoinMatch.length; i++)
-        // {
-        //     allProductJoin.push({
-        //         productID: row.id,
-        //         typeID: allJoinMatch[i]._id.typeID,
-        //         importDate: allJoinMatch[i]._id.importDate,
-        //         storeID: row.storeID,
-        //     });
-        // }
-        // const dataJoin = {
-        //     token: localStorage.getItem('token'),
-        //     productJoinTypes: allProductJoin,      
-        // }
+        // Get hết các cái join của sản phẩm
+        var allJoinMatch = [];
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": row._id.storeID,
+                "_id.productID": row._id.productID,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, 
+        {
+            params: {...data1}
+        })
+            .then(res => {
+                allJoinMatch = res.data.data;
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
+        console.log(allJoinMatch);
+        // Xoá các join liên quan đến sản phẩm
+        var allProductJoin = [];
+        for(var i = 0 ; i < allJoinMatch.length; i++)
+        {
+            allProductJoin.push({
+                productID: row._id.productID,
+                typeID: allJoinMatch[i]._id.typeID,
+                importDate: allJoinMatch[i]._id.importDate,
+                storeID: row._id.storeID,
+            });
+        }
+        const dataJoin = {
+            token: localStorage.getItem('token'),
+            productJoinTypes: allProductJoin,      
+        }
 
-        // console.log(dataJoin);
+        console.log(dataJoin);
 
-        // await axios.delete(`http://localhost:5000/api/product/join`,{data: dataJoin})
-        //     .then(res => {
-        //         console.log("delete join success");
-        //     })
-        //     .catch(err => {
-        //         alert(err);
-        //     })
-
-        // Tạm thời
-        // window.location.reload();
+        await axios.delete(`http://localhost:5000/api/product/join`,{data: dataJoin})
+            .then(res => {
+                console.log("delete join success");
+            })
+            .catch(err => {
+                alert(err);
+            })
+        
+        console.log("this.props.data",this.props.data)
+        this.props.deleteProductToRedux(this.props.data);
     }
+
+    getTypeList(typeList)
+    {
+        var joinType = '';
+        for(var i = 0 ; i < typeList.length; i++)
+        {
+            for(var j = 0 ; j < this.props.typeProduct.length; j++)
+            {
+                if(this.props.typeProduct[j]._id.typeID == typeList[i])
+                {
+                    joinType += " " + this.props.typeProduct[j].name;
+                    break;
+                }
+            }
+        }
+        return joinType;
+    }
+
     render () {
         const { classes } = this.props;
         const row = this.props.data;
-        console.log(row);
+        // console.log(row);
         return (
             <React.Fragment>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -134,7 +152,7 @@ class GoodRow extends Component{
                 <TableCell className={classes.goodTable_Cell} align="right">{row.sellPrice}</TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">
                     {/* {row.importTime == null ? '' : row.importTime.substring(0,row.importTime.indexOf('T'))} */}
-                    {row._id.importDate == null ? '': row._id.importDate.substring(0,row._id.importDate.indexOf('T'))}
+                    {row._id.importDate == null ? '': row._id.importDate.indexOf('T')==-1 ? row._id.importDate: row._id.importDate.substring(0,row._id.importDate.indexOf('T'))}
                 </TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">
                     <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!this.isOpen)}>
@@ -143,8 +161,7 @@ class GoodRow extends Component{
                 </TableCell>
             </TableRow>
             {
-                // this.isOpen ?
-                true ?
+                this.isOpen ?
                 <TableRow>
                     <TableCell className={classes.goodTable_Cell} style={{ padding: 0, height: 100}} colSpan={8}>
                         {/* <Collapse in={open} timeout="auto" unmountOnExit> */}
@@ -174,11 +191,11 @@ class GoodRow extends Component{
                                             <TableRow>
                                                 <TableCell className={classes.goodTable_Cell} component="th" scope="row">
                                                     {/* {row.hidden.expires == null ? '': row.hidden.expires.substring(0,row.hidden.expires.indexOf('T'))} */}
-                                                    {row.expires == null ? '': row.expires.substring(0,row.expires.indexOf('T'))}
+                                                    {row.expires == null ? '': row.expires.indexOf('T') ==-1 ? row.expires : row.expires.substring(0,row.expires.indexOf('T'))}
                                                 </TableCell>
                                                 <TableCell className={classes.goodTable_Cell}>{row.importPrice}</TableCell>
                                                 <TableCell className={classes.goodTable_Cell}>{row.remain}</TableCell>
-                                                <TableCell className={classes.goodTable_Cell}>{row.joinType}</TableCell>
+                                                <TableCell className={classes.goodTable_Cell}>{this.getTypeList(row.typeIDList)}</TableCell>
                                                 <TableCell className={classes.goodTable_Cell}>{row.unit}</TableCell>
                                             </TableRow>
                                         </TableBody>
@@ -197,7 +214,7 @@ class GoodRow extends Component{
                                         </Button>
                                         <Button 
                                             variant="contained"
-                                            onClick={() => this.deleteProduct()}
+                                            onClick={() => this.deleteProduct(row)}
                                         >
                                             Delete
                                             
@@ -222,6 +239,7 @@ const mapStateToProps = (state, ownProps) => {
         isAddTypeStatus: state.isAddTypeStatus,
         confirmStatus: state.confirmStatus,
         listProduct: state.listProduct,
+        typeProduct: state.typeProduct,
     }
 }
 
@@ -238,7 +256,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         openUpdateModal: (data) => {
             dispatch({ type: "CHANGE_UPDATE_GOOD_STATUS", });
-        }
+        },
+        deleteProductToRedux: (data) => {
+            dispatch({
+                type: "DELETE_PRODUCT",
+                data: data,
+            }); 
+        },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, {withTheme: true}))(GoodRow));

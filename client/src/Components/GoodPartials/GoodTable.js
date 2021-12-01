@@ -37,9 +37,7 @@ class GoodTable extends Component {
         this.state ={
             update: false
         }
-        this.loadAllType();
-        this.loadAllGood();
-        console.log(this.props.listProduct.state);
+        console.log("this.props.listProduct.state", this.props.listProduct.state);
     }
     removeProduct= (row) => {
         // Đây là xử lý ở phía dữ liệu, có thể await gì đó.
@@ -48,116 +46,14 @@ class GoodTable extends Component {
         // Đây là câu lệnh để update nhẹ
         this.setState({update: this.state.update})
     }
-    async loadAllGood() {
-        var resultProduct = [];
-        const data = {
-            token: localStorage.getItem('token'),
-            filter: {
-                "_id.storeID": this.props.infoUser.email,
-            }
-        }
-        await axios.get(`http://localhost:5000/api/product/`, {
-            params: { ...data }
-        })
-            .then(res => {
-                resultProduct = res.data.data;
-            })
-            .catch(err => {
-                console.log(err);
-                alert(err)
-            })
-        // Get hết từ cái productjoinType
-        var result = [];
-        const data1 = {
-            token: localStorage.getItem('token'),
-            filter: {
-                "_id.storeID": this.props.infoUser.email,
-            }   
-        }
-        await axios.get(`http://localhost:5000/api/product/join`, {
-            params: { ...data1 }
-        })
-            .then(res => {
-                result = res.data.data;
-                localStorage.getItem('token', res.data.token);
-            })
-            .catch(err => {
-                console.log(err);
-                alert(err)
-            })
-        // Lấy các cái jointype
-        var joinTypeInfor = [];
-        for (let i = 0; i < result.length; i++) {
-            joinTypeInfor.push(result[i]);
-        }
-        console.log("joinTypeInfor", joinTypeInfor);
 
-        var listProductInfor = [];
-        for (let i = 0; i < resultProduct.length; i++) {
-            var typeIDList = [];
-            var joinType = '';
-            for (var j = 0; j < joinTypeInfor.length; j++) {
-                if (resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID &&
-                    resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) 
-                {
-                    typeIDList.push(joinTypeInfor[j]._id.typeID);
-                    joinType = joinType + ' ' + this.getTypeNamebyTypeID(joinTypeInfor[j]._id.typeID);
-                }
-            }
-
-            listProductInfor.push(
-                {
-                    ...resultProduct[i],
-                    typeIDList: typeIDList,
-                    joinType: joinType
-                });
-
-            // rows.push(
-            //     createData((i+1), obj._id.productID, obj.name, obj.quantity, 
-            //         obj.importPrice, obj.sellPrice, obj._id.importDate, joinType, 
-            //         obj.imgUrl, obj.unit, obj.expires, obj._id.storeID)
-            // );
-            
-        }
-        this.props.getProductToReducer(listProductInfor);
-        this.setState({ change: !this.state.change });
-    }
-    async loadAllType() {
-        var result = [];
-        const data = {
-            token: localStorage.getItem('token'),
-            filter: {
-                "_id.storeID": this.props.infoUser.email,
-            }   
-        }
-
-        await axios.get(`http://localhost:5000/api/product/type`, 
-        {
-            params: {...data}
-        })
-            .then(res => {
-                result = res.data.data;
-            })
-            .catch(err => {
-                console.log(err);
-                alert(err);
-            })
-        //Get data và lưu các tên Type vào bảng
-        listTypeInfor=[];
-        for(var i=0; i < result.length ; i++)
-        {
-            listTypeInfor.push(result[i]);
-        }
-
-        this.setState({change: true});
-    }
     getTypeNamebyTypeID (typeID) {
-        var typeName='';
-        for(var i = 0; i<listTypeInfor.length;i++)
+        var typeName="Null";
+        for(var i = 0; i < this.props.typeProduct.length;i++)
         {   
-            if(listTypeInfor[i]._id.typeID == typeID)
+            if(this.props.typeProduct[i]._id.typeID == typeID)
             {
-                typeName = listTypeInfor[i].name;
+                typeName = this.props.typeProduct[i].name;
                 break;
             }
         }
@@ -184,6 +80,7 @@ class GoodTable extends Component {
                             {
                                 this.props.listProduct.state == undefined ? (null):
                                 this.props.listProduct.state.map((product) => (
+                                    product==undefined ? null :
                                     <GoodRow data={product} />
                                 ))
                             }   
@@ -202,17 +99,13 @@ const mapStateToProps = (state, ownProps) => {
         isAddTypeStatus: state.isAddTypeStatus,
         confirmStatus: state.confirmStatus,
         listProduct: state.listProduct,
+        typeProduct: state.typeProduct,
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        getProductToReducer: (data) => {
-            dispatch({
-                type: "GET_PRODUCT_AND_TYPE",
-                data: data
-            });
-        },
+        
     }
 }
 

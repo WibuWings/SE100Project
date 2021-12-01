@@ -50,6 +50,19 @@ class FixedCalendarCell extends Component {
       return "Can't get name";
   }
 
+  findEmployeeNameByID(employeeID)
+  {
+      for(var i = 0 ; i < this.props.listEmployee.employees.length; i++)
+      {
+          var currentEmployee = this.props.listEmployee.employees[i];
+          if(currentEmployee._id.employeeID==employeeID)
+          {
+            return true;
+          }
+      }
+      return false;
+  }
+
   getCurrentDateTime()
   {
       var currentDate = new Date();
@@ -151,7 +164,7 @@ class FixedCalendarCell extends Component {
         },
       }
       
-      console.log("data", data);
+      // console.log("data", data);
       this.props.RemoveShiftAssign(data);
       
   }
@@ -162,7 +175,8 @@ class FixedCalendarCell extends Component {
       for(var i = 0 ; i < listShiftAssign.length ; i++)
       {
           if(this.props.shiftID == listShiftAssign[i]._id.shiftType._id.shiftID && 
-            this.props.dayIndex == listShiftAssign[i]._id.dateInWeek)
+            this.props.dayIndex == listShiftAssign[i]._id.dateInWeek && 
+            this.findEmployeeNameByID(listShiftAssign[i]._id.employee._id.employeeID))
             { 
                 return true;
             }
@@ -182,6 +196,7 @@ class FixedCalendarCell extends Component {
       }
       return false;
   }
+  
   render() {
     const { classes } = this.props;
     return (
@@ -220,10 +235,12 @@ class FixedCalendarCell extends Component {
                 </IoIosAdd>
                 
             </div>
-            {
+            { 
               this.props.listShiftAssign.map((item) => 
                 (
-                  ( this.props.shiftID == item._id.shiftType._id.shiftID && this.props.dayIndex == item._id.dateInWeek )
+                  ( this.props.shiftID == item._id.shiftType._id.shiftID 
+                    && this.props.dayIndex == item._id.dateInWeek 
+                    && this.findEmployeeNameByID(item._id.employee._id.employeeID))
                   ? <div style={{
                             backgroundColor: "#fff", 
                             padding: 10, 

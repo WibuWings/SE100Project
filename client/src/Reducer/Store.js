@@ -14,7 +14,7 @@ import statusDeleteConfirmReducer from './Status/StatusDeleteConfirmReducer';
 import statusUpdateGoodReducer from './Status/StatusUpdateGoodReducer';
 import statusEditTypeReducer from './Status/StatusEditTypeReducer';
 import statusAddTypeReducer from './Status/StatusAddTypeReducer';
-import statusIsAddTypeReducer from './Status/StatusIsAddTypeReducer';
+import statusUpdateTypeReducer from './GoodManager/UpdateTypeStatus';
 import roleReducer from './RoleReducer';
 import confirmModalReducer from './ConfirmModalReducer';
 import statusYesConfirmReducer from './Status/StatusYesConfirmReducer';
@@ -49,6 +49,8 @@ import typeByDateReducer from './RecieptManager/TypeByDate';
 import statusSelectAllReducer from './RecieptManager/StatusSelectAll'
 import listRecieptDeleteReducer from './RecieptManager/ListRecieptDelete';
 import searchReducer from './RecieptManager/SearchReducer';
+import statusAddGoodReducer from './GoodManager/AddGoodStatus';
+import currentEmployeeViewValueReducer from './Employee/currentEmployeeViewValue';
 import typeTimeDashboard from './Dashboard/TypeTimeDashboard';
 import typeHeaderDashboard from './Dashboard/TypeHeaderDashboard'
 import monthSelectDashboard from './Dashboard/MonthSelectReducer';
@@ -71,7 +73,6 @@ const allReducers = redux.combineReducers({
     deleteStatus: statusDeleteConfirmReducer,
     editTypeStatus: statusEditTypeReducer,
     addTypeStatus: statusAddTypeReducer,
-    isAddTypeStatus: statusIsAddTypeReducer,
     updateGoodStatus: statusUpdateGoodReducer,
     infoUpdate: infoGoodReducer,
     infoUser: infoUserReducer,
@@ -86,6 +87,7 @@ const allReducers = redux.combineReducers({
     addEmployeeStatus: statusAddEmployeeReducer,
     payEmployeeStatus: statusPayEmployeeReducer,
     updateEmpoyeeStatus: statusUpdateEmployeeReducer,
+    currentEmployeeViewValue: currentEmployeeViewValueReducer,
     updateNextWeekTimeKeepingValue : updateNextWeekTimeKeepingValueReducer ,
     listShiftAssign: listShiftAssignReducer,
     listTimeKeeping: listTimeKeepingReducer,
@@ -102,10 +104,12 @@ const allReducers = redux.combineReducers({
     statusDarkmode: statusDarkmodeReducer,
     statusConfirmPassword: statusModalConfirmPasswordReducer,
     //Hàng hoá
+    statusAddGood: statusAddGoodReducer,
     typeProductValue: typeProductValueReducer,
     listProduct: listProductReducer,
     typeProduct: typeProductReducer,
     chooseTypeProduct: chooseTypeProductReducer,
+    statusUpdateType: statusUpdateTypeReducer,
     alert: alertReducer,
     //Hóa đơn
     shoppingBags: shoppingBagsReducer,

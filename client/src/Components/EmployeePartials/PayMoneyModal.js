@@ -68,7 +68,8 @@ class PayEmployeeModal extends Component {
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
         }; 
-        console.log("listTimeKeeper", this.props.listTimeKeeper);
+        // console.log("listTimeKeeper", this.props.listTimeKeeper);
+        // console.log("this.props.employeeID", this.props.employeeID);
     }
 
     getShiftInforByID(shiftID)
@@ -97,10 +98,39 @@ class PayEmployeeModal extends Component {
         return "Can't get name";
     }
 
+    exit() {
+        this.props.changePayEmployeeStatus();  
+    }
+
     payEmployee(){
-        alert("Confirm password");
+        // alert("Confirm password");
         // viết api để trả lương ở đây
-        this.props.changePayEmployeeStatus();
+        // this.props.changePayEmployeeStatus();
+        for(var i =0; i< this.props.listTimeKeeper.length; i++)
+        {
+            if(this.props.listTimeKeeper[i]._id.employee._id.employeeID != this.props.employeeID.id) continue;
+            // Thử api
+            const data = {
+                token: localStorage.getItem('token'),
+                updatedTimeKeeping: {
+                    _id: this.props.listTimeKeeper[i]._id,
+                    isPaidSalary: true,
+                }
+            };
+            axios.put(`http://localhost:5000/api/employee/time-keeping`, data)
+                .then(res => {
+                    console.log("Update success");
+                    alert('Đã update thành công sản phẩm');
+                    
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        
+        this.props.changePayEmployeeStatus();    
+        // Cập nhật redux trạng thái trả lương nhiều cái cùng lúc
+
     }
     
     render() {
@@ -148,17 +178,23 @@ class PayEmployeeModal extends Component {
                                                     </TableRow>
                                                     {
                                                         this.props.listTimeKeeper.map((timeKeeper)=>
+                                                        timeKeeper._id.employee._id.employeeID != this.props.employeeID.id ? (null) :
                                                             (
                                                             <TableRow>
-                                                                <TableCell className={classes.goodTable_Cell}>{timeKeeper.realDate}</TableCell>
+                                                                <TableCell className={classes.goodTable_Cell}>
+                                                                    {timeKeeper._id.realDate.substring(0,timeKeeper._id.realDate.indexOf('T') )}
+                                                                </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.dateInWeek}</TableCell>
-                                                                <TableCell className={classes.goodTable_Cell}>{this.getShiftInforByID(timeKeeper._id.shiftType._id.shiftID)}</TableCell>
+                                                                <TableCell className={classes.goodTable_Cell}>
+                                                                    {timeKeeper._id.shiftType.name + " ("+ timeKeeper._id.shiftType.timeFrom + 
+                                                                    ' - '+  timeKeeper._id.shiftType.timeEnd +')'}
+                                                                </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.employee._id.employeeID}</TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
-                                                                    {this.getEmployeeFullNameByID(timeKeeper._id.employee._id.employeeID)}
+                                                                    {timeKeeper._id.employee.firstName + " " + timeKeeper._id.employee.lastName}
                                                                 </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
-                                                                    Salary
+                                                                    {timeKeeper.isPaidSalary.toString()}
                                                                 </TableCell>
                                                             </TableRow>
                                                             )
@@ -167,9 +203,16 @@ class PayEmployeeModal extends Component {
                                                 </TableHead>
                                             </Table>
                                     </TableContainer>
-                                    <Grid item md={3}
+                                    <Grid item md={12}
                                         className='input-item'
+                                        style ={{
+                                            display: 'flex',
+                                            justifyContent: 'space-evenly'
+                                        }}
                                     >
+                                        <Button variant="contained" onClick={() => this.exit()}>
+                                            Exit
+                                        </Button>
                                         <Button variant="contained" onClick={() => this.payEmployee()}>
                                             Pay employee
                                         </Button>
@@ -193,7 +236,8 @@ const mapStateToProps = (state, ownProps) => {
         listTimeKeeper: state.listTimeKeeping,
         listShift: state.listShift,
         listEmployee: state.listEmployee,
-        infoUser: state.infoUser
+        infoUser: state.infoUser,
+        employeeID: state.currentEmployeeViewValue,
     }
 }
 

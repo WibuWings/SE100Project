@@ -2,14 +2,18 @@ import React from 'react';
 import { Typography } from '@mui/material';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { useSelector } from 'react-redux'
-import moment from 'moment'
+import moment from 'moment';
+
 
 function TotalMoney(props) {
     const typeHeaderDashboard = useSelector(state => state.typeHeaderDashboard);
     const listReciept = useSelector(state => state.listReciept)
     const [totalMoney, setTotalMoney] = React.useState('')
 
-    let nowTime = new Date()
+    // console.log("ListReceipt", listReciept);
+    let nowTime = new Date();
+
+    console.log("nowTime.getMonth",moment().subtract(24, 'days').format('l'));
 
     React.useEffect(() => {
         let money = 0;

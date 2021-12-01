@@ -63,13 +63,17 @@ class Printf extends React.PureComponent {
     return result;
   }
 
+  getProductByID(){
+
+  }
 
   addReciept = async () => {
     if (this.props.shoppingBags.length === 0) {
       this.props.hideAlert()
       this.props.showAlert("Cart empty ", "warning")
     } else {
-      let code = this.makeCode(8)
+      let code = this.makeCode(8);
+      var isContinue = true;
       this.setState({
         code: code
       })
@@ -122,7 +126,6 @@ class Printf extends React.PureComponent {
             })
             this.props.hideAlert()
             this.props.showAlert("Print bill success", "success")
-            this.props.resetShoppingBag();
             this.props.addRecieptToHistory(data);
             this.setState({
               coupon: null,
@@ -133,7 +136,45 @@ class Printf extends React.PureComponent {
           this.props.changeLoginStatus();
           this.props.hideAlert();
           this.props.showAlert("Login timeout, signin again", "warning");
+          isContinue = false;
         })
+        if(isContinue)
+        {
+          console.log("Chạy thành công rồi")
+          // Update số lượng sản phẩm ở đây
+          console.log("this.props.shoppingBags", this.props.shoppingBags)
+          for(var i = 0 ; i < this.props.shoppingBags.length;  i++)
+          {
+            const data = {
+                token: localStorage.getItem('token'),
+                product: {
+                    _id: 
+                    {
+                        productID: this.props.shoppingBags[i].product._id.productID,
+                        importDate: this.props.shoppingBags[i].product._id.importDate,
+                        storeID: this.props.shoppingBags[i].product._id.storeID,
+                    },
+                    remain: this.props.shoppingBags[i].product.remain - this.props.shoppingBags[i].quantity,
+                }
+              }
+            axios.put(`http://localhost:5000/api/product`, data)
+            .then(res => {
+                console.log("Update success", i);
+                // Xử lý ở redux
+                const dataRedux = data.product;
+                this.props.decreaseRemainProduct(dataRedux);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+          }
+          
+          
+          this.props.resetShoppingBag();
+        }
+
+
+        
     }
   }
 
@@ -300,7 +341,8 @@ const mapStateToProps = (state, ownProps) => {
     shoppingBags: state.shoppingBags,
     statusEditInfoBill: state.statusEditInfoBill,
     InfomationBillEdit: state.InfomationBillEdit,
-    listCoupon: state.listCoupon
+    listCoupon: state.listCoupon,
+    InfomationBillEdit: state.InfomationBillEdit,   
   }
 }
 
@@ -355,7 +397,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "UPDATE_QUANTITY_COUPON",
         idCoupon: idCoupon,
       })
-    }
+    },
+    decreaseRemainProduct: (data) => {
+      dispatch({
+          type: "DECREASE_REMAIN_PRODUCT",
+          data: data,
+      });
+    },
   }
 }
 

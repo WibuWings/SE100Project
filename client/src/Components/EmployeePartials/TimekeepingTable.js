@@ -35,27 +35,29 @@ class TimeKeepingTable extends Component {
     this.getAllTimeKeeping()
   }
 
-  getAllTimeKeeping()
-  {
-    const data = {
-      token: localStorage.getItem('token'),
-      filter: {
-          "_id.storeID": this.props.infoUser.email,
-      }   
+    async getAllTimeKeeping()
+    {
+        var result = [];
+        const data = {
+          token: localStorage.getItem('token'),
+          filter: {
+              "_id.storeID": this.props.infoUser.email,
+          }   
+        }
+        await axios.get(`http://localhost:5000/api/employee/time-keeping`, {
+            params: {...data}
+        })
+            .then(res => {
+                result = res.data.data;
+                // console.log("điểm danh", res.data.data);
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err)
+            })
+        // To redux
+        this.props.getTimeKeeping(result);
     }
-    // await axios.get(`http://localhost:5000/api/????`, {
-    //     params: {...data}
-    // })
-    //     .then(res => {
-    //         // alert("Lấy hết đc product ròi anh chai");
-    //         result = res.data.data;
-    //         console.log(res.data.data);
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //         alert(err)
-    //     })
-  }
 
   getShiftInforByID(shiftID)
   {
@@ -102,18 +104,27 @@ class TimeKeepingTable extends Component {
                             <TableCell className={classes.goodTable_Cell_Header} align="center" >Shift</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
                             <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center">Paid</TableCell>
                             {/* <TableCell className={classes.goodTable_Cell_Header} align="center"></TableCell> */}
                         </TableRow>
                         {
                             this.props.listTimeKeeper.map((timeKeeper)=>
                                 (
                                   <TableRow>
-                                    <TableCell className={classes.goodTable_Cell}>{timeKeeper.realDate}</TableCell>
+                                    <TableCell className={classes.goodTable_Cell}>
+                                        {timeKeeper._id.realDate.substring(0,timeKeeper._id.realDate.indexOf('T') )}
+                                    </TableCell>
                                     <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.dateInWeek}</TableCell>
-                                    <TableCell className={classes.goodTable_Cell}>{this.getShiftInforByID(timeKeeper._id.shiftType._id.shiftID)}</TableCell>
+                                    <TableCell className={classes.goodTable_Cell}>
+                                        {timeKeeper._id.shiftType.name + " ("+ timeKeeper._id.shiftType.timeFrom + 
+                                          ' - '+  timeKeeper._id.shiftType.timeEnd +')'}
+                                      </TableCell>
                                     <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.employee._id.employeeID}</TableCell>
                                     <TableCell className={classes.goodTable_Cell}>
-                                        {this.getEmployeeFullNameByID(timeKeeper._id.employee._id.employeeID)}
+                                        {timeKeeper._id.employee.firstName + " " + timeKeeper._id.employee.lastName}
+                                    </TableCell>
+                                    <TableCell className={classes.goodTable_Cell}>
+                                        {timeKeeper.isPaidSalary.toString()}
                                     </TableCell>
                                     {/* <TableCell className={classes.goodTable_Cell}>
                                       <div style={{display: 'flex'}}>
@@ -196,8 +207,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "DELETE_TIMEKEEPER",
         data: data
-      });
-      
+      });  
+    },
+    getTimeKeeping: (data) => {
+      dispatch({
+        type: "GET_TIMEKEEPER",
+        data: data
+      });  
     },
   }
 }

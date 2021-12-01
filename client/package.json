@@ -54,6 +54,7 @@
     "redux": "^4.1.1",
     "simplebar-react": "^2.3.6",
     "web-vitals": "^1.1.2",
+    "xlsx": "^0.17.4",
     "yarn": "^1.22.15"
   },
   "scripts": {
