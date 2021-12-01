@@ -21,7 +21,7 @@ function ModalAddCoupon(props) {
     const [percent, setPercent] = React.useState(statusEditCoupon ? objectEditCoupon.percent : 100);
     const [isPercent, setIsPercent] = React.useState(false);
     const [description, setDiscription] = React.useState(statusEditCoupon ? objectEditCoupon.name : "Discount 2/9")
-    const [minTotal, setMinTotal] = React.useState(statusEditCoupon ? objectEditCoupon.minTotal : 10000)
+    const [minTotal, setMinTotal] = React.useState(statusEditCoupon ? objectEditCoupon.minTotal : 100000)
     const [isMinTotal, setIsMinTotal] = React.useState(false)
     const [quantity, setQuantity] = React.useState(statusEditCoupon ? objectEditCoupon.quantity : 10)
     const [isQuantity, setIsQuantity] = React.useState(false)
@@ -48,21 +48,20 @@ function ModalAddCoupon(props) {
     }
 
     const blurQuantity = (e) => {
-        if (e.target.value < 0 || e.target.value == "") {
-            setIsPercent(true)
-        }
-        else {
-            setIsPercent(false)
-            setPercent(e.target.value)
-        }
-    }
-
-    const blurMinTotal = (e) => {
         if(e.target.value < 0 || e.target.value == "") {
             setIsQuantity(true)
         } else {
             setIsQuantity(false)
             setQuantity(e.target.value)
+        }
+    }
+
+    const blurMinTotal = (e) => {
+        if(e.target.value < 100000 || e.target.value == "") {
+            setIsMinTotal(true)
+        } else {
+            setIsMinTotal(false)
+            setMinTotal(e.target.value)
         }
     }
 
@@ -99,7 +98,6 @@ function ModalAddCoupon(props) {
                 }).catch(err => {
                     
                 })
-                console.log(data)
                 dispatch({
                     type: "ADD_COUPON",
                     data: data
@@ -240,10 +238,10 @@ function ModalAddCoupon(props) {
                                 label="Minimum Total Amount"
                                 defaultValue={minTotal}
                                 error={isMinTotal}
-                                helperText={isMinTotal ? "Enter greater than 0" : ""}
+                                helperText={isMinTotal ? "Enter greater than 100.000" : ""}
                                 type="number"
                                 id="outlined-error-helper-text"
-                                name="discount"
+                                name="mintotal"
                                 variant="outlined"
                             />
                         </Grid>

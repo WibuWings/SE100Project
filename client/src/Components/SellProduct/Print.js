@@ -112,6 +112,11 @@ class Printf extends React.PureComponent {
                 })
 
             }
+
+            if (this.state.coupon) {
+              this.props.updateQuantityCoupon(this.state.coupon.idCoupon)
+            }
+
             this.setState({
               infoReciept: this.props.shoppingBags,
             })
@@ -119,6 +124,9 @@ class Printf extends React.PureComponent {
             this.props.showAlert("Print bill success", "success")
             this.props.resetShoppingBag();
             this.props.addRecieptToHistory(data);
+            this.setState({
+              coupon: null,
+            })
           }
         })
         .catch(err => {
@@ -147,10 +155,10 @@ class Printf extends React.PureComponent {
     this.props.listCoupon.map(value => {
       let start = new Date(value.timeFrom)
       let end = new Date(value.timeEnd)
-      if(now - start >= 0 && end - now >= 0) {
+      if (now - start >= 0 && end - now >= 0) {
         if (money > Number(value.minTotal)) {
-          let index = money*Number(value.percent)/100;
-          if(index > reduceMoney) {
+          let index = money * Number(value.percent) / 100;
+          if (index > reduceMoney) {
             percent = Number(value.percent);
             reduceMoney = index;
             this.setState({
@@ -161,9 +169,10 @@ class Printf extends React.PureComponent {
       }
     })
     this.setState({
-      percentDiscount: Number(percent),
+      percentDiscount: Number(percent)
     })
   }
+
 
   componentWillMount() {
     let now = new Date()
@@ -173,10 +182,10 @@ class Printf extends React.PureComponent {
     this.props.listCoupon.map(value => {
       let start = new Date(value.timeFrom)
       let end = new Date(value.timeEnd)
-      if(now - start >= 0 && end - now >= 0) {
+      if (now - start >= 0 && end - now >= 0) {
         if (money > Number(value.minTotal)) {
-          let index = money*Number(value.percent)/100;
-          if(index > reduceMoney) {
+          let index = money * Number(value.percent) / 100;
+          if (index > reduceMoney) {
             percent = Number(value.percent);
             reduceMoney = index;
             this.setState({
@@ -187,10 +196,14 @@ class Printf extends React.PureComponent {
       }
     })
     this.setState({
-      percentDiscount: Number(percent),
+      percentDiscount: Number(percent)
     })
   }
+
   
+  
+
+
 
   render() {
     const PrintBill = this.addReciept
@@ -218,7 +231,7 @@ class Printf extends React.PureComponent {
                 <p>Discount (%)</p>
               </div>
               <div style={{ marginBottom: '10px' }} className="col-5">
-                <input disabled value={this.state.percentDiscount}   style={{ fontSize: '1.2rem', border: 'none', outline: 'none', textAlign: 'end', width: '100%', borderBottom: '1px solid black' }} min={0} max={100} type="number"></input>
+                <input disabled value={this.state.percentDiscount} style={{ fontSize: '1.2rem', border: 'none', outline: 'none', textAlign: 'end', width: '100%', borderBottom: '1px solid black' }} min={0} max={100} type="number"></input>
               </div>
               <div style={{ fontSize: '1.2rem' }} className="col-7">
                 <p style={{}}>Reduce</p>
@@ -335,6 +348,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "EDIT_SHOPPING_BAGS",
         MAHD: MAHD,
+      })
+    },
+    updateQuantityCoupon: (idCoupon) => {
+      dispatch({
+        type: "UPDATE_QUANTITY_COUPON",
+        idCoupon: idCoupon,
       })
     }
   }

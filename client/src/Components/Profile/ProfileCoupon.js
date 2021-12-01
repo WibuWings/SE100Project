@@ -59,7 +59,6 @@ function ProfileCoupon(props) {
     }
     
     const editCoupon = (data) => {
-        console.log(data)
         dispatch({
             type: "CHANGE_ADD_COUPON_STATUS"
         })
