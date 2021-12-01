@@ -53,7 +53,14 @@ class Regulation extends Component {
         const data = {
             email: this.props.infoUser.email,
             token: localStorage.getItem('token'),
-            currency: document.querySelector('select[name="currency"]').value, 
+            regulation : {
+                currency: document.querySelector('select[name="currency"]').value,
+                exchangeRate: document.querySelector('select[name="exchangeRate"]').value,
+                miniumEmployeeAge: document.querySelector('select[name="miniumEmployeeAge"]').value, 
+                lessChangeTimeKeepingDay: document.querySelector('select[name="lessChangeTimeKeepingDay"]').value,
+                minExpiredProduct: document.querySelector('select[name="exchangeRate"]').value,
+            },
+        }
             numberEmployees: this.state.numberEmployees,
             timeStart: {
                 hours: this.state.timeStart.getHours(),
@@ -123,6 +130,48 @@ class Regulation extends Component {
                                 />
                             </Grid>
                             <Grid item md={6} xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    label="Exchange rate"
+                                    defaultValue='20000'
+                                    name="exchangeRate"
+                                    variant="outlined"
+                                    // error={this.state.isNumberEmployees}
+                                    // helperText={this.state.isNumberEmployees? "Enter more 0" : ''}
+                                    type="number"
+                                    // onBlur={(e) => this.blurNumberEmployees(e)}
+                                />
+                            </Grid>
+                            <Grid item md={6} xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    label="Less change timekeeping days"
+                                    defaultValue='2'
+                                    name="exchangeRate"
+                                    variant="outlined"
+                                    // error={this.state.isNumberEmployees}
+                                    // helperText={this.state.isNumberEmployees? "Enter more 0" : ''}
+                                    type="number"
+                                    // onBlur={(e) => this.blurNumberEmployees(e)}
+                                />
+                            </Grid>
+                            <Grid item md={6} xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    label="Employee Minium Age"
+                                    defaultValue='2'
+                                    name="exchangeRate"
+                                    variant="outlined"
+                                    // error={this.state.isNumberEmployees}
+                                    // helperText={this.state.isNumberEmployees? "Enter more 0" : ''}
+                                    type="number"
+                                    // onBlur={(e) => this.blurNumberEmployees(e)}
+                                />
+                            </Grid>
+                            {/* <Grid item md={6} xs={12}>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <Stack spacing={3}>
                                         <TimePicker
@@ -146,7 +195,7 @@ class Regulation extends Component {
                                         />
                                     </Stack>
                                 </LocalizationProvider>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </CardContent>
                     <Divider />
