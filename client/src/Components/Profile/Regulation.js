@@ -50,40 +50,40 @@ class Regulation extends Component {
     }
 
     SaveRegulations = async () => {
-        const data = {
-            email: this.props.infoUser.email,
-            token: localStorage.getItem('token'),
-            regulation : {
-                currency: document.querySelector('select[name="currency"]').value,
-                exchangeRate: document.querySelector('select[name="exchangeRate"]').value,
-                miniumEmployeeAge: document.querySelector('select[name="miniumEmployeeAge"]').value, 
-                lessChangeTimeKeepingDay: document.querySelector('select[name="lessChangeTimeKeepingDay"]').value,
-                minExpiredProduct: document.querySelector('select[name="exchangeRate"]').value,
-            },
-        }
-            numberEmployees: this.state.numberEmployees,
-            timeStart: {
-                hours: this.state.timeStart.getHours(),
-                minutes: this.state.timeStart.getMinutes(),
-            },
-            timeEnd: {
-                hours: this.state.timeEnd.getHours(),
-                minutes: this.state.timeEnd.getMinutes(),
-            },
-        }
-        if (!this.state.isNumberEmployees && this.state.isSaveRegulations) {
-              console.log("save");  
-              console.log(data);
-            await axios.post(`http://localhost:5000/api/profile/regulation`, data)
-            .then(res => {
-                this.props.hideAlert();
-                this.props.showAlert("Login timeout, signin again", "success");
-            })
-            .catch(err => {
-                this.props.hideAlert();
-                this.props.showAlert("Login timeout, signin again", "warning");
-            });
-        }
+        // const data = {
+        //     email: this.props.infoUser.email,
+        //     token: localStorage.getItem('token'),
+        //     regulation : {
+        //         currency: document.querySelector('select[name="currency"]').value,
+        //         exchangeRate: document.querySelector('select[name="exchangeRate"]').value,
+        //         miniumEmployeeAge: document.querySelector('select[name="miniumEmployeeAge"]').value, 
+        //         lessChangeTimeKeepingDay: document.querySelector('select[name="lessChangeTimeKeepingDay"]').value,
+        //         minExpiredProduct: document.querySelector('select[name="exchangeRate"]').value,
+        //     },
+        // }
+        //     numberEmployees: this.state.numberEmployees,
+        //     timeStart: {
+        //         hours: this.state.timeStart.getHours(),
+        //         minutes: this.state.timeStart.getMinutes(),
+        //     },
+        //     timeEnd: {
+        //         hours: this.state.timeEnd.getHours(),
+        //         minutes: this.state.timeEnd.getMinutes(),
+        //     },
+        // }
+        // if (!this.state.isNumberEmployees && this.state.isSaveRegulations) {
+        //       console.log("save");  
+        //       console.log(data);
+        //     await axios.post(`http://localhost:5000/api/profile/regulation`, data)
+        //     .then(res => {
+        //         this.props.hideAlert();
+        //         this.props.showAlert("Login timeout, signin again", "success");
+        //     })
+        //     .catch(err => {
+        //         this.props.hideAlert();
+        //         this.props.showAlert("Login timeout, signin again", "warning");
+        //     });
+        // }
     }
 
 
