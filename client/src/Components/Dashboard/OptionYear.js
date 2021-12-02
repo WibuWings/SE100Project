@@ -10,9 +10,13 @@ import MenuList from '@mui/material/MenuList';
 import {BiCaretDown} from 'react-icons/bi'
 import { useDispatch } from 'react-redux';
 
-const options = ['Month', 'Week' , 'Last Week'];
+let options = [];
+let date = new Date()
+for(let i = date.getFullYear();i >= 2000; i--) {
+    options.push(i);
+}
 
-export default function SplitButton() {
+export default function OptionYear() {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const dispatch = useDispatch()
@@ -25,7 +29,7 @@ export default function SplitButton() {
   const handleMenuItemClick = (event, index, option) => {
     console.log(option)
     dispatch({
-      type: "TYPE_TIME_DASHBOARD",
+      type: "YEAR_SELECT_DASHBOARD",
       typeDashboard: option,
     })
     setSelectedIndex(index);
@@ -46,7 +50,7 @@ export default function SplitButton() {
 
   React.useEffect(() => {
     dispatch({
-      type: "RESET_TYPE_TIME_DASHBOARD"
+      type: "RESET_MONTH_SELECT_DASHBOARD"
     })
   }, [])
 
@@ -66,7 +70,9 @@ export default function SplitButton() {
         </Button>
       </ButtonGroup>
       <Popper
+        id="choses-product"
         open={open}
+        style={{height: '500px', overflowY:'scroll'}}
         anchorEl={anchorRef.current}
         role={undefined}
         transition

@@ -98,3 +98,6 @@
 .css-dr3dyz-MuiButtonGroup-root.button-group-customize{
     margin: 0 !important;
 }
+.css-bhp9pd-MuiPaper-root-MuiCard-root{
+    overflow:unset !important;
+}

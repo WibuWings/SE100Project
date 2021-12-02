@@ -62,7 +62,6 @@ class ComponentToPrint extends React.PureComponent {
     }
 
     render() {
-        
         return (
             <div className="row">
                 <div className="col-12">

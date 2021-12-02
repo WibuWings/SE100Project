@@ -56,7 +56,6 @@ class ChangePassword extends Component {
                 this.props.setEmployeePass(this.newPass);
             })
             .catch(err => {
-                console.log(err);
             })
         }
         else {

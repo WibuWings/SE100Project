@@ -53,6 +53,12 @@ import statusAddGoodReducer from './GoodManager/AddGoodStatus';
 import currentEmployeeViewValueReducer from './Employee/currentEmployeeViewValue';
 import typeTimeDashboard from './Dashboard/TypeTimeDashboard';
 import typeHeaderDashboard from './Dashboard/TypeHeaderDashboard'
+import monthSelectDashboard from './Dashboard/MonthSelectReducer';
+import yearSelectDashboard from './Dashboard/YearSelectReducer';
+import statusModalAddCouponReducer from './Profile/StatusModalAddCoupon';
+import listCouponReducer from './Profile/ListCoupon';
+import statusEditCouponReducer from './Profile/StatusEditCoupon';
+import objectEditCouponReducer from './Profile/ObjectEditCoupon';
 
 
 var redux = require('redux');
@@ -119,6 +125,13 @@ const allReducers = redux.combineReducers({
     //Dashboard
     typeTimeDashboard: typeTimeDashboard,
     typeHeaderDashboard: typeHeaderDashboard,
+    monthSelectDashboard: monthSelectDashboard,
+    yearSelectDashboard: yearSelectDashboard,
+    //Coupon
+    statusModalAddCoupon: statusModalAddCouponReducer,
+    listCoupon: listCouponReducer,
+    statusEditCoupon: statusEditCouponReducer,
+    objectEditCoupon: objectEditCouponReducer
 })
 
 

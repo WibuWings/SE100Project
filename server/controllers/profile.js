@@ -318,6 +318,42 @@ class meProfile {
                 }
             })
     }
+    regulation = async (req, res) => {
+        Regulation.findOneAndUpdate(
+            { _id : req.body.email},
+            {
+                $set: {
+                    currency: req.body.regulation.currency,
+                    exchangeRate:req.body.regulation.exchangeRate,
+                    miniumEmployeeAge:req.body.regulation.miniumEmployeeAge,
+                    lessChangeTimeKeepingDay:req.body.regulation.lessChangeTimeKeepingDay,
+                    minExpiredProduct:req.body.regulation.minExpiredProduct,
+                    numberEmployees: req.body.regulation.numberEmployees,
+                }
+            }, {
+            returnOriginal: false,
+        },
+            function (err, doc) {
+                if (err) {
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.FAILURE_UPDATE,
+                        })
+                    );
+                }
+                else {
+                    res.status(200).send(
+                        JSON.stringify({
+                            token: res.locals.newToken,
+                            email: res.locals.decoded.email,
+                            data: doc,
+                        })
+                    )
+                }
+            });
+    }
+
     deleteAccount = async (req, res) => {
         const manager = await Manager.findOne({email: req.body.email}).exec();
         const storeID = manager.storeID;

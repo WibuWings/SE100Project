@@ -54,7 +54,6 @@ class Register extends Component {
                 tel: document.getElementById('tel').value,
             })
                 .then(res => {
-                    console.log(res.data);
                     switch (res.data.status) {
                         case 1:
                             localStorage.setItem('token', res.data.token);

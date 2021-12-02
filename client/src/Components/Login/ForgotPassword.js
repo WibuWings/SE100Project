@@ -70,7 +70,6 @@ class ForgotPassword extends Component {
             })
                 .then(res => {
                     form.reset();
-                    console.log(res.data.status);
                     switch (res.data.status) {
                         case 1:
                             this.props.hideAlert();

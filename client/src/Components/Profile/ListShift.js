@@ -42,7 +42,6 @@ class ListShift extends Component {
             to: to,
             salary: salary,
         }
-        console.log(data);
         if (id) {
             this.props.objectEditShift(data)
             this.props.changeEditShiftStatus();

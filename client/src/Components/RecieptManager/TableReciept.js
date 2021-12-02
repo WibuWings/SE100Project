@@ -366,6 +366,26 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Mã coupon:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.coupon? row.coupon.idCoupon : "Không áp dụng"}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Tiền giảm:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{(row.totalFinalMoney - row.totalMoney).toLocaleString()}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid> 
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>Giảm giá (%):</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
@@ -461,18 +481,22 @@ export default function CollapsibleTable() {
     React.useEffect(() => {
         var list = typeReciept.length === 0 ? listReciept : listReciept.filter(value => {
             for (var i = 0; i < typeReciept.length; i++) {
-                if (typeReciept[i] === 'delete') {
-                    if (value.deleted) {
-                        return value;
-                    }
-                } else if (typeReciept[i] === 'return') {
-                    if (!value.deleted && value.isEdit) {
-                        return value;
-                    }
-                } else {
-                    if (!value.deleted && !value.isEdit) {
-                        return value;
-                    }
+                switch (typeReciept[i]) {
+                    case 'delete':
+                        if (value.deleted) {
+                            return value;
+                        }
+                        break;
+                    case 'return':
+                        if (!value.deleted && value.isEdit) {
+                            return value;
+                        }
+                        break;
+                    default:
+                        if (!value.deleted && !value.isEdit) {
+                            return value;
+                        }
+                        break;
                 }
             }
         })
@@ -525,7 +549,6 @@ export default function CollapsibleTable() {
             })
         }
 
-
         list.map(value => {
             listMAHD.push(value.MAHD)
         })
@@ -536,10 +559,9 @@ export default function CollapsibleTable() {
         }) : dispatch({
             type: "RESET_MAHD_RECIEPT"
         })
-
-
         setListRecieptReplace(list)
     }, [typeReciept, typeByDate, listReciept, statusSelectAll, search])
+
 
     return (
         <TableContainer style={{overflowX: 'hidden',  boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
