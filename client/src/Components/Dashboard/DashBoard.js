@@ -11,6 +11,7 @@ import ProductStatis from './ProductStatis';
 import ComponentToPrint from './ComponentToPrint';
 import ReactToPrint from 'react-to-print';
 import SalaryStats from './SalaryStats';
+import { MdLocalPrintshop } from 'react-icons/md'
 
 class DashBoard extends Component {
 
@@ -38,7 +39,10 @@ class DashBoard extends Component {
                                 <ReactToPrint
                                     trigger={() => {
                                         return <div>
-                                            <Button style={{ backgroundColor: '#01579b', color: 'white' }}>Export dashboard</Button>
+                                            <Button style={{ backgroundColor: '#01579b', color: 'white' }}>
+                                                <MdLocalPrintshop style={{marginRight: '10px'}}></MdLocalPrintshop>
+                                                Export dashboard
+                                            </Button>
                                         </div>;
                                     }}
                                     content={() => this.componentRef}
