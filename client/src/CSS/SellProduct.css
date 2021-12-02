@@ -26,12 +26,14 @@ body {
 #choses-product::-webkit-scrollbar {
     width: 5px;
     background-color: rgba(0,0,0,0.7);
+    height: 7px;
 } 
 
 #choses-product::-webkit-scrollbar-thumb {
     background-color: rgba(0,0,0,0.7);
     border-radius: 8px;
 }
+
 
 .customizeTable{
     border-bottom: 3px solid black;

@@ -59,7 +59,6 @@ function ProfileCoupon(props) {
     }
     
     const editCoupon = (data) => {
-        console.log(data)
         dispatch({
             type: "CHANGE_ADD_COUPON_STATUS"
         })
@@ -83,11 +82,12 @@ function ProfileCoupon(props) {
                 <CardHeader style={{ color: !statusDarkmode ? '#0091ea' : 'white', backgroundColor: !statusDarkmode ? '#efeeef' : '#455a64' }} title="Coupon" />
                 <Divider />
                 <CardContent>
-                    <TableContainer component={Paper}>
+                    <TableContainer id="choses-product" component={Paper}>
                         <Table sx={{ minWidth: 700 }} aria-label="customized table">
                             <TableHead>
                                 <TableRow>
                                     <StyledTableCell>Coupon name</StyledTableCell>
+                                    <StyledTableCell align="center">Quantity</StyledTableCell>
                                     <StyledTableCell align="center">Discount</StyledTableCell>
                                     <StyledTableCell align="center">Min Total</StyledTableCell>
                                     <StyledTableCell align="center">From</StyledTableCell>
@@ -101,6 +101,7 @@ function ProfileCoupon(props) {
                                     <TableBody>
                                         <StyledTableRow key="abc">
                                             <StyledTableCell component="th" scope="row">{item.name}</StyledTableCell>
+                                            <StyledTableCell align="center">{item.quantity}</StyledTableCell>
                                             <StyledTableCell align="center">{item.percent}</StyledTableCell>
                                             <StyledTableCell align="center">{item.minTotal.toLocaleString()}</StyledTableCell>
                                             <StyledTableCell align="center">{convertTime(item.timeFrom)}</StyledTableCell>

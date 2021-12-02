@@ -175,7 +175,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Mã hóa đơn:</p>
+                                                    <p style={{ marginBottom: '0' }}>Id Receipt:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.MAHD}</p>
@@ -185,7 +185,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Trạng thái:</p>
+                                                    <p style={{ marginBottom: '0' }}>Status:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{StatusTypeReciept(row.isEdit, row.isDelete)}</p>
@@ -195,7 +195,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Thời gian:</p>
+                                                    <p style={{ marginBottom: '0' }}>Date:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.date}</p>
@@ -205,7 +205,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Giờ:</p>
+                                                    <p style={{ marginBottom: '0' }}>Time:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.time}</p>
@@ -215,7 +215,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Mã HD củ:</p>
+                                                    <p style={{ marginBottom: '0' }}>Old bill:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.oldBill ? row.oldBill.MAHD : "Không có"}</p>
@@ -225,7 +225,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Người bán:</p>
+                                                    <p style={{ marginBottom: '0' }}>Seller:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.name}</p>
@@ -235,7 +235,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Tổng số lượng:</p>
+                                                    <p style={{ marginBottom: '0' }}>Total quanitty:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{countQuantity()}</p>
@@ -245,7 +245,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Tổng tiền hàng:</p>
+                                                    <p style={{ marginBottom: '0' }}>Total money:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.totalMoney.toLocaleString()}</p>
@@ -255,7 +255,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Mã coupon:</p>
+                                                    <p style={{ marginBottom: '0' }}>Coupon:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.coupon? row.coupon.idCoupon : "Không áp dụng"}</p>
@@ -265,7 +265,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Tiền giảm:</p>
+                                                    <p style={{ marginBottom: '0' }}>Reduce money:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{(row.totalFinalMoney - row.totalMoney).toLocaleString()}</p>
@@ -275,7 +275,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Giảm giá (%):</p>
+                                                    <p style={{ marginBottom: '0' }}>Discount (%):</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.discount}</p>
@@ -285,7 +285,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>TỔNG:</p>
+                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>TOTAL:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0', fontWeight: '600' }}>{row.totalFinalMoney.toLocaleString()}</p>
@@ -332,11 +332,11 @@ export default function CollapsibleTable() {
                 <TableHead>
                     <TableRow style={{ backgroundColor: 'black', color: 'white' }}>
                         <TableCell />
-                        <TableCell >Mã HĐ</TableCell>
-                        <TableCell align="right">Ngày hóa đơn</TableCell>
-                        <TableCell align="right">Tổng hóa đơn</TableCell>
-                        <TableCell align="right">Giảm giá</TableCell>
-                        <TableCell align="right">Khách hàng trả</TableCell>
+                        <TableCell >Id Receipt</TableCell>
+                        <TableCell align="right">Date</TableCell>
+                        <TableCell align="right">Total</TableCell>
+                        <TableCell align="right">Discount</TableCell>
+                        <TableCell align="right">Total final</TableCell>
                         <TableCell />
                     </TableRow>
                 </TableHead>
