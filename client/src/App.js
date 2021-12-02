@@ -58,6 +58,9 @@ class App extends Component {
               // Phi
               this.props.getTimeKeeping(res.data.data.timeKeeping);
               this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
+              if(res.data.data.regulation.length > 0)
+                this.props.setRegulation(res.data.data.regulation[0]);
+              console.log("res.data", res.data)
             } else {
               this.props.setRoleEmployee()
               localStorage.setItem('token', res.data.token);
@@ -174,7 +177,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           type: "GET_PRODUCT_AND_TYPE",
           data: data
       });
-  },
+    },
+    setRegulation: (data) => {
+      dispatch({
+          type: "SET_REGULATION",
+          data: data,
+      });
+    },
   }
 }
 

@@ -59,6 +59,8 @@ import statusModalAddCouponReducer from './Profile/StatusModalAddCoupon';
 import listCouponReducer from './Profile/ListCoupon';
 import statusEditCouponReducer from './Profile/StatusEditCoupon';
 import objectEditCouponReducer from './Profile/ObjectEditCoupon';
+import regulationReducer from './Profile/RegulationReducer';
+
 
 
 var redux = require('redux');
@@ -98,6 +100,8 @@ const allReducers = redux.combineReducers({
     statusAddTimeKeeping: statusAddTimeKeepingReducer,
     statusUpdateTimeKeeping: statusUpdateTimeKeepingReducer,
     updateTimeKeepingValue: updateTimeKeepingValueReducer, 
+    //Quy định
+    regulationReducer: regulationReducer,
     // Ca
     editShiftStatus: statusEditShiftReducer,
     objectEditShift: objectEditShiftReducer,
