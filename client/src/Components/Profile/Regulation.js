@@ -11,66 +11,38 @@ class Regulation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            timeStart: new Date(2018, 5, 35, 7, 0, 0),
-            timeEnd: new Date(2018, 5, 35, 18, 0, 0),
-            numberEmployees: 10,
-            isNumberEmployees: false,
             isSaveRegulations: false,
         }
     }
 
-    changeTimeStart = (newValue) => {
+    blurAnything = (e) => {
         this.setState({
-            timeStart: newValue,
             isSaveRegulations: true,
         })
     }
 
-    changeTimeEnd = (newValue) => {
-        this.setState({
-            isSaveRegulations: true,
-            timeEnd: newValue,
-        })
-    }
-
-    blurNumberEmployees = (e) => {
-        if (e.target.value < 0) {
-            this.setState({
-                isNumberEmployees: true,
-                numberEmployees: e.target.value,
-                isSaveRegulations: true,
-            })
-        } else {
-            this.setState({
-                isNumberEmployees: false,
-                numberEmployees: e.target.value,
-                isSaveRegulations: true,
-            })
+    checkConstraint(data) {
+        if(data.regulation.exchangeRate <= 0)
+        {
+            
         }
     }
 
+
     SaveRegulations = async () => {
-        // const data = {
-        //     email: this.props.infoUser.email,
-        //     token: localStorage.getItem('token'),
-        //     regulation : {
-        //         currency: document.querySelector('select[name="currency"]').value,
-        //         exchangeRate: document.querySelector('select[name="exchangeRate"]').value,
-        //         miniumEmployeeAge: document.querySelector('select[name="miniumEmployeeAge"]').value, 
-        //         lessChangeTimeKeepingDay: document.querySelector('select[name="lessChangeTimeKeepingDay"]').value,
-        //         minExpiredProduct: document.querySelector('select[name="exchangeRate"]').value,
-        //     },
-        // }
-        //     numberEmployees: this.state.numberEmployees,
-        //     timeStart: {
-        //         hours: this.state.timeStart.getHours(),
-        //         minutes: this.state.timeStart.getMinutes(),
-        //     },
-        //     timeEnd: {
-        //         hours: this.state.timeEnd.getHours(),
-        //         minutes: this.state.timeEnd.getMinutes(),
-        //     },
-        // }
+        const data = {
+            email: this.props.infoUser.email,
+            token: localStorage.getItem('token'),
+            regulation : {
+                currency: document.querySelector('select[name="currency"]').value,
+                exchangeRate: document.querySelector('input[name="exchangeRate"]').value,
+                miniumEmployeeAge: document.querySelector('input[name="miniumEmployeeAge"]').value, 
+                lessChangeTimeKeepingDay: document.querySelector('input[name="lessChangeTimeKeepingDay"]').value,
+                minExpiredProduct: document.querySelector('input[name="minExpiredProduct"]').value,
+            },
+        }
+        console.log("Thông tin quy định", data);
+
         // if (!this.state.isNumberEmployees && this.state.isSaveRegulations) {
         //       console.log("save");  
         //       console.log(data);
@@ -100,7 +72,7 @@ class Regulation extends Component {
                                     fullWidth
                                     label="Currency"
                                     name="currency"
-                                    onBlur={(e) => this.blurNumberEmployees(e)}
+                                    onBlur={(e) => this.blurAnything(e)}
                                     required
                                     defaultValue="vnd"
                                     variant="outlined"
@@ -119,42 +91,24 @@ class Regulation extends Component {
                                 <TextField
                                     required
                                     fullWidth
-                                    label="Number of employees"
-                                    defaultValue='10'
-                                    name="numberEmployees"
-                                    variant="outlined"
-                                    error={this.state.isNumberEmployees}
-                                    helperText={this.state.isNumberEmployees? "Enter more 0" : ''}
-                                    type="number"
-                                    onBlur={(e) => this.blurNumberEmployees(e)}
-                                />
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    label="Exchange rate"
+                                    label="Exchange rate ($ to VNĐ)"
                                     defaultValue='20000'
                                     name="exchangeRate"
+                                    onBlur={(e) => this.blurAnything(e)}
                                     variant="outlined"
-                                    // error={this.state.isNumberEmployees}
-                                    // helperText={this.state.isNumberEmployees? "Enter more 0" : ''}
                                     type="number"
-                                    // onBlur={(e) => this.blurNumberEmployees(e)}
                                 />
                             </Grid>
                             <Grid item md={6} xs={12}>
                                 <TextField
                                     required
                                     fullWidth
-                                    label="Less change timekeeping days"
+                                    label="Minium day before timekeeping change"
                                     defaultValue='2'
-                                    name="exchangeRate"
+                                    name="lessChangeTimeKeepingDay"
                                     variant="outlined"
-                                    // error={this.state.isNumberEmployees}
-                                    // helperText={this.state.isNumberEmployees? "Enter more 0" : ''}
+                                    onBlur={(e) => this.blurAnything(e)}
                                     type="number"
-                                    // onBlur={(e) => this.blurNumberEmployees(e)}
                                 />
                             </Grid>
                             <Grid item md={6} xs={12}>
@@ -163,39 +117,24 @@ class Regulation extends Component {
                                     fullWidth
                                     label="Employee Minium Age"
                                     defaultValue='2'
-                                    name="exchangeRate"
+                                    name="miniumEmployeeAge"
                                     variant="outlined"
-                                    // error={this.state.isNumberEmployees}
-                                    // helperText={this.state.isNumberEmployees? "Enter more 0" : ''}
+                                    onBlur={(e) => this.blurAnything(e)}
                                     type="number"
-                                    // onBlur={(e) => this.blurNumberEmployees(e)}
                                 />
                             </Grid>
-                            {/* <Grid item md={6} xs={12}>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <Stack spacing={3}>
-                                        <TimePicker
-                                            label="Start"
-                                            value={this.state.timeStart}
-                                            className="timeFrom"
-                                            onChange={(newValue) => this.changeTimeStart(newValue)}
-                                            renderInput={(params) => <TextField {...params} />}
-                                        />
-                                    </Stack>
-                                </LocalizationProvider>
-                            </Grid>
                             <Grid item md={6} xs={12}>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <Stack spacing={3}>
-                                        <TimePicker
-                                            label="End"
-                                            value={this.state.timeEnd}
-                                            onChange={(newValue) => this.changeTimeEnd(newValue)}
-                                            renderInput={(params) => <TextField onChange={(e) => this.changeTime(e)} {...params} />}
-                                        />
-                                    </Stack>
-                                </LocalizationProvider>
-                            </Grid> */}
+                                <TextField
+                                    required
+                                    fullWidth
+                                    label="Min expired product days"
+                                    defaultValue='2'
+                                    name="minExpiredProduct"
+                                    variant="outlined"
+                                    onBlur={(e) => this.blurAnything(e)}
+                                    type="number"
+                                />
+                            </Grid>
                         </Grid>
                     </CardContent>
                     <Divider />
