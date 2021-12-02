@@ -51,6 +51,7 @@ class Regulation extends Component {
             email: this.props.infoUser.email,
             token: localStorage.getItem('token'),
             regulation : {
+                _id: this.props.infoUser.email,
                 currency: document.querySelector('select[name="currency"]').value,
                 exchangeRate: document.querySelector('input[name="exchangeRate"]').value,
                 miniumEmployeeAge: document.querySelector('input[name="miniumEmployeeAge"]').value, 
@@ -60,19 +61,14 @@ class Regulation extends Component {
         }
         console.log("Thông tin quy định", data);
         if(this.checkConstraint(data)== false) return;
-        // if (!this.state.isNumberEmployees && this.state.isSaveRegulations) {
-        //       console.log("save");  
-        //       console.log(data);
-        //     await axios.post(`http://localhost:5000/api/profile/regulation`, data)
-        //     .then(res => {
-        //         this.props.hideAlert();
-        //         this.props.showAlert("Login timeout, signin again", "success");
-        //     })
-        //     .catch(err => {
-        //         this.props.hideAlert();
-        //         this.props.showAlert("Login timeout, signin again", "warning");
-        //     });
-        // }
+        await axios.post(`http://localhost:5000/api/profile/regulation`, data)
+        .then(res => {
+            console.log("Add thành công");
+        })
+        .catch(err => {
+            this.props.hideAlert();
+            this.props.showAlert("Login timeout, signin again", "warning");
+        });
     }
 
 
