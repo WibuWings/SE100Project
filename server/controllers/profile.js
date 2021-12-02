@@ -41,7 +41,6 @@ const STATUS = {
 };
 
 class meProfile {
-
     updateProfileData = async (req, res) => {
         const idcheck = req.body._id
         const email = req.body.email;
@@ -119,7 +118,6 @@ class meProfile {
         )
 
     }
-
     addShift = async (req, res) => {
         const idUserJwt = req.body.email;
         const idShift = req.body.data.id;
@@ -159,8 +157,6 @@ class meProfile {
             })
 
     }
-
-
     updateShift = async (req, res) => {
         const idUser = req.body.idUser
         const idShift = req.body.id
@@ -322,7 +318,6 @@ class meProfile {
                 }
             })
     }
-
     deleteAccount = async (req, res) => {
         const manager = await Manager.findOne({email: req.body.email}).exec();
         const storeID = manager.storeID;
@@ -345,6 +340,8 @@ class meProfile {
 
         res.status(200).send("Delete account successfully!");
     }
+
+
 }
 
 module.exports = new meProfile();
