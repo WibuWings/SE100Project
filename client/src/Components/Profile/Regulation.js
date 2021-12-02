@@ -24,8 +24,25 @@ class Regulation extends Component {
     checkConstraint(data) {
         if(data.regulation.exchangeRate <= 0)
         {
-            
+            alert("Tỉ giá không thể nhỏ hơn 0");
+            return false;
         }
+        else if(data.regulation.miniumEmployeeAge <= 0)
+        {
+            alert("Tuổi tối thiểu của nhân viên không được nhỏ hơn 0");
+            return false;
+        }
+        else if(data.regulation.lessChangeTimeKeepingDay <= 0)
+        {
+            alert("Ngày báo trước nghỉ không được nhỏ hơn 0");
+            return false;
+        }
+        else if(data.regulation.minExpiredProduct <= 0)
+        {
+            alert("Hiệu ngày hết hạn và ngày nhập không được nhỏ hơn 0");
+            return false;
+        }
+        return true;
     }
 
 
@@ -42,7 +59,7 @@ class Regulation extends Component {
             },
         }
         console.log("Thông tin quy định", data);
-
+        if(this.checkConstraint(data)== false) return;
         // if (!this.state.isNumberEmployees && this.state.isSaveRegulations) {
         //       console.log("save");  
         //       console.log(data);
