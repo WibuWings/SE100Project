@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import '../../css/Dashboard.css'
-import { Container, Grid } from '@mui/material';
-import { Typography } from '@mui/material';
-import { DiApple } from 'react-icons/di'
+import { Container, Grid, Button } from '@mui/material';
 import AppWebsiteVisits from './Statistic';
 import DaiLyMoneyTracking from './DaiLyMoneyTracking';
 import GroupButtonDashboard from './GroupButtonDashboard';
@@ -10,7 +8,10 @@ import TotalMoney from './TotalMoney';
 import ErrorReceipt from './ErrorReceipt';
 import CouponManager from './CouponManager';
 import ProductStatis from './ProductStatis';
+import ComponentToPrint from './ComponentToPrint';
+import ReactToPrint from 'react-to-print';
 import SalaryStats from './SalaryStats';
+
 class DashBoard extends Component {
 
     renderEventContent = (eventInfo) => {
@@ -32,33 +33,28 @@ class DashBoard extends Component {
                 <Container style={{ marginTop: '40px' }} maxWidth="xl">
                     <Grid container spacing={3}>
                         <Grid item md={12} sm={12}>
-                            <GroupButtonDashboard></GroupButtonDashboard>
+                            <div style={{ justifyContent: 'space-between', width: '100&', display: 'flex' }}>
+                                <GroupButtonDashboard></GroupButtonDashboard>
+                                <ReactToPrint
+                                    trigger={() => {
+                                        return <div>
+                                            <Button style={{ backgroundColor: '#01579b', color: 'white' }}>Export dashboard</Button>
+                                        </div>;
+                                    }}
+                                    content={() => this.componentRef}
+                                />
+                                <div style={{ display: 'none' }}>
+                                    <ComponentToPrint ref={el => (this.componentRef = el)} />
+                                </div>
+                            </div>
                         </Grid>
                         <Grid className="dashboard-item" item md={3} sm={12} >
                             <TotalMoney></TotalMoney>
                         </Grid>
                         <Grid className="dashboard-item" item md={3} sm={12} >
-                            {/* <div className="dashboard-css sold-good">
-                                <div className="dashboard-item-img sold-good" style={{ marginBottom: '30px' }}>
-                                    <DiApple className="dashboard-item-icon sold-good"></DiApple>
-                                </div>
-                                <Typography style={{ marginBottom: '10px' }} variant="h4">256</Typography>
-                                <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-                                    Sold good
-                                </Typography>
-                            </div> */}
                             <ProductStatis></ProductStatis>
                         </Grid>
                         <Grid className="dashboard-item" item md={3} sm={12} >
-                            {/* <div className="dashboard-css imported-good">
-                                <div className="dashboard-item-img imported-good" style={{ marginBottom: '30px' }}>
-                                    <DiApple className="dashboard-item-icon imported-good"></DiApple>
-                                </div>
-                                <Typography style={{ marginBottom: '10px' }} variant="h4">256</Typography>
-                                <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-                                    Imported good
-                                </Typography>
-                            </div> */}
                             <SalaryStats></SalaryStats>
                         </Grid>
                         <Grid className="dashboard-item" item md={3} sm={12} >
