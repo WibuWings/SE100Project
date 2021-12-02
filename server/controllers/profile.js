@@ -319,6 +319,31 @@ class meProfile {
             })
     }
     regulation = async (req, res) => {
+        console.log("req.body.email", req.body.email);
+
+        var newI = await Regulation.findOne({ _id : req.body.email});
+        console.log("newI", newI);
+
+        if(newI == null)
+        {
+            const newRegulation = Regulation(req.body.regulation);
+            newRegulation.
+            save()
+            .then((data) => {
+                res.status(200).send(
+                    JSON.stringify({
+                        token: res.locals.newToken,
+                        email: res.locals.decoded.email,
+                        data,
+                    })
+                );
+            })
+            .catch((err) => {
+                res.status(404).send(err);
+            });
+            return;
+        }
+
         Regulation.findOneAndUpdate(
             { _id : req.body.email},
             {

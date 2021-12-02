@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const Regulation = new Schema({
     _id: String,
-    currency: Number,
+    currency: String,
     exchangeRate:Number,
     miniumEmployeeAge:Number,
     lessChangeTimeKeepingDay:Number,
