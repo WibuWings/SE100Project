@@ -339,12 +339,8 @@ const mapStateToProps = (state, ownProps) => {
     shoppingBags: state.shoppingBags,
     statusEditInfoBill: state.statusEditInfoBill,
     InfomationBillEdit: state.InfomationBillEdit,
-<<<<<<< HEAD
-    listCoupon: state.listCoupon
-=======
     listCoupon: state.listCoupon,
     InfomationBillEdit: state.InfomationBillEdit,
->>>>>>> origin/front-end-phuoc-dashboard
   }
 }
 
@@ -393,9 +389,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "EDIT_SHOPPING_BAGS",
         MAHD: MAHD,
       })
-<<<<<<< HEAD
-    }
-=======
     },
     updateQuantityCoupon: (idCoupon) => {
       dispatch({
@@ -409,7 +402,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         data: data,
       });
     },
->>>>>>> origin/front-end-phuoc-dashboard
   }
 }
 
