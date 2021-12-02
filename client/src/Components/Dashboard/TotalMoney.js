@@ -83,11 +83,12 @@ function TotalMoney(props) {
             </div>
             {
                 regulation.currency == 'vnd' ?
-                <Typography style={{ marginBottom: '10px' }} variant="h6">{totalMoney.toLocaleString()} VNĐ 
+                <Typography style={{ marginBottom: '10px' }} variant="h6">
+                    {totalMoney.toLocaleString()} VNĐ 
                 </Typography>
                 :
                 <Typography style={{ marginBottom: '10px' }} variant="h6">
-                    {(totalMoney.toLocaleString()/regulation.exchangeRate).toFixed(2)} $
+                    {((totalMoney/regulation.exchangeRate).toFixed(2)).toLocaleString()} $
                 </Typography>
             }
             <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>

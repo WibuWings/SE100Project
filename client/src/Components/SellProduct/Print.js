@@ -264,7 +264,9 @@ class Printf extends React.PureComponent {
                 <p style={{}}>Total</p>
               </div>
               <div className="col-5">
-                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>{this.totalMoney().toLocaleString()}</p>
+                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>
+                  {this.props.regulation.currency === 'vnd' ? (this.totalMoney()).toLocaleString() : ((this.totalMoney()) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
+                </p>
               </div>
               <div style={{ fontSize: '1.2rem' }} className="col-7">
                 <p>Discount (%)</p>
@@ -276,13 +278,17 @@ class Printf extends React.PureComponent {
                 <p style={{}}>Reduce</p>
               </div>
               <div className="col-5">
-                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>-{this.reduceMoney().toLocaleString()}</p>
+                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>
+                  -{this.props.regulation.currency === 'vnd' ? (this.reduceMoney()).toLocaleString() : ((this.reduceMoney()) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
+                </p>
               </div>
               <div className="col-7">
                 <p style={{ margin: '0', fontSize: '1.2rem', fontWeight: '700' }}>TOTAL FINAL</p>
               </div>
               <div className="col-5">
-                <p style={{ margin: '0', fontSize: '1.2rem', textAlign: 'end', color: 'green', fontWeight: '700' }}>{this.totalFinalMoney().toLocaleString()}</p>
+                <p style={{ margin: '0', fontSize: '1.2rem', textAlign: 'end', color: 'green', fontWeight: '700' }}>
+                  {this.props.regulation.currency === 'vnd' ? (this.totalFinalMoney()).toLocaleString() : ((this.totalFinalMoney()) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
+                </p>
               </div>
             </div>
           </div>
@@ -326,7 +332,7 @@ class Printf extends React.PureComponent {
         </div>
         {/* Ẩn đi */}
         <div style={{ display: 'none' }}>
-          <ComponentToPrint MAHD={this.state.code} percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
+          <ComponentToPrint regulation={this.props.regulation}  MAHD={this.state.code} percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
         </div>
       </div>
     );
@@ -341,6 +347,7 @@ const mapStateToProps = (state, ownProps) => {
     InfomationBillEdit: state.InfomationBillEdit,
     listCoupon: state.listCoupon,
     InfomationBillEdit: state.InfomationBillEdit,
+    regulation: state.regulationReducer
   }
 }
 

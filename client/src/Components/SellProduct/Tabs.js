@@ -21,8 +21,7 @@ export default function IconLabelTabs() {
                 return true;
             })
         }
-        
-        dispatch({
+            dispatch({
             type: "UPDATE_TYPE_CHOOSE",
             typeProductID: index,
         })

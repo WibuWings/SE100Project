@@ -27,6 +27,8 @@ function Row(props) {
     const infoUser = useSelector(state => state.infoUser)
     const dispatch = useDispatch();
     const [statusSelectReplace, setStatusSelectReplace] = React.useState(false);
+    const regulation = useSelector(state => state.regulationReducer)
+
 
     const style = {
         position: 'absolute',
@@ -240,9 +242,13 @@ function Row(props) {
                     {row.MAHD}
                 </TableCell>
                 <TableCell align="right">{row.date}</TableCell>
-                <TableCell align="right">{row.totalMoney.toLocaleString()}</TableCell>
+                <TableCell align="right">
+                    {regulation.currency === 'vnd' ? (row.totalMoney).toLocaleString() : ((row.totalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                </TableCell>
                 <TableCell align="right">{row.discount}</TableCell>
-                <TableCell align="right">{row.totalFinalMoney.toLocaleString()}</TableCell>
+                <TableCell align="right">
+                    {regulation.currency === 'vnd' ? (row.totalFinalMoney).toLocaleString() : ((row.totalFinalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                    </TableCell>
             </TableRow>
             <TableRow style={{ borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae' }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
@@ -272,9 +278,9 @@ function Row(props) {
                                                     </TableCell>
                                                     <TableCell>{value.product.name}</TableCell>
                                                     <TableCell>{value.quantity}</TableCell>
-                                                    <TableCell align="right">{value.product.sellPrice.toLocaleString()}</TableCell>
+                                                    <TableCell align="right">{regulation.currency === 'vnd' ? value.product.sellPrice.toLocaleString() : (value.product.sellPrice / regulation.exchangeRate).toFixed(2).toLocaleString()}</TableCell>
                                                     <TableCell align="right">
-                                                        {(value.quantity * value.product.sellPrice).toLocaleString()}
+                                                        {regulation.currency === 'vnd' ? (value.quantity * value.product.sellPrice).toLocaleString() : ((value.quantity * value.product.sellPrice) / regulation.exchangeRate).toFixed(2).toLocaleString()}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -359,7 +365,9 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0' }}>Total money:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.totalMoney.toLocaleString()}</p>
+                                                    <p style={{ marginBottom: '0' }}>
+                                                        {regulation.currency === 'vnd' ? row.totalMoney.toLocaleString() : (row.totalMoney / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                    </p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -379,7 +387,9 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0' }}>Reduce money:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{(row.totalFinalMoney - row.totalMoney).toLocaleString()}</p>
+                                                    <p style={{ marginBottom: '0' }}>
+                                                        {regulation.currency === 'vnd' ? (row.totalFinalMoney - row.totalMoney).toLocaleString() : ((row.totalFinalMoney - row.totalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                    </p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -399,7 +409,9 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0', fontWeight: '600' }}>TOTAL:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>{row.totalFinalMoney.toLocaleString()}</p>
+                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>
+                                                        {regulation.currency === 'vnd' ? (row.totalFinalMoney).toLocaleString() : ((row.totalFinalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                    </p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>

@@ -22,17 +22,17 @@ export default function AppWebsiteVisits() {
   const [showOption, setShowOption] = React.useState(false);
   var CHART_DATA = [
     {
-      name: 'Tiền gốc',
+      name: 'Funds',
       type: 'column',
       data: tienGoc
     },
     {
-      name: 'Doanh thu',
+      name: 'Revenue',
       type: 'area',
       data: tienDoanhThu
     },
     {
-      name: 'Lợi nhuận',
+      name: 'Profit',
       type: 'line',
       data: tienLai
     }
@@ -57,10 +57,10 @@ export default function AppWebsiteVisits() {
       y: {
         formatter: (y) => {
           if (typeof y !== 'undefined') {
-            if(regulation.currency =='vnd')
+            if (regulation.currency == 'vnd')
               return `${y.toFixed(0)} VNĐ`;
             else
-              return  `${(y/regulation.exchangeRate).toFixed(0)} $`
+              return `${(y).toFixed(2)} $`
           }
           return y;
         }
@@ -128,6 +128,10 @@ export default function AppWebsiteVisits() {
           }
         }
       })
+      if (regulation.currency !== 'vnd') {
+        moneyDoanhThu = (moneyDoanhThu / regulation.exchangeRate).toFixed(2);
+        moneyTienGoc = (moneyTienGoc / regulation.exchangeRate).toFixed(2)
+      }
       arrTienGoc.unshift(moneyTienGoc)
       arrDoanhThu.unshift(moneyDoanhThu)
       arrLai.unshift(moneyDoanhThu - moneyTienGoc)
@@ -225,6 +229,10 @@ export default function AppWebsiteVisits() {
               }
             }
           })
+          if (regulation.currency !== 'vnd') {
+            moneyDoanhThu = (moneyDoanhThu / regulation.exchangeRate).toFixed(2);
+            moneyTienGoc = (moneyTienGoc / regulation.exchangeRate).toFixed(2)
+          }
           arrDoanhThu.push(moneyDoanhThu);
           arrTienGoc.push(moneyTienGoc)
           arrLai.push(moneyDoanhThu - moneyTienGoc)
@@ -249,6 +257,10 @@ export default function AppWebsiteVisits() {
               }
             }
           })
+        }
+        if (regulation.currency !== 'vnd') {
+          moneyDoanhThu = (moneyDoanhThu / regulation.exchangeRate).toFixed(2);
+          moneyTienGoc = (moneyTienGoc / regulation.exchangeRate).toFixed(2)
         }
         arrDoanhThu.push(moneyDoanhThu);
         arrTienGoc.push(moneyTienGoc)
@@ -279,6 +291,10 @@ export default function AppWebsiteVisits() {
             }
           }
         })
+        if (regulation.currency !== 'vnd') {
+          moneyDoanhThu = (moneyDoanhThu / regulation.exchangeRate).toFixed(2);
+          moneyTienGoc = (moneyTienGoc / regulation.exchangeRate).toFixed(2)
+        }
         arrDoanhThu.push(moneyDoanhThu);
         arrTienGoc.push(moneyTienGoc)
         arrLai.push(moneyDoanhThu - moneyTienGoc)
@@ -300,6 +316,10 @@ export default function AppWebsiteVisits() {
               }
             }
           })
+        }
+        if (regulation.currency !== 'vnd') {
+          moneyDoanhThu = (moneyDoanhThu / regulation.exchangeRate).toFixed(2);
+          moneyTienGoc = (moneyTienGoc / regulation.exchangeRate).toFixed(2)
         }
         arrDoanhThu.push(moneyDoanhThu);
         arrTienGoc.push(moneyTienGoc)
@@ -333,6 +353,12 @@ export default function AppWebsiteVisits() {
           }
         }
       })
+
+      if (regulation.currency !== 'vnd') {
+        moneyDoanhThu = (moneyDoanhThu / regulation.exchangeRate).toFixed(2);
+        moneyTienGoc = (moneyTienGoc / regulation.exchangeRate).toFixed(2)
+      }
+
       arrDoanhThu.push(moneyDoanhThu);
       arrTienGoc.push(moneyTienGoc)
       arrLai.push(moneyDoanhThu - moneyTienGoc)
@@ -515,8 +541,9 @@ export default function AppWebsiteVisits() {
       GrowthPercent(typeMonth, typeYear, typeTimeDashboard, '', '');
     }
 
+  }, [typeTimeDashboard, growth, typeMonth, typeYear,regulation])
 
-  }, [typeTimeDashboard, growth, typeMonth, typeYear])
+
 
   return (
     <Card>

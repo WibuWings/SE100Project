@@ -35,6 +35,9 @@ function ProfileCoupon(props) {
     const statusDarkmode = useSelector(state => state.statusDarkmode)
     const dispatch = useDispatch()
     const listCoupon = useSelector(state => state.listCoupon)
+    const regulation = useSelector(state => state.regulationReducer)
+
+
     const openModalAddCoupon = () => {
         dispatch({
             type: "CHANGE_ADD_COUPON_STATUS"
@@ -57,7 +60,7 @@ function ProfileCoupon(props) {
             typeMessage: "success",
         })
     }
-    
+
     const editCoupon = (data) => {
         dispatch({
             type: "CHANGE_ADD_COUPON_STATUS"
@@ -103,7 +106,9 @@ function ProfileCoupon(props) {
                                             <StyledTableCell component="th" scope="row">{item.name}</StyledTableCell>
                                             <StyledTableCell align="center">{item.quantity}</StyledTableCell>
                                             <StyledTableCell align="center">{item.percent}</StyledTableCell>
-                                            <StyledTableCell align="center">{item.minTotal.toLocaleString()}</StyledTableCell>
+                                            <StyledTableCell align="center">
+                                                {regulation.currency === 'vnd' ? (item.minTotal).toLocaleString() : ((item.minTotal) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                            </StyledTableCell>
                                             <StyledTableCell align="center">{convertTime(item.timeFrom)}</StyledTableCell>
                                             <StyledTableCell align="center">{convertTime(item.timeEnd)}</StyledTableCell>
                                             <StyledTableCell align="center">
@@ -111,7 +116,7 @@ function ProfileCoupon(props) {
                                                     <FiEdit />
                                                 </IconButton>
                                             </StyledTableCell>
-                                            <StyledTableCell  align="center">
+                                            <StyledTableCell align="center">
                                                 <IconButton onClick={() => deleteCoupon(item.idCoupon)} name={item.idCoupon} style={{ color: 'red' }} aria-label="fingerprint">
                                                     <FiTrash2 />
                                                 </IconButton>

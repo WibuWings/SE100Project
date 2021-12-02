@@ -10,6 +10,8 @@ function DaiLyMoneyTracking(props) {
     const [value, setValue] = React.useState(new Date());
     const listReciept = useSelector(state => state.listReciept)
     const [dailyListReciept, setDailiListReciept] = React.useState([]);
+    const regulation = useSelector(state => state.regulationReducer)
+
     const changeTime = (newValue) => {
         if (newValue) {
             setValue(newValue);
@@ -27,18 +29,28 @@ function DaiLyMoneyTracking(props) {
                 }
             }
         })
+
+        if(regulation.currency !== 'vnd') {
+            money = (money/regulation.exchangeRate).toFixed(2);
+        } 
+
         return money
     }
 
     const renderMoney = (item) => {
+        let money = item.totalFinalMoney
+        if(regulation.currency !== 'vnd') {
+            money = (money/regulation.exchangeRate).toFixed(2);
+        } 
+
         if (item.deleted && item.isEdit) {
             return 0
         } else if (item.deleted) {
-            return "-" + item.totalFinalMoney
+            return "-" + money
         } else if (item.isEdit) {
             return 0
         } else {
-            return "+" + item.totalFinalMoney
+            return "+" + money
         }
     }
 
@@ -103,7 +115,7 @@ function DaiLyMoneyTracking(props) {
                                 <Grid container spacing={2}>
                                     <Grid item sm={6} md={6}>
                                         <div>{renderStatus(value)}</div>
-                                        <div style={{ fontWeight: '700', color: renderColor(value) }}>{renderMoney(value)}</div>
+                                        <div style={{ fontWeight: '700', color: renderColor(value) }}>{renderMoney(value).toLocaleString()}</div>
                                     </Grid>
                                     <Grid style={{ display: 'flex', justifyContent: 'center' }} item sm={6} md={3}>
                                         <div style={{ color: '#00000075', paddingLeft: '10px', fontSize: '1rem' }}>{value.name}</div>
@@ -130,9 +142,9 @@ function DaiLyMoneyTracking(props) {
                     </Grid>
                     <Grid style={{ display: 'flex', justifyContent: 'start' }} item md={5}>
                         {totalMoneyDaily() >= 0 ? (
-                            <h5 style={{ color: 'green', fontWeight: 'bold' }}>{totalMoneyDaily()} VNĐ</h5>
+                            <h5 style={{ color: 'green', fontWeight: 'bold' }}>{totalMoneyDaily().toLocaleString()} {(regulation.currency == 'vnd') ? 'VNĐ' : '$'}</h5>
                         ) : (
-                            <h5 style={{ color: 'red', fontWeight: 'bold' }}>{totalMoneyDaily()} VNĐ</h5>
+                            <h5 style={{ color: 'red', fontWeight: 'bold' }}>{totalMoneyDaily().toLocaleString()} {(regulation.currency == 'vnd') ? 'VNĐ' : '$'}</h5>
                         )}
                     </Grid>
                 </Grid>
