@@ -45,8 +45,6 @@ class App extends Component {
         token: localStorage.getItem('token'),
       })
         .then(res => {
-          console.log("Thành công");
-          console.log(res);
           if (res.status === 200) {
             if (res.data.data.isEmployee === false) {
               this.props.setRole()
@@ -73,8 +71,6 @@ class App extends Component {
           }
         })
         .catch(err => {
-          console.log("thất bại");
-          console.log(err)
         })
     }
   }

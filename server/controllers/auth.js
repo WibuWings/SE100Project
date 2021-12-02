@@ -397,7 +397,7 @@ async function getAllData(email) {
                 Store.find({ _id: employees._id.storeID }).exec(),
                 Manager.find({ _id: employees.managerID }).exec(),
             ]);
-        return { employee, receipts, products, store, manager };
+        return { employee, receipts, products, store, manager ,isEmployee: true};
     }
 }
 

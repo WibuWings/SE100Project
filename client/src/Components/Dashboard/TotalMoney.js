@@ -2,8 +2,7 @@ import React from 'react';
 import { Typography } from '@mui/material';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { useSelector } from 'react-redux'
-import moment from 'moment';
-
+import moment from 'moment'
 
 function TotalMoney(props) {
     const typeHeaderDashboard = useSelector(state => state.typeHeaderDashboard);
@@ -18,7 +17,8 @@ function TotalMoney(props) {
     React.useEffect(() => {
         let money = 0;
         let currentMonth = nowTime.getMonth() + 1;
-
+        let lastMonth = new Date(moment().subtract(1, 'months'))
+        
         if (typeHeaderDashboard == 'Today') {
             listReciept.map(value => {
                 let date = value.date.replace(/\s/g, "");
@@ -31,10 +31,11 @@ function TotalMoney(props) {
             })
             setTotalMoney(money)
         } else if (typeHeaderDashboard == 'Yesterday') {
+            let yesterdayTime = new Date(moment().subtract(1, 'days'))
             listReciept.map(value => {
                 let date = value.date.replace(/\s/g, "");
                 date = date.split("/");
-                if (date[0] == nowTime.getDate() - 1 && date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
+                if (date[0] == yesterdayTime.getDate() && date[1] == yesterdayTime.getMonth()+1 && date[2] == yesterdayTime.getFullYear()) {
                     if(!value.deleted){
                         money += value.totalFinalMoney
                     }
@@ -45,7 +46,7 @@ function TotalMoney(props) {
             listReciept.map(value => {
                 let date = value.date.replace(/\s/g, "");
                 date = date.split("/");
-                if (date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
+                if (date[1] == lastMonth.getMonth() + 1 && date[2] == lastMonth.getFullYear()) {
                     if(!value.deleted) {
                         money += value.totalFinalMoney
                     }

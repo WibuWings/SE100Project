@@ -29,7 +29,6 @@ class ProfileHeader extends Component {
             formData.append("upload_preset", "qqqhcaa3");
             axios.post(`https://api.cloudinary.com/v1_1/databaseimg/image/upload`, formData)
                 .then(res => {
-                    console.log(res.data.url);
                     this.props.updateAvatar(res.data.url);
                     axios.post(`http://localhost:5000/api/profile/update-avatar`, {
                         email: this.props.infoUser.email,
@@ -37,7 +36,6 @@ class ProfileHeader extends Component {
                         token: localStorage.getItem('token'),
                     }).then(res => {
                         localStorage.setItem('token', res.data.token);
-                        console.log(res.data);
                         this.props.hideAlert();
                         this.props.showAlert("Update avatar success", "success");
                     }).catch(err => {

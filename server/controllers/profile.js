@@ -41,7 +41,6 @@ const STATUS = {
 };
 
 class meProfile {
-
     updateProfileData = async (req, res) => {
         const idcheck = req.body._id
         const email = req.body.email;
@@ -119,7 +118,6 @@ class meProfile {
         )
 
     }
-
     addShift = async (req, res) => {
         const idUserJwt = req.body.email;
         const idShift = req.body.data.id;
@@ -159,8 +157,6 @@ class meProfile {
             })
 
     }
-
-
     updateShift = async (req, res) => {
         const idUser = req.body.idUser
         const idShift = req.body.id
@@ -322,6 +318,41 @@ class meProfile {
                 }
             })
     }
+    regulation = async (req, res) => {
+        Regulation.findOneAndUpdate(
+            { _id : req.body.email},
+            {
+                $set: {
+                    currency: req.body.regulation.currency,
+                    exchangeRate:req.body.regulation.exchangeRate,
+                    miniumEmployeeAge:req.body.regulation.miniumEmployeeAge,
+                    lessChangeTimeKeepingDay:req.body.regulation.lessChangeTimeKeepingDay,
+                    minExpiredProduct:req.body.regulation.minExpiredProduct,
+                    numberEmployees: req.body.regulation.numberEmployees,
+                }
+            }, {
+            returnOriginal: false,
+        },
+            function (err, doc) {
+                if (err) {
+                    res.send(
+                        JSON.stringify({
+                            status: STATUS.FAILURE,
+                            message: MESSAGES.FAILURE_UPDATE,
+                        })
+                    );
+                }
+                else {
+                    res.status(200).send(
+                        JSON.stringify({
+                            token: res.locals.newToken,
+                            email: res.locals.decoded.email,
+                            data: doc,
+                        })
+                    )
+                }
+            });
+    }
 
     deleteAccount = async (req, res) => {
         const manager = await Manager.findOne({email: req.body.email}).exec();
@@ -345,6 +376,8 @@ class meProfile {
 
         res.status(200).send("Delete account successfully!");
     }
+
+
 }
 
 module.exports = new meProfile();

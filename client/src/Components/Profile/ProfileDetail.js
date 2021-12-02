@@ -35,7 +35,6 @@ class ProfileDetail extends Component {
                 this.props.showAlert("Update success", "success");
             })
             .catch(err => {
-                console.log(err);
             })
     }
 
@@ -56,7 +55,6 @@ class ProfileDetail extends Component {
             }
             await axios.post(`http://localhost:5000/api/profile/update-profile`, data)
                 .then(res => {
-                    console.log(res);
                     if (res.status === 200) {
                         localStorage.setItem('token', res.data.token);
                         this.props.updateProfile(data);
@@ -75,7 +73,6 @@ class ProfileDetail extends Component {
     }
 
     changeCountry = (e) => {
-        console.log(this.state.listProvince);
         if (e.target.value !== '0') {
             this.props.updateDistrict(this.state.listProvince.filter(word => word.codename === e.target.value)[0].districts)
         }
@@ -181,7 +178,6 @@ class ProfileDetail extends Component {
                 }
             })
             .catch(err => {
-                console.log("fail");
             })
     }
 
