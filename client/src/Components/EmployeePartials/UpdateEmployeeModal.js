@@ -157,13 +157,27 @@ class UpdateEmployeeModal extends Component {
             alert("Ảnh chưa được upload xong");
             return false;
         }
-
+        // Constraint 12: Check tuổi với cái regulation:
+        if(this.props.regulation != {})
+        {
+            if(this.calculateOld(startDate, birthDay) < this.props.regulation.miniumEmployeeAge)
+            {
+                console.log("Tính tuổi",this.calculateOld(startDate, birthDay));
+                alert("Nhân viên chưa đạt đủ độ tuổi cho phép (" + this.props.regulation.miniumEmployeeAge+")");
+                return false;
+            }
+        }
         alert("Đã check hết các constraint")
         return true;
     }
 
     isGreater(dateString1, dateString2){
         return (new Date(dateString1).getTime() - new Date(dateString2).getTime()) > 0;
+    }
+
+    calculateOld(dateString1, dateString2)
+    {
+        return (new Date(dateString1).getYear() - new Date(dateString2).getYear());
     }
 
     async updateEmployee(){
@@ -464,6 +478,7 @@ const mapStateToProps = (state, ownProps) => {
         currentEditEmployee: state.currentEditEmployee,
         infoUser: state.infoUser,
         listEmployee: state.listEmployee,
+        regulation: state.regulationReducer,
     }
 }
 
