@@ -41,6 +41,7 @@ export default function AppWebsiteVisits() {
   const listReciept = useSelector(state => state.listReciept)
   const typeMonth = useSelector(state => state.monthSelectDashboard)
   const typeYear = useSelector(state => state.yearSelectDashboard)
+  const regulation = useSelector(state => state.regulationReducer)
 
   let nowTime = new Date()
   const chartOptions = merge(BaseOptionChart(), {
@@ -56,7 +57,10 @@ export default function AppWebsiteVisits() {
       y: {
         formatter: (y) => {
           if (typeof y !== 'undefined') {
-            return `${y.toFixed(0)} VNĐ`;
+            if(regulation.currency =='vnd')
+              return `${y.toFixed(0)} VNĐ`;
+            else
+              return  `${(y/regulation.exchangeRate).toFixed(0)} $`
           }
           return y;
         }

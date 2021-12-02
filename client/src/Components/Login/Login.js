@@ -67,6 +67,7 @@ class Login extends Component {
                         this.props.showAlert(res.data.message, "success");
                         if(res.data.data.regulation.length > 0)
                             this.props.setRegulation(res.data.data.regulation[0]);
+                        else this.props.setRegulation({});
                         console.log("res.data", res.data)
                         break;
                     case -1:
@@ -107,6 +108,7 @@ class Login extends Component {
                             this.props.showAlert(res.data.message, "success");
                             if(res.data.data.regulation.length > 0)
                                 this.props.setRegulation(res.data.data.regulation[0]);
+                            else this.props.setRegulation({});
                             console.log("res.data", res.data)
                             break;
                         case -1:

@@ -60,6 +60,7 @@ class App extends Component {
               this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
               if(res.data.data.regulation.length > 0)
                 this.props.setRegulation(res.data.data.regulation[0]);
+              else this.props.setRegulation({});
               console.log("res.data", res.data)
             } else {
               this.props.setRoleEmployee()

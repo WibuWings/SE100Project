@@ -7,6 +7,7 @@ import moment from 'moment'
 function TotalMoney(props) {
     const typeHeaderDashboard = useSelector(state => state.typeHeaderDashboard);
     const listReciept = useSelector(state => state.listReciept)
+    const regulation = useSelector(state => state.regulationReducer)
     const [totalMoney, setTotalMoney] = React.useState('')
 
     // console.log("ListReceipt", listReciept);
@@ -79,8 +80,15 @@ function TotalMoney(props) {
             <div className="dashboard-item-img" style={{ marginBottom: '30px' }}>
                 <RiMoneyDollarCircleFill className="dashboard-item-icon"></RiMoneyDollarCircleFill>
             </div>
-            <Typography style={{ marginBottom: '10px' }} variant="h6">{totalMoney.toLocaleString()} VNĐ  
-            </Typography>
+            {
+                regulation.currency == 'vnd' ?
+                <Typography style={{ marginBottom: '10px' }} variant="h6">{totalMoney.toLocaleString()} VNĐ 
+                </Typography>
+                :
+                <Typography style={{ marginBottom: '10px' }} variant="h6">
+                    {(totalMoney.toLocaleString()/regulation.exchangeRate).toFixed(2)} $
+                </Typography>
+            }
             <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
                 Total money
             </Typography>
