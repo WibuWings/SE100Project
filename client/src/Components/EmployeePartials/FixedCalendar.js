@@ -62,7 +62,7 @@ class FixedCalendar extends Component {
     const { classes } = this.props;
     return (
       <div style={{marginTop: 10, padding: 24, maxHeight: 600}}> 
-          <TableContainer component={Paper}>
+          <TableContainer id="scroll-bar" component={Paper}>
               <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                   <TableHead>
                       <TableRow>

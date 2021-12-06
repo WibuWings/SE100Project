@@ -63,8 +63,8 @@ class GoodTable extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div style={{height: '550px', width: '100%', overflowY: 'scroll'}}>
-                <TableContainer component={Paper}>
+            <div id="scroll-bar" style={{height: '550px', width: '100%', overflowY: 'auto'}}>
+                <TableContainer id="scroll-bar" component={Paper}>
                     <Table className={classes.goodTable} aria-label="collapsible table">
                         <TableHead>
                             <TableRow>
