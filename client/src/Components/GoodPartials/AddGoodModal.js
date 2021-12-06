@@ -146,7 +146,7 @@ class AddGoodModal extends Component {
                 remain: document.querySelector('input[name="goodQuantity"]').value,
                 importPrice: (currentCurrency == 'vnd') ?
                     document.querySelector('input[name="originalPrice"]').value :
-                    document.querySelector('input[name="originalPrice"]').value,
+                    document.querySelector('input[name="originalPrice"]').value* this.props.regulation.exchangeRate,
                 sellPrice: (currentCurrency == 'vnd') ?
                     document.querySelector('input[name="sellPrice"]').value:
                     document.querySelector('input[name="sellPrice"]').value * this.props.regulation.exchangeRate,
@@ -202,8 +202,12 @@ class AddGoodModal extends Component {
             name: document.querySelector('input[name="goodName"]').value,
             quantity: document.querySelector('input[name="goodQuantity"]').value,
             remain: document.querySelector('input[name="goodQuantity"]').value,
-            importPrice: document.querySelector('input[name="originalPrice"]').value,
-            sellPrice: document.querySelector('input[name="sellPrice"]').value,
+            importPrice: (currentCurrency == 'vnd') ?
+                document.querySelector('input[name="originalPrice"]').value :
+                document.querySelector('input[name="originalPrice"]').value* this.props.regulation.exchangeRate,
+            sellPrice: (currentCurrency == 'vnd') ?
+                document.querySelector('input[name="sellPrice"]').value:
+                document.querySelector('input[name="sellPrice"]').value * this.props.regulation.exchangeRate,
             expires: document.querySelector('input[name="expiredDate"]').value + 'T00:00:00.000+00:00',
             imgUrl: this.imgUrl,
             unit: document.querySelector('input[name="unit"]').value,
@@ -287,9 +291,9 @@ class AddGoodModal extends Component {
         }
         // Constraint 7: Check giá gốc nhỏ hơn giá bán
         if(
-            parseInt(document.querySelector('input[name="sellPrice"]').value) 
+            parseFloat(document.querySelector('input[name="sellPrice"]').value) 
             - 
-            parseInt(document.querySelector('input[name="originalPrice"]').value) <=0
+            parseFloat(document.querySelector('input[name="originalPrice"]').value) <=0.0
             ) 
         {
             this.props.hideAlert();
