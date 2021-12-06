@@ -144,6 +144,16 @@ class UpdateGoodModal extends Component {
         return typeName;
     }
 
+    calculateDay(dateString1, dateString2)
+    {
+        return (
+            (new Date(dateString1)).setHours(0, 0, 0) 
+                - 
+            (new Date(dateString2)).setHours(0,0,0)
+            )
+            /(1000 * 60 * 60 * 24);
+    }
+
     checkConstraint = () => {
         // Kiểm tra các constraint ở đây coi thử ổn chưa
         // Constraint 1: Check name
@@ -220,6 +230,20 @@ class UpdateGoodModal extends Component {
             alert('Ảnh chưa được upload xong');
             return false;
         }
+         // Constraint 9: Ngày nhập phải nhỏ  hơn ngày hết hạn theo regulation
+         if(this.props.regulation!={})
+         {
+             if (
+                 this.calculateDay(document.querySelector('input[name="expiredDate"]').value, document.querySelector('input[name="importDate"]').value)
+                 < this.props.regulation.minExpiredProduct)
+                 // minExpiredProduct
+             {
+                 this.props.hideAlert();
+                 this.props.showAlert('Ngày hết hạn với ngày nhập phải cách nhau ít nhất ' + this.props.regulation.minExpiredProduct + ' ngày'
+                 ,"warning");
+                 return false;
+             }
+         }
         alert('Constraint đã check đầy đủ');
         return true;
     }
@@ -747,6 +771,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         typeProduct: state.typeProduct,
         listProduct: state.listProduct,
+        regulation: state.regulationReducer,
     }
 }
 
@@ -777,6 +802,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "UPDATE_PRODUCT",
                 data: data,
             }); 
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
         },
     }
 }

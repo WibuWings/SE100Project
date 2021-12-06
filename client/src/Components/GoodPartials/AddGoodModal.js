@@ -111,9 +111,18 @@ class AddGoodModal extends Component {
         }
         this.finishUpImage = true;
     }
-    async importGood(e) {
-        // Ngăn chuyển trang
 
+    calculateDay(dateString1, dateString2)
+    {
+        return (
+            (new Date(dateString1)).setHours(0, 0, 0) 
+                - 
+            (new Date(dateString2)).setHours(0,0,0)
+            )
+            /(1000 * 60 * 60 * 24);
+    }
+
+    async importGood(e) {
         var isContinue = this.checkConstraint();
         if(!isContinue)
         {
@@ -287,6 +296,21 @@ class AddGoodModal extends Component {
             this.props.showAlert('Ảnh chưa được upload xong',"warning");
             return false;
         }
+        // Constraint 9: Ngày nhập phải nhỏ  hơn ngày hết hạn theo regulation
+        if(this.props.regulation!={})
+        {
+            if (
+                this.calculateDay(document.querySelector('input[name="expiredDate"]').value, document.querySelector('input[name="importDate"]').value)
+                < this.props.regulation.minExpiredProduct)
+                // minExpiredProduct
+            {
+                this.props.hideAlert();
+                this.props.showAlert('Ngày hết hạn với ngày nhập phải cách nhau ít nhất ' + this.props.regulation.minExpiredProduct + ' ngày'
+                ,"warning");
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -606,6 +630,7 @@ const mapStateToProps = (state, ownProps) => {
         confirmStatus: state.confirmStatus,
         typeProduct: state.typeProduct,
         listProduct: state.listProduct,
+        regulation: state.regulationReducer,
     }
 }
 
