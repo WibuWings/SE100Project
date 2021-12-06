@@ -87,7 +87,7 @@ function TotalMoney(props) {
                 </Typography>
                 :
                 <Typography style={{ marginBottom: '10px' }} variant="h6">
-                    {(totalMoney.toLocaleString()/regulation.exchangeRate).toFixed(2)} $
+                    {(totalMoney/regulation.exchangeRate).toFixed(2)} $
                 </Typography>
             }
             <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>

@@ -594,7 +594,8 @@ class AddGoodModal extends Component {
                         style={{
                             display: 'flex',
                             justifyContent: 'space-evenly',
-                            margin: 10
+                            margin: 10,
+                            paddingBottom: 10,
                         }}
                     >
                         <Button className="btn btn-primary" variant="contained" onClick={(e) => this.props.changeStatusAddGood()}>

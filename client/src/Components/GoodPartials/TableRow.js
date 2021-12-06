@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux'
 import axios from 'axios';
 import { Component } from 'react';
 import { connect } from 'react-redux';
+import { StaticRouter } from 'react-router-dom';
 
 const styles = theme =>  ({
     goodTable_Cell:{
@@ -149,7 +150,25 @@ class GoodRow extends Component{
                 <TableCell className={classes.goodTable_Cell} component="th" scope="row">{row._id.productID}</TableCell>
                 <TableCell className={classes.goodTable_Cell} component="th" scope="row">{row.name}</TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">{row.quantity}</TableCell>
-                <TableCell className={classes.goodTable_Cell} align="right">{row.sellPrice}</TableCell>
+                <TableCell className={classes.goodTable_Cell} align="right">
+                <div style={{display: 'flex'}}>
+                    {
+                        this.props.regulation == {} ?
+                        <div>{row.sellPrice}</div> :
+                        this.props.regulation.currency == 'vnd' ?
+                        <div>{row.sellPrice}</div> :
+                        <div>{(row.sellPrice/this.props.regulation.exchangeRate).toFixed(2)}</div>
+                    }
+                    
+                    <div style={{marginLeft: 4}}>
+                        {
+                            (this.props.regulation == {})
+                                ? ' VNĐ':
+                            (this.props.regulation.currency == 'vnd' ? ' VNĐ' : ' $')
+                        }
+                    </div>
+                </div>
+                </TableCell>
                 <TableCell className={classes.goodTable_Cell} align="right">
                     {/* {row.importTime == null ? '' : row.importTime.substring(0,row.importTime.indexOf('T'))} */}
                     {row._id.importDate == null ? '': row._id.importDate.indexOf('T')==-1 ? row._id.importDate: row._id.importDate.substring(0,row._id.importDate.indexOf('T'))}
@@ -193,7 +212,24 @@ class GoodRow extends Component{
                                                     {/* {row.hidden.expires == null ? '': row.hidden.expires.substring(0,row.hidden.expires.indexOf('T'))} */}
                                                     {row.expires == null ? '': row.expires.indexOf('T') ==-1 ? row.expires : row.expires.substring(0,row.expires.indexOf('T'))}
                                                 </TableCell>
-                                                <TableCell className={classes.goodTable_Cell}>{row.importPrice}</TableCell>
+                                                <TableCell className={classes.goodTable_Cell} >
+                                                    <div style={{display: 'flex'}}>
+                                                    {
+                                                        this.props.regulation == {} ?
+                                                        <div>{row.importPrice}</div> :
+                                                        this.props.regulation.currency == 'vnd' ?
+                                                        <div>{row.importPrice}</div> :
+                                                        <div>{(row.importPrice/this.props.regulation.exchangeRate).toFixed(2)}</div>
+                                                    }
+                                                        <div style={{marginLeft: 4}}>
+                                                            {
+                                                                (this.props.regulation == {})
+                                                                    ? ' VNĐ':
+                                                                (this.props.regulation.currency == 'vnd' ? ' VNĐ' : ' $')
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </TableCell>
                                                 <TableCell className={classes.goodTable_Cell}>{row.remain}</TableCell>
                                                 <TableCell className={classes.goodTable_Cell}>{this.getTypeList(row.typeIDList)}</TableCell>
                                                 <TableCell className={classes.goodTable_Cell}>{row.unit}</TableCell>
@@ -240,6 +276,7 @@ const mapStateToProps = (state, ownProps) => {
         confirmStatus: state.confirmStatus,
         listProduct: state.listProduct,
         typeProduct: state.typeProduct,
+        regulation: state.regulationReducer,
     }
 }
 
