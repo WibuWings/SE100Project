@@ -34,6 +34,7 @@ class SideNavBar extends Component {
         }
         this.getInitialScreen();
         console.log("openSidebar", this.props.sidebarOpen);
+        this.loadIntialOpen();
     }
     active = ['active', '', '', '', '', ''];
 
@@ -149,6 +150,24 @@ class SideNavBar extends Component {
         const navbarContainer = document.querySelector('.navbar-container');
         navbarContainer.classList.remove('short');
         this.props.openSidebar();
+    }
+
+    loadIntialOpen() {
+        this.props.openSidebar();
+        // if(this.props.sidebarOpen)
+        // {
+        //     var navbarContainer2 = document.querySelector('.navbar-container');
+        //     console.log('Toang mở')
+        //     console.log("navbarContainer", navbarContainer2)
+        //     // navbarContainer2.classList.remove('short');
+        // }
+        // else 
+        // {
+        //     var navbarContainer2 = document.querySelector('.navbar-container');
+        //     console.log('Toang đóng')
+        //     console.log("navbarContainer", navbarContainer2)
+        //     // navbarContainer2.classList.add('short');
+        // }
     }
 
     render() {
