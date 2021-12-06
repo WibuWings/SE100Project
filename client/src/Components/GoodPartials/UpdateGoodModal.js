@@ -48,6 +48,7 @@ class UpdateGoodModal extends Component {
             imageSelect: "null",
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
+            exchangeRate: this.props.regulation=={} ? 1 : this.props.regulation.currency == 'vnd' ? 1 : this.props.regulation.exchangeRate,
         }; 
         typeSet = [];
         this.loadInitialData();
@@ -154,6 +155,9 @@ class UpdateGoodModal extends Component {
             /(1000 * 60 * 60 * 24);
     }
 
+
+    curCurrencySelect = 'vnd';
+
     checkConstraint = () => {
         // Kiểm tra các constraint ở đây coi thử ổn chưa
         // Constraint 1: Check name
@@ -186,7 +190,7 @@ class UpdateGoodModal extends Component {
             alert("Giá nhập không được trống");
             return false;
         }
-        else if(parseInt(document.querySelector('input[name="originalPrice"]').value) <= 0) 
+        else if(parseFloat(document.querySelector('input[name="originalPrice"]').value) <= 0) 
         {
             alert('Giá nhập phải lớn hơn 0');
             return false;
@@ -197,7 +201,7 @@ class UpdateGoodModal extends Component {
             alert("Giá bán không được trống");
             return false;
         }
-        else if(parseInt(document.querySelector('input[name="sellPrice"]').value) <= 0) 
+        else if(parseFloat(document.querySelector('input[name="sellPrice"]').value) <= 0) 
         {
             alert('Giá bán phải lớn hơn 0');
             return false;
@@ -253,6 +257,7 @@ class UpdateGoodModal extends Component {
     }
 
     async updateGood() {
+        var currentCurrency = document.querySelector('#currencySelector').value;
         var isContinue = this.checkConstraint();
         if(!isContinue)
         {
@@ -271,8 +276,12 @@ class UpdateGoodModal extends Component {
                 name: this.name,
                 quantity: this.quantity,
                 // remain: document.querySelector('input[name="goodQuantity"]').value,
-                importPrice: document.querySelector('input[name="originalPrice"]').value,
-                sellPrice: document.querySelector('input[name="sellPrice"]').value,
+                importPrice: (currentCurrency == 'vnd') ?
+                    document.querySelector('input[name="originalPrice"]').value :
+                    document.querySelector('input[name="originalPrice"]').value* this.props.regulation.exchangeRate,
+                sellPrice: (currentCurrency == 'vnd') ?
+                    document.querySelector('input[name="sellPrice"]').value:
+                    document.querySelector('input[name="sellPrice"]').value * this.props.regulation.exchangeRate,
                 expires: document.querySelector('input[name="expiredDate"]').value,
                 imgUrl: this.imgUrl,
                 unit: document.querySelector('input[name="unit"]').value,
@@ -361,15 +370,19 @@ class UpdateGoodModal extends Component {
         var reduxData = {
             _id: {
                 productID: productInfo._id.productID,
-                importDate: productInfo._id.importDate,
+                importDate: productInfo._id.importDate, 
                 storeID: this.props.infoUser.email,
             },
             name: this.name,
             quantity: this.quantity,
             remain: this.remain,
-            importPrice: document.querySelector('input[name="originalPrice"]').value,
-            sellPrice: document.querySelector('input[name="sellPrice"]').value,
-            expires: document.querySelector('input[name="expiredDate"]').value,
+            importPrice: (currentCurrency == 'vnd') ?
+                document.querySelector('input[name="originalPrice"]').value :
+                document.querySelector('input[name="originalPrice"]').value* this.props.regulation.exchangeRate,
+            sellPrice: (currentCurrency == 'vnd') ?
+                document.querySelector('input[name="sellPrice"]').value:
+                document.querySelector('input[name="sellPrice"]').value * this.props.regulation.exchangeRate,
+            expires: document.querySelector('input[name="expiredDate"]').value + 'T00:00:00.000+00:00',
             imgUrl: this.imgUrl,
             unit: document.querySelector('input[name="unit"]').value,
             typeIDList: typeSet,
@@ -593,43 +606,7 @@ class UpdateGoodModal extends Component {
                                             defaultValue={this.unit}
                                         />
                                     </Grid>
-                                    <Grid item md={6}
-                                        className='input-item'
-                                    >
-                                        <div className="input-label" style={{width: 128}}>Original Price</div>
-                                        <StyledTextField
-                                            classname='input-box'
-                                            style = {{width: '60%', marginLeft: '4px', marginRight:'8px'}} 
-                                            fullWidth
-                                            name="originalPrice" 
-                                            variant="outlined"
-                                            type="number"
-                                            defaultValue={this.importPrice}
-                                        />
-                                        đ
-                                    </Grid>
-                                    <Grid item md={6}
-                                        className='input-item'
-                                        style={{padding: '0px', marginLeft: '0px', paddingRight: 24}}
-                                    >
-                                        <div 
-                                            className="input-label"
-                                            style={{width: '96px'}}
-                                        >
-                                            Sell Price
-                                        </div>
-                                        <StyledTextField
-                                            classname='input-box'
-                                            style = {{width: '80%', marginLeft: '4px',marginRight:'8px'}} 
-                                            fullWidth
-                                            name="sellPrice" 
-                                            variant="outlined"
-                                            type="number" 
-                                            defaultValue={this.sellPrice}
-                                        />
-                                        đ
-                                    </Grid>
-                                    <Grid item md={7} 
+                                    <Grid item md={6} 
                                         className='input-item'
                                     >
                                         <div className="input-label" style={{width: 132}}>Expired Date</div>
@@ -652,6 +629,99 @@ class UpdateGoodModal extends Component {
                                             value={this.expire}
                                         /> */}
                                     </Grid>
+                                    <Grid item md={6} className='input-item'>
+                                        <div className="input-label" style={{width: 100}}>Currency</div>
+                                        <StyledTextField
+                                            // fullWidth
+                                            id="currencySelector"
+                                            name="currency"
+                                            variant="outlined"
+                                            style = {{width: '70%'}} 
+                                            select
+
+                                            SelectProps={{ native: true }}
+                                            onChange={(event) => {
+                                                var preChoice = this.curCurrencySelect;
+                                                this.curCurrencySelect = event.target.value;
+                                                if(preChoice != this.curCurrencySelect)
+                                                {
+                                                    if(this.curCurrencySelect == 'vnd')
+                                                    {
+                                                        this.sellPrice= (this.sellPrice*this.props.regulation.exchangeRate).toFixed(0)
+                                                        this.importPrice= (this.props.regulation.exchangeRate*this.importPrice).toFixed(0);
+                                                    }
+                                                    else
+                                                    {
+                                                        this.sellPrice= (this.sellPrice/this.props.regulation.exchangeRate).toFixed(2);
+                                                        this.importPrice= (this.importPrice/this.props.regulation.exchangeRate).toFixed(2);
+                                                    }
+                                                }
+                                                this.setState({change: !this.state.change,});
+                                            }}
+                                        >
+                                            <option value="vnd">
+                                                VNĐ
+                                            </option>
+                                            {
+                                                this.props.regulation != {} ?
+                                                <option value="dollar">
+                                                    $
+                                                </option>
+                                                : (null)
+                                            }
+                                            
+                                        </StyledTextField>
+                                    </Grid>
+                                    <Grid item md={6}
+                                        className='input-item'
+                                    >
+                                        <div className="input-label" style={{width: 128}}>Original Price</div>
+                                        <StyledTextField
+                                            classname='input-box'
+                                            style = {{width: '60%', marginLeft: '4px', marginRight:'8px'}} 
+                                            fullWidth
+                                            name="originalPrice" 
+                                            variant="outlined"
+                                            type="number"
+                                            // onChange={(this.)}
+                                            onChange={(e) => {
+                                                this.importPrice = e.target.value;
+                                                this.setState({
+                                                    change: !this.state.change,
+                                                });
+                                            }}
+                                            value={this.importPrice}
+                                        />
+                                        { this.curCurrencySelect == 'vnd' ? <div>VNĐ</div> : <div>$</div>}
+                                    </Grid>
+                                    <Grid item md={6}
+                                        className='input-item'
+                                        style={{padding: '0px', marginLeft: '0px', paddingRight: 24}}
+                                    >
+                                        <div 
+                                            className="input-label"
+                                            style={{width: '96px'}}
+                                        >
+                                            Sell Price
+                                        </div>
+                                        <StyledTextField
+                                            classname='input-box'
+                                            style = {{width: '80%', marginLeft: '4px',marginRight:'8px'}} 
+                                            fullWidth
+                                            name="sellPrice" 
+                                            variant="outlined"
+                                            type="number" 
+                                            onChange={(e) => {
+                                                this.sellPrice = e.target.value;
+                                                this.setState({
+                                                    change: !this.state.change,
+                                                });
+                                            }}
+                                            value={this.sellPrice}
+                                        />
+                                        { this.curCurrencySelect == 'vnd' ? <div>VNĐ</div> : <div>$</div>}
+                                    </Grid>
+                                    
                                     <Grid item md={10}
                                         className='input-item'
                                     >

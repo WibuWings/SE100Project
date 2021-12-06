@@ -258,7 +258,7 @@ class AddGoodModal extends Component {
             this.props.showAlert("Giá nhập không được trống","warning");
             return false;
         }
-        else if(parseInt(document.querySelector('input[name="originalPrice"]').value) <= 0) 
+        else if(parseFloat(document.querySelector('input[name="originalPrice"]').value) <= 0.0) 
         {
             this.props.hideAlert();
             this.props.showAlert('Giá nhập phải lớn hơn 0',"warning");
@@ -271,7 +271,7 @@ class AddGoodModal extends Component {
             this.props.showAlert("Giá bán không được trống","warning");
             return false;
         }
-        else if(parseInt(document.querySelector('input[name="sellPrice"]').value) <= 0) 
+        else if(parseFloat(document.querySelector('input[name="sellPrice"]').value) <= 0.0) 
         {
             this.props.hideAlert();
             this.props.showAlert('Giá bán phải lớn hơn 0',"warning");
