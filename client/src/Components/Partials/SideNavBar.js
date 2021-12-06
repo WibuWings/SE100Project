@@ -72,6 +72,24 @@ class SideNavBar extends Component {
             case "sellproduct":
                 this.active[5] = 'active';
                 break;
+            case "profile#":
+                this.active[1] = 'active';
+                break;
+            case "employeemanager#":
+                this.active[2] = 'active';
+                break;
+            case "goodmanager#":
+                this.active[3] = 'active';
+                break;
+            case "import#":
+                this.active[3] = 'active';
+                break;
+            case "receiptmanager#":
+                this.active[4] = 'active';
+                break;
+            case "sellproduct#":
+                this.active[5] = 'active';
+                break;
             default:
                 this.active[0] = 'active';
                 break;
@@ -160,7 +178,7 @@ class SideNavBar extends Component {
                     </div>
                     <div class="nav-heading">
                         <div style={{ 
-                                backgroundColor: !this.props.sidebarOpen? '#fafafa': !this.props.statusDarkmode ? '#cfd8dc' : '#455a64',
+                                backgroundColor: !this.props.sidebarOpen? !this.props.statusDarkmode ? '#fafafa' : '#37474f': (!this.props.statusDarkmode ? '#cfd8dc' : '#455a64'),
                                 paddingTop: !this.props.sidebarOpen? 10: 8,
 
                             }} 
