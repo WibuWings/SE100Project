@@ -120,7 +120,7 @@ function ModalAddCoupon(props) {
         }
     }
 
-    const editCoupon = () => {
+    const editCoupon = async () => {
         if (timeEnd - timeFrom > 0) {
             if (!isPercent && !isDescription  && !isQuantity) {
                 const data = {
@@ -132,6 +132,15 @@ function ModalAddCoupon(props) {
                     timeEnd: timeEnd,
                     quantity: quantity
                 }
+                await axios.post(`http://localhost:5000/api/profile/edit-coupon`, {
+                    token: localStorage.getItem('token'),
+                    email: infoUser.email,
+                    data: data,
+                }).then(res => {
+
+                }).catch(err => {
+                    
+                })
                 dispatch({
                     type: "EDIT_COUPON",
                     data: data

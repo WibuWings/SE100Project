@@ -36,6 +36,7 @@ function ProfileCoupon(props) {
     const dispatch = useDispatch()
     const listCoupon = useSelector(state => state.listCoupon)
     const regulation = useSelector(state => state.regulationReducer)
+    const infoUser = useSelector(state => state.infoUser)
 
 
     const openModalAddCoupon = () => {
@@ -49,7 +50,16 @@ function ProfileCoupon(props) {
         return date.getDate() + " / " + (date.getMonth() + 1) + " / " + date.getFullYear()
     }
 
-    const deleteCoupon = (idCoupon) => {
+    const deleteCoupon = async (idCoupon) => {
+        await axios.post(`http://localhost:5000/api/profile/delete-coupon`, {
+            token: localStorage.getItem('token'),
+            email: infoUser.email,
+            idCoupon: idCoupon,
+        }).then(res => {
+
+        }).catch(err => {
+
+        })
         dispatch({
             type: "DELETE_COUPON",
             idCoupon: idCoupon
