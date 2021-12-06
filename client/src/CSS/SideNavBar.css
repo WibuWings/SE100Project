@@ -201,3 +201,7 @@
 .navbar-container.short .navibar.sidebar .nav-footer{    
     flex-direction: column;
 }
+
+.navbar-container.short .navibar.sidebar .nav-footer .nav-item{    
+    padding-bottom: 0;
+}

@@ -14,7 +14,7 @@ class Body extends Component {
                 <div 
                     className="body-content"
                     style={{
-                        width: 'calc(100% - 224px)',
+                        width: this.props.sidebarOpen ? 'calc(100% - 224px)' : 'calc(100% - 60px)' ,
                         position: 'fixed', top: 0, right: 0, backgroundColor: !this.props.statusDarkmode ?  '#e3f2fd' : '#263238', borderLeft: '2px solid #99999975',
                     }}
                 >
@@ -35,6 +35,7 @@ const mapStateToProps = (state, ownProps) => {
         isLogin: state.loginStatus,
         statusDarkmode: state.statusDarkmode,
         statusConfirmPassword: state.statusConfirmPassword,
+        sidebarOpen: state.sidebarOpen,
     }
 }
 
