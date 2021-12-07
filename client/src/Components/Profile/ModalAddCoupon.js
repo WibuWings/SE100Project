@@ -21,8 +21,10 @@ function ModalAddCoupon(props) {
     const [percent, setPercent] = React.useState(statusEditCoupon ? objectEditCoupon.percent : 100);
     const [isPercent, setIsPercent] = React.useState(false);
     const [description, setDiscription] = React.useState(statusEditCoupon ? objectEditCoupon.name : "Discount 2/9")
-    const [minTotal, setMinTotal] = React.useState(statusEditCoupon ? objectEditCoupon.minTotal : 10000)
+    const [minTotal, setMinTotal] = React.useState(statusEditCoupon ? objectEditCoupon.minTotal : 100000)
     const [isMinTotal, setIsMinTotal] = React.useState(false)
+    const [quantity, setQuantity] = React.useState(statusEditCoupon ? objectEditCoupon.quantity : 10)
+    const [isQuantity, setIsQuantity] = React.useState(false)
     const dispatch = useDispatch()
 
     const blurDiscription = (e) => {
@@ -45,8 +47,17 @@ function ModalAddCoupon(props) {
         }
     }
 
-    const blurMinTotal = (e) => {
+    const blurQuantity = (e) => {
         if(e.target.value < 0 || e.target.value == "") {
+            setIsQuantity(true)
+        } else {
+            setIsQuantity(false)
+            setQuantity(e.target.value)
+        }
+    }
+
+    const blurMinTotal = (e) => {
+        if(e.target.value < 100000 || e.target.value == "") {
             setIsMinTotal(true)
         } else {
             setIsMinTotal(false)
@@ -68,7 +79,7 @@ function ModalAddCoupon(props) {
 
     const addCoupon = async () => {
         if (timeEnd - timeFrom > 0) {
-            if (!isPercent && !isDescription && !isMinTotal) {
+            if (!isPercent && !isDescription && !isMinTotal && !isQuantity) {
                 const data = {
                     idCoupon: makeCode(6),
                     name: description,
@@ -76,6 +87,7 @@ function ModalAddCoupon(props) {
                     minTotal: minTotal,
                     timeFrom: timeFrom,
                     timeEnd: timeEnd,
+                    quantity: quantity,
                 }
                 await axios.post(`http://localhost:5000/api/profile/add-coupon`, {
                     token: localStorage.getItem('token'),
@@ -86,7 +98,6 @@ function ModalAddCoupon(props) {
                 }).catch(err => {
                     
                 })
-                console.log(data)
                 dispatch({
                     type: "ADD_COUPON",
                     data: data
@@ -111,7 +122,7 @@ function ModalAddCoupon(props) {
 
     const editCoupon = () => {
         if (timeEnd - timeFrom > 0) {
-            if (!isPercent && !isDescription) {
+            if (!isPercent && !isDescription  && !isQuantity) {
                 const data = {
                     idCoupon: objectEditCoupon.idCoupon,
                     name: description,
@@ -119,6 +130,7 @@ function ModalAddCoupon(props) {
                     percent: percent,
                     timeFrom: timeFrom,
                     timeEnd: timeEnd,
+                    quantity: quantity
                 }
                 dispatch({
                     type: "EDIT_COUPON",
@@ -207,14 +219,29 @@ function ModalAddCoupon(props) {
                             <TextField
                                 required
                                 fullWidth
+                                onBlur={(e) => blurQuantity(e)}
+                                label="Quantity"
+                                defaultValue={quantity}
+                                error={isQuantity}
+                                helperText={isQuantity ? "Enter greater than 0" : ""}
+                                type="number"
+                                id="outlined-error-helper-text"
+                                name="quantity"
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item md={12} xs={12}>
+                            <TextField
+                                required
+                                fullWidth
                                 onBlur={(e) => blurMinTotal(e)}
                                 label="Minimum Total Amount"
                                 defaultValue={minTotal}
                                 error={isMinTotal}
-                                helperText={isMinTotal ? "Enter greater than 0" : ""}
+                                helperText={isMinTotal ? "Enter greater than 100.000" : ""}
                                 type="number"
                                 id="outlined-error-helper-text"
-                                name="discount"
+                                name="mintotal"
                                 variant="outlined"
                             />
                         </Grid>

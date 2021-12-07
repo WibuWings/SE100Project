@@ -41,6 +41,7 @@ class LoginWithEmployee extends Component {
                         this.props.changeLoginStatus();
                         this.props.hideAlert();
                         this.props.showAlert("Login successfully", "success");
+                        console.log("res.data", res.data)
                     }
                 })
                 .catch(err => {

@@ -205,7 +205,7 @@ function DataReciept(props) {
                                     <div className="form-check">
                                         <input onClick={() => selectDate()} style={{ transform: 'translateY(70%)' }} className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
                                         <DesktopDatePicker
-                                            label="Ngày"
+                                            label="Date"
                                             value={value}
                                             minDate={new Date('2017-01-01')}
                                             onChange={(newValue) => changeTime(newValue)}

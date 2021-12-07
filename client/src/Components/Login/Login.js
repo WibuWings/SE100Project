@@ -65,6 +65,10 @@ class Login extends Component {
                         this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
                         this.props.hideAlert();
                         this.props.showAlert(res.data.message, "success");
+                        if(res.data.data.regulation.length > 0)
+                            this.props.setRegulation(res.data.data.regulation[0]);
+                        else this.props.setRegulation({});
+                        console.log("res.data", res.data)
                         break;
                     case -1:
                         this.props.hideAlert();
@@ -102,6 +106,10 @@ class Login extends Component {
                             this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
                             this.props.hideAlert();
                             this.props.showAlert(res.data.message, "success");
+                            if(res.data.data.regulation.length > 0)
+                                this.props.setRegulation(res.data.data.regulation[0]);
+                            else this.props.setRegulation({});
+                            console.log("res.data", res.data)
                             break;
                         case -1:
                             this.props.hideAlert();
@@ -334,6 +342,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "GET_PRODUCT_AND_TYPE",
                 data: data
+            });
+        },
+        setRegulation: (data) => {
+            dispatch({
+                type: "SET_REGULATION",
+                data: data,
             });
         },
     }

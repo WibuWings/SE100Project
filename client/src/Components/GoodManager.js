@@ -179,7 +179,7 @@ class GoodManager extends Component {
     render() {
         return (
             <div>
-                <div style={{height: '100%', width: '100%', marginTop: '40px', marginBottom: '40px', paddingBottom: '40px' }}>
+                <div id="scroll-bar"style={{height: '100%', width: '100%', marginTop: '40px', marginBottom: '40px', paddingBottom: '40px' }}>
                     <div style={{display: 'flex'}}>
                         <Button variant="contained">
                             <Button style={{color: '#fff', textDecoration: 'none'}} onClick={() => this.props.changeStatusAddGood()}>Import</Button>

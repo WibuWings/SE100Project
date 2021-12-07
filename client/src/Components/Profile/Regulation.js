@@ -13,6 +13,7 @@ class Regulation extends Component {
         this.state = {
             isSaveRegulations: false,
         }
+        this.loadInitialData();
     }
 
     blurAnything = (e) => {
@@ -45,6 +46,22 @@ class Regulation extends Component {
         return true;
     }
 
+    currency = '';
+    exchangeRate = 0;
+    miniumEmployeeAge = 0;
+    lessChangeTimeKeepingDay = 0;
+    minExpiredProduct = 0;
+    loadInitialData()
+    {
+        if(this.props.regulation != {})
+        {
+            this.currency = this.props.regulation.currency;
+            this.exchangeRate = this.props.regulation.exchangeRate;
+            this.miniumEmployeeAge = this.props.regulation.miniumEmployeeAge;
+            this.lessChangeTimeKeepingDay = this.props.regulation.lessChangeTimeKeepingDay;
+            this.minExpiredProduct = this.props.regulation.minExpiredProduct;
+        }
+    }   
 
     SaveRegulations = async () => {
         const data = {
@@ -64,11 +81,15 @@ class Regulation extends Component {
         await axios.post(`http://localhost:5000/api/profile/regulation`, data)
         .then(res => {
             console.log("Add thành công");
+            this.props.showAlert("Change regulation OK", "success");
         })
         .catch(err => {
             this.props.hideAlert();
             this.props.showAlert("Login timeout, signin again", "warning");
         });
+
+        // Thêm vào redux:
+        this.props.updateRegulation(data.regulation);
     }
 
 
@@ -87,7 +108,7 @@ class Regulation extends Component {
                                     name="currency"
                                     onBlur={(e) => this.blurAnything(e)}
                                     required
-                                    defaultValue="vnd"
+                                    defaultValue={this.currency}
                                     variant="outlined"
                                     select
                                     SelectProps={{ native: true }}
@@ -105,7 +126,7 @@ class Regulation extends Component {
                                     required
                                     fullWidth
                                     label="Exchange rate ($ to VNĐ)"
-                                    defaultValue='20000'
+                                    defaultValue={this.exchangeRate}
                                     name="exchangeRate"
                                     onBlur={(e) => this.blurAnything(e)}
                                     variant="outlined"
@@ -117,7 +138,7 @@ class Regulation extends Component {
                                     required
                                     fullWidth
                                     label="Minium day before timekeeping change"
-                                    defaultValue='2'
+                                    defaultValue={this.lessChangeTimeKeepingDay}
                                     name="lessChangeTimeKeepingDay"
                                     variant="outlined"
                                     onBlur={(e) => this.blurAnything(e)}
@@ -129,7 +150,7 @@ class Regulation extends Component {
                                     required
                                     fullWidth
                                     label="Employee Minium Age"
-                                    defaultValue='2'
+                                    defaultValue={this.miniumEmployeeAge}
                                     name="miniumEmployeeAge"
                                     variant="outlined"
                                     onBlur={(e) => this.blurAnything(e)}
@@ -141,7 +162,7 @@ class Regulation extends Component {
                                     required
                                     fullWidth
                                     label="Min expired product days"
-                                    defaultValue='2'
+                                    defaultValue={this.minExpiredProduct}
                                     name="minExpiredProduct"
                                     variant="outlined"
                                     onBlur={(e) => this.blurAnything(e)}
@@ -163,7 +184,8 @@ class Regulation extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         infoUser: state.infoUser,
-        statusDarkmode: state.statusDarkmode
+        statusDarkmode: state.statusDarkmode,
+        regulation : state.regulationReducer,
     }
 }
 
@@ -180,6 +202,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 message: message,
                 typeMessage: typeMessage,
             })
+        },
+        setRegulation: (data) => {
+            dispatch({
+                type: "SET_REGULATION",
+                data: data,
+            });
+        },
+        updateRegulation: (data) => {
+            dispatch({
+                type: "UPDATE_REGULATION",
+                data: data,
+            });
         },
     }
 }

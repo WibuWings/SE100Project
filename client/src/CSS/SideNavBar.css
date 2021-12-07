@@ -162,3 +162,46 @@
     /* display: none; */
     cursor: pointer;
 }
+
+
+/* Làm chức năng ẩn navbar để mà có thể đc full màn hình khi cần thiết */
+.navbar-container.short {
+    width: 60px;
+}
+
+
+.navbar-container.short .navibar.sidebar{
+    width: 60px;
+}
+
+.navbar-container.short .navibar.sidebar .navbar-heading-container{
+    width: 60px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.navbar-container.short .navibar.sidebar .nav-heading{
+    padding-left: 4px;
+}
+
+.navbar-container.short .navibar.sidebar .navbar-heading-container .user-name{
+    display: none;
+}
+
+
+
+.navbar-container.short .navibar.sidebar .navbar-heading-container .user-name{
+    display: none;
+}
+
+.navbar-container.short .navibar.sidebar .nav-item-lable {
+    display: none;
+}
+
+.navbar-container.short .navibar.sidebar .nav-footer{    
+    flex-direction: column;
+}
+
+.navbar-container.short .navibar.sidebar .nav-footer .nav-item{    
+    padding-bottom: 0;
+}

@@ -72,7 +72,20 @@ const listTimeKeepingReducer = (state = listTimeKeepingInitialState, action) => 
                     //     )
                     // );
                 }
-               
+            case "PAY_SALARY":
+            {
+                // Ở đây thì có trả lương hết
+                var newState = [];
+                for(var i = 0 ; i < state.length ; i ++)
+                {
+                    if(state[i]._id.employee._id.employeeID == action.employeeID)
+                    {
+                        state[i].isPaidSalary = true;
+                    }
+                    newState.push(state[i]);
+                }
+                return newState;
+            }
                 
             default:
                 return state

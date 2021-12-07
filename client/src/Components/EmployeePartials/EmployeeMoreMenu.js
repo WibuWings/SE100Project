@@ -30,6 +30,7 @@ class EmployeeMoreMenu extends Component {
   }
 
   edit() {
+    this.setIsOpen(false);
     this.getEmployeeByID(this.props.data);
     // console.log("send nude", this.currentEmployee);
     this.props.setUpdateEmployee(this.currentEmployee);
@@ -37,6 +38,7 @@ class EmployeeMoreMenu extends Component {
   }
 
   delete() {
+    this.setIsOpen(false);
     const data = {
       token: localStorage.getItem('token'),
       employee:
@@ -105,6 +107,7 @@ class EmployeeMoreMenu extends Component {
       console.log("this.props.data", this.props.data)
       this.props.setIDView(this.props.data);
       this.props.changePayEmployeeStatus();
+      this.setIsOpen(false);
   }
 
   isOpen=false;

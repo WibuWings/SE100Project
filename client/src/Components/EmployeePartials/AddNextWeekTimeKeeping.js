@@ -80,6 +80,16 @@ class AddNextWeekTimeKeepingModal extends Component {
         return (new Date(dateString1).getTime() - new Date(dateString2).getTime()) > 0;
     }
 
+    calculateDay(dateString1, dateString2)
+    {
+        return (
+            (new Date(dateString1)).setHours(0, 0, 0) 
+                - 
+            (new Date(dateString2)).setHours(0,0,0)
+            )
+            /(1000 * 60 * 60 * 24);
+    }
+
     checkContraint() {
         if(this.state.dayChosed.length == 0)
         {
@@ -106,10 +116,20 @@ class AddNextWeekTimeKeepingModal extends Component {
         {
             alert("Ngày nhập phải nhỏ hơn ngày báo nghỉ");
             return false;
-        }   
+        }
+        // Check thử ngày nhập nhỏ hơn ngày báo nghỉ bn ngày
+        if(this.props.regulation != {})
+        {
+            if(this.calculateDay(document.querySelector('input[name="realDate"]').value, this.getCurrentDateTime() ) < 
+            this.props.regulation.lessChangeTimeKeepingDay)
+            {
+                console.log("Tính ngày",this.calculateDay(document.querySelector('input[name="realDate"]').value, this.getCurrentDateTime()));
+                alert("Nhân viên phải bảo nghỉ trước ít nhất " + this.props.regulation.lessChangeTimeKeepingDay+" ngày.");
+                return false;
+            }
+        }
 
-        // Có CSDL thì báo xem có trùng với cái cũ ko nữa
-        
+
         alert("Đã check hết constraint");
         return true;
     }
@@ -413,6 +433,7 @@ const mapStateToProps = (state, ownProps) => {
         listShift: state.listShift,
         listEmployee: state.listEmployee,
         nextWeekTimeKeeping: state.nextWeekTimeKeeping,
+        regulation: state.regulationReducer,
     }
 }
 

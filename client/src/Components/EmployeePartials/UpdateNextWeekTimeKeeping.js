@@ -67,10 +67,60 @@ class UpdateNextWeekTimeKeepingModal extends Component {
         }
         return new Date().getFullYear() + '-' + month + '-' + day;
     }
+    getCurrentDateTime()
+    {
+        var currentDate = new Date();
+        var day = (currentDate.toString().split(' '))[2];
+        if(day.length < 2)
+        {
+            day = '0' + day;
+        }
+        var month = (new Date().getMonth() + 1).toString();
+        if(month.length<2)
+        {
+            month = '0' + month;
+        }
+        return new Date().getFullYear() + '-' + month + '-' + day;
+    }
 
+    isGreater(dateString1, dateString2){
+        return (new Date(dateString1).getTime() - new Date(dateString2).getTime()) > 0;
+    }
+
+    calculateDay(dateString1, dateString2)
+    {
+        return (
+            (new Date(dateString1)).setHours(0, 0, 0) 
+                - 
+            (new Date(dateString2)).setHours(0,0,0)
+            )
+            /(1000 * 60 * 60 * 24);
+    }
+
+    checkContraint() {
+        if(!this.isGreater(document.querySelector('input[name="realDate"]').value, this.getCurrentDateTime() ))
+        {
+            alert("Ngày nhập phải nhỏ hơn ngày báo nghỉ");
+            return false;
+        }
+        // Check thử ngày nhập nhỏ hơn ngày báo nghỉ bn ngày
+        if(this.props.regulation != {})
+        {
+            if(this.calculateDay(document.querySelector('input[name="realDate"]').value, this.getCurrentDateTime() ) < 
+            this.props.regulation.lessChangeTimeKeepingDay)
+            {
+                console.log("Tính ngày",this.calculateDay(document.querySelector('input[name="realDate"]').value, this.getCurrentDateTime()));
+                alert("Nhân viên phải bảo nghỉ trước ít nhất " + this.props.regulation.lessChangeTimeKeepingDay+" ngày.");
+                return false;
+            }
+        }
+
+
+        alert("Đã check hết constraint");
+        return true;
+    }
     async updateChange() {
-        console.log("Vô được hàm cập nhập rồi")
-        console.log("id giá trị hiện tại", )
+        if(this.checkContraint() == false) return;
         // Xoá cái hiện tại đi cái đã
         const data = {
             token: localStorage.getItem('token'),   
@@ -399,6 +449,7 @@ const mapStateToProps = (state, ownProps) => {
         listEmployee: state.listEmployee,
         nextWeekTimeKeeping: state.nextWeekTimeKeeping,
         updateNextWeekTimeKeepingValue: state.updateNextWeekTimeKeepingValue,
+        regulation: state.regulationReducer,
     }
 }
 

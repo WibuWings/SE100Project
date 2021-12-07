@@ -1,9 +1,5 @@
 
-const regulationInitialState =
-{
-    
-},
-
+const regulationInitialState ={},
 regulationReducer = (state = regulationInitialState, action) => {
     switch (action.type) {
         case "SET_REGULATION":
@@ -14,5 +10,4 @@ regulationReducer = (state = regulationInitialState, action) => {
             return state
     }
 }
-
 export default regulationReducer;

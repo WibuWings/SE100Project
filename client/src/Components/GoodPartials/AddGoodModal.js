@@ -42,6 +42,7 @@ class AddGoodModal extends Component {
     dateTime= Date.now();
     currentDateTime = '2021-01-02';
     finishUpImage = true;
+    curCurrencySelect = 'vnd';
 
     constructor(props) {
         super(props);
@@ -85,7 +86,7 @@ class AddGoodModal extends Component {
         this.props.changeAddTypeStatus();
         this.props.setAddTypeStatus();
     }
-    
+
     async profileImageChange(fileChangeEvent) {
         this.setState({
             imageSelect: fileChangeEvent.target.files[0],
@@ -111,15 +112,26 @@ class AddGoodModal extends Component {
         }
         this.finishUpImage = true;
     }
-    async importGood(e) {
-        // Ngăn chuyển trang
 
+    calculateDay(dateString1, dateString2)
+    {
+        return (
+            (new Date(dateString1)).setHours(0, 0, 0) 
+                - 
+            (new Date(dateString2)).setHours(0,0,0)
+            )
+            /(1000 * 60 * 60 * 24);
+    }
+
+    async importGood(e) {
+        var currentCurrency = document.querySelector('#currencySelector').value;
         var isContinue = this.checkConstraint();
         if(!isContinue)
         {
             e.preventDefault();
             return;
         }
+        
         // // Thêm hàng hoá
         const data = {
             token: localStorage.getItem('token'),
@@ -132,8 +144,12 @@ class AddGoodModal extends Component {
                 name: document.querySelector('input[name="goodName"]').value,
                 quantity: document.querySelector('input[name="goodQuantity"]').value,
                 remain: document.querySelector('input[name="goodQuantity"]').value,
-                importPrice: document.querySelector('input[name="originalPrice"]').value,
-                sellPrice: document.querySelector('input[name="sellPrice"]').value,
+                importPrice: (currentCurrency == 'vnd') ?
+                    document.querySelector('input[name="originalPrice"]').value :
+                    document.querySelector('input[name="originalPrice"]').value* this.props.regulation.exchangeRate,
+                sellPrice: (currentCurrency == 'vnd') ?
+                    document.querySelector('input[name="sellPrice"]').value:
+                    document.querySelector('input[name="sellPrice"]').value * this.props.regulation.exchangeRate,
                 expires: document.querySelector('input[name="expiredDate"]').value,
                 imgUrl: this.imgUrl,
                 unit: document.querySelector('input[name="unit"]').value,
@@ -186,8 +202,12 @@ class AddGoodModal extends Component {
             name: document.querySelector('input[name="goodName"]').value,
             quantity: document.querySelector('input[name="goodQuantity"]').value,
             remain: document.querySelector('input[name="goodQuantity"]').value,
-            importPrice: document.querySelector('input[name="originalPrice"]').value,
-            sellPrice: document.querySelector('input[name="sellPrice"]').value,
+            importPrice: (currentCurrency == 'vnd') ?
+                document.querySelector('input[name="originalPrice"]').value :
+                document.querySelector('input[name="originalPrice"]').value* this.props.regulation.exchangeRate,
+            sellPrice: (currentCurrency == 'vnd') ?
+                document.querySelector('input[name="sellPrice"]').value:
+                document.querySelector('input[name="sellPrice"]').value * this.props.regulation.exchangeRate,
             expires: document.querySelector('input[name="expiredDate"]').value + 'T00:00:00.000+00:00',
             imgUrl: this.imgUrl,
             unit: document.querySelector('input[name="unit"]').value,
@@ -238,7 +258,7 @@ class AddGoodModal extends Component {
             this.props.showAlert("Giá nhập không được trống","warning");
             return false;
         }
-        else if(parseInt(document.querySelector('input[name="originalPrice"]').value) <= 0) 
+        else if(parseFloat(document.querySelector('input[name="originalPrice"]').value) <= 0.0) 
         {
             this.props.hideAlert();
             this.props.showAlert('Giá nhập phải lớn hơn 0',"warning");
@@ -251,7 +271,7 @@ class AddGoodModal extends Component {
             this.props.showAlert("Giá bán không được trống","warning");
             return false;
         }
-        else if(parseInt(document.querySelector('input[name="sellPrice"]').value) <= 0) 
+        else if(parseFloat(document.querySelector('input[name="sellPrice"]').value) <= 0.0) 
         {
             this.props.hideAlert();
             this.props.showAlert('Giá bán phải lớn hơn 0',"warning");
@@ -271,9 +291,9 @@ class AddGoodModal extends Component {
         }
         // Constraint 7: Check giá gốc nhỏ hơn giá bán
         if(
-            parseInt(document.querySelector('input[name="sellPrice"]').value) 
+            parseFloat(document.querySelector('input[name="sellPrice"]').value) 
             - 
-            parseInt(document.querySelector('input[name="originalPrice"]').value) <=0
+            parseFloat(document.querySelector('input[name="originalPrice"]').value) <=0.0
             ) 
         {
             this.props.hideAlert();
@@ -287,6 +307,21 @@ class AddGoodModal extends Component {
             this.props.showAlert('Ảnh chưa được upload xong',"warning");
             return false;
         }
+        // Constraint 9: Ngày nhập phải nhỏ  hơn ngày hết hạn theo regulation
+        if(this.props.regulation!={})
+        {
+            if (
+                this.calculateDay(document.querySelector('input[name="expiredDate"]').value, document.querySelector('input[name="importDate"]').value)
+                < this.props.regulation.minExpiredProduct)
+                // minExpiredProduct
+            {
+                this.props.hideAlert();
+                this.props.showAlert('Ngày hết hạn với ngày nhập phải cách nhau ít nhất ' + this.props.regulation.minExpiredProduct + ' ngày'
+                ,"warning");
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -441,6 +476,50 @@ class AddGoodModal extends Component {
                                                 name="unit" 
                                             />
                                         </Grid>
+                                        <Grid item md={6} 
+                                            className='input-item'
+                                        >
+                                            <div className="input-label" style={{width: 132}}>Expired Date</div>
+                                            <StyledTextField
+                                                classname='input-box'   
+                                                type="date" 
+                                                style = {{width: '70%'}} 
+                                                fullWidth
+                                                size="small"
+                                                name="expiredDate" 
+                                                variant="outlined"
+                                                defaultValue={this.currentDateTime}
+                                            />
+                                        </Grid>
+                                        <Grid item md={6} className='input-item'>
+                                            <div className="input-label" style={{width: 100}}>Currency</div>
+                                            <StyledTextField
+                                                // fullWidth
+                                                id="currencySelector"
+                                                name="currency"
+                                                variant="outlined"
+                                                style = {{width: '70%'}} 
+                                                select
+
+                                                SelectProps={{ native: true }}
+                                                onChange={(event) => {
+                                                    this.curCurrencySelect = event.target.value;
+                                                    this.setState({change: !this.state.change})
+                                                }}
+                                            >
+                                                <option value="vnd">
+                                                    VNĐ
+                                                </option>
+                                                {
+                                                    this.props.regulation != {} ?
+                                                    <option value="dollar">
+                                                        $
+                                                    </option>
+                                                    : (null)
+                                                }
+                                                
+                                            </StyledTextField>
+                                        </Grid>
                                         <Grid item md={6}
                                             className='input-item'
                                         >
@@ -453,7 +532,7 @@ class AddGoodModal extends Component {
                                                 variant="outlined"
                                                 type="number" 
                                             />
-                                            đ
+                                            { this.curCurrencySelect == 'vnd' ? <div>VNĐ</div> : <div>$</div>}
                                         </Grid>
                                         <Grid item md={6}
                                             className='input-item'
@@ -473,23 +552,9 @@ class AddGoodModal extends Component {
                                                 variant="outlined"
                                                 type="number" 
                                             />
-                                            đ
+                                            { this.curCurrencySelect == 'vnd' ? <div>VNĐ</div> : <div>$</div>}
                                         </Grid>
-                                        <Grid item md={7} 
-                                            className='input-item'
-                                        >
-                                            <div className="input-label" style={{width: 132}}>Expired Date</div>
-                                            <StyledTextField
-                                                classname='input-box'   
-                                                type="date" 
-                                                style = {{width: '70%'}} 
-                                                fullWidth
-                                                size="small"
-                                                name="expiredDate" 
-                                                variant="outlined"
-                                                defaultValue={this.currentDateTime}
-                                            />
-                                        </Grid>
+                                        
                                         <Grid item md={12}
                                             className='input-item'
                                         >
@@ -570,7 +635,8 @@ class AddGoodModal extends Component {
                         style={{
                             display: 'flex',
                             justifyContent: 'space-evenly',
-                            margin: 10
+                            margin: 10,
+                            paddingBottom: 10,
                         }}
                     >
                         <Button className="btn btn-primary" variant="contained" onClick={(e) => this.props.changeStatusAddGood()}>
@@ -606,6 +672,7 @@ const mapStateToProps = (state, ownProps) => {
         confirmStatus: state.confirmStatus,
         typeProduct: state.typeProduct,
         listProduct: state.listProduct,
+        regulation: state.regulationReducer,
     }
 }
 

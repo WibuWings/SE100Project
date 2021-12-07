@@ -41,6 +41,7 @@ export default function AppWebsiteVisits() {
   const listReciept = useSelector(state => state.listReciept)
   const typeMonth = useSelector(state => state.monthSelectDashboard)
   const typeYear = useSelector(state => state.yearSelectDashboard)
+  const regulation = useSelector(state => state.regulationReducer)
 
   let nowTime = new Date()
   const chartOptions = merge(BaseOptionChart(), {
@@ -56,7 +57,10 @@ export default function AppWebsiteVisits() {
       y: {
         formatter: (y) => {
           if (typeof y !== 'undefined') {
-            return `${y.toFixed(0)} VNĐ`;
+            if(regulation.currency =='vnd')
+              return `${y.toFixed(0)} VNĐ`;
+            else
+              return  `${(y/regulation.exchangeRate).toFixed(0)} $`
           }
           return y;
         }
@@ -198,35 +202,39 @@ export default function AppWebsiteVisits() {
       setTypeData(arrDate)
     }
 
-
     if (currentMonth) {
-      for (let i = 1; i <= nowTime.getDate() / 4; i++) {
-        let year = nowTime.getFullYear();
-        let date = newArr[i].replace(/\s/g, "");
-        date = date.split("/")
-        let moneyDoanhThu = 0;
-        let moneyTienGoc = 0;
-        listReciept.map(reciept => {
-          let dateReciept = reciept.date.replace(/\s/g, "");
-          dateReciept = dateReciept.split("/")
-          if (date[0] == dateReciept[0] || date[0] - 1 == dateReciept[0] || date[0] - 2 == dateReciept[0] || date[0] - 3 == dateReciept[0]) {
-            if (!reciept.deleted) {
-              if (date[1] == dateReciept[1] && year == dateReciept[2])
-                moneyDoanhThu += reciept.totalFinalMoney;
-              reciept.listProduct.map(value => {
-                moneyTienGoc += value.quantity * value.product.importPrice;
-              })
+      if (nowTime.getDate() / 4 === 0) {
+
+      } else {
+        for (let i = 1; i <= nowTime.getDate() / 4; i++) {
+          let year = nowTime.getFullYear();
+          let date = newArr[i].replace(/\s/g, "");
+          date = date.split("/")
+          let moneyDoanhThu = 0;
+          let moneyTienGoc = 0;
+          listReciept.map(reciept => {
+            let dateReciept = reciept.date.replace(/\s/g, "");
+            dateReciept = dateReciept.split("/")
+            if (date[0] == dateReciept[0] || date[0] - 1 == dateReciept[0] || date[0] - 2 == dateReciept[0] || date[0] - 3 == dateReciept[0]) {
+              if (!reciept.deleted) {
+                if (date[1] == dateReciept[1] && year == dateReciept[2])
+                  moneyDoanhThu += reciept.totalFinalMoney;
+                reciept.listProduct.map(value => {
+                  moneyTienGoc += value.quantity * value.product.importPrice;
+                })
+              }
             }
-          }
-        })
-        arrDoanhThu.push(moneyDoanhThu);
-        arrTienGoc.push(moneyTienGoc)
-        arrLai.push(moneyDoanhThu - moneyTienGoc)
+          })
+          arrDoanhThu.push(moneyDoanhThu);
+          arrTienGoc.push(moneyTienGoc)
+          arrLai.push(moneyDoanhThu - moneyTienGoc)
+        }
       }
+
       if (nowTime.getDate() % 4 !== 0) {
         let moneyDoanhThu = 0;
         let moneyTienGoc = 0;
-        for (let i = 4 * (nowTime.getDate() % 4 + 1) + 1; i <= nowTime.getDate(); i++) {
+        for (let i = 4 * Math.floor(nowTime.getDate() / 4); i <= nowTime.getDate(); i++) {
           let year = nowTime.getFullYear();
           let month = nowTime.getMonth() + 1;
           listReciept.map(reciept => {
@@ -412,7 +420,7 @@ export default function AppWebsiteVisits() {
         }
       } else {
         let lastMonth = month == 1 ? 12 : month - 1
-        let yearOfLastMonth = month == 1 ? year -1  : year
+        let yearOfLastMonth = month == 1 ? year - 1 : year
         listReciept.map(value => {
           let date = value.date.replace(/\s/g, "")
           date = date.split("/")
@@ -446,7 +454,7 @@ export default function AppWebsiteVisits() {
       }
     } else {
       let lastMonth = month == 1 ? 12 : month - 1
-      let yearOfLastMonth = month == 1 ? year -1  : year
+      let yearOfLastMonth = month == 1 ? year - 1 : year
       listReciept.map(value => {
         let date = value.date.replace(/\s/g, "")
         date = date.split("/")
@@ -476,116 +484,6 @@ export default function AppWebsiteVisits() {
         }
       }
     }
-
-
-
-
-
-    // if (type === 'Week' || type === 'Last Week') {
-    //   arrCurrent.map(date => {
-    //     let item = date.split(" ");
-    //     listReciept.map(value => {
-    //       let valueDate = value.date.replace(/\s/g, "")
-    //       valueDate = valueDate.split("/")
-    //       if (!value.deleted) {
-    //         if (item[0] == valueDate[0] && item[1] == valueDate[1] && item[2] == valueDate[2]) {
-    //           moneyCurrent += value.totalFinalMoney
-    //         }
-    //       }
-    //     })
-    //   })
-
-    //   arrLast.map(date => {
-    //     let item = date.split(" ");
-    //     listReciept.map(value => {
-    //       let valueDate = value.date.replace(/\s/g, "")
-    //       valueDate = valueDate.split("/")
-    //       if (!value.deleted) {
-    //         if (item[0] == valueDate[0] && item[1] == valueDate[1] && item[2] == valueDate[2]) {
-    //           moneyLast += value.totalFinalMoney
-    //         }
-    //       }
-    //     })
-    //   })
-
-    //   if (moneyLast == 0 && moneyCurrent == 0) {
-    //     setGrowth('(+0%) than Last Week')
-    //   } else if (moneyLast == 0) {
-    //     setGrowth('(+100%) than Last Week')
-    //   } else if (moneyCurrent == 0) {
-    //     setGrowth('(+0%) than Last Week')
-    //   } else {
-    //     let percent = (moneyCurrent / moneyLast) * 100
-    //     if (percent >= 100) {
-    //       setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Week`)
-    //     } else {
-    //       setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Week`)
-    //     }
-    //   }
-    // } else if (type == 'Month' || type == 'Last Month') {
-    //   let currentMonth = nowTime.getMonth() + 1
-    //   let lastMonth = nowTime.getMonth()
-    //   let year = nowTime.getFullYear()
-    //   listReciept.map(value => {
-    //     let date = value.date.replace(/\s/g, "")
-    //     date = date.split("/")
-    //     if (date[1] == currentMonth && date[2] == year) {
-    //       if (!value.deleted) {
-    //         moneyCurrent += value.totalFinalMoney
-    //       }
-    //     }
-    //     if (date[1] == lastMonth && date[2] == year) {
-    //       if (!value.deleted) {
-    //         moneyLast += value.totalFinalMoney
-    //       }
-    //     }
-    //   })
-    //   if (moneyLast == 0 && moneyCurrent == 0) {
-    //     setGrowth('(+0%) than Last Month')
-    //   } else if (moneyLast == 0) {
-    //     setGrowth('(+100%) than Last Month')
-    //   } else if (moneyCurrent == 0) {
-    //     setGrowth('(+0%) than Last Month')
-    //   } else {
-    //     let percent = (moneyCurrent / moneyLast) * 100
-    //     if (percent >= 100) {
-    //       setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Month`)
-    //     } else {
-    //       setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Month`)
-    //     }
-    //   }
-    // } else {
-    //   let currentYear = nowTime.getFullYear()
-    //   let lastYear = currentYear - 1;
-    //   listReciept.map(value => {
-    //     let date = value.date.replace(/\s/g, "")
-    //     date = date.split("/")
-    //     if (date[2] == currentYear) {
-    //       if (!value.deleted) {
-    //         moneyCurrent += value.totalFinalMoney
-    //       }
-    //     }
-    //     if (date[2] == lastYear) {
-    //       if (!value.deleted) {
-    //         moneyLast += value.totalFinalMoney
-    //       }
-    //     }
-    //   })
-    //   if (moneyLast == 0 && moneyCurrent == 0) {
-    //     setGrowth('(+0%) than Last Year')
-    //   } else if (moneyLast == 0) {
-    //     setGrowth('(+100%) than Last Year')
-    //   } else if (moneyCurrent == 0) {
-    //     setGrowth('(+0%) than Last Year')
-    //   } else {
-    //     let percent = (moneyCurrent / moneyLast) * 100
-    //     if (percent >= 100) {
-    //       setGrowth(`(+${(percent - 100).toFixed(2)}%) than Last Year`)
-    //     } else {
-    //       setGrowth(`(-${(100 - percent).toFixed(2)}%) than Last Year`)
-    //     }
-    //   }
-    // }
   }
 
 
@@ -617,23 +515,7 @@ export default function AppWebsiteVisits() {
       GrowthPercent(typeMonth, typeYear, typeTimeDashboard, '', '');
     }
 
-    // if (typeTimeDashboard === 'Week' || typeTimeDashboard === 'Last Week') {
-    //   let arrCurrent = DateInWeek('Week')
-    //   let arrLast = DateInWeek('Last Week')
-    //   setTypeData(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sartuday', 'Sunday'])
-    //   totalMoneyInWeek(DateInWeek(typeTimeDashboard), typeTimeDashboard);
-    //   GrowthPercent(typeTimeDashboard, arrCurrent, arrLast);
-    //   setTitle('last Week')
-    // } else if (typeTimeDashboard === 'Month' || typeTimeDashboard === 'Last Month') {
-    //   totalMoneyInMonth(DateInMonth(typeTimeDashboard), typeTimeDashboard)
-    //   GrowthPercent(typeTimeDashboard);
-    //   setTitle('last month')
-    // } else {
-    //   DateInYear(typeTimeDashboard)
-    //   GrowthPercent(typeTimeDashboard);
-    //   setTypeData(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
-    //   setTitle('last year')
-    // }
+
   }, [typeTimeDashboard, growth, typeMonth, typeYear])
 
   return (

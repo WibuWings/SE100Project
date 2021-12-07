@@ -41,7 +41,7 @@ function SalaryStats(props) {
     const listTimeKeeping = useSelector(state => state.listTimeKeeping)
     const [totalSalary, setTotalSalary] = React.useState('')
     const [totalMoney, setTotalMoney] = React.useState('')
-
+    const regulation = useSelector(state => state.regulationReducer)
     let nowTime = new Date();
 
     React.useEffect(() => {
@@ -121,8 +121,16 @@ function SalaryStats(props) {
             <div className="dashboard-item-img sold-good" style={{ marginBottom: '30px'}}>
                 <IoCashSharp className="dashboard-item-icon sold-good"></IoCashSharp>
             </div>
-            <Typography style={{ marginBottom: '10px' }} variant="h6">{totalSalary.toLocaleString()} VNĐ  
-            </Typography>
+            {
+                regulation.currency == 'vnd' ?
+                <Typography style={{ marginBottom: '10px' }} variant="h6">{totalSalary.toLocaleString()} VNĐ  
+                </Typography>
+                : 
+                <Typography style={{ marginBottom: '10px' }} variant="h6">
+                    {(totalSalary/regulation.exchangeRate).toFixed(2)} $ 
+                </Typography>
+            }
+           
             <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
                 Total salary
             </Typography>
