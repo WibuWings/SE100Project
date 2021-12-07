@@ -294,7 +294,8 @@ class FixedCalendarCell extends Component {
                     <ListItem style={{display: 'flex', flexDirection: 'column'}} disablePadding height={30} onClick={() => this.addThisShiftAssign(item._id.employeeID)}>
                         <ListItemButton>
                             <ListItemText>
-                                {item._id.employeeID + ' - ' + item.firstName}
+                              <span style={{fontSize: 14}}>{item._id.employeeID + ' - ' + item.firstName}</span>
+                                
                             </ListItemText>
                         </ListItemButton>
                         <div style={{
