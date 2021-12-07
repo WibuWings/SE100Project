@@ -36,7 +36,7 @@ class EmployeeInformation extends Component {
       return (
         <div>
             <Grid container>
-                <Grid item xs={3} display={{
+                <Grid item xs={2} display={{
                     display: 'flex',
                     // alignItems: 'center',
                     justifyContent: 'center',
@@ -61,7 +61,7 @@ class EmployeeInformation extends Component {
                         </div>
                     }
                 </Grid>
-                <Grid item xs={7}>
+                <Grid item xs={8}>
                     <Grid container style={{marginTop: 14}}>
                         <Grid item xs={6} class="property-display">
                             <lable class="property-name">

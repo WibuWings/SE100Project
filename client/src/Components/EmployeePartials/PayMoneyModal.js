@@ -95,37 +95,101 @@ class PayEmployeeModal extends Component {
         // alert("Confirm password");
         // viết api để trả lương ở đây
         // this.props.changePayEmployeeStatus();
-        for(var i =0; i< this.props.listTimeKeeper.length; i++)
+        try {
+            for(var i =0; i< this.props.listTimeKeeper.length; i++)
+            {
+                if(this.props.listTimeKeeper[i]._id.employee._id.employeeID != this.props.employeeID.id) continue;
+                // Thử api
+                const data = {
+                    token: localStorage.getItem('token'),
+                    updatedTimeKeeping: {
+                        _id: this.props.listTimeKeeper[i]._id,
+                        isPaidSalary: true,
+                    }
+                };
+                axios.put(`http://localhost:5000/api/employee/time-keeping`, data)
+                    .then(res => {
+                        console.log("Update success");
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                // Cập nhật redux khi update việc trả lương
+
+            }
+        }
+        catch(e)
         {
-            if(this.props.listTimeKeeper[i]._id.employee._id.employeeID != this.props.employeeID.id) continue;
-            // Thử api
-            const data = {
-                token: localStorage.getItem('token'),
-                updatedTimeKeeping: {
-                    _id: this.props.listTimeKeeper[i]._id,
-                    isPaidSalary: true,
-                }
-            };
-            axios.put(`http://localhost:5000/api/employee/time-keeping`, data)
-                .then(res => {
-                    console.log("Update success");
-                    alert('Đã update thành công sản phẩm');
-                    
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+            alert("Đã có lỗi xảy ra")
         }
         
-        this.props.changePayEmployeeStatus();    
+        // this.props.changePayEmployeeStatus();    
         // Cập nhật redux trạng thái trả lương nhiều cái cùng lúc
 
     }
-    
+
+    findShift(shiftID) {
+        var shifts= this.props.listShift;
+          for(var i = 0 ; i < shifts.length ; i++)
+          {
+              if(shifts[i]._id.shiftID == shiftID)
+              {
+                  return true;
+              }
+          }
+          return false;
+    }
+
+    getShiftNameAndTime(shiftID)
+    {
+        var shifts= this.props.listShift;
+        for(var i = 0 ; i < shifts.length ; i++)
+        {
+            if(shifts[i]._id.shiftID == shiftID)
+            {
+                return shifts[i].name + ' (' + shifts[i].timeFrom + ' - ' + shifts[i].timeEnd +') ';
+            }
+        }
+        return "Can't get shift";
+    }
+
+    getEmployeeNameByID(employeeID)
+    {
+        for(var i = 0 ; i < this.props.listEmployee.employees.length; i++)
+        {
+            var currentEmployee = this.props.listEmployee.employees[i];
+            if(currentEmployee._id.employeeID==employeeID)
+            {
+                return currentEmployee.firstName;
+            }
+        }
+        return "This employee was sacked";
+    }
+    findEmployeeNameByID(employeeID)
+    {
+        for(var i = 0 ; i < this.props.listEmployee.employees.length; i++)
+        {
+            var currentEmployee = this.props.listEmployee.employees[i];
+            if(currentEmployee._id.employeeID==employeeID)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    toReadableDay(dayToConvert) {
+        var days = dayToConvert.split('-');
+        return days[2] + '/' + days[1] + '/'+ days[0];
+    }
+
     render() {
         const { classes } = this.props;
         return (
-            <form style={{ zIndex: '10', width: '80%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
+            <form 
+                style={{ zIndex: '10', width: '80%', height: 600,justifyContent: 'center', marginTop: '40px', overflow:'auto'}} 
+                autoComplete="off" noValidate id='scroll-bar'
+            >
                 <Card>
                     <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="PAY EMPLOYEE" />
                         <div 
@@ -134,33 +198,35 @@ class PayEmployeeModal extends Component {
                         }}
                     >   
                     <Grid className="import-container" container >
-                        <Grid item md={12}  
-                            style={{
-                                display: 'flex', 
-                                justifyContent:'center', 
-                                flexDirection:'column',
-                                alignItems:'center',
-                                marginTop: '0px'
-                            }}
-                        >   
-                            {/* <label className="profile-header__avatar" for="profile-header-update-avatar" style={{ overflow: 'hidden' }}>
-                                <Image style={{width: '150px',height: '150px' }} cloudName="databaseimg" publicId={this.imgUrl=='none' ? 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png' : this.imgUrl}></Image>
-                            </label>
-                            <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input> */}
-                        </Grid>
                         <Grid item md={12}>
-
                             <Card>
                                 <Grid container md={12}>
                                     <EmployeeInformation></EmployeeInformation>
                                 </Grid>
+                                <label
+                                    style={{margin: 18, marginBottom: 4, fontWeight: 700}}
+                                >
+                                    Timekeeping table
+                                </label>
+                                
                                 <Grid container md={12}>
-                                     <TableContainer component={Paper}>
+                                     <TableContainer 
+                                        component={Paper}
+                                        style={{
+                                            marginLeft: 18,
+                                            marginRight: 18,
+                                            // Thay đổi chiều dài cột tại đây
+                                            maxHeight: 400,
+                                            overflow: 'auto',
+                                        }}
+                                        id="scroll-bar"
+                                     >
+                                            
                                             <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='180px'>Day</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Date Of Week</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='120px'>Day</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='140px'>Date Of Week</TableCell>
                                                         <TableCell className={classes.goodTable_Cell_Header} align="center" >Shift</TableCell>
                                                         <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
                                                         <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
@@ -173,7 +239,7 @@ class PayEmployeeModal extends Component {
                                                             (
                                                             <TableRow>
                                                                 <TableCell className={classes.goodTable_Cell}>
-                                                                    {timeKeeper._id.realDate.substring(0,timeKeeper._id.realDate.indexOf('T') )}
+                                                                    {this.toReadableDay(timeKeeper._id.realDate.substring(0,timeKeeper._id.realDate.indexOf('T') ))}
                                                                 </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.dateInWeek}</TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
@@ -194,25 +260,75 @@ class PayEmployeeModal extends Component {
                                                 </TableHead>
                                             </Table>
                                     </TableContainer>
-                                    <Grid item md={12}
-                                        className='input-item'
-                                        style ={{
-                                            display: 'flex',
-                                            justifyContent: 'space-evenly'
-                                        }}
-                                    >
-                                        <Button variant="contained" onClick={() => this.exit()}>
-                                            Exit
-                                        </Button>
-                                        <Button variant="contained" onClick={() => this.payEmployee()}>
+                                    <Grid item md={12}>
+                                        <Button style={{margin: '4px 18px', float: 'right'}}variant="contained" onClick={() => this.payEmployee()}>
                                             Pay employee
+                                        </Button>
+                                    </Grid>
+                                    
+                                </Grid>
+                                <Grid container md={12}>
+                                    <label
+                                        style={{margin: 18, marginBottom: 4, fontWeight: 700}}
+                                    >
+                                        ChangeTimekeeping table
+                                    </label>
+                                    <TableContainer component={Paper} 
+                                        style={{
+                                            margin: 18, 
+                                            marginTop: 0,
+                                            // Thay đổi chiều dài cột tại đây
+                                            maxHeight: 400,
+                                            overflow: 'auto',
+                                        }}
+                                        id='scroll-bar' 
+                                    >
+                                        <Table className={classes.goodTable} size="small" aria-label="a dense table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Day</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">Shift</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">Real Date</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
+                                                </TableRow>
+                                                {
+                                                this.props.nextWeekTimeKeeping.map((item) =>
+                                                // this.findEmployeeNameByID(item._id.employee._id.employeeID) == false 
+                                                // || this.findEmployeeNameByID(item.alternativeEmployee._id.employeeID) == false
+                                                this.props.employeeID.id != item._id.employee._id.employeeID
+                                                || this.findShift(item._id.shiftType._id.shiftID) == false
+                                                ? (null) :
+                                                <TableRow
+                                                    style={{
+                                                        position: 'relative',
+                                                    }}
+                                                >
+                                                    <TableCell className={classes.goodTable_Cell}>{item._id.dateInWeek}</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell}>{this.getShiftNameAndTime(item._id.shiftType._id.shiftID)}</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell}>
+                                                        {item._id.realDate ? item._id.realDate.indexOf('T') !=-1 ? item._id.realDate.substring(0,item._id.realDate.indexOf('T') ) : item._id.realDate : "Loading..."}
+                                                    </TableCell>
+                                                    <TableCell className={classes.goodTable_Cell}>{item._id.employee._id.employeeID}</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell}>{this.getEmployeeNameByID(item._id.employee._id.employeeID)}</TableCell>
+                                                </TableRow> 
+                                                )
+                                                }
+                                            </TableHead>
+                                            
+                                        </Table>
+                                    </TableContainer>
+                                </Grid>
+                                <Grid container md={12}>
+                                    <Grid item md={10}>
+                                    </Grid>
+                                    <Grid item md={2}>
+                                        <Button style={{margin: '4px 18px',float: 'right', backgroundColor:"#f00"}} variant="contained" onClick={() => this.exit()}>
+                                            Exit
                                         </Button>
                                     </Grid>
                                 </Grid>
                             </Card>
-                        </Grid>
-                        <Grid item sm={12} md={12} >
-                            
                         </Grid>
                     </Grid> 
                 </div>
@@ -227,6 +343,7 @@ const mapStateToProps = (state, ownProps) => {
         listTimeKeeper: state.listTimeKeeping,
         listShift: state.listShift,
         listEmployee: state.listEmployee,
+        nextWeekTimeKeeping: state.nextWeekTimeKeeping,
         infoUser: state.infoUser,
         employeeID: state.currentEmployeeViewValue,
     }
