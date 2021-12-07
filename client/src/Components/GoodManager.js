@@ -214,9 +214,15 @@ class GoodManager extends Component {
         for(var i2 = 1; i2 < rows.length - 1; i2++)
         {
             var dataRows = rows[i2].split(',');
-            if(dataRows.length != 9)
+            if(dataRows.length < 9)
             {
                 alert("Hàng thứ " + (i2+1) + " trong file excel chứa sản phẩm bị thiếu dữ liệu");
+                return false;
+            }
+
+            if(dataRows.length > 9)
+            {
+                alert("Hàng thứ " + (i2+1) + " trong file excel chứa sản phẩm bị dư dữ liệu hoặc có ô dư dấu phẩy");
                 return false;
             }
             for(var j = 0; j < dataRows.length; j++)
@@ -238,8 +244,10 @@ class GoodManager extends Component {
                 sellPrice: dataRows[7],
                 productTypeName: dataRows[8]
             }
+            // Check các constraint và quy định ở đây trước khi add vào listObject
+            if(this.checkConstraintOfExcelObject(newRow, i2) == false) return false;
             allRows.push(newRow);
-            // Check các constraint và quy định ở đây
+            
         } 
         
         console.log("Tất cả dữ liệu", allRows);
@@ -255,12 +263,87 @@ class GoodManager extends Component {
         // }
     }
 
-    checkConstraintOfExcelObject() {
+    checkAllNumber(stringToCheck)
+    {
+        var number=[1,2,3,4,5,6,7,8,9,0];
+        for(var i = 0; i < stringToCheck.length ; i++)
+        {
+            var isFound = false;
+            for(var j = 0; j < number.length ;j++)
+            {
+                if(number[j]==stringToCheck[i])
+                {
+                    isFound = true;
+                    break;
+                }
+            }
+            if(!isFound) return false; 
+        }
+        return true;
+    }
 
+    checkAllDoubleNumber(stringToCheck) {
+        var number=['1','2','3','4','5','6','7','8','9','0','.'];
+        for(var i = 0; i < stringToCheck.length ; i++)
+        {
+            var isFound = false;
+            for(var j = 0; j < number.length ;j++)
+            {
+                if(number[j]==stringToCheck[i])
+                {
+                    isFound = true;
+                    break;
+                }
+            }
+            if(!isFound) return false; 
+        }
+        return true;
+    }
+
+    checkConstraintOfExcelObject(newRow, index) {
+        // check quantity
+        try {
+            if(parseInt(newRow.quantity) <= 0 || this.checkAllNumber(newRow.quantity)==false)
+            {
+                alert("Số lượng sản phẩm ở hàng "+ (index + 1) +" không hợp lệ");
+                return false;
+            }
+        }
+        catch(e)
+        {
+            alert("Số lượng sản phẩm ở hàng "+ (index + 1) +" không hợp lệ");
+            return false;
+        }
+
+        try {
+            if(parseFloat(newRow.originalPrice) <= 0 || this.checkAllDoubleNumber(newRow.originalPrice)==false)
+            {
+                alert("Giá nhập hàng ở hàng "+ (index + 1) +" không hợp lệ");
+                return false;
+            }
+
+        }
+        catch (e){
+            alert("Giá nhập hàng ở hàng "+ (index+1) +" không hợp lệ");
+            return false;
+        }
+
+        try {
+            if(parseFloat(newRow.sellPrice) <= 0 || this.checkAllDoubleNumber(newRow.sellPrice)==false)
+            {
+                alert("Giá bán ở hàng "+ (index + 1) +" không hợp lệ");
+                return false;
+            }
+
+        }
+        catch (e){
+            alert("Giá bán ở hàng "+ (index+1) +" không hợp lệ");
+            return false;
+        }
     }
 
     checkRegulationOfExcelObject() {
-        
+
     }
     render() {
         return (
