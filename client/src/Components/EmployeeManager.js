@@ -549,6 +549,7 @@ class EmployeeManager extends Component {
                 {this.props.payEmployeeStatus ? (
                     <div 
                         className="modal-add"
+                        style={{width: '100%'}}
                     >
                         <div onClick={() => {this.props.changePayEmployeeStatus();}} className="modal-overlay"></div>
                         <PayMoneyModal

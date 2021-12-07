@@ -3,22 +3,11 @@ import { Card, CardHeader, Table, Grid, TextField,
     TableCell, TableContainer, Button, InputLabel,
     Paper, TableRow, TableHead } from '@mui/material';
 import { connect } from 'react-redux'
-import { BiPlusMedical, BiEdit } from 'react-icons/bi';
-import Stack from '@mui/material/Stack';
-import { GiCancel } from 'react-icons/gi'
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import { Image } from 'cloudinary-react';
 import axios from 'axios';
 import '../../css/GoodManager.css';
 import { withStyles } from '@material-ui/styles';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DatePicker from '@mui/lab/DatePicker';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import { AiFillPlusCircle} from "react-icons/ai";
-import CancelIcon from '@mui/icons-material/Cancel';
+import EmployeeInformation from './EmployeeInformation';
+
 
 var productTypes =[
     'food', 'detergent', 'cuisine'
@@ -136,7 +125,7 @@ class PayEmployeeModal extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
+            <form style={{ zIndex: '10', width: '80%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="PAY EMPLOYEE" />
                         <div 
@@ -162,7 +151,9 @@ class PayEmployeeModal extends Component {
                         <Grid item md={12}>
 
                             <Card>
-                                
+                                <Grid container md={12}>
+                                    <EmployeeInformation></EmployeeInformation>
+                                </Grid>
                                 <Grid container md={12}>
                                      <TableContainer component={Paper}>
                                             <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
