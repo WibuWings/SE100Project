@@ -39,13 +39,6 @@ class GoodTable extends Component {
         }
         console.log("this.props.listProduct.state", this.props.listProduct.state);
     }
-    removeProduct= (row) => {
-        // Đây là xử lý ở phía dữ liệu, có thể await gì đó.
-        // Xử lý ở phía giao diện(tạm)
-
-        // Đây là câu lệnh để update nhẹ
-        this.setState({update: this.state.update})
-    }
 
     getTypeNamebyTypeID (typeID) {
         var typeName="Null";

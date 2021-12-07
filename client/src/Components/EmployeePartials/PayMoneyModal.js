@@ -299,10 +299,38 @@ class PayEmployeeModal extends Component {
                                                                     ' - '+  timeKeeper._id.shiftType.timeEnd +')'}
                                                                 </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
-                                                                    {timeKeeper._id.shiftType.salary + ' VNĐ'}
+                                                                    <div style={{display: 'flex'}}>
+                                                                        {
+                                                                            this.props.regulation == {} ?
+                                                                            <div style={{marginRight: 4}}>{timeKeeper._id.shiftType.salary}</div> :
+                                                                            this.props.regulation.currency == 'vnd' ?
+                                                                            <div style={{marginRight: 4}}>{timeKeeper._id.shiftType.salary}</div> :
+                                                                            <div style={{marginRight: 4}}>{(timeKeeper._id.shiftType.salary/this.props.regulation.exchangeRate).toFixed(2)}</div>
+                                                                        }
+                                                                        {
+                                                                            (this.props.regulation == {})
+                                                                                ? <div>{' VNĐ'}</div> :
+                                                                            (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
+                                                                        }
+                                                                    </div>
                                                                 </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
-                                                                    {this.calculateSalary(timeKeeper._id.shiftType) + ' VNĐ'}
+                                                                    {/* {this.calculateSalary(timeKeeper._id.shiftType)}\ */}
+                                                                    <div style={{display: 'flex'}}>
+                                                                        {
+                                                                            this.props.regulation == {} ?
+                                                                            <div style={{marginRight: 4}}>{this.calculateSalary(timeKeeper._id.shiftType)}</div> :
+                                                                            this.props.regulation.currency == 'vnd' ?
+                                                                            <div style={{marginRight: 4}}>{this.calculateSalary(timeKeeper._id.shiftType)}</div> :
+                                                                            <div style={{marginRight: 4}}>{(this.calculateSalary(timeKeeper._id.shiftType)/this.props.regulation.exchangeRate).toFixed(2)}</div>
+                                                                        }
+                                                                        {
+                                                                            (this.props.regulation == {})
+                                                                                ? <div>{' VNĐ'}</div> :
+                                                                            (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
+                                                                        }
+                                                                    </div>
+                                                                    
                                                                 </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell} align="center">
                                                                     {
@@ -323,12 +351,25 @@ class PayEmployeeModal extends Component {
                                             </Table>
                                     </TableContainer>
                                     <Grid item md={12} style={{marginTop: 4}}>
-                                        <lable style={{margin: '12px 18px', fontWeight: 700}}>
-                                            TotalSalary: 
-                                        </lable>
-                                        {this.totalSalary}
-                                        {' VNĐ'}
-                                        <Button style={{margin: '6px 18px', float: 'right'}}variant="contained" onClick={() => this.payEmployee()}>
+                                        <div style={{display: 'flex', margin: '12px 18px'}}>
+                                            <lable style={{fontWeight: 700, marginRight: '14px'}}>
+                                                TotalSalary: 
+                                            </lable>
+                                            {
+                                                this.props.regulation == {} ?
+                                                <div style={{marginRight: 4}}>{this.totalSalary}</div> :
+                                                this.props.regulation.currency == 'vnd' ?
+                                                <div style={{marginRight: 4}}>{this.totalSalary}</div> :
+                                                <div style={{marginRight: 4}}>{(this.totalSalary/this.props.regulation.exchangeRate).toFixed(2)}</div>
+                                            }
+                                            {
+                                                (this.props.regulation == {})
+                                                    ? <div>{' VNĐ'}</div> :
+                                                (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
+                                            }
+                                        </div>
+                                        
+                                        <Button style={{margin: '-38px 18px', float: 'right'}}variant="contained" onClick={() => this.payEmployee()}>
                                             Pay employee
                                         </Button>
                                     </Grid>
@@ -413,6 +454,7 @@ const mapStateToProps = (state, ownProps) => {
         nextWeekTimeKeeping: state.nextWeekTimeKeeping,
         infoUser: state.infoUser,
         employeeID: state.currentEmployeeViewValue,
+        regulation: state.regulationReducer,
     }
 }
 
