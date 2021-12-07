@@ -260,8 +260,11 @@ class PayEmployeeModal extends Component {
                                                 </TableHead>
                                             </Table>
                                     </TableContainer>
-                                    <Grid item md={12}>
-                                        <Button style={{margin: '4px 18px', float: 'right'}}variant="contained" onClick={() => this.payEmployee()}>
+                                    <Grid item md={12} style={{marginTop: 4}}>
+                                        <lable style={{margin: '12px 18px',}}>
+                                            TotalSalary: 
+                                        </lable>
+                                        <Button style={{margin: '6px 18px', float: 'right'}}variant="contained" onClick={() => this.payEmployee()}>
                                             Pay employee
                                         </Button>
                                     </Grid>
