@@ -14,6 +14,8 @@ import AddGoodModal from './GoodPartials/AddGoodModal';
 import axios from 'axios';
 import UpdateTypeModal from './GoodPartials/UpdateTypeModal';
 import XLSX from 'xlsx';
+import excelLogo from './GoodPartials/excelLogo.png';
+
 
 class GoodManager extends Component {
     constructor(props) {
@@ -64,7 +66,7 @@ class GoodManager extends Component {
         for (let i = 0; i < result.length; i++) {
             joinTypeInfor.push(result[i]);
         }
-        console.log("joinTypeInfor", joinTypeInfor);
+        // console.log("joinTypeInfor", joinTypeInfor);
 
         var listProductInfor = [];
         for (let i = 0; i < resultProduct.length; i++) {
@@ -91,7 +93,6 @@ class GoodManager extends Component {
 
     getTypeNamebyTypeID (typeID) {
         var typeName="Null";
-        console.log("typeList", this.props.typeProduct);
         for(var i = 0; i < this.props.typeProduct.length;i++)
         {   
             if(this.props.typeProduct[i]._id.typeID == typeID)
@@ -158,24 +159,109 @@ class GoodManager extends Component {
         catch(e) {
             console.log(e);
             return;
-        }   
+        } 
+
         var name = f.name;
         const reader = new FileReader();
-        reader.onload = (evt) => { // evt = on_file_select event
-            /* Parse data */
+        var dataExcel;
+        // Chỗ này đọc file excel gì đó, giờ xử lý cái data lấy ra thôi
+        reader.onload = (evt) => {
             const bstr = evt.target.result;
             const wb = XLSX.read(bstr, {type:'binary'});
-            /* Get first worksheet */
             const wsname = wb.SheetNames[0];
             const ws = wb.Sheets[wsname];
-            /* Convert array of arrays */
             const data = XLSX.utils.sheet_to_csv(ws, {header:1});
-            /* Update state */
-            console.log("Data>>>"+data);
+            // console.log("data", data);
+            dataExcel = data;
+            this.handleExcelData(dataExcel);
         };
         reader.readAsBinaryString(f);
+        // Reset tên file mỗi khi đọc
+        document.querySelector('#upload-excel').value = '';
+
+        
     }
 
+    handleExcelData(excelData) {
+        // chia các cột theo row
+        var rows = excelData.split('\n');
+        console.log("Nội dung file", rows);
+        if(rows.length  <= 2)
+        {
+            alert("File không hợp lệ do chưa có thông tin về hàng header và dữ liệu ở đó")
+            return false;
+        }
+        // Xử lý các thông tin ở trưởng header
+        var rowSample=
+            ["Product ID","Name","Quantity","Unit","Expired Date",
+            "Currency","Original Price","SellPrice","ProductType"];
+        var rowSplit = rows[0].split(',');
+        if(rowSample.length != rowSplit.length)
+        {
+            alert("Header bị lỗi, header khác với sample hoặc có dữ liệu trồi ra bên ngoài của bảng");
+            return false;
+        }
+        for(var i = 0 ; i < rowSample.length ; i++)
+        {
+            if(rowSample[i] != rowSplit[i]) {
+                alert("Header bị lỗi, header khác với sample");
+                return false;
+            }
+        }
+        var columnName = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+        var allRows = [];
+        // Xử lý lần lượt các dữ liệu ở từng ô.
+        for(var i2 = 1; i2 < rows.length - 1; i2++)
+        {
+            var dataRows = rows[i2].split(',');
+            if(dataRows.length != 9)
+            {
+                alert("Hàng thứ " + (i2+1) + " trong file excel chứa sản phẩm bị thiếu dữ liệu");
+                return false;
+            }
+            for(var j = 0; j < dataRows.length; j++)
+            {
+                if(dataRows[j]=='')
+                {
+                    alert("Hàng thứ " + (i2+1) + " cột " + columnName[j] + " trong file excel chứa sản phẩm bị thiếu dữ liệu");
+                    return false;
+                }
+            }
+            // Lấy dữ liệu đã có tạo thành object và bắt đầu check xong constraint
+            var newRow = {
+                name: dataRows[1],
+                quantity: dataRows[2],
+                unit: dataRows[3],
+                expiredDate: dataRows[4],
+                currency: dataRows[5],
+                originalPrice: dataRows[6],
+                sellPrice: dataRows[7],
+                productTypeName: dataRows[8]
+            }
+            allRows.push(newRow);
+            // Check các constraint và quy định ở đây
+        } 
+        
+        console.log("Tất cả dữ liệu", allRows);
+
+        // console.log('rowSplit', rowSplit)
+        
+        // var data = excelData.split(',');
+        // console.log('data', data);
+        // if(data.length < 10)
+        // {
+        //     alert("File format bị sai");
+        //     console.log(data);
+        // }
+    }
+
+    checkConstraintOfExcelObject() {
+
+    }
+
+    checkRegulationOfExcelObject() {
+        
+    }
     render() {
         return (
             <div>
@@ -191,10 +277,15 @@ class GoodManager extends Component {
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleEditType()} variant="contained">
                             edit type
                         </Button>
-                        <label for="upload-excel">
+                        <label style={{backgroundColor: '#31be7d', padding: '4px 8px',borderRadius: 4, lineHeight: 2.2, color:'#fff'}} for="upload-excel">
+                            <img src={excelLogo} width={25} height={25} style={{marginRight: 4}}></img>
                             Load Excel
                         </label>
-                        <input id="upload-excel" type="file" style={{display: 'none'}} accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onChange={(e) => this.uploadExcel(e)}></input>
+                        <input 
+                            id="upload-excel" type="file" style={{display: 'none'}} 
+                            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+                            onChange={(e) => this.uploadExcel(e)}
+                        ></input>
                         {/* <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirmDelete()} variant="contained">
                             Delete
                         </Button>

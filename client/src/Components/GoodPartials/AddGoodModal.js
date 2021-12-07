@@ -350,7 +350,7 @@ class AddGoodModal extends Component {
     
     render() {
         return(
-            <form style={{ zIndex: '10', minWidth: '500px', width: '1000px', justifyContent: 'center', marginTop: '10%' }}>   
+            <form style={{ zIndex: '10', minWidth: '500px', width: '90%', justifyContent: 'center', marginTop: '10%' }}>   
                 <Card>
                     <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="ADD GOOD" />
                     <Divider />

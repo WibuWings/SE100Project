@@ -197,7 +197,7 @@ class UpdateTypeModal extends Component {
         for (let i = 0; i < result.length; i++) {
             joinTypeInfor.push(result[i]);
         }
-        console.log("joinTypeInfor", joinTypeInfor);
+        // console.log("joinTypeInfor", joinTypeInfor);
 
         var listProductInfor = [];
         for (let i = 0; i < resultProduct.length; i++) {
