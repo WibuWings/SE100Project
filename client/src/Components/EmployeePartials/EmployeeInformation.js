@@ -32,6 +32,11 @@ class EmployeeInformation extends Component {
         return {};
     }
 
+    toReadableDay(dayToConvert) {
+        var days = dayToConvert.split('-');
+        return days[2] + '/' + days[1] + '/'+ days[0];
+    }
+
     render() {
       return (
         <div>
@@ -124,9 +129,9 @@ class EmployeeInformation extends Component {
                                 StartDate:
                             </lable>
                             <div class="property-val">
-                                {this.currentEmployee.startDate.indexOf('T')!=-1 ? 
+                                {this.toReadableDay(this.currentEmployee.startDate.indexOf('T')!=-1 ? 
                                 this.currentEmployee.startDate.substring(0, this.currentEmployee.startDate.indexOf('T')) :
-                                this.currentEmployee.startDate
+                                this.currentEmployee.startDate)
                                 }
                             </div>
                         </Grid>
@@ -143,9 +148,9 @@ class EmployeeInformation extends Component {
                                 Birthday:
                             </lable>
                             <div class="property-val">
-                                {this.currentEmployee.dateOfBirth.indexOf('T')!=-1 ? 
+                                {this.toReadableDay(this.currentEmployee.dateOfBirth.indexOf('T')!=-1 ? 
                                 this.currentEmployee.dateOfBirth.substring(0, this.currentEmployee.dateOfBirth.indexOf('T')) : 
-                                this.currentEmployee.dateOfBirth}
+                                this.currentEmployee.dateOfBirth)}
                             </div>
                         </Grid>
                         

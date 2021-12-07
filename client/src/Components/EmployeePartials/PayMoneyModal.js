@@ -277,11 +277,11 @@ class PayEmployeeModal extends Component {
                                             <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='120px'>Day</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='140px'>Date Of Week</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center">Shift</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='140px'>Salary per hour</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='100px'>Salary</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='240px'>Day</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='100px'>Weekday</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='240px'>Shift</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='140px'>Per Hour</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='140px'>Salary</TableCell>
                                                         <TableCell className={classes.goodTable_Cell_Header} align="center" width='120px'>Salary status</TableCell>
                                                         {/* <TableCell className={classes.goodTable_Cell_Header} align="center"></TableCell> */}
                                                     </TableRow>
@@ -290,19 +290,19 @@ class PayEmployeeModal extends Component {
                                                         timeKeeper._id.employee._id.employeeID != this.props.employeeID.id ? (null) :
                                                             (
                                                             <TableRow>
-                                                                <TableCell className={classes.goodTable_Cell}>
+                                                                <TableCell className={classes.goodTable_Cell} align="center">
                                                                     {this.toReadableDay(timeKeeper._id.realDate.substring(0,timeKeeper._id.realDate.indexOf('T') ))}
                                                                 </TableCell>
-                                                                <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.dateInWeek}</TableCell>
+                                                                <TableCell className={classes.goodTable_Cell} align="center">{timeKeeper._id.dateInWeek}</TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
                                                                     {timeKeeper._id.shiftType.name + " ("+ timeKeeper._id.shiftType.timeFrom + 
                                                                     ' - '+  timeKeeper._id.shiftType.timeEnd +')'}
                                                                 </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
-                                                                    {timeKeeper._id.shiftType.salary}
+                                                                    {timeKeeper._id.shiftType.salary + ' VNĐ'}
                                                                 </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
-                                                                    {this.calculateSalary(timeKeeper._id.shiftType)}
+                                                                    {this.calculateSalary(timeKeeper._id.shiftType) + ' VNĐ'}
                                                                 </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell} align="center">
                                                                     {
@@ -327,6 +327,7 @@ class PayEmployeeModal extends Component {
                                             TotalSalary: 
                                         </lable>
                                         {this.totalSalary}
+                                        {' VNĐ'}
                                         <Button style={{margin: '6px 18px', float: 'right'}}variant="contained" onClick={() => this.payEmployee()}>
                                             Pay employee
                                         </Button>
