@@ -7,6 +7,7 @@ import axios from 'axios';
 import '../../css/GoodManager.css';
 import { withStyles } from '@material-ui/styles';
 import EmployeeInformation from './EmployeeInformation';
+import { GiConsoleController } from 'react-icons/gi';
 
 
 var productTypes =[
@@ -59,6 +60,7 @@ class PayEmployeeModal extends Component {
         }; 
         // console.log("listTimeKeeper", this.props.listTimeKeeper);
         // console.log("this.props.employeeID", this.props.employeeID);
+        this.calculateTotalSalary();
     }
 
     getShiftInforByID(shiftID)
@@ -153,6 +155,34 @@ class PayEmployeeModal extends Component {
         return "Can't get shift";
     }
 
+    calculateTime(timeFrom, timeEnd)
+    {
+        var realTimeFrom, realTimeEnd;
+
+        realTimeFrom = parseInt(timeFrom.substring(0, timeFrom.indexOf(':')));
+        if(timeFrom.indexOf('PM')!=-1) realTimeFrom += 12;
+        var minuteFrom= parseInt(timeFrom.substring(timeFrom.indexOf(':')+1, timeFrom.indexOf(':') + 3));
+
+        realTimeEnd = parseInt(timeEnd.substring(0, timeEnd.indexOf(':')));
+        if(timeEnd.indexOf('PM')!=-1) realTimeEnd += 12;
+        var minuteEnd= parseInt(timeEnd.substring(timeEnd.indexOf(':')+1, timeEnd.indexOf(':') + 3));
+
+        var timeDiff = realTimeEnd - realTimeFrom;
+        
+        if(minuteEnd - minuteFrom < 0)
+        {
+            timeDiff --;
+            minuteEnd += 60;
+        }
+
+        return Math.round(timeDiff + (minuteEnd - minuteFrom) / 60.0);
+    }
+
+    calculateSalary(shiftType){
+        console.log("shiftType", shiftType);
+        return shiftType.salary * (this.calculateTime(shiftType.timeFrom,shiftType.timeEnd));
+    }
+
     getEmployeeNameByID(employeeID)
     {
         for(var i = 0 ; i < this.props.listEmployee.employees.length; i++)
@@ -176,6 +206,27 @@ class PayEmployeeModal extends Component {
             }
         }
         return false;
+    }
+
+    totalSalary = 0;
+
+    calculateTotalSalary() {
+        // this.props.listTimeKeeper;
+        var baseSalary = 0;
+        for(var i = 0; i < this.props.listTimeKeeper.length ; i++)
+        {
+            if(
+                this.props.listTimeKeeper[i]._id.employee._id.employeeID == this.props.employeeID.id &&
+                this.props.listTimeKeeper[i].isPaidSalary == true
+                )
+            {
+                console.log("Chấm công", this.props.listTimeKeeper[i])
+                baseSalary += this.calculateSalary(this.props.listTimeKeeper[i]._id.shiftType);
+            }
+        }
+        this.totalSalary = baseSalary;
+        this.setState({change: !this.state.change});
+        console.log("this.totalSalary",this.totalSalary);
     }
 
     toReadableDay(dayToConvert) {
@@ -227,10 +278,10 @@ class PayEmployeeModal extends Component {
                                                     <TableRow>
                                                         <TableCell className={classes.goodTable_Cell_Header} align="center" width='120px'>Day</TableCell>
                                                         <TableCell className={classes.goodTable_Cell_Header} align="center" width='140px'>Date Of Week</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" >Shift</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center">Salary</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center">Shift</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='140px'>Salary per hour</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='100px'>Salary</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='120px'>Salary status</TableCell>
                                                         {/* <TableCell className={classes.goodTable_Cell_Header} align="center"></TableCell> */}
                                                     </TableRow>
                                                     {
@@ -246,12 +297,22 @@ class PayEmployeeModal extends Component {
                                                                     {timeKeeper._id.shiftType.name + " ("+ timeKeeper._id.shiftType.timeFrom + 
                                                                     ' - '+  timeKeeper._id.shiftType.timeEnd +')'}
                                                                 </TableCell>
-                                                                <TableCell className={classes.goodTable_Cell}>{timeKeeper._id.employee._id.employeeID}</TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
-                                                                    {timeKeeper._id.employee.firstName + " " + timeKeeper._id.employee.lastName}
+                                                                    {timeKeeper._id.shiftType.salary}
                                                                 </TableCell>
                                                                 <TableCell className={classes.goodTable_Cell}>
-                                                                    {timeKeeper.isPaidSalary.toString()}
+                                                                    {this.calculateSalary(timeKeeper._id.shiftType)}
+                                                                </TableCell>
+                                                                <TableCell className={classes.goodTable_Cell} align="center">
+                                                                    {
+                                                                        timeKeeper.isPaidSalary== true ? 
+                                                                        <div style={{backgroundColor:'#73b504', color:'#fff', borderRadius: 4, lineHeight: 2.2}}>
+                                                                            Payed
+                                                                        </div> : 
+                                                                        <div style={{backgroundColor:'#ff2400', color:'#fff', borderRadius: 4, lineHeight: 2.2}}>
+                                                                            Not payed
+                                                                        </div>
+                                                                    }
                                                                 </TableCell>
                                                             </TableRow>
                                                             )
@@ -261,9 +322,10 @@ class PayEmployeeModal extends Component {
                                             </Table>
                                     </TableContainer>
                                     <Grid item md={12} style={{marginTop: 4}}>
-                                        <lable style={{margin: '12px 18px',}}>
+                                        <lable style={{margin: '12px 18px', fontWeight: 700}}>
                                             TotalSalary: 
                                         </lable>
+                                        {this.totalSalary}
                                         <Button style={{margin: '6px 18px', float: 'right'}}variant="contained" onClick={() => this.payEmployee()}>
                                             Pay employee
                                         </Button>
