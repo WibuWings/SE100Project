@@ -116,13 +116,15 @@ class PayEmployeeModal extends Component {
                     .catch(err => {
                         console.log(err);
                     })
-                // Cập nhật redux khi update việc trả lương
-
             }
+            // Cập nhật redux khi update việc trả lương
+            this.props.paySalary(this.props.employeeID.id);
+            console.log("Đã gọi hàm cập nhập trạng thái", this.props.employeeID.id)
         }
         catch(e)
         {
-            alert("Đã có lỗi xảy ra")
+            alert("Đã có lỗi xảy ra");
+            console.log("Lỗi trả lương", e);
         }
         
         // this.props.changePayEmployeeStatus();    
@@ -179,7 +181,6 @@ class PayEmployeeModal extends Component {
     }
 
     calculateSalary(shiftType){
-        console.log("shiftType", shiftType);
         return shiftType.salary * (this.calculateTime(shiftType.timeFrom,shiftType.timeEnd));
     }
 
@@ -217,7 +218,7 @@ class PayEmployeeModal extends Component {
         {
             if(
                 this.props.listTimeKeeper[i]._id.employee._id.employeeID == this.props.employeeID.id &&
-                this.props.listTimeKeeper[i].isPaidSalary == true
+                this.props.listTimeKeeper[i].isPaidSalary == false
                 )
             {
                 console.log("Chấm công", this.props.listTimeKeeper[i])
@@ -421,6 +422,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "CHANGE_PAY_EMPLOYEE_STATUS",
             });
         },
+        paySalary: (employeeID) => {
+            dispatch({
+                type: "PAY_SALARY",
+                employeeID: employeeID
+            });
+        }
     }
 }
 
