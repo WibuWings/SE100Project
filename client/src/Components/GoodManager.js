@@ -479,15 +479,19 @@ class GoodManager extends Component {
             genIDProductStart = parseInt(listProductInfor[listProductInfor.length-1]._id.productID) + 1;
         } 
         
-        var genIDTypeStart = 0;
+        var currentgenIDTypeStart = 0;
         var listTypeInfor = this.props.typeProduct;
+        console.log("listTypeInfor", listTypeInfor);
         if(listTypeInfor.length>0)
         {
-            genIDTypeStart = parseInt(listTypeInfor[listTypeInfor.length-1]._id.typeID) + 1;
+            currentgenIDTypeStart = parseInt(listTypeInfor[listTypeInfor.length-1]._id.typeID) + 1;
         } 
+
+        var excecuteListType = [];
         // Chạy từng cái object để tạo cái product, cái type và cái join
         for(var i = 0; i < excelObject.length; i++)
         {
+            // Tách riêng từng cái product
             var currentProduct = {
                 _id: {
                     productID: genIDProductStart + i,
@@ -508,8 +512,100 @@ class GoodManager extends Component {
                 unit: excelObject[i].unit,
             }
             allProducts.push(currentProduct);
+            // Tách riêng từng cái type của cái currentProduct
+            var currentTypes = excelObject[i].productTypeName.split(' || ');
+            // console.log("currentTypes", currentTypes)
+
+            // Tìm kiếm các cái trong listTypeInfor và trong cái executeListType
+            
+            for(var k = 0; k < currentTypes.length ; k ++)
+            {
+                var indexFound = -1;
+                // Tìm kiếm trong các loại có sẵn
+                for(var j = 0 ; j < listTypeInfor.length; j++)
+                {
+                    if(currentTypes[k] == listTypeInfor[j].name)
+                    {
+                        indexFound = listTypeInfor[j]._id.typeID;
+                        break;
+                    }
+                }
+                if(indexFound != -1)
+                {
+                    // Tạo một cái object join để thêm vào cái có sẵn
+                    var currentproductJoinType = {
+                        _id : {
+                            productID: genIDProductStart + i,
+                            typeID: indexFound, 
+                            importDate: this.getCurrentDateTimeString(),
+                            storeID: this.props.infoUser.email,
+                        }
+                    }
+                    allJoins.push(currentproductJoinType);
+                }
+                else 
+                {
+                    var indexExecFound = -1;
+                    for(var l =0 ; l < excecuteListType.length ; l++)
+                    {
+                        if(currentTypes[k] == excecuteListType[l].name)
+                        {
+                            indexExecFound = excecuteListType[l]._id.typeID;
+                        }
+                    }
+                    if(indexExecFound != -1)
+                    {
+                        var currentproductJoinType = {
+                            _id : {
+                                productID: genIDProductStart + i,
+                                typeID: indexExecFound, 
+                                importDate: this.getCurrentDateTimeString(),
+                                storeID: this.props.infoUser.email,
+                            }
+                        }
+                        allJoins.push(currentproductJoinType);
+                    }
+                    // Nếu như không tìm thấy trong cả hai cái thì phải thêm thôi
+                    else 
+                    {
+                        // Thêm các cái mình sẽ add vào csdl ở đây
+                        var newTypeToAdd = {
+                            _id:{
+                                typeID: currentgenIDTypeStart,
+                                storeID: this.props.infoUser.email,
+                            },
+                            name: currentTypes[k],
+                        }
+                        allTypes.push(newTypeToAdd);
+                        
+                        // Sau đó sẽ thêm vào cái cái join ở đây
+                        var currentproductJoinType = {
+                            _id : {
+                                productID: genIDProductStart + i,
+                                typeID: currentgenIDTypeStart, 
+                                importDate: this.getCurrentDateTimeString(),
+                                storeID: this.props.infoUser.email,
+                            }
+                        }
+                        allJoins.push(currentproductJoinType);
+
+                        // Cộng thêm để lấy ID cho các cái sau này
+                        currentgenIDTypeStart ++;
+                    }
+                }
+            }
+            
         }
-        console.log("allProducts", allProducts)
+        console.log("allProducts", allProducts);
+        console.log("allTypes", allTypes);
+        console.log("allJoins", allJoins);
+        // var allTypes = [];
+        // var allProducts = [];
+        // var allJoins = [];
+
+        // Lấy được ok rồi, giờ thì thêm từng cái vào cơ sở dữ liệu thôi
+        // Thêm thử tất cả sản phẩm vào csdl xem sao 
+        
     }
 
     render() {
