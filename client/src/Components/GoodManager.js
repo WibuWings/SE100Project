@@ -605,7 +605,54 @@ class GoodManager extends Component {
 
         // Lấy được ok rồi, giờ thì thêm từng cái vào cơ sở dữ liệu thôi
         // Thêm thử tất cả sản phẩm vào csdl xem sao 
-        
+
+        var dataProduct = {
+            token: localStorage.getItem('token'),
+            products: [...allProducts ]
+        }
+        axios.post(`http://localhost:5000/api/product/import`, dataProduct)
+            .then(res => {
+                console.log("Save success");
+            })
+            .catch(err => {
+                alert(err);
+                console.log(err);
+            })
+        for(var m = 0 ; m < allTypes.length ; m++)
+        {
+            const dataType = {
+                token: localStorage.getItem('token'),
+                productType: {
+                    ...allTypes[m]
+                }    
+            }
+            axios.post(`http://localhost:5000/api/product/type`, dataType)
+            .then(res => {
+                
+            })
+            .catch(err => {
+                alert(err);
+            })
+        }
+        alert("Save types success");
+
+        for(var m = 0 ; m < allJoins.length ; m++)
+        {
+            const dataJoin = {
+                token: localStorage.getItem('token'),
+                productJoinType: {
+                    ...allJoins[m]
+                }  
+            }
+            axios.post(`http://localhost:5000/api/product/join`, dataJoin)
+                .then(res => {
+                    
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        console.log("lưu vô bảng join thành công");
     }
 
     render() {
