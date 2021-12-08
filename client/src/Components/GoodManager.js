@@ -471,6 +471,8 @@ class GoodManager extends Component {
         var allTypes = [];
         var allProducts = [];
         var allJoins = [];
+
+        var allProductsforRedux = [];
         // ID bắt đầu đánh ở đây:
         var genIDProductStart = 0;
         var listProductInfor = this.props.listProduct.state;
@@ -517,7 +519,9 @@ class GoodManager extends Component {
             // console.log("currentTypes", currentTypes)
 
             // Tìm kiếm các cái trong listTypeInfor và trong cái executeListType
-            
+            var currentProductRedux = currentProduct;
+            var typeIDList = [];
+
             for(var k = 0; k < currentTypes.length ; k ++)
             {
                 var indexFound = -1;
@@ -542,6 +546,8 @@ class GoodManager extends Component {
                         }
                     }
                     allJoins.push(currentproductJoinType);
+
+                    typeIDList.push(indexFound);
                 }
                 else 
                 {
@@ -564,6 +570,8 @@ class GoodManager extends Component {
                             }
                         }
                         allJoins.push(currentproductJoinType);
+
+                        typeIDList.push(indexExecFound);
                     }
                     // Nếu như không tìm thấy trong cả hai cái thì phải thêm thôi
                     else 
@@ -589,12 +597,19 @@ class GoodManager extends Component {
                         }
                         allJoins.push(currentproductJoinType);
 
+                        typeIDList.push(currentgenIDTypeStart);
                         // Cộng thêm để lấy ID cho các cái sau này
                         currentgenIDTypeStart ++;
                     }
                 }
             }
             
+            // Thêm vào redux
+            var currentProductRedux2 = {
+                ...currentProductRedux,
+                typeIDList: typeIDList,
+            }
+            allProductsforRedux.push(currentProductRedux2);
         }
         console.log("allProducts", allProducts);
         console.log("allTypes", allTypes);
@@ -618,6 +633,8 @@ class GoodManager extends Component {
                 alert(err);
                 console.log(err);
             })
+
+        
         for(var m = 0 ; m < allTypes.length ; m++)
         {
             const dataType = {
@@ -633,8 +650,12 @@ class GoodManager extends Component {
             .catch(err => {
                 alert(err);
             })
+            // Cập nhật type vào redux
+            this.props.addTypeToReducer(dataType.productType);
         }
         alert("Save types success");
+        
+
 
         for(var m = 0 ; m < allJoins.length ; m++)
         {
@@ -653,6 +674,12 @@ class GoodManager extends Component {
                 })
         }
         console.log("lưu vô bảng join thành công");
+        // Cập nhật các sản phẩm và joinType vào redux:
+        for(var m = 0; m < allProductsforRedux.length ;m++)
+        {
+            this.props.addProductToRedux(allProductsforRedux[m]);
+        }
+
     }
 
     render() {
@@ -825,6 +852,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "GET_PRODUCT_AND_TYPE",
                 data: data
             });
+        },
+        addTypeToReducer: (data) => {
+            dispatch({
+                type: "ADD_TYPE",
+                data: data,
+            });
+        },
+        addProductToRedux: (data) => {
+            dispatch({
+                type: "ADD_PRODUCT",
+                data: data,
+            }); 
         },
     }
 }
