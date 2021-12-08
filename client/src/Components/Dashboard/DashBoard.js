@@ -9,11 +9,10 @@ import ErrorReceipt from './ErrorReceipt';
 import CouponManager from './CouponManager';
 import ProductStatis from './ProductStatis';
 import ComponentToPrintRevenue from './ComponentToPrintRevenue';
-import ComponentToPrintReceiptCoupon from './ComponentToPrintReceiptCoupon'
-import ComponentToPrintRevenueDaily from './ComponentToPrintRevenueDaily'
 import ReactToPrint from 'react-to-print';
 import SalaryStats from './SalaryStats';
 import { MdLocalPrintshop } from 'react-icons/md'
+import { connect } from 'react-redux'
 
 class DashBoard extends Component {
 
@@ -52,7 +51,7 @@ class DashBoard extends Component {
                         <Grid className="dashboard-item" item md={3} sm={12} >
                             <ErrorReceipt></ErrorReceipt>
                         </Grid>
-                        <Grid style={{justifyContent: 'end', display:'flex'}} className="dashboard-item" item md={12} sm={12}>
+                        <Grid style={{ justifyContent: 'end', display: 'flex' }} className="dashboard-item" item md={12} sm={12}>
                             <ReactToPrint
                                 trigger={() => {
                                     return <div>
@@ -65,47 +64,17 @@ class DashBoard extends Component {
                                 content={() => this.componentRef}
                             />
                             <div style={{ display: 'none' }}>
-                                <ComponentToPrintRevenue ref={el => (this.componentRef = el)} />
+                                <ComponentToPrintRevenue listReceipt={this.props.listReceipt} ref={el => (this.componentRef = el)} />
                             </div>
                         </Grid>
                         <Grid className="dashboard-item" item md={12} sm={12} >
                             <AppWebsiteVisits></AppWebsiteVisits>
                         </Grid>
-                        <Grid style={{justifyContent: 'end', display:'flex'}} className="dashboard-item" item md={12} sm={12}>
-                            <ReactToPrint
-                                trigger={() => {
-                                    return <div>
-                                        <Button style={{ backgroundColor: '#01579b', color: 'white' }}>
-                                            <MdLocalPrintshop style={{ marginRight: '10px' }}></MdLocalPrintshop>
-                                            Export Revenue Daily
-                                        </Button>
-                                    </div>;
-                                }}
-                                content={() => this.componentRef}
-                            />
-                            <div style={{ display: 'none' }}>
-                                <ComponentToPrintRevenue ref={el => (this.componentRef = el)} />
-                            </div>
-                        </Grid>
+
                         <Grid item md={12} sm={12}>
                             <DaiLyMoneyTracking></DaiLyMoneyTracking>
                         </Grid>
-                        <Grid style={{justifyContent: 'end', display:'flex'}} className="dashboard-item" item md={12} sm={12}>
-                            <ReactToPrint
-                                trigger={() => {
-                                    return <div>
-                                        <Button style={{ backgroundColor: '#01579b', color: 'white' }}>
-                                            <MdLocalPrintshop style={{ marginRight: '10px' }}></MdLocalPrintshop>
-                                            Export Receipt Coupon 
-                                        </Button>
-                                    </div>;
-                                }}
-                                content={() => this.componentRef}
-                            />
-                            <div style={{ display: 'none' }}>
-                                <ComponentToPrintRevenue ref={el => (this.componentRef = el)} />
-                            </div>
-                        </Grid>
+
                         <Grid item md={12} sm={12}>
                             <CouponManager></CouponManager>
                         </Grid>
@@ -116,4 +85,10 @@ class DashBoard extends Component {
     }
 }
 
-export default DashBoard;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        listReceipt: state.listReciept,
+    }
+}
+
+export default connect(mapStateToProps)(DashBoard);
