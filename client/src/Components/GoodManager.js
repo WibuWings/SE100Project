@@ -247,6 +247,7 @@ class GoodManager extends Component {
             }
             // Check các constraint và quy định ở đây trước khi add vào listObject
             if(this.checkConstraintOfExcelObject(newRow, i2) == false) return false;
+            if(this.checkRegulationOfExcelObject(newRow, i2) == false) return false;
             allRows.push(newRow);
             
         } 
@@ -397,10 +398,79 @@ class GoodManager extends Component {
             alert("Ngày hết hạn ở hàng "+ (index+1) +" không hợp lệ");
             return false;
         }
+        // Check ngày hết hạn lớn hơn ngày nhập là ngày hiện tại
+        try{
+            // console.log("In thử ngày hiện tại", new Date().getTime())
+            if(new Date().getTime() - new Date(this.toDateString(newRow.expiredDate)).getTime() >=0)
+            {
+                alert("Ngày nhập hàng ở hàng "+ (index+1) +" không thể lớn hơn hoặc bằng ngày hết hạn");
+                return false;
+            }
+        }
+        catch(e) {
+            alert("Ngày nhập hàng ở hàng "+ (index+1) +" không thể lớn hơn hoặc bằng ngày hết hạn");
+            return false;
+        }
+        // Check giá gốc phải nhỏ hơn giá bán
+        if ( parseFloat(newRow.sellPrice) - parseFloat(newRow.originalPrice) <=0.0) 
+        {
+            alert('Giá bán ở hàng ' + (index+1) +' phải lớn hơn giá gốc');
+            return false;
+        }
+        // Check cái đơn vị tiền
+        if ( newRow.currency != '$' && newRow.currency !='VNĐ') 
+        {
+            alert('Đơn vị tiền tệ của hàng '  + (index+1) + ' bị sai (chỉ có thể là "$" hoặc "VNĐ")');
+            return false;
+        }
+        // Check xong hết các constraint;
+        return true
     }
 
-    checkRegulationOfExcelObject() {
+    calculateDay(dateString1, dateString2)
+    {
+        return (
+            (new Date(dateString1)).setHours(0, 0, 0) 
+                - 
+            (new Date(dateString2)).setHours(0,0,0)
+            )
+            /(1000 * 60 * 60 * 24);
+    }
 
+    getCurrentDateTimeString()
+    {
+        var currentDate = new Date();
+        var day = (currentDate.toString().split(' '))[2];
+        if(day.length < 2)
+        {
+            day = '0' + day;
+        }
+        var month = (new Date().getMonth() + 1).toString();
+        if(month.length<2)
+        {
+            month = '0' + month;
+        }
+        return new Date().getFullYear() + '-' + month + '-' + day;
+    }
+
+    checkRegulationOfExcelObject(newRow, index) {
+        if(this.props.regulation == {}) return true;
+        try {
+            if(
+                this.props.regulation.minExpiredProduct > 
+                this.calculateDay(this.toDateString(newRow.expiredDate), this.getCurrentDateTimeString())
+            )
+            {
+                alert('Ngày nhập và ngày hết hạn ở hàng '  + (index+1) 
+                + ' phải cách nhau ít nhất ' +this.props.regulation.minExpiredProduct + ' ngày');
+                return false;
+            }
+        }
+        catch(e){
+            alert("Đã có lỗi xảy ra trong việc check quy định của ngày hết hạn và ngày nhập");
+            return false;
+        }
+        
     }
     render() {
         return (
@@ -509,6 +579,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         statusUpdateType: state.statusUpdateType,
         typeProduct: state.typeProduct,
+        regulation: state.regulationReducer,
     }
 }
 
