@@ -8,11 +8,11 @@ class ComponentToPrint extends React.PureComponent {
         }
     }
 
-
-
     render() {
+        
         return (
             <div className="row">
+                {console.log(this.props.listReceipt)}
                 Thích gì thì code ra revenueasd asdasdasd asdasd asdasdasdadasdsada ad
             </div>
         );

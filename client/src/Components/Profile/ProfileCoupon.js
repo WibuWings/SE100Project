@@ -51,10 +51,13 @@ function ProfileCoupon(props) {
     }
 
     const deleteCoupon = async (idCoupon) => {
-        await axios.post(`http://localhost:5000/api/profile/delete-coupon`, {
+        await axios.post(`http://localhost:5000/api/coupon/delete`, {
             token: localStorage.getItem('token'),
             email: infoUser.email,
-            idCoupon: idCoupon,
+            _id: {
+                couponID: idCoupon,
+                storeID: infoUser.email,
+            }
         }).then(res => {
 
         }).catch(err => {
@@ -122,12 +125,12 @@ function ProfileCoupon(props) {
                                             <StyledTableCell align="center">{convertTime(item.timeFrom)}</StyledTableCell>
                                             <StyledTableCell align="center">{convertTime(item.timeEnd)}</StyledTableCell>
                                             <StyledTableCell align="center">
-                                                <IconButton onClick={() => editCoupon(item)} name={item.idCoupon} color="secondary" aria-label="fingerprint">
+                                                <IconButton onClick={() => editCoupon(item)} name={item._id.couponID} color="secondary" aria-label="fingerprint">
                                                     <FiEdit />
                                                 </IconButton>
                                             </StyledTableCell>
                                             <StyledTableCell align="center">
-                                                <IconButton onClick={() => deleteCoupon(item.idCoupon)} name={item.idCoupon} style={{ color: 'red' }} aria-label="fingerprint">
+                                                <IconButton onClick={() => deleteCoupon(item._id.couponID)} name={item._id.couponID} style={{ color: 'red' }} aria-label="fingerprint">
                                                     <FiTrash2 />
                                                 </IconButton>
                                             </StyledTableCell>

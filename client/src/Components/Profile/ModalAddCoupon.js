@@ -81,7 +81,10 @@ function ModalAddCoupon(props) {
         if (timeEnd - timeFrom > 0) {
             if (!isPercent && !isDescription && !isMinTotal && !isQuantity) {
                 const data = {
-                    idCoupon: makeCode(6),
+                    _id: {
+                       storeID: infoUser.email ,
+                       couponID: makeCode(6),
+                    },
                     name: description,
                     percent: percent,
                     minTotal: minTotal,
@@ -89,10 +92,10 @@ function ModalAddCoupon(props) {
                     timeEnd: timeEnd,
                     quantity: quantity,
                 }
-                await axios.post(`http://localhost:5000/api/profile/add-coupon`, {
+                await axios.post(`http://localhost:5000/api/coupon/create`, {
                     token: localStorage.getItem('token'),
                     email: infoUser.email,
-                    data: data,
+                    coupon: data,
                 }).then(res => {
 
                 }).catch(err => {
@@ -124,7 +127,10 @@ function ModalAddCoupon(props) {
         if (timeEnd - timeFrom > 0) {
             if (!isPercent && !isDescription  && !isQuantity) {
                 const data = {
-                    idCoupon: objectEditCoupon.idCoupon,
+                    _id: {
+                        couponID: objectEditCoupon._id.couponID,
+                        storeID: infoUser.email
+                    },
                     name: description,
                     minTotal: minTotal,
                     percent: percent,
@@ -132,10 +138,10 @@ function ModalAddCoupon(props) {
                     timeEnd: timeEnd,
                     quantity: quantity
                 }
-                await axios.post(`http://localhost:5000/api/profile/edit-coupon`, {
+                await axios.post(`http://localhost:5000/api/coupon/update`, {
                     token: localStorage.getItem('token'),
                     email: infoUser.email,
-                    data: data,
+                    coupon: data,
                 }).then(res => {
 
                 }).catch(err => {
