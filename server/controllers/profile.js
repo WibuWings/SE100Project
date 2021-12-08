@@ -199,10 +199,11 @@ class meProfile {
             });
     }
     deleteShift = async (req, res) => {
-        const idUser = req.body.idUser
-        const idShift = req.body.id
+        const idUser = req.body.email
+        const idShift = req.body.idShift
+
         ShiftType.findOneAndDelete(
-            { shiftID: idShift, storeID: idUser, },
+            { "_id.shiftID": idShift, "_id.storeID": idUser, },
             function (err, doc) {
                 if (err) {
                     res.send(

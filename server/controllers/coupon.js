@@ -30,7 +30,7 @@ class CouponTab {
         var reqCoupon = req.body.coupon;
 
         var newCoupon = new Coupon({
-            ...reqCoupon
+            ...reqCoupon,
         });
 
         newCoupon
@@ -51,13 +51,18 @@ class CouponTab {
 
     updateCoupon = async (req, res) => {
         var reqCoupon = req.body.coupon;
-        reqCoupon.timeFrom = new Date(reqCoupon.timeFrom)
-        reqCoupon.timeEnd = new Date(reqCoupon.timeEnd)
-        let coupons = await Coupon.findOne({ "_id.couponID": reqCoupon._id.couponID, "_id.storeID": reqCoupon._id.storeID })
+        var { _id, ...updateFields } = reqCoupon;
 
-        Coupon.findOneAndUpdate({ "_id.couponID": reqCoupon._id.couponID, "_id.storeID": reqCoupon._id.storeID }, reqCoupon, {
-            returnOriginal: false,
-        })
+        Coupon.findOneAndUpdate(
+            {
+                "_id.couponID": reqCoupon._id.couponID,
+                "_id.storeID": reqCoupon._id.storeID,
+            },
+            updateFields,
+            {
+                returnOriginal: false,
+            }
+        )
             .then((data) => {
                 res.status(200).send(
                     JSON.stringify({
