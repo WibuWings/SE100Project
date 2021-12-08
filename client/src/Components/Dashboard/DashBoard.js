@@ -8,7 +8,9 @@ import TotalMoney from './TotalMoney';
 import ErrorReceipt from './ErrorReceipt';
 import CouponManager from './CouponManager';
 import ProductStatis from './ProductStatis';
-import ComponentToPrint from './ComponentToPrint';
+import ComponentToPrintRevenue from './ComponentToPrintRevenue';
+import ComponentToPrintReceiptCoupon from './ComponentToPrintReceiptCoupon'
+import ComponentToPrintRevenueDaily from './ComponentToPrintRevenueDaily'
 import ReactToPrint from 'react-to-print';
 import SalaryStats from './SalaryStats';
 import { MdLocalPrintshop } from 'react-icons/md'
@@ -34,22 +36,8 @@ class DashBoard extends Component {
                 <Container style={{ marginTop: '40px' }} maxWidth="xl">
                     <Grid container spacing={3}>
                         <Grid item md={12} sm={12}>
-                            <div style={{ justifyContent: 'space-between', width: '100&', display: 'flex' }}>
+                            <div style={{ width: '100&', display: 'flex' }}>
                                 <GroupButtonDashboard></GroupButtonDashboard>
-                                <ReactToPrint
-                                    trigger={() => {
-                                        return <div>
-                                            <Button style={{ backgroundColor: '#01579b', color: 'white' }}>
-                                                <MdLocalPrintshop style={{marginRight: '10px'}}></MdLocalPrintshop>
-                                                Export dashboard
-                                            </Button>
-                                        </div>;
-                                    }}
-                                    content={() => this.componentRef}
-                                />
-                                <div style={{ display: 'none' }}>
-                                    <ComponentToPrint ref={el => (this.componentRef = el)} />
-                                </div>
                             </div>
                         </Grid>
                         <Grid className="dashboard-item" item md={3} sm={12} >
@@ -64,11 +52,59 @@ class DashBoard extends Component {
                         <Grid className="dashboard-item" item md={3} sm={12} >
                             <ErrorReceipt></ErrorReceipt>
                         </Grid>
+                        <Grid style={{justifyContent: 'end', display:'flex'}} className="dashboard-item" item md={12} sm={12}>
+                            <ReactToPrint
+                                trigger={() => {
+                                    return <div>
+                                        <Button style={{ backgroundColor: '#01579b', color: 'white' }}>
+                                            <MdLocalPrintshop style={{ marginRight: '10px' }}></MdLocalPrintshop>
+                                            Export Revenue
+                                        </Button>
+                                    </div>;
+                                }}
+                                content={() => this.componentRef}
+                            />
+                            <div style={{ display: 'none' }}>
+                                <ComponentToPrintRevenue ref={el => (this.componentRef = el)} />
+                            </div>
+                        </Grid>
                         <Grid className="dashboard-item" item md={12} sm={12} >
                             <AppWebsiteVisits></AppWebsiteVisits>
                         </Grid>
+                        <Grid style={{justifyContent: 'end', display:'flex'}} className="dashboard-item" item md={12} sm={12}>
+                            <ReactToPrint
+                                trigger={() => {
+                                    return <div>
+                                        <Button style={{ backgroundColor: '#01579b', color: 'white' }}>
+                                            <MdLocalPrintshop style={{ marginRight: '10px' }}></MdLocalPrintshop>
+                                            Export Revenue Daily
+                                        </Button>
+                                    </div>;
+                                }}
+                                content={() => this.componentRef}
+                            />
+                            <div style={{ display: 'none' }}>
+                                <ComponentToPrintRevenue ref={el => (this.componentRef = el)} />
+                            </div>
+                        </Grid>
                         <Grid item md={12} sm={12}>
                             <DaiLyMoneyTracking></DaiLyMoneyTracking>
+                        </Grid>
+                        <Grid style={{justifyContent: 'end', display:'flex'}} className="dashboard-item" item md={12} sm={12}>
+                            <ReactToPrint
+                                trigger={() => {
+                                    return <div>
+                                        <Button style={{ backgroundColor: '#01579b', color: 'white' }}>
+                                            <MdLocalPrintshop style={{ marginRight: '10px' }}></MdLocalPrintshop>
+                                            Export Receipt Coupon 
+                                        </Button>
+                                    </div>;
+                                }}
+                                content={() => this.componentRef}
+                            />
+                            <div style={{ display: 'none' }}>
+                                <ComponentToPrintRevenue ref={el => (this.componentRef = el)} />
+                            </div>
                         </Grid>
                         <Grid item md={12} sm={12}>
                             <CouponManager></CouponManager>

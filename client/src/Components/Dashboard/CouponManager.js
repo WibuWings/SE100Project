@@ -102,7 +102,7 @@ function CouponManager(props) {
 
     return (
         <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', marginBottom: '30px' }}>
-            <Card style={{ position: "relative", marginTop: '15px' }}>
+            <Card style={{ position: "relative" }}>
                 <CardHeader style={{ color: !statusDarkmode ? '#0091ea' : 'white', backgroundColor: !statusDarkmode ? '#efeeef' : '#455a64' }} title="Coupon Manager" />
                 <Divider />
                 <CardContent>

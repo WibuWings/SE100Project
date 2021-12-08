@@ -95,7 +95,7 @@ function DaiLyMoneyTracking(props) {
     }, [value])
 
     return (
-        <div style={{ backgroundColor: 'white', borderRadius: '4px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', overflow: 'hidden', marginBottom: '30px' }}>
+        <div style={{ backgroundColor: 'white', borderRadius: '4px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', overflow: 'hidden' }}>
             <div style={{ height: 'auto', width: '90%', margin: 'auto', paddingTop: '20px' }}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DesktopDatePicker

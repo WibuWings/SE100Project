@@ -25,6 +25,8 @@ const listCouponInitialState = [],
                     }
                     return value
                 })
+            case "UPDATE_COUPON_USER": 
+                return state = action.coupons
             default:
                 return state
         }
