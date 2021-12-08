@@ -220,6 +220,7 @@ class SellProduct extends Component {
 
                                                             <CardContent style={{ padding: '5px' }}>
                                                                 <Typography style={{ textAlign: 'center' }} gutterBottom variant="h6" component="div">
+
                                                                     {value.name}
                                                                 </Typography>
                                                             </CardContent>
@@ -231,7 +232,7 @@ class SellProduct extends Component {
                                                         </CardActionArea>
                                                         <CardActions style={{ justifyContent: 'center' }}>
                                                             <Button style={{ color: 'green', fontWeight: '700' }} endIcon={<BiPlusMedical></BiPlusMedical>} size="medium" color="primary">
-                                                                {value.sellPrice}
+                                                                {this.props.regulation.currency === 'vnd' ? (value.sellPrice).toLocaleString() : ((value.sellPrice) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
                                                             </Button>
                                                         </CardActions>
                                                     </Card>
@@ -292,6 +293,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         shoppingBags: state.shoppingBags,
         statusShowHistoryReciept: state.statusShowHistoryReciept,
+        regulation: state.regulationReducer
     }
 }
 
@@ -338,7 +340,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "HIDE_ALERT",
             })
         },
-        hideHistoryReceipt:() => {
+        hideHistoryReceipt: () => {
             dispatch({
                 type: "CHANGE_HISTORY_RECIEPT_STATUS"
             })

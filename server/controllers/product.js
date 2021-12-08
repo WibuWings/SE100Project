@@ -101,7 +101,23 @@ class ProductTab {
         });
     };
 
-    importProducts = async (req, res) => {};
+    importProducts = async (req, res) => {
+        var reqProducts = req.body.products;
+
+            Product.insertMany([...reqProducts])
+                .then((data) => {
+                    res.status(200).send(
+                        JSON.stringify({
+                            email: res.locals.decoded.email,
+                            token: res.locals.newToken,
+                            data,
+                        })
+                    );              
+                })
+                .catch((err) => {
+                    res.status(404).send(err);
+                });
+    };
     //------
 
     //productTypes

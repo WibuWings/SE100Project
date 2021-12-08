@@ -35,6 +35,10 @@ function ProfileCoupon(props) {
     const statusDarkmode = useSelector(state => state.statusDarkmode)
     const dispatch = useDispatch()
     const listCoupon = useSelector(state => state.listCoupon)
+    const regulation = useSelector(state => state.regulationReducer)
+    const infoUser = useSelector(state => state.infoUser)
+
+
     const openModalAddCoupon = () => {
         dispatch({
             type: "CHANGE_ADD_COUPON_STATUS"
@@ -46,7 +50,16 @@ function ProfileCoupon(props) {
         return date.getDate() + " / " + (date.getMonth() + 1) + " / " + date.getFullYear()
     }
 
-    const deleteCoupon = (idCoupon) => {
+    const deleteCoupon = async (idCoupon) => {
+        await axios.post(`http://localhost:5000/api/profile/delete-coupon`, {
+            token: localStorage.getItem('token'),
+            email: infoUser.email,
+            idCoupon: idCoupon,
+        }).then(res => {
+
+        }).catch(err => {
+
+        })
         dispatch({
             type: "DELETE_COUPON",
             idCoupon: idCoupon
@@ -57,7 +70,7 @@ function ProfileCoupon(props) {
             typeMessage: "success",
         })
     }
-    
+
     const editCoupon = (data) => {
         dispatch({
             type: "CHANGE_ADD_COUPON_STATUS"
@@ -103,7 +116,9 @@ function ProfileCoupon(props) {
                                             <StyledTableCell component="th" scope="row">{item.name}</StyledTableCell>
                                             <StyledTableCell align="center">{item.quantity}</StyledTableCell>
                                             <StyledTableCell align="center">{item.percent}</StyledTableCell>
-                                            <StyledTableCell align="center">{item.minTotal.toLocaleString()}</StyledTableCell>
+                                            <StyledTableCell align="center">
+                                                {regulation.currency === 'vnd' ? (item.minTotal).toLocaleString() : ((item.minTotal) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                            </StyledTableCell>
                                             <StyledTableCell align="center">{convertTime(item.timeFrom)}</StyledTableCell>
                                             <StyledTableCell align="center">{convertTime(item.timeEnd)}</StyledTableCell>
                                             <StyledTableCell align="center">
@@ -111,7 +126,7 @@ function ProfileCoupon(props) {
                                                     <FiEdit />
                                                 </IconButton>
                                             </StyledTableCell>
-                                            <StyledTableCell  align="center">
+                                            <StyledTableCell align="center">
                                                 <IconButton onClick={() => deleteCoupon(item.idCoupon)} name={item.idCoupon} style={{ color: 'red' }} aria-label="fingerprint">
                                                     <FiTrash2 />
                                                 </IconButton>

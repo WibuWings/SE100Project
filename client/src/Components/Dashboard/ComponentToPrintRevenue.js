@@ -13,7 +13,7 @@ class ComponentToPrint extends React.PureComponent {
     render() {
         return (
             <div className="row">
-                Thích gì thì code ra 
+                Thích gì thì code ra revenueasd asdasdasd asdasd asdasdasdadasdsada ad
             </div>
         );
     }

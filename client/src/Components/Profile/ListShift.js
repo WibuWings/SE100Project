@@ -80,7 +80,7 @@ class ListShift extends Component {
     render() {
         return (
             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
-                <Card style={{ position: "relative", marginTop: '15px'}}>
+                <Card style={{ position: "relative", marginTop: '15px' }}>
                     <CardHeader style={{ color: !this.props.statusDarkmode ? '#0091ea' : 'white', backgroundColor: !this.props.statusDarkmode ? '#efeeef' : '#455a64' }} title="List Shift" />
                     <Divider />
                     <CardContent>
@@ -101,7 +101,9 @@ class ListShift extends Component {
                                         <TableBody>
                                             <StyledTableRow key="abc">
                                                 <StyledTableCell component="th" scope="row">{item.name}</StyledTableCell>
-                                                <StyledTableCell align="center">{item.salary}</StyledTableCell>
+                                                <StyledTableCell align="center">
+                                                    {this.props.regulation.currency === 'vnd' ? (item.salary).toLocaleString() : ((item.salary) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                </StyledTableCell>
                                                 <StyledTableCell align="center">{item.timeFrom}</StyledTableCell>
                                                 <StyledTableCell align="center">{item.timeEnd}</StyledTableCell>
                                                 <StyledTableCell align="center">
@@ -138,7 +140,8 @@ const mapStateToProps = (state, ownProps) => {
         addStatus: state.addStatus,
         listShift: state.listShift,
         infoUser: state.infoUser,
-        statusDarkmode: state.statusDarkmode
+        statusDarkmode: state.statusDarkmode,
+        regulation: state.regulationReducer
     }
 }
 
