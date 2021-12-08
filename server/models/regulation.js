@@ -4,6 +4,10 @@ const Schema = mongoose.Schema;
 const Regulation = new Schema({
     _id: String,
     currency: String,
+    exchangeRate:Number,
+    miniumEmployeeAge:Number,
+    lessChangeTimeKeepingDay:Number,
+    minExpiredProduct:Number,
     numberEmployees: Number,
     from :{
         hour: Number,

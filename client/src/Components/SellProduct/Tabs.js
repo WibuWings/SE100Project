@@ -14,15 +14,14 @@ export default function IconLabelTabs() {
         if (newValue === 0) {
             index = 'all'
         } else {
-            typeProduct.state.map((value ,key) => {
+            typeProduct.map((value ,key) => {
                  if (key === newValue - 1) {
                     index = value._id.typeID
                 }
                 return true;
             })
         }
-        
-        dispatch({
+            dispatch({
             type: "UPDATE_TYPE_CHOOSE",
             typeProductID: index,
         })
@@ -36,8 +35,8 @@ export default function IconLabelTabs() {
             aria-label="scrollable auto tabs example"
         >
             <Tab  label="Tất cả" />
-            {typeProduct.state 
-                ?typeProduct.state.map(value => (
+            {typeProduct 
+                ?typeProduct.map(value => (
                     <Tab  label={value.name} />))
                 :(null)
             }

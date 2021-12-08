@@ -97,21 +97,25 @@ class SideNavBar extends Component {
     attendance = () => {
         var time = new Date();
         let a = ((time.getHours() > 12) ? time.getHours() - 12 : time.getHours()) + ":" + time.getMinutes() +" "+ ((time.getHours() > 12) ? "PM" : "AM");
-        let b = "5:30 PM"
         axios.post('http://localhost:5000/api/employee/time-keeping',{
             token: localStorage.getItem('token'),
             data: {
                 email: this.props.infoUser.employeeID,
                 time: a,
             }
-        })
-        this.setState({
-            attendance: true
+        }).then(res => {
+            console.log(res)
+            localStorage.setItem('token', res.data.token)
+            this.props.showAlert(res.data.message, 'success')
+            this.setState({
+                attendance: true
+            })
+        }).catch(err => {
+            this.props.showAlert(err.response.data.message, 'error')
         })
     }
 
     render() {
-
         const navbarContainer = document.querySelector('.navbar-container');
         return (
             <div
@@ -156,7 +160,6 @@ class SideNavBar extends Component {
                                     <span className="nav-item-lable">Dashboard</span>
                                 </NavLink>) : (null)
                         }
-
                         <NavLink to="/profile" className={"nav-item " + this.active[1]} href="#"
                             onClick={() => this.changeIndex(1)}
                         >

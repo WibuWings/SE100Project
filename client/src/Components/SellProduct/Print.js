@@ -11,33 +11,14 @@ class Printf extends React.PureComponent {
     this.state = {
       percentDiscount: 0,
       infoReciept: [],
-      code: '', 
+      code: '',
       date: new Date(),
       MAHD: "HD" + this.makeCode(6),
+      moneyReduce: 0,
+      coupon: null,
     }
   }
 
-  blurDiscount = (e) => {
-    if (e.target.value <= 100 && e.target.value >= 0) {
-      this.setState({
-        percentDiscount: e.target.value,
-      })
-    } else if (e.target.value < 0) {
-      this.setState({
-        percentDiscount: 0,
-      })
-    } else {
-      this.setState({
-        percentDiscount: 100,
-      })
-    }
-  }
-
-  changeDiscount = (e) => {
-    this.setState({
-      percentDiscount: e.target.value,
-    })
-  }
 
   totalMoney = () => {
     let total = 0;
@@ -82,13 +63,17 @@ class Printf extends React.PureComponent {
     return result;
   }
 
+  getProductByID() {
+
+  }
 
   addReciept = async () => {
     if (this.props.shoppingBags.length === 0) {
       this.props.hideAlert()
       this.props.showAlert("Cart empty ", "warning")
     } else {
-      let code = this.makeCode(8)
+      let code = this.makeCode(8);
+      var isContinue = true;
       this.setState({
         code: code
       })
@@ -104,9 +89,10 @@ class Printf extends React.PureComponent {
         time: this.state.date.getHours() + ":" + this.state.date.getMinutes(),
         isEdit: false,
         oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
+        coupon: this.state.coupon
       }
-      axios.post('http://localhost:5000/api/sell-product/add-reciept', {
-        email: this.props.infoUser.managerID? this.props.infoUser.managerID : this.props.infoUser.email,
+      await axios.post('http://localhost:5000/api/sell-product/add-reciept', {
+        email: this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email,
         token: localStorage.getItem('token'),
         data: data,
       })
@@ -114,25 +100,85 @@ class Printf extends React.PureComponent {
           if (res.status === 200) {
             localStorage.setItem('token', res.data.token)
             if (this.props.statusEditInfoBill) {
-              this.props.changeStatusEditRecipt()
+              axios.post('http://localhost:5000/api/sell-product/edit-reciept', {
+                MAHD: this.props.InfomationBillEdit.MAHD,
+                token: localStorage.getItem('token'),
+                email: this.props.infoUser.email,
+              })
+                .then(res => {
+                  this.props.changeStatusEditRecipt()
+                  this.props.editShoppingBar(this.props.InfomationBillEdit.MAHD)
+                })
+                .catch(err => {
+                  this.props.changeLoginStatus();
+                  this.props.hideAlert();
+                  this.props.showAlert("Login timeout, signin again", "warning");
+                })
+
             }
+
+            if (this.state.coupon) {
+              this.props.updateQuantityCoupon(this.state.coupon.idCoupon)
+            }
+
             this.setState({
               infoReciept: this.props.shoppingBags,
             })
             this.props.hideAlert()
             this.props.showAlert("Print bill success", "success")
-            this.props.resetShoppingBag();
             this.props.addRecieptToHistory(data);
+            this.setState({
+              coupon: null,
+            })
           }
         })
         .catch(err => {
           this.props.changeLoginStatus();
           this.props.hideAlert();
           this.props.showAlert("Login timeout, signin again", "warning");
+          isContinue = false;
         })
+      if (isContinue) {
+        console.log("Chạy thành công rồi")
+        // Update số lượng sản phẩm ở đây
+        console.log("this.props.shoppingBags", this.props.shoppingBags)
+        for (var i = 0; i < this.props.shoppingBags.length; i++) {
+          const data = {
+            token: localStorage.getItem('token'),
+            product: {
+              _id:
+              {
+                productID: this.props.shoppingBags[i].product._id.productID,
+                importDate: this.props.shoppingBags[i].product._id.importDate,
+                storeID: this.props.shoppingBags[i].product._id.storeID,
+              },
+              remain: this.props.shoppingBags[i].product.remain - this.props.shoppingBags[i].quantity,
+            }
+          }
+          axios.put(`http://localhost:5000/api/product`, data)
+            .then(res => {
+              console.log("Update success", i);
+              // Xử lý ở redux
+              const dataRedux = data.product;
+              this.props.decreaseRemainProduct(dataRedux);
+            })
+            .catch(err => {
+              console.log(err);
+            })
+        }
+
+
+        this.props.resetShoppingBag();
+      }
+
+
 
     }
+  }
 
+  CancelEditReiept = () => {
+    this.props.changeStatusEditRecipt()
+    this.props.resetShoppingBag()
   }
 
   dateFunction = () => {
@@ -140,7 +186,75 @@ class Printf extends React.PureComponent {
     return "  " + this.state.date.getDate() + " / " + month + " / " + this.state.date.getFullYear()
   }
 
+  componentWillReceiveProps(nextProps) {
+    let now = new Date()
+    let money = this.totalMoney();
+    let percent = 0;
+    let reduceMoney = 0;
+    this.props.listCoupon.map(value => {
+      let start = new Date(value.timeFrom)
+      let end = new Date(value.timeEnd)
+      if (value.quantity > 0) {
+        if (now - start >= 0 && end - now >= 0) {
+          if (money >= Number(value.minTotal)) {
+            let index = money * Number(value.percent) / 100;
+            if (index >= reduceMoney) {
+              percent = Number(value.percent);
+              reduceMoney = index;
+              this.setState({
+                coupon: value,
+              })
+            }
+          }
+        }
+      }
+    })
+    this.setState({
+      percentDiscount: Number(percent)
+    })
+  }
+
+
+  componentWillMount() {
+    console.log(this.props.listCoupon)
+    let now = new Date()
+    let money = this.totalMoney();
+    let percent = 0;
+    let reduceMoney = 0;
+    this.props.listCoupon.map(value => {
+      let start = new Date(value.timeFrom)
+      let end = new Date(value.timeEnd)
+      if (value.quantity > 0) {
+        if (now - start >= 0 && end - now >= 0) {
+          if (money >= Number(value.minTotal)) {
+            let index = money * Number(value.percent) / 100;
+            if (index >= reduceMoney) {
+              percent = Number(value.percent);
+              reduceMoney = index;
+              this.setState({
+                coupon: value,
+              })
+            }
+          }
+        }
+      }
+    })
+    this.setState({
+      percentDiscount: Number(percent)
+    })
+  }
+
   render() {
+    const PrintBill = this.addReciept
+    document.onkeydown = function (e) {
+      switch (e.key.charCodeAt()) {
+        case 70:
+          PrintBill()
+          break;
+        default:
+          break;
+      }
+    }
     return (
       <div>
         <div style={{ margin: '0px' }} className="row">
@@ -150,47 +264,75 @@ class Printf extends React.PureComponent {
                 <p style={{}}>Total</p>
               </div>
               <div className="col-5">
-                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>{this.totalMoney().toLocaleString()}</p>
+                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>
+                  {this.props.regulation.currency === 'vnd' ? (this.totalMoney()).toLocaleString() : ((this.totalMoney()) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
+                </p>
               </div>
               <div style={{ fontSize: '1.2rem' }} className="col-7">
                 <p>Discount (%)</p>
               </div>
               <div style={{ marginBottom: '10px' }} className="col-5">
-                <input value={this.state.percentDiscount} onChange={(e) => this.changeDiscount(e)} onBlur={(e) => this.blurDiscount(e)} style={{ fontSize: '1.2rem', border: 'none', outline: 'none', textAlign: 'end', width: '100%', borderBottom: '1px solid black' }} min={0} max={100} type="number"></input>
+                <input disabled value={this.state.percentDiscount} style={{ fontSize: '1.2rem', border: 'none', outline: 'none', textAlign: 'end', width: '100%', borderBottom: '1px solid black' }} min={0} max={100} type="number"></input>
               </div>
               <div style={{ fontSize: '1.2rem' }} className="col-7">
                 <p style={{}}>Reduce</p>
               </div>
               <div className="col-5">
-                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>-{this.reduceMoney().toLocaleString()}</p>
+                <p style={{ textAlign: 'end', marginBottom: '0', fontSize: '1.2rem' }}>
+                  -{this.props.regulation.currency === 'vnd' ? (this.reduceMoney()).toLocaleString() : ((this.reduceMoney()) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
+                </p>
               </div>
               <div className="col-7">
                 <p style={{ margin: '0', fontSize: '1.2rem', fontWeight: '700' }}>TOTAL FINAL</p>
               </div>
               <div className="col-5">
-                <p style={{ margin: '0', fontSize: '1.2rem', textAlign: 'end', color: 'green', fontWeight: '700' }}>{this.totalFinalMoney().toLocaleString()}</p>
+                <p style={{ margin: '0', fontSize: '1.2rem', textAlign: 'end', color: 'green', fontWeight: '700' }}>
+                  {this.props.regulation.currency === 'vnd' ? (this.totalFinalMoney()).toLocaleString() : ((this.totalFinalMoney()) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
+                </p>
               </div>
             </div>
           </div>
-          <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-12">
-            <ReactToPrint
-              trigger={() => {
+          {this.props.statusEditInfoBill ? (
+            <div className="col-12">
+              <div className="row">
+                <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-8">
+                  <ReactToPrint
+                    trigger={() => {
 
-                return <div style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
-                  PAY (F9)
-                </div>;
-              }}
-              content={this.props.shoppingBags.length !== 0 ? () => this.componentRef : null}
-            />
-          </div>
+                      return <div style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
+                        SAVE (F9)
+                      </div>;
+                    }}
+                    content={this.props.shoppingBags.length !== 0 ? () => this.componentRef : null}
+                  />
+                </div>
+                <div className="col-4">
+                  <div onClick={() => this.CancelEditReiept()} style={{ width: '100%', marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#757575', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem', cursor: 'pointer' }} className="col-4">
+                    CANCEL
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-12">
+              <ReactToPrint
+                trigger={() => {
+
+                  return <div style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
+                    PAY (F9)
+                  </div>;
+                }}
+                content={this.props.shoppingBags.length !== 0 ? () => this.componentRef : null}
+              />
+            </div>
+          )}
           <div className="col-12">
             <p onClick={() => this.props.changeStatusHistoryReciept()} style={{ cursor: 'pointer' }}>(*) Receipt history</p>
           </div>
         </div>
-              {console.log(this.props.shoppingBags)}
         {/* Ẩn đi */}
         <div style={{ display: 'none' }}>
-          <ComponentToPrint MAHD={this.state.code} percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
+          <ComponentToPrint regulation={this.props.regulation}  MAHD={this.state.code} percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
         </div>
       </div>
     );
@@ -203,6 +345,9 @@ const mapStateToProps = (state, ownProps) => {
     shoppingBags: state.shoppingBags,
     statusEditInfoBill: state.statusEditInfoBill,
     InfomationBillEdit: state.InfomationBillEdit,
+    listCoupon: state.listCoupon,
+    InfomationBillEdit: state.InfomationBillEdit,
+    regulation: state.regulationReducer
   }
 }
 
@@ -243,9 +388,27 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     changeLoginStatus: () => {
       dispatch({
-          type: "CHANGE_LOGIN_STATUS",
+        type: "CHANGE_LOGIN_STATUS",
       });
-  },
+    },
+    editShoppingBar: (MAHD) => {
+      dispatch({
+        type: "EDIT_SHOPPING_BAGS",
+        MAHD: MAHD,
+      })
+    },
+    updateQuantityCoupon: (idCoupon) => {
+      dispatch({
+        type: "UPDATE_QUANTITY_COUPON",
+        idCoupon: idCoupon,
+      })
+    },
+    decreaseRemainProduct: (data) => {
+      dispatch({
+        type: "DECREASE_REMAIN_PRODUCT",
+        data: data,
+      });
+    },
   }
 }
 

@@ -14,28 +14,67 @@ class App extends Component {
     super(props);
   }
 
+  loadAllGood(dataProduct, dataJoin) {
+    var resultProduct = dataProduct;
+    var joinTypeInfor = dataJoin;
+
+    var listProductInfor = [];
+    for (let i = 0; i < resultProduct.length; i++) {
+      var typeIDList = [];
+      var joinType = '';
+      for (var j = 0; j < joinTypeInfor.length; j++) {
+        if (resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID &&
+          resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) {
+          typeIDList.push(joinTypeInfor[j]._id.typeID);
+        }
+      }
+
+      listProductInfor.push(
+        {
+          ...resultProduct[i],
+          typeIDList: typeIDList,
+        });
+    }
+    this.props.getProductToReducer(listProductInfor);
+  }
+
   async componentWillMount() {
     if (localStorage.getItem('token') && localStorage.getItem('token') !== "") {
       axios.post(`http://localhost:5000/refresh`, {
         token: localStorage.getItem('token'),
       })
         .then(res => {
-          console.log("Thành công");
-          console.log(res.data);
           if (res.status === 200) {
-            this.props.setRole()
-            localStorage.setItem('token', res.data.token);
-            this.props.updateProfile(res.data.data);
-            this.props.updateRecieptUser(res.data.data.receipts)
-            this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
-            this.props.updateShiftTypes(res.data.data.shiftTypes)
-            this.props.changeLoginStatus();
-            this.props.getEmployee(res.data.data.employees);
+            if (res.data.data.isEmployee === false) {
+              this.props.setRole()
+              localStorage.setItem('token', res.data.token);
+              this.props.updateProfile(res.data.data);
+              this.props.updateRecieptUser(res.data.data.receipts)
+              this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+              this.props.updateCouponUser(res.data.data.coupons)
+              this.props.updateShiftTypes(res.data.data.shiftTypes)
+              this.props.changeLoginStatus();
+              this.props.getEmployee(res.data.data.employees);
+              // Phi
+              this.props.getTimeKeeping(res.data.data.timeKeeping);
+              this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
+              if (res.data.data.regulation.length > 0)
+                this.props.setRegulation(res.data.data.regulation[0]);
+              else this.props.setRegulation({});
+              console.log("res.data", res.data)
+            } else {
+              this.props.setRoleEmployee()
+              localStorage.setItem('token', res.data.token);
+              this.props.updateProfileEployee(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);
+              this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+              this.props.updateRecieptUser(res.data.data.receipts);
+              this.props.updateCouponUser(res.data.data.coupons)
+              this.props.changeLoginStatus();
+              this.props.showAlert(res.data.message, "success");
+            }
           }
         })
         .catch(err => {
-          console.log("thất bại");
-          console.log(err)
         })
     }
   }
@@ -106,15 +145,52 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     getEmployee: (data) => {
       dispatch({
-          type: "GET_EMPLOYEE",
-          employees: data,
+        type: "GET_EMPLOYEE",
+        employees: data,
       });
     },
     setRole: () => {
       dispatch({
-          type: "ADMIN_ROLE"
+        type: "ADMIN_ROLE"
       });
-  },
+    },
+    updateProfileEployee: (data, data1, storeName) => {
+      dispatch({
+        type: "UPDATA_DATA_EMPLOYEE",
+        data: data,
+        data1: data1,
+        storeName: storeName,
+      })
+    },
+    setRoleEmployee: () => {
+      dispatch({
+        type: "EMPLOYEE_ROLE",
+      });
+    },
+    getTimeKeeping: (data) => {
+      dispatch({
+        type: "GET_TIMEKEEPER",
+        data: data
+      });
+    },
+    getProductToReducer: (data) => {
+      dispatch({
+        type: "GET_PRODUCT_AND_TYPE",
+        data: data
+      });
+    },
+    setRegulation: (data) => {
+      dispatch({
+        type: "SET_REGULATION",
+        data: data,
+      });
+    },
+    updateCouponUser: (coupons) => {
+      dispatch({
+        type: "UPDATE_COUPON_USER",
+        coupons: coupons
+      })
+    }
   }
 }
 

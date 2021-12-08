@@ -38,8 +38,7 @@ class SellProduct extends Component {
     );
 
     AddProduct = (value) => {
-        console.log(value)
-        if (value.quantity === 0) {
+        if (value.remain === 0) {
             this.props.showAlert('Shout out !', 'warning')
         } else {
             var isCheck = false;
@@ -49,7 +48,7 @@ class SellProduct extends Component {
                 if (value1.product.name === value.name) {
                     isCheck = true;
                     currentQuantity = value1.quantity
-                    maxQuantity = value.quantity
+                    maxQuantity = value.remain
                 }
                 return value;
             })
@@ -98,7 +97,6 @@ class SellProduct extends Component {
 
     async loadAllGood() {
         var resultProduct = [];
-        console.log("infoUser", this.props.infoUser);
         const data = {
             token: localStorage.getItem('token'),
             filter: {
@@ -147,7 +145,6 @@ class SellProduct extends Component {
                     typeIDList.push(joinTypeInfor[j]._id.typeID);
                 }
             }
-
             listProductInfor.push(
                 {
                     ...resultProduct[i],
@@ -158,11 +155,23 @@ class SellProduct extends Component {
         this.setState({ change: !this.state.change });
     }
 
-
+    componentWillMount() {
+        document.title = 'SellProduct'
+    }
 
     render() {
+        const hideHistory = this.props.hideHistoryReceipt
+        document.onkeydown = function (e) {
+            switch (e.key.charCodeAt()) {
+                case 69:
+                    hideHistory()
+                    break;
+                default:
+                    break;
+            }
+        }
         return (
-            <div className="sell-product" >
+            <div id="scroll-bar" className="sell-product" >
                 <Container style={{ marginBottom: '20px' }} maxWidth="xl">
                     <Grid container spacing={2}>
                         <Grid item lg={8} md={12} sm={12}>
@@ -172,7 +181,7 @@ class SellProduct extends Component {
                                 </div>
                                 <Container id="choses-product" style={{ height: '94%', overflowY: 'scroll' }} maxWidth="xl">
                                     <Grid container spacing={2}>
-                                        {this.props.listProduct.state
+                                        {(this.props.listProduct.state !== undefined && this.props.listProduct.state.length !== 0)
                                             ? this.props.listProduct.state.filter(value => {
                                                 if (this.props.chooseTypeProductID === 'all') {
                                                     return value;
@@ -185,14 +194,13 @@ class SellProduct extends Component {
                                                     <Card onClick={() => this.AddProduct(value)}>
                                                         <CardActionArea>
                                                             <CardMedia
-                                                                style={{ display: (value.quantity === 0) ? 'block' : 'none' }}
+                                                                style={{ display: (value.remain === 0) ? 'block' : 'none' }}
                                                                 component="img"
                                                                 height="140"
                                                                 image='https://res.cloudinary.com/databaseimg/image/upload/v1637083732/aqd37xtgxukcq3x9eb4q.png'
                                                                 alt="green iguana"
                                                             />
-
-                                                            <div  style={{ display: (value.quantity !== 0) ? 'block' : 'none' }}>
+                                                            <div style={{ display: (value.remain !== 0) ? 'block' : 'none' }}>
                                                                 {
                                                                     value.imgUrl === "none"
                                                                         ? <CardMedia
@@ -209,42 +217,44 @@ class SellProduct extends Component {
                                                                         />
                                                                 }
                                                             </div>
-                                                            
+
                                                             <CardContent style={{ padding: '5px' }}>
                                                                 <Typography style={{ textAlign: 'center' }} gutterBottom variant="h6" component="div">
+
                                                                     {value.name}
                                                                 </Typography>
                                                             </CardContent>
-                                                            <CardContent  style={{ textAlign: 'center', margin:'0', padding: '0'}}>
-                                                                <Typography style={{ textAlign: 'center', margin:'0', padding: '0', fontSize:'0.7rem', fontWeight: '700', color: '#00000080'}} gutterBottom variant="h6" component="div">
-                                                                Quantity: {value.quantity}
+                                                            <CardContent style={{ textAlign: 'center', margin: '0', padding: '0' }}>
+                                                                <Typography style={{ textAlign: 'center', margin: '0', padding: '0', fontSize: '0.7rem', fontWeight: '700', color: '#00000080' }} gutterBottom variant="h6" component="div">
+                                                                    Quantity: {value.remain}
                                                                 </Typography>
                                                             </CardContent>
                                                         </CardActionArea>
                                                         <CardActions style={{ justifyContent: 'center' }}>
                                                             <Button style={{ color: 'green', fontWeight: '700' }} endIcon={<BiPlusMedical></BiPlusMedical>} size="medium" color="primary">
-                                                                {value.sellPrice}
+                                                                {this.props.regulation.currency === 'vnd' ? (value.sellPrice).toLocaleString() : ((value.sellPrice) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
                                                             </Button>
                                                         </CardActions>
                                                     </Card>
                                                 </Grid>
-                                            )) : (null)}
+                                            )) : (<div style={{ width: '100%', height: '100%', textAlign: 'center', marginTop: '100px' }}>
+                                                <h3>Không có gì</h3>
+                                            </div>)}
                                     </Grid>
                                 </Container>
                             </div>
                         </Grid>
                         <Grid item lg={4} md={12}>
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden', overflowX: 'hidden' }}>
-                                <div id="choses-product" style={{ backgroundColor: '#ebebeb', height: '60%', margin: '10px', overflowY: 'scroll', overflowX: 'hidden' }} >
+                                <div id="choses-product" style={{ backgroundColor: '#e0e0e0', height: '60%', margin: '10px', overflowY: 'scroll', overflowX: 'hidden' }} >
                                     <Grid sty container spacing={0}>
                                         {/* Table */}
-                                        <Grid item className="customizeTable" style={{ backgroundColor: 'rgba(20,20,20,0.4)', alignContent: 'center', justifyContent: 'center', borderBottom: '2px solic black' }} md={12} sm={12}>
+                                        <Grid item className="customizeTable" style={{ backgroundColor: '#bdbdbd', alignContent: 'center', justifyContent: 'center', borderBottom: '2px solic black' }} md={12} sm={12}>
                                             <Grid style={{ textAlign: 'center', alignItems: 'center', justifyItems: 'center', fontWeight: 'bold' }} container spacing={0}>
                                                 <Grid item md={1} sm={1}>
                                                     #
                                                 </Grid>
                                                 <Grid item md={1} sm={1}>
-
                                                 </Grid>
                                                 <Grid item md={4} sm={4}>
                                                     Name
@@ -283,6 +293,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         shoppingBags: state.shoppingBags,
         statusShowHistoryReciept: state.statusShowHistoryReciept,
+        regulation: state.regulationReducer
     }
 }
 
@@ -318,16 +329,21 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             })
         },
         showAlert: (message, typeMessage) => {
-          dispatch({
-            type: "SHOW_ALERT",
-            message: message,
-            typeMessage: typeMessage,
-          })
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
         },
         hideAlert: () => {
-          dispatch({
-            type: "HIDE_ALERT",
-          })
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
+        hideHistoryReceipt: () => {
+            dispatch({
+                type: "CHANGE_HISTORY_RECIEPT_STATUS"
+            })
         }
     }
 }

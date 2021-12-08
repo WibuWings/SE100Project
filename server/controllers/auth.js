@@ -360,7 +360,7 @@ async function getAllData(email) {
             ReturnProduct.find({ "_id.storeID": store._id }).exec(),
             ShiftAssign.find({ "_id.storeID": store._id }).exec(),
             ShiftType.find({ "_id.storeID": store._id }).exec(),
-            Regulation.find({ "_id.storeID": store._id }).exec(),
+            Regulation.find({ "_id": store._id }).exec(),
             TimeKeeping.find({ "_id.storeID": store._id }).exec(),
             NextWeekTimeKeeping.find({ "_id.storeID": store._id }).exec(),
         ]);

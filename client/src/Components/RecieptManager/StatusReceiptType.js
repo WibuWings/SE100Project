@@ -47,7 +47,7 @@ function StatusReceiptType(props) {
                                                 color: green[600],
                                             },
                                         }} />}
-                                    label="Thành công"
+                                    label="Success"
                                     labelPlacement="end"
                                 />
                             </Grid>
@@ -64,7 +64,7 @@ function StatusReceiptType(props) {
                                                 color: yellow[600],
                                             },
                                         }} />}
-                                    label="Đổi trả"
+                                    label="Exchange"
                                     labelPlacement="end"
                                 />
                             </Grid>
@@ -81,7 +81,7 @@ function StatusReceiptType(props) {
                                                 color: red[600],
                                             },
                                         }} />}
-                                    label="Đã xóa"
+                                    label="Deleted"
                                     labelPlacement="end"
                                 />
                             </Grid>

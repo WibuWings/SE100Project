@@ -14,42 +14,39 @@ class AddTypeModal extends Component {
         this.state= {
             change: 'false'
         }
-        this.loadInitialData();
-        this.getAllTypeList();
+        // this.getAllTypeList();
+        listTypeInfor = this.props.typeProduct;
     }
     storeID = "";
     typeList = [];
 
-    async getAllTypeList(){
-        var result = [];
-        const data = {
-            token: localStorage.getItem('token'),
-            filter: {
-                "_id.storeID": this.props.infoUser.email,
-            }   
-        }
-        console.log(data.token);
-        // alert(data.token);
-        console.log(data.filter);
-        await axios.get(`http://localhost:5000/api/product/type`, 
-        {
-            params: {...data}
-        })
-            .then(res => {
-                result = res.data.data;
-            })
-            .catch(err => {
-                alert(err);
-            })
-        //Get data và lưu các tên Type vào bảng
-        for(var i=0; i < result.length ; i++)
-        {
-            listTypeInfor.push(result[i]);
-        }
-    }
+    // async getAllTypeList(){
+    //     var result = [];
+    //     const data = {
+    //         token: localStorage.getItem('token'),
+    //         filter: {
+    //             "_id.storeID": this.props.infoUser.email,
+    //         }   
+    //     }
+    //     console.log(data.filter);
+    //     await axios.get(`http://localhost:5000/api/product/type`, 
+    //     {
+    //         params: {...data}
+    //     })
+    //         .then(res => {
+    //             result = res.data.data;
+    //         })
+    //         .catch(err => {
+    //             alert(err);
+    //         })
+    //     //Get data và lưu các tên Type vào bảng
+    //     for(var i=0; i < result.length ; i++)
+    //     {
+    //         listTypeInfor.push(result[i]);
+    //     }
+    // }
     addType = () => {
-        var newTypeName = document.querySelector('input[name="typeName"]').value.trim();
-        if(this.checkConstraint(newTypeName)==false)  return;
+        if(this.checkConstraint(this.typeName)==false)  return;
         var genTypeID = 0;
         if(listTypeInfor.length>0)
         {
@@ -62,7 +59,7 @@ class AddTypeModal extends Component {
                     typeID: genTypeID,
                     storeID: this.props.infoUser.email,
                 },
-                name: newTypeName,
+                name: this.typeName,
             }    
         }
         axios.post(`http://localhost:5000/api/product/type`, data)
@@ -73,24 +70,20 @@ class AddTypeModal extends Component {
             .catch(err => {
                 alert(err);
             })
+        this.props.addTypeToReducer(data.productType);
         this.props.changeAddTypeStatus();
     }
     
     checkConstraint(typeName) {
+        console.log("check name", typeName);
         //Constraint 1: Check name
         for(var i=0;i<listTypeInfor.length;i++)
         {
             if(listTypeInfor[i].name==typeName)
             {
-                if(!this.props.isAddTypeStatus && typeName.trim()==this.props.typeProductValue.name)
-                {
-                    alert("Không đổi tên à anh zai");
-                    return false;
-                }
                 alert("Trùng tên rồi anh chai");
                 return false;
             }
-            
         }        
         // Constraint 2: Not blank
         if(typeName.length==0)
@@ -106,62 +99,22 @@ class AddTypeModal extends Component {
     }
 
     handle = () => {
-        if (this.props.isAddTypeStatus)
-            this.addType();
-        else 
-            this.editType();
-    }
-
-    editType = () => {
-        var newTypeName = this.typeName;
-        if(this.checkConstraint(newTypeName)==false) return;
-        const data = {
-            token: localStorage.getItem('token'),
-            productType: {
-                _id: {
-                    typeID: this.props.typeProductValue._id.typeID,
-                    storeID: this.props.infoUser.email,
-                }, 
-                name: newTypeName,
-            }
-        }
-        // alert(data.product.name)
-        axios.put(`http://localhost:5000/api/product/type`, data)
-            .then(res => {
-                // Có khi mình sẽ cập nhật type ở dây
-                console.log("Update success");
-                alert('update được rồi anh trai')
-            })
-            .catch(err => {
-                console.log(err);
-                alert("Lỗi gì cmnr")
-            })
-        this.props.changeAddTypeStatus();
-        this.props.changeEditTypeStatus();
+        this.addType();
     }
     typeName = "";
-    loadInitialData = () => {
-        if (this.props.isAddTypeStatus) {
-            
-        }
-        else
-        {
-            this.typeName = this.props.typeProductValue.name;
-            this.setState({change: true});
-        } 
-    }
 
     changeTypeName(e)
     {
         this.typeName = e.target.value;
     }
+
     render() {
         return (
-            <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
+            <form style={{ zIndex: '11', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader 
                         style={{ color: 'blue', backgroundColor: '#efeeef', textAlign: 'center' }} 
-                        title={this.props.isAddTypeStatus? "Add Type" : "Edit Type"}
+                        title={"Add Type"}
                         />
                     <Divider />
                     <CardContent>
@@ -197,12 +150,11 @@ class AddTypeModal extends Component {
                     <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2 }}>
                         <Button 
                             style={{ backgroundColor: 'yellowgreen' }} 
-                            // onClick={() => this.addShift()} 
                             onClick={() => this.handle()}
                             variant="contained" 
                             startIcon={<BiPlusMedical />}
                         >
-                            Xác nhận
+                            Add type
                         </Button>
                         <Button 
                             style={{ backgroundColor: 'red' }} 
@@ -223,9 +175,9 @@ class AddTypeModal extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         addTypeStatus: state.addTypeStatus,
-        isAddTypeStatus: state.isAddTypeStatus,
         infoUser: state.infoUser,
-        typeProductValue: state.typeProductValue
+        typeProductValue: state.typeProductValue,
+        typeProduct: state.typeProduct,
     }
 }
 

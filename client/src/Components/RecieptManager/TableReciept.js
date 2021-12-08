@@ -27,6 +27,8 @@ function Row(props) {
     const infoUser = useSelector(state => state.infoUser)
     const dispatch = useDispatch();
     const [statusSelectReplace, setStatusSelectReplace] = React.useState(false);
+    const regulation = useSelector(state => state.regulationReducer)
+
 
     const style = {
         position: 'absolute',
@@ -148,7 +150,7 @@ function Row(props) {
             return red[400]
         } else if (isEdit) {
             return '#f4f492'
-        } else if (oldBill){
+        } else if (oldBill) {
             return '#00897b'
         } else {
             return '#a6ffa6'
@@ -165,7 +167,7 @@ function Row(props) {
         }
     }
 
-    const RestoneReciept =  async (MAHD) => {
+    const RestoneReciept = async (MAHD) => {
         await axios.post('http://localhost:5000/api/sell-product/restone-receipt', {
             token: localStorage.getItem('token'),
             email: infoUser.email,
@@ -173,7 +175,7 @@ function Row(props) {
         })
             .then(res => {
                 localStorage.setItem('token', res.data.token)
-                if(res.data.status === 1) {
+                if (res.data.status === 1) {
                     dispatch({
                         type: 'RESTONE_ONE_RECIEPT',
                         MAHD: MAHD
@@ -240,9 +242,13 @@ function Row(props) {
                     {row.MAHD}
                 </TableCell>
                 <TableCell align="right">{row.date}</TableCell>
-                <TableCell align="right">{row.totalMoney.toLocaleString()}</TableCell>
+                <TableCell align="right">
+                    {regulation.currency === 'vnd' ? (row.totalMoney).toLocaleString() : ((row.totalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                </TableCell>
                 <TableCell align="right">{row.discount}</TableCell>
-                <TableCell align="right">{row.totalFinalMoney.toLocaleString()}</TableCell>
+                <TableCell align="right">
+                    {regulation.currency === 'vnd' ? (row.totalFinalMoney).toLocaleString() : ((row.totalFinalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                    </TableCell>
             </TableRow>
             <TableRow style={{ borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae' }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
@@ -272,9 +278,9 @@ function Row(props) {
                                                     </TableCell>
                                                     <TableCell>{value.product.name}</TableCell>
                                                     <TableCell>{value.quantity}</TableCell>
-                                                    <TableCell align="right">{value.product.sellPrice.toLocaleString()}</TableCell>
+                                                    <TableCell align="right">{regulation.currency === 'vnd' ? value.product.sellPrice.toLocaleString() : (value.product.sellPrice / regulation.exchangeRate).toFixed(2).toLocaleString()}</TableCell>
                                                     <TableCell align="right">
-                                                        {(value.quantity * value.product.sellPrice).toLocaleString()}
+                                                        {regulation.currency === 'vnd' ? (value.quantity * value.product.sellPrice).toLocaleString() : ((value.quantity * value.product.sellPrice) / regulation.exchangeRate).toFixed(2).toLocaleString()}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -286,7 +292,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Mã hóa đơn:</p>
+                                                    <p style={{ marginBottom: '0' }}>Id Receipt:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.MAHD}</p>
@@ -296,7 +302,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Trạng thái:</p>
+                                                    <p style={{ marginBottom: '0' }}>Status:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{StatusTypeReciept(row.isEdit, row.deleted)}</p>
@@ -306,7 +312,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Thời gian:</p>
+                                                    <p style={{ marginBottom: '0' }}>Date:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.date}</p>
@@ -316,7 +322,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Giờ:</p>
+                                                    <p style={{ marginBottom: '0' }}>Time:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.time}</p>
@@ -326,7 +332,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Mã HD củ:</p>
+                                                    <p style={{ marginBottom: '0' }}>Old bill:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.oldBill ? row.oldBill.MAHD : "Không có"}</p>
@@ -336,7 +342,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Người bán:</p>
+                                                    <p style={{ marginBottom: '0' }}>Seller:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.name}</p>
@@ -346,7 +352,7 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Tổng số lượng:</p>
+                                                    <p style={{ marginBottom: '0' }}>Total quanitty:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{countQuantity()}</p>
@@ -356,17 +362,41 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Tổng tiền hàng:</p>
+                                                    <p style={{ marginBottom: '0' }}>Total money:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.totalMoney.toLocaleString()}</p>
+                                                    <p style={{ marginBottom: '0' }}>
+                                                        {regulation.currency === 'vnd' ? row.totalMoney.toLocaleString() : (row.totalMoney / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                    </p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Giảm giá (%):</p>
+                                                    <p style={{ marginBottom: '0' }}>Id coupon:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>{row.coupon ? row.coupon.idCoupon : "Không áp dụng"}</p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Reduce money:</p>
+                                                </Grid>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>
+                                                        {regulation.currency === 'vnd' ? (row.totalFinalMoney - row.totalMoney).toLocaleString() : ((row.totalFinalMoney - row.totalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                    </p>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item md={6} xs={6}>
+                                            <Grid container>
+                                                <Grid item md={6} xs={6}>
+                                                    <p style={{ marginBottom: '0' }}>Discount (%):</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
                                                     <p style={{ marginBottom: '0' }}>{row.discount}</p>
@@ -376,10 +406,12 @@ function Row(props) {
                                         <Grid item md={6} xs={6}>
                                             <Grid container>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>TỔNG:</p>
+                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>TOTAL:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>{row.totalFinalMoney.toLocaleString()}</p>
+                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>
+                                                        {regulation.currency === 'vnd' ? (row.totalFinalMoney).toLocaleString() : ((row.totalFinalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                    </p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -398,7 +430,7 @@ function Row(props) {
                                         <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
                                             <Button onClick={() => DeleteReciept(row.MAHD, row.deleted)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: red[400], color: 'white' }}>
                                                 <FiXSquare style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></FiXSquare>
-                                                Xóa bỏ
+                                                Delete
                                             </Button>
                                         </Grid>
                                     </Grid>
@@ -461,18 +493,22 @@ export default function CollapsibleTable() {
     React.useEffect(() => {
         var list = typeReciept.length === 0 ? listReciept : listReciept.filter(value => {
             for (var i = 0; i < typeReciept.length; i++) {
-                if (typeReciept[i] === 'delete') {
-                    if (value.deleted) {
-                        return value;
-                    }
-                } else if (typeReciept[i] === 'return') {
-                    if (!value.deleted && value.isEdit) {
-                        return value;
-                    }
-                } else {
-                    if (!value.deleted && !value.isEdit) {
-                        return value;
-                    }
+                switch (typeReciept[i]) {
+                    case 'delete':
+                        if (value.deleted) {
+                            return value;
+                        }
+                        break;
+                    case 'return':
+                        if (!value.deleted && value.isEdit) {
+                            return value;
+                        }
+                        break;
+                    default:
+                        if (!value.deleted && !value.isEdit) {
+                            return value;
+                        }
+                        break;
                 }
             }
         })
@@ -525,7 +561,6 @@ export default function CollapsibleTable() {
             })
         }
 
-
         list.map(value => {
             listMAHD.push(value.MAHD)
         })
@@ -536,24 +571,23 @@ export default function CollapsibleTable() {
         }) : dispatch({
             type: "RESET_MAHD_RECIEPT"
         })
-
-
         setListRecieptReplace(list)
     }, [typeReciept, typeByDate, listReciept, statusSelectAll, search])
 
+
     return (
-        <TableContainer component={Paper}>
+        <TableContainer style={{ overflowX: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow style={{ backgroundColor: 'black', color: 'white' }}>
                         <TableCell>
                         </TableCell>
                         <TableCell />
-                        <TableCell >Mã HĐ</TableCell>
-                        <TableCell align="right">Ngày hóa đơn</TableCell>
-                        <TableCell align="right">Tổng hóa đơn</TableCell>
-                        <TableCell align="right">Giảm giá</TableCell>
-                        <TableCell align="right">Khách hàng trả</TableCell>
+                        <TableCell >ID Receipt</TableCell>
+                        <TableCell align="right">Date</TableCell>
+                        <TableCell align="right">Total</TableCell>
+                        <TableCell align="right">Discount</TableCell>
+                        <TableCell align="right">Total final</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

@@ -44,13 +44,14 @@ class myReceipt {
         isEdit: receipt.isEdit,
         oldBill : receipt.oldBill,
         createAt: receipt.date,
+        coupon: receipt.coupon,
         timeCreate : receipt.time,
        })
-       console.log(newReceipt)
+    //    console.log(newReceipt)
        newReceipt
        .save()
        .then((data) => {
-           console.log(data)
+        //    console.log(data)
            res.status(200).send(
                JSON.stringify({
                    email: res.locals.decoded.email,

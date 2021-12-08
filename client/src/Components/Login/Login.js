@@ -23,13 +23,36 @@ class Login extends Component {
         }
     }
 
+    loadAllGood(dataProduct, dataJoin) {
+        var resultProduct = dataProduct;
+        var joinTypeInfor = dataJoin;
+     
+        var listProductInfor = [];
+        for (let i = 0; i < resultProduct.length; i++) {
+            var typeIDList = [];
+            var joinType = '';
+            for (var j = 0; j < joinTypeInfor.length; j++) {
+                if (resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID &&
+                    resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) 
+                {
+                    typeIDList.push(joinTypeInfor[j]._id.typeID);
+                }
+            }
+    
+            listProductInfor.push(
+                {
+                    ...resultProduct[i],
+                    typeIDList: typeIDList,
+                });
+        }
+        this.props.getProductToReducer(listProductInfor);
+      }
+
     // Login with google
     onLoginSuccess = async (res) => {
         this.props.setRole();
         await axios.post(`http://localhost:5000/sign-in-with-google`, res.profileObj)
             .then(res => {
-                console.log("thành công");
-                console.log(res.data);
                 switch (res.data.status) {
                     case 1:
                         localStorage.setItem('token', res.data.token);
@@ -37,9 +60,16 @@ class Login extends Component {
                         this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                         this.props.updateShiftTypes(res.data.data.shiftTypes);
                         this.props.updateRecieptUser(res.data.data.receipts);
+                        this.props.updateCouponUser(res.data.data.coupons)
                         this.props.changeLoginStatus();
+                        this.props.getTimeKeeping(res.data.data.timeKeeping);
+                        this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
                         this.props.hideAlert();
                         this.props.showAlert(res.data.message, "success");
+                        if(res.data.data.regulation.length > 0)
+                            this.props.setRegulation(res.data.data.regulation[0]);
+                        else this.props.setRegulation({});
+                        console.log("res.data", res.data)
                         break;
                     case -1:
                         this.props.hideAlert();
@@ -64,18 +94,24 @@ class Login extends Component {
                 password: document.getElementById('password').value,
             })
                 .then(res => {
-                    console.log(res.data);
                     switch (res.data.status) {
                         case 1:
                             localStorage.setItem('token', res.data.token);
                             this.props.updateProfile(res.data.data);
                             this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                             this.props.updateShiftTypes(res.data.data.shiftTypes);
+                            this.props.updateCouponUser(res.data.data.coupons)
                             this.props.updateRecieptUser(res.data.data.receipts);
                             this.props.changeLoginStatus();
                             this.props.getEmployee(res.data.data.employees);
+                            this.props.getTimeKeeping(res.data.data.timeKeeping);
+                            this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
                             this.props.hideAlert();
                             this.props.showAlert(res.data.message, "success");
+                            if(res.data.data.regulation.length > 0)
+                                this.props.setRegulation(res.data.data.regulation[0]);
+                            else this.props.setRegulation({});
+                            console.log("res.data", res.data)
                             break;
                         case -1:
                             this.props.hideAlert();
@@ -148,7 +184,14 @@ class Login extends Component {
         document.onkeydown = function (e) {
             switch (e.which) {
                 case 13:
-                    enterPress(e);
+                    try
+                    {
+                        enterPress(e);
+                    }
+                    catch(err) 
+                    {
+                        console.log("Alo lỗi mẹ rồi")
+                    }
                     break;
                 default:
                     break;
@@ -291,6 +334,30 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 listReciept: data,
             })
         },
+        getTimeKeeping: (data) => {
+            dispatch({
+              type: "GET_TIMEKEEPER",
+              data: data
+            });  
+          },
+        getProductToReducer: (data) => {
+            dispatch({
+                type: "GET_PRODUCT_AND_TYPE",
+                data: data
+            });
+        },
+        setRegulation: (data) => {
+            dispatch({
+                type: "SET_REGULATION",
+                data: data,
+            });
+        },
+        updateCouponUser: (coupons) => {
+            dispatch({
+                type: "UPDATE_COUPON_USER",
+                coupons: coupons
+            })
+        }
     }
 }
 

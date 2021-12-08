@@ -31,6 +31,11 @@ class ComponentToPrint extends React.PureComponent {
         this.props.shoppingBags.map(value => {
             total += value.quantity * value.product.sellPrice;
         })
+
+        if (this.props.regulation.currency != 'vnd') {
+            total = (total / this.props.regulation.exchangeRate).toFixed(2)
+        }
+
         return total.toLocaleString();
     }
 
@@ -40,8 +45,13 @@ class ComponentToPrint extends React.PureComponent {
             total += value.quantity * value.product.sellPrice;
         })
         if (total !== 0) {
-            total = total*this.props.percentDiscount/100
+            total = total * this.props.percentDiscount / 100
         }
+
+        if (this.props.regulation.currency != 'vnd') {
+            total = (total / this.props.regulation.exchangeRate).toFixed(2)
+        }
+
         return total.toLocaleString()
     }
 
@@ -51,21 +61,32 @@ class ComponentToPrint extends React.PureComponent {
             total += value.quantity * value.product.sellPrice;
         })
         if (total !== 0 && this.props.percentDiscount !== 0) {
-            total -= total*this.props.percentDiscount/100
+            total -= total * this.props.percentDiscount / 100
+        }
+        if (this.props.regulation.currency != 'vnd') {
+            total = (total / this.props.regulation.exchangeRate).toFixed(2)
         }
         return total.toLocaleString();
     }
 
     dateFunction = () => {
-        let month = this.state.date.getMonth()+1;
+        let month = this.state.date.getMonth() + 1;
         return "  " + this.state.date.getDate() + " / " + month + " / " + this.state.date.getFullYear()
     }
 
+    renderMoneyProduct= (value) => {
+        let Money = 0
+        if (this.props.regulation.currency != 'vnd') {
+            Money = (value.product.sellPrice / this.props.regulation.exchangeRate).toFixed(2)
+        } else {
+            Money = value.product.sellPrice
+        }
+        return Money
+    }
+
     render() {
-        
         return (
             <div className="row">
-                {this.reduceTotalMoney()}
                 <div className="col-12">
                     <h1 style={{ textAlign: 'center' }}>{this.props.infoUser.storeName}</h1>
                 </div>
@@ -118,20 +139,24 @@ class ComponentToPrint extends React.PureComponent {
                                 <td>{key + 1}</td>
                                 <td>{value.product.name}</td>
                                 <td>{value.quantity}</td>
-                                <td>{value.product.sellPrice}</td>
-                                <td>{value.quantity * value.product.sellPrice}</td>
+                                <td>
+                                    {this.renderMoneyProduct(value)}
+                                </td>
+                                <td>
+                                    {(this.props.regulation.currency != 'vnd') ? ((value.quantity * value.product.sellPrice) / this.props.regulation.exchangeRate).toFixed(2) : (value.quantity * value.product.sellPrice)}
+                                </td>
                             </tr>
                         ))
-                        : null}
+                            : null}
                     </tbody>
                 </table>
-                <div style={{marginTop: '20px'}} className="col-12">
+                <div style={{ marginTop: '20px' }} className="col-12">
                     <div className="row">
                         <div className="col-6">
                             <h6 style={{ textAlign: 'end' }}>Total :</h6>
                         </div>
                         <div className="col-6">
-                            <h6 style={{ textAlign: 'start' }}>{this.totalMoney()}đ</h6>
+                            <h6 style={{ textAlign: 'start' }}>{this.totalMoney()} {(this.props.regulation.currency != 'vnd') ? '$' : 'VNĐ'}</h6>
                         </div>
                     </div>
                 </div>
@@ -141,7 +166,7 @@ class ComponentToPrint extends React.PureComponent {
                             <h6 style={{ textAlign: 'end' }}>Discount :</h6>
                         </div>
                         <div className="col-6">
-                            <h6 style={{ textAlign: 'start' }}>-{this.reduceTotalMoney()}đ</h6>
+                            <h6 style={{ textAlign: 'start' }}>-{this.reduceTotalMoney()} {(this.props.regulation.currency != 'vnd') ? '$' : 'VNĐ'}</h6>
                         </div>
                     </div>
                 </div>
@@ -151,13 +176,15 @@ class ComponentToPrint extends React.PureComponent {
                             <h5 style={{ textAlign: 'end' }}>TOTAL FINAL :</h5>
                         </div>
                         <div className="col-6">
-                            <h5 style={{ textAlign: 'start' }}>{this.finalTotalMoney()}đ</h5>
+                            <h5 style={{ textAlign: 'start' }}>
+                                {this.finalTotalMoney()} {(this.props.regulation.currency != 'vnd') ? '$' : 'VNĐ'}
+                            </h5>
                         </div>
                     </div>
                 </div>
                 <div style={{ marginTop: '30px' }} className="col-12">
-                    <h6 style={{ textAlign: 'center',fontStyle: 'italic ' }}>Xin cảm ơn quý khách</h6>
-                    <h6 style={{ textAlign: 'center',fontStyle: 'italic ' }}>hẹn gặp lại!</h6>
+                    <h6 style={{ textAlign: 'center', fontStyle: 'italic ' }}>Xin cảm ơn quý khách</h6>
+                    <h6 style={{ textAlign: 'center', fontStyle: 'italic ' }}>hẹn gặp lại!</h6>
                 </div>
             </div>
         );

@@ -56,6 +56,8 @@ class FixedCalendar extends Component {
             alert(err)
         })
   }
+  
+
   render() {
     const { classes } = this.props;
     return (
@@ -64,14 +66,16 @@ class FixedCalendar extends Component {
               <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                   <TableHead>
                       <TableRow>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Shift</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Mon</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Tue</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Wed</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Thu</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Fri</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Sat</TableCell>
-                          <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Sun</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>
+                                Shift
+                            </TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Mon</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Tue</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Wed</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Thu</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Fri</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Sat</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Sun</TableCell>
                       </TableRow>
                   </TableHead>
                       {

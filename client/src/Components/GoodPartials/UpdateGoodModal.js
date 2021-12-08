@@ -223,13 +223,18 @@ class UpdateGoodModal extends Component {
         alert('Constraint đã check đầy đủ');
         return true;
     }
+
+    handleAdd(){
+        this.props.changeAddTypeStatus();
+    }
+
     async updateGood() {
         var isContinue = this.checkConstraint();
         if(!isContinue)
         {
             return;
         }
-        this.props.changeUpdateGoodStatus();
+        
         var productInfo = this.props.infoUpdate;
         const data = {
             token: localStorage.getItem('token'),
@@ -327,8 +332,29 @@ class UpdateGoodModal extends Component {
                     console.log(err);
                 })
         }
+
+        // Thêm vào redux
+        var reduxData = {
+            _id: {
+                productID: productInfo._id.productID,
+                importDate: productInfo._id.importDate,
+                storeID: this.props.infoUser.email,
+            },
+            name: this.name,
+            quantity: this.quantity,
+            remain: this.remain,
+            importPrice: document.querySelector('input[name="originalPrice"]').value,
+            sellPrice: document.querySelector('input[name="sellPrice"]').value,
+            expires: document.querySelector('input[name="expiredDate"]').value,
+            imgUrl: this.imgUrl,
+            unit: document.querySelector('input[name="unit"]').value,
+            typeIDList: typeSet,
+        }
+        this.props.updateProductToRedux(reduxData);
+        this.props.changeUpdateGoodStatus();
     }
 
+    remain = 0;
 
     cancel = () => {
         this.props.changeUpdateGoodStatus();
@@ -346,7 +372,7 @@ class UpdateGoodModal extends Component {
         this.name = productInfo.name == null ? '' : productInfo.name;
         this.imgUrl = productInfo.imgUrl == null ? '' : productInfo.imgUrl;
         this.quantity = productInfo.quantity == null ? '' : productInfo.quantity;
-        // this.remain = productInfo.remain;
+        this.remain = productInfo.remain;
         this.unit = productInfo.unit == null ? '' : productInfo.unit;
         this.importPrice = productInfo.importPrice == null ? '' : productInfo.importPrice;
         this.sellPrice = productInfo.sellPrice == null ? '' : productInfo.sellPrice;
@@ -627,11 +653,10 @@ class UpdateGoodModal extends Component {
                                             }}
                                         >
                                             {
-                                                listTypeInfor.length== 0 ? <MenuItem value={'none'}>None</MenuItem>
-                                                : listTypeInfor.map((type) =>
-                                                    ! this.foundTypeInSet(type) 
-                                                    ? <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
-                                                    : null
+                                                this.props.typeProduct.length== 0 ? <MenuItem value={'none'}>None</MenuItem>:
+                                                this.props.typeProduct.map((type) =>
+                                                    this.foundTypeInSet(type) ? null :
+                                                    <MenuItem value={type._id.typeID}>{type.name}</MenuItem>
                                                 )
                                             }   
                                         </Select> 
@@ -693,20 +718,21 @@ class UpdateGoodModal extends Component {
                         </Grid>
                     </Grid> 
                         
-                    {this.props.addTypeStatus ? (
-                        <div className="modal-add">
+                    
+                </div>
+                </Card>
+                {this.props.addTypeStatus ? (
+                        <div className="modal-add" style={{ zIndex: '12'}}>
                             <div onClick={() => {this.props.changeAddTypeStatus();}} className="modal-overlay"></div>
                             <AddTypeModal></AddTypeModal>
                         </div>
                     ): null}
-                    {this.props.confirmStatus ? (
-                        <div className="modal-add">
-                            <div onClick={() => {this.props.changeConfirmStatus();}} className="modal-overlay"></div>
-                            <ConfirmModal></ConfirmModal>
-                        </div>
-                    ): null}
-                </div>
-                </Card>
+                {this.props.confirmStatus ? (
+                    <div className="modal-add">
+                        <div onClick={() => {this.props.changeConfirmStatus();}} className="modal-overlay"></div>
+                        <ConfirmModal></ConfirmModal>
+                    </div>
+                ): null}
             </form>
         )
     }
@@ -714,15 +740,23 @@ class UpdateGoodModal extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
+        addTypeStatus: state.addTypeStatus,
         updateGoodStatus: state.updateGoodStatus,
         confirmStatus: state.confirmStatus,
         infoUpdate: state.infoUpdate,
         infoUser: state.infoUser,
+        typeProduct: state.typeProduct,
+        listProduct: state.listProduct,
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
+        changeAddTypeStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_TYPE_STATUS",
+            });
+        },
         changeUpdateGoodStatus: () => {
             dispatch({
                 type: "CHANGE_UPDATE_GOOD_STATUS",
@@ -737,7 +771,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "SET_CONFIRM_UPDATE_GOOD",
             }); 
-        }
+        },
+        updateProductToRedux: (data) => {
+            dispatch({
+                type: "UPDATE_PRODUCT",
+                data: data,
+            }); 
+        },
     }
 }
 

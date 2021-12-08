@@ -6,15 +6,10 @@ import { TiDelete } from "react-icons/ti";
 import Stack from '@mui/material/Stack';
 import { GiCancel } from 'react-icons/gi'
 import axios from 'axios';
-import AddTypeModal from './AddTypeModal';
-
-var productTypes =[];
-var listTypeInfor = [];
 
 class EditTypeModal extends Component {
     constructor(props) {
         super(props);
-        this.loadAllType();
         this.state = {
             change: false
         }
@@ -28,10 +23,10 @@ class EditTypeModal extends Component {
         this.props.changeEditTypeStatus();
     }
     edit = (type) => {
-        this.props.changeAddTypeStatus();
-        this.props.setEditTypeStatus();
+        // this.props.setEditTypeStatus();
         this.props.typeToUpdate(type);
-        this.props.changeEditTypeStatus();
+        // this.props.changeEditTypeStatus();
+        this.props.changeStatusUpdateType();
     }
     async delete(type){
         const data = {
@@ -53,8 +48,12 @@ class EditTypeModal extends Component {
                 alert(err);
                 // alert("Lỗi gì cmnr")
             })
+        this.props.deleteTypeFromRedux(data.productTypes[0]);
+
         // Ở đây mình phải cập nhật join nữa
         // Phải get tất cả cái join mà có cái type là type hiện tại
+
+
         var allJoinMatch = [];
         const data1 = {
             token: localStorage.getItem('token'),
@@ -101,44 +100,7 @@ class EditTypeModal extends Component {
             .catch(err => {
                 alert(err);
             })
-
-        this.loadAllType();
         this.setState({change: !this.state.change})
-    }
-    
-
-
-    async loadAllType() {
-        var result = [];
-        const data = {
-            token: localStorage.getItem('token'),
-            filter: {
-                "_id.storeID": this.props.infoUser.email,
-            }   
-        }
-        await axios.get(`http://localhost:5000/api/product/type`, 
-        {
-            params: {...data}
-        })
-            .then(res => {
-                result = res.data.data;
-            })
-            .catch(err => {
-                console.log(err);
-                alert(err); // 401 ở đây
-            })
-        //Get data và lưu các tên Type vào bảng
-        listTypeInfor=[];
-        for(var i=0; i < result.length ; i++)
-        {
-            listTypeInfor.push(result[i]);
-        }
-        productTypes=[];
-        for(var i=0 ; i< listTypeInfor.length ; i ++)
-        {
-            productTypes.push(listTypeInfor[i].name);
-        }
-        this.setState({change: true});
     }
 
     render() {
@@ -150,7 +112,7 @@ class EditTypeModal extends Component {
                     <CardContent>
                         <Grid container spacing={2}>
                             <Grid container item md={12} xs={12} spacing={0}>
-                                { listTypeInfor.map((type) => (
+                                { this.props.typeProduct.map((type) => (
                                     <Grid item md={3} style={{border:'1px solid #333', padding: 4}}>
                                         <span>{type.name}</span>
                                         <BiEdit onClick={() => this.edit(type)}/>
@@ -172,12 +134,6 @@ class EditTypeModal extends Component {
                         </Button>
                     </Box>
                 </Card>
-                {/* {this.props.addTypeStatus ? (
-                        <div className="modal-add">
-                            <div onClick={() => {this.props.changeAddTypeStatus();}} className="modal-overlay"></div>
-                            <AddTypeModal></AddTypeModal>
-                        </div>
-                    ): null} */}
             </form>
         );
     }
@@ -190,6 +146,7 @@ const mapStateToProps = (state, ownProps) => {
         isAddTypeStatus: state.isAddTypeStatus,
         infoUser: state.infoUser,
         typeProductValue: state.typeProductValue,
+        typeProduct: state.typeProduct,
     }
 }
 
@@ -224,6 +181,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 },
                 name: data.name
             })
+        },
+        changeStatusUpdateType: () => {
+            dispatch({
+                type: "CHANGE_UPDATE_TYPE_STATUS",
+            }); 
+        },
+        deleteTypeFromRedux: (data) => {
+            dispatch({
+                type: "DELETE_TYPE",
+                data: data
+            });
+            
         }
     }
 }

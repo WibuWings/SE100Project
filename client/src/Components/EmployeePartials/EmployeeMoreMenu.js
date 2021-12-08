@@ -21,6 +21,7 @@ class EmployeeMoreMenu extends Component {
       change: 'false'
     }
     this.myRef = React.createRef();
+    this.getEmployeeByID(this.props.data);
   }
   setIsOpen(val) {
     this.isOpen = val;
@@ -56,10 +57,34 @@ class EmployeeMoreMenu extends Component {
             alert(err);
         })
     
-    // Delete redux
-    this.props.deleteEmployeeRedux(this.props.data);
     //Move to sacked
     this.props.deleteEmployeeToSackRedux(this.currentEmployee)
+    // Delete redux
+    this.props.deleteEmployeeRedux(this.props.data);
+
+    // Xoá hết shiftAssign
+    for(var i = 0; i < this.props.listShiftAssign.length; i++)
+    {
+        if(this.props.listShiftAssign[i]._id.employee._id.employeeID == this.props.data) 
+        {
+          const data1 = {
+            token: localStorage.getItem('token'),
+            shiftAssign: {...this.props.listShiftAssign[i]}
+          }
+          console.log("data1", data1)
+          axios.delete(`http://localhost:5000/api/employee/shift-assign`,{data: data1})
+          .then(res => {
+              // alert("success");
+              // Xoá đi trong redux
+              this.props.RemoveShiftAssign(data1.shiftAssign);
+          })
+          .catch(err => {
+              alert(err);
+          })
+        }
+        
+    }
+
   }
 
   getEmployeeByID(employeeID) {
@@ -73,6 +98,13 @@ class EmployeeMoreMenu extends Component {
         return listEmployee[i];
       }
     }
+  }
+
+  viewEmployee()
+  {
+      console.log("this.props.data", this.props.data)
+      this.props.setIDView(this.props.data);
+      this.props.changePayEmployeeStatus();
   }
 
   isOpen=false;
@@ -116,7 +148,7 @@ class EmployeeMoreMenu extends Component {
             <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
           <MenuItem sx={{ color: 'text.secondary' }}
-            onClick={()=> this.props.changePayEmployeeStatus()}
+            onClick={()=> this.viewEmployee()}
           >
             <ListItemIcon>
               <GiPayMoney size={24}/> 
@@ -135,6 +167,7 @@ const mapStateToProps = (state, ownProps) => {
     payEmployeeStatus: state.payEmployeeStatus,
     listEmployee: state.listEmployee,
     infoUser: state.infoUser,
+    listShiftAssign: state.listShiftAssign,
   }
 }
 
@@ -166,6 +199,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch({
           type: "DELETE_EMPLOYEE_SACKED",
           data: data
+        });
+      },
+      setIDView: (id) => {
+        dispatch({
+          type: "SET_ID_EMPLOYEE",
+          id: id
+        });
+      },
+      RemoveShiftAssign: (data) => {
+        dispatch({
+            type: "DELETE_SHIFT_ASSIGN",
+            data: data,
         });
       }
   }

@@ -33,7 +33,6 @@ class LoginWithEmployee extends Component {
                 password: document.getElementById('password').value,
             })
                 .then(res => {
-                    console.log(res);
                     if (res.status === 200) {
                         localStorage.setItem('token', res.data.token);
                         this.props.updateProfile(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);
@@ -41,11 +40,11 @@ class LoginWithEmployee extends Component {
                         this.props.updateRecieptUser(res.data.data.receipts);
                         this.props.changeLoginStatus();
                         this.props.hideAlert();
-                        this.props.showAlert(res.data.message, "success");
+                        this.props.showAlert("Login successfully", "success");
+                        console.log("res.data", res.data)
                     }
                 })
                 .catch(err => {
-                    console.log(err)
                     this.props.hideAlert();
                     this.props.showAlert("The email IS NOT registered or you entered the WRONG password.", "error");
                     return;

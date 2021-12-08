@@ -1,5 +1,4 @@
-
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const Coupon = new Schema({
@@ -7,10 +6,12 @@ const Coupon = new Schema({
         storeID: String,
         couponID: String,
     },
+    name: String,
+    minTotal: Number,
     percent: Number,
-    from: Date,
-    expire: Date,
-    createdAt: Date,
+    timeFrom: Date,
+    timeEnd: Date,
+    quantity: Number,
 });
 
-module.exports = mongoose.model('Coupon', Coupon);
+module.exports = mongoose.model("Coupon", Coupon);

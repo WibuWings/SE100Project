@@ -25,7 +25,7 @@ router.delete('/off-day',AuthMiddleware, employeeController.deleteOffDay);
 ///////
 router.get('/time-keeping', AuthMiddleware, employeeController.getTimeKeeping)
 router.post('/time-keeping', AuthMiddleware, employeeController.createTimeKeeping)
-
+router.put('/time-keeping', AuthMiddleware, employeeController.updateTimeKeeping)
 ////////////////////////////////
 
 module.exports = router;
