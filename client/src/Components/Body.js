@@ -4,7 +4,6 @@ import DashboardURL from '../Router/DashboardURL';
 import { connect } from 'react-redux';
 import SideNavBar from './Partials/SideNavBar';
 import '../css/Body.css'
-import ModalConfirmPassword from './ModalConfirmPassword';
 
 class Body extends Component {
     render() {
@@ -20,11 +19,7 @@ class Body extends Component {
                 >
                     <DashboardURL ></DashboardURL>
                 </div>
-                {this.props.statusConfirmPassword ?
-                    <div className="modal-comfirm-password">
-                        <ModalConfirmPassword></ModalConfirmPassword>
-                    </div> : null
-                }
+                
             </div>
         );
     }

@@ -19,11 +19,11 @@ export default function SplitButton() {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const handleClick = () => {
-    console.info(`You clicked ${options[selectedIndex]}`);
+    //console.info(`You clicked ${options[selectedIndex]}`);
   };
 
   const handleMenuItemClick = (event, index, option) => {
-    console.log(option)
+    //console.log(option)
     dispatch({
       type: "TYPE_TIME_DASHBOARD",
       typeDashboard: option,

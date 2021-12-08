@@ -292,8 +292,6 @@ function ModalAddCoupon(props) {
                             Add
                         </Button>
                     )}
-
-
                     <Button style={{ backgroundColor: 'red' }} onClick={(e) => hanhleCancel(e)} variant="contained" startIcon={<GiCancel />}>
                         Cancel
                     </Button>

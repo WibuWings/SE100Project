@@ -8,14 +8,12 @@ import TotalMoney from './TotalMoney';
 import ErrorReceipt from './ErrorReceipt';
 import CouponManager from './CouponManager';
 import ProductStatis from './ProductStatis';
-import ComponentToPrintRevenue from './ComponentToPrintRevenue';
-import ReactToPrint from 'react-to-print';
 import SalaryStats from './SalaryStats';
 import { MdLocalPrintshop } from 'react-icons/md'
 import { connect } from 'react-redux'
+import ModalConfirmPassword from './ExportRevenue';
 
 class DashBoard extends Component {
-
     renderEventContent = (eventInfo) => {
         return (
             <>
@@ -24,7 +22,6 @@ class DashBoard extends Component {
             </>
         )
     }
-
     componentWillMount() {
         document.title = 'DashBoard'
     }
@@ -52,20 +49,15 @@ class DashBoard extends Component {
                             <ErrorReceipt></ErrorReceipt>
                         </Grid>
                         <Grid style={{ justifyContent: 'end', display: 'flex' }} className="dashboard-item" item md={12} sm={12}>
-                            <ReactToPrint
-                                trigger={() => {
-                                    return <div>
-                                        <Button style={{ backgroundColor: '#01579b', color: 'white' }}>
-                                            <MdLocalPrintshop style={{ marginRight: '10px' }}></MdLocalPrintshop>
-                                            Export Revenue
-                                        </Button>
-                                    </div>;
-                                }}
-                                content={() => this.componentRef}
-                            />
-                            <div style={{ display: 'none' }}>
-                                <ComponentToPrintRevenue listReceipt={this.props.listReceipt} ref={el => (this.componentRef = el)} />
-                            </div>
+                            <Button onClick={() => this.props.changeConfirmPasswordTest()} style={{ backgroundColor: '#01579b', color: 'white' }}>
+                                <MdLocalPrintshop style={{ marginRight: '10px' }}></MdLocalPrintshop>
+                                Export Revenue
+                            </Button>
+                            {this.props.statusConfirmPassword ?
+                                <div  className="modal-comfirm-password">
+                                    <ModalConfirmPassword></ModalConfirmPassword>
+                                </div> : null
+                            }
                         </Grid>
                         <Grid className="dashboard-item" item md={12} sm={12} >
                             <AppWebsiteVisits></AppWebsiteVisits>
@@ -87,8 +79,25 @@ class DashBoard extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        listReceipt: state.listReciept,
+        isLogin: state.loginStatus,
+        statusDarkmode: state.statusDarkmode,
+        statusConfirmPassword: state.statusConfirmPassword,
     }
 }
 
-export default connect(mapStateToProps)(DashBoard);
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        changeLoginStatus: () => {
+            dispatch({
+                type: "CHANGE_LOGIN_STATUS",
+            })
+        },
+        changeConfirmPasswordTest: () => {
+            dispatch({
+                type: "CHANGE_MODAL_CONFIRM_PASSWORD_STATUS",
+            })
+        },
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashBoard);
