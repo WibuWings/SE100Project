@@ -15,6 +15,7 @@ import axios from 'axios';
 import UpdateTypeModal from './GoodPartials/UpdateTypeModal';
 import XLSX from 'xlsx';
 import excelLogo from './GoodPartials/excelLogo.png';
+import { inputAdornmentClasses } from '@material-ui/core';
 
 
 class GoodManager extends Component {
@@ -300,6 +301,49 @@ class GoodManager extends Component {
         return true;
     }
 
+    isLeafYear(year) {
+        if(year % 400 == 0) return true;
+        if(year % 100 == 0) return false;
+        if(year % 4 == 0) return true;
+        else return false;
+    }
+
+    toDateString(dateStringToConvert)
+    {
+        var days = dateStringToConvert.split('/');
+        if(days.length !=3) return "";
+        // Check một số cái điều kiện về tháng
+        if(!this.checkAllNumber(days[0]) || parseInt(days[0]) > 12 || parseInt(days[0]) < 1 )
+        {
+            return "";
+        } 
+        // Check một số điều kiện về năm
+        if(!this.checkAllNumber(days[2]) || parseInt(days[2]) <= 0 )
+        {
+            return "";
+        }
+        // Check các điều kiện về ngày 
+        var dayInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        if(parseInt(days[0]) < 1 || parseInt(days[0]) > 31)
+        {
+            return "";
+        }
+        var dayOfCurrrentMonth = dayInMonth[parseInt(days[0])];
+        if(parseInt(days[0]) == 2)
+        {
+            if(this.isLeafYear(parseInt(days[2])))
+            {
+                dayOfCurrrentMonth = 29;
+            }
+        }
+        if(parseInt(days[0]) > dayOfCurrrentMonth)
+        {
+            return "";
+        }
+        // Này là trường hợp lý tưởng nhất luôn rồi
+        return '20' + days[2] + '-' + days[0] + '-' + days[1]; 
+    }
+
     checkConstraintOfExcelObject(newRow, index) {
         // check quantity
         try {
@@ -338,6 +382,19 @@ class GoodManager extends Component {
         }
         catch (e){
             alert("Giá bán ở hàng "+ (index+1) +" không hợp lệ");
+            return false;
+        }
+
+        try {
+            if(this.toDateString(newRow.expiredDate)=="")
+            {
+                alert("Ngày hết hạn ở hàng "+ (index+1) +" không hợp lệ");
+                return false;
+            }
+        }
+        catch(e)
+        {
+            alert("Ngày hết hạn ở hàng "+ (index+1) +" không hợp lệ");
             return false;
         }
     }
