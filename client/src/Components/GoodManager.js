@@ -110,6 +110,7 @@ class GoodManager extends Component {
         const data = {
             token: localStorage.getItem('token'),
             filter: {
+
                 "_id.storeID": this.props.infoUser.email,
             }   
         }
@@ -253,16 +254,8 @@ class GoodManager extends Component {
         } 
         
         console.log("Tất cả dữ liệu", allRows);
-
-        // console.log('rowSplit', rowSplit)
-        
-        // var data = excelData.split(',');
-        // console.log('data', data);
-        // if(data.length < 10)
-        // {
-        //     alert("File format bị sai");
-        //     console.log(data);
-        // }
+        // Xử lý sau khi đã lấy được các excel Object
+        this.addProductsFromExcel(allRows);
     }
 
     checkAllNumber(stringToCheck)
@@ -424,7 +417,7 @@ class GoodManager extends Component {
             return false;
         }
         // Check xong hết các constraint;
-        return true
+        return true;
     }
 
     calculateDay(dateString1, dateString2)
@@ -470,8 +463,55 @@ class GoodManager extends Component {
             alert("Đã có lỗi xảy ra trong việc check quy định của ngày hết hạn và ngày nhập");
             return false;
         }
-        
+        return true;
     }
+
+    // Thêm các sản phẩm vào cơ sở dữ liệu:
+    addProductsFromExcel(excelObject){ 
+        var allTypes = [];
+        var allProducts = [];
+        var allJoins = [];
+        // ID bắt đầu đánh ở đây:
+        var genIDProductStart = 0;
+        var listProductInfor = this.props.listProduct.state;
+        if(listProductInfor.length > 0)
+        {
+            genIDProductStart = parseInt(listProductInfor[listProductInfor.length-1]._id.productID) + 1;
+        } 
+        
+        var genIDTypeStart = 0;
+        var listTypeInfor = this.props.typeProduct;
+        if(listTypeInfor.length>0)
+        {
+            genIDTypeStart = parseInt(listTypeInfor[listTypeInfor.length-1]._id.typeID) + 1;
+        } 
+        // Chạy từng cái object để tạo cái product, cái type và cái join
+        for(var i = 0; i < excelObject.length; i++)
+        {
+            var currentProduct = {
+                _id: {
+                    productID: genIDProductStart + i,
+                    importDate: this.getCurrentDateTimeString(),
+                    storeID: this.props.infoUser.email,
+                },
+                name: excelObject[i].name,
+                quantity: excelObject[i].quantity,
+                remain: excelObject[i].quantity,
+                importPrice: (excelObject[i].currency == 'VNĐ') ?
+                    excelObject[i].originalPrice :
+                    excelObject[i].originalPrice * this.props.regulation.exchangeRate,
+                sellPrice: (excelObject[i].currency == 'VNĐ') ?
+                    excelObject[i].sellPrice :
+                    excelObject[i].sellPrice * this.props.regulation.exchangeRate,
+                expires: this.toDateString(excelObject[i].expiredDate),
+                imgUrl: 'none',
+                unit: excelObject[i].unit,
+            }
+            allProducts.push(currentProduct);
+        }
+        console.log("allProducts", allProducts)
+    }
+
     render() {
         return (
             <div>
@@ -580,6 +620,7 @@ const mapStateToProps = (state, ownProps) => {
         statusUpdateType: state.statusUpdateType,
         typeProduct: state.typeProduct,
         regulation: state.regulationReducer,
+        listProduct: state.listProduct,
     }
 }
 
