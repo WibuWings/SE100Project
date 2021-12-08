@@ -23,10 +23,11 @@ const Receipt = new Schema({
         endDate: Date,
     },
     listItem: [],
-    oldBill:{}, 
+    oldBill: {}, 
     totalMoney: Number,
     totalFinalMoney: Number,
     totalProducts: Number,
+    
     discount:Number,
     coupon: {
         _id: {
