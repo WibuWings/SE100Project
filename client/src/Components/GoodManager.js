@@ -16,7 +16,7 @@ import UpdateTypeModal from './GoodPartials/UpdateTypeModal';
 import XLSX from 'xlsx';
 import excelLogo from './GoodPartials/excelLogo.png';
 import { inputAdornmentClasses } from '@material-ui/core';
-
+import GoodTableDisplay from './GoodPartials/GoodTableDisplay';
 
 class GoodManager extends Component {
     constructor(props) {
@@ -706,6 +706,7 @@ class GoodManager extends Component {
                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
                             onChange={(e) => this.uploadExcel(e)}
                         ></input>
+                        
                         {/* <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirmDelete()} variant="contained">
                             Delete
                         </Button>
@@ -717,7 +718,7 @@ class GoodManager extends Component {
                         </Button> */}
 
                      </div>
-
+                    <GoodTableDisplay/>
                     <GoodTable />
 
                     {/* Đây là phần modal */}
