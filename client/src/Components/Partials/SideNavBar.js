@@ -180,11 +180,13 @@ class SideNavBar extends Component {
                         {
                             this.props.sidebarOpen ?
                             <IoIosArrowBack
+                                className='icon-open'
                                 size={20}
                                 onClick={(e) => this.hideNavbar()}
                             />
                             :
                             <IoIosArrowForward
+                                className='icon-close'
                                 style={{
                                     position: 'fixed',
                                     left: '42px',
