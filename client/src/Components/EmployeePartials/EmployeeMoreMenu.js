@@ -56,7 +56,8 @@ class EmployeeMoreMenu extends Component {
             alert("delete employee(s) success");
         })
         .catch(err => {
-            alert(err);
+          this.props.hideAlert();
+          this.props.showAlert("Something happened, restart and try again","warning");
         })
     
     //Move to sacked
@@ -81,7 +82,8 @@ class EmployeeMoreMenu extends Component {
               this.props.RemoveShiftAssign(data1.shiftAssign);
           })
           .catch(err => {
-              alert(err);
+            this.props.hideAlert();
+            this.props.showAlert("Something happened, restart and try again","warning");
           })
         }
         
@@ -215,7 +217,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             type: "DELETE_SHIFT_ASSIGN",
             data: data,
         });
-      }
+      },
+      showAlert: (message, typeMessage) => {
+        dispatch({
+          type: "SHOW_ALERT",
+          message: message,
+          typeMessage: typeMessage,
+        })
+      },
+      hideAlert: () => {
+        dispatch({
+          type: "HIDE_ALERT",
+        })
+      },
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeMoreMenu);

@@ -53,7 +53,8 @@ class TimeKeepingTable extends Component {
             })
             .catch(err => {
                 console.log(err);
-                alert(err)
+                this.props.hideAlert();
+				        this.props.showAlert("Something happened, restart and try again","warning");
             })
         // To redux
         this.props.getTimeKeeping(result);
@@ -126,37 +127,6 @@ class TimeKeepingTable extends Component {
                                     <TableCell className={classes.goodTable_Cell}>
                                         {timeKeeper.isPaidSalary.toString()}
                                     </TableCell>
-                                    {/* <TableCell className={classes.goodTable_Cell}>
-                                      <div style={{display: 'flex'}}>
-                                        <AiOutlineEdit size={20} 
-                                            onClick={() =>
-                                              {
-                                                this.props.changeUpdateTimeKeepingStatus();
-                                                this.props.changeUpdateTimeKeepingValue(timeKeeper);
-                                              }
-                                            }
-                                          />
-                                          <AiFillDelete size={20} 
-                                            onClick={() => 
-                                                {
-                                                    // axios.delete(`http://localhost:5000/api/????`,{data: data})
-                                                    //   .then(res => {
-                                                    //       alert("success");
-                                                    //   })
-                                                    //   .catch(err => {
-                                                    //       alert(err);
-                                                    //   })
-                                                    this.props.deleteTimeKeeping(timeKeeper);
-                                                    console.log(this.props.listTimeKeeper);
-                                                }
-                                                
-                                              // this.props.changeUpdateNextWeekTimeKeepingStatus();
-                                              
-                                              // this.props.changeUpdateNextWeekTimeKeepingValue(item);
-                                            }
-                                        />
-                                      </div>
-                                    </TableCell> */}
                                 </TableRow>
                                 )
                             )
@@ -214,6 +184,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "GET_TIMEKEEPER",
         data: data
       });  
+    },
+    showAlert: (message, typeMessage) => {
+      dispatch({
+        type: "SHOW_ALERT",
+        message: message,
+        typeMessage: typeMessage,
+      })
+    },
+    hideAlert: () => {
+      dispatch({
+        type: "HIDE_ALERT",
+      })
     },
   }
 }

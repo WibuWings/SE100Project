@@ -163,8 +163,9 @@ class AddGoodModal extends Component {
                 alert("Lưu thành công")
             })
             .catch(err => {
-                alert(err);
-                console.log(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
+                console.log('Bug when add product', err);
             })
 
         //Thêm vào bảng joinType nữa

@@ -198,15 +198,18 @@ class SideNavBar extends Component {
                         }
                     </div>
                     <div class="nav-heading">
-                        <div style={{ 
+                        <div 
+                            style={{ 
                                 backgroundColor: !this.props.sidebarOpen? !this.props.statusDarkmode ? '#fafafa' : '#37474f': (!this.props.statusDarkmode ? '#cfd8dc' : '#455a64'),
                                 paddingTop: !this.props.sidebarOpen? 10: 8,
-
+                                display: 'flex'
                             }} 
                             class="navbar-heading-container"
                         >
-                            <img class='user-avatar'src={this.props.infoUser.avatar ? this.props.infoUser.avatar : Avatar} style={{ width: 40, height: 40, borderRadius: '100%' }}></img>
-                            <span class="user-name" style={{ color: !this.props.statusDarkmode ? 'black' : 'white', fontWeight: '700' }} >{this.props.infoUser.lastName + " " + this.props.infoUser.firstName}</span>
+                            <img class='user-avatar'src={this.props.infoUser.avatar ? this.props.infoUser.avatar : Avatar} style={{ width: 40, height: 40, borderRadius: '100%', flex: 1 }}></img>
+                            <span class="user-name" style={{ color: !this.props.statusDarkmode ? 'black' : 'white', fontWeight: '700', maxWidth: '100px' }} >
+                                {this.props.infoUser.lastName + " " + this.props.infoUser.firstName}
+                            </span>
                         </div>
                     </div>
                     <div class="nav-container">

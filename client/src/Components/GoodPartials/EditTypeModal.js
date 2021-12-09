@@ -45,8 +45,9 @@ class EditTypeModal extends Component {
                 console.log("delete success");
             })
             .catch(err => {
-                alert(err);
-                // alert("Lỗi gì cmnr")
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
+                console.log('bug when delete type',err);
             })
         this.props.deleteTypeFromRedux(data.productTypes[0]);
 
@@ -70,8 +71,9 @@ class EditTypeModal extends Component {
                 allJoinMatch = res.data.data;
             })
             .catch(err => {
-                console.log(err);
-                alert(err);
+                console.log('Bug when get join', err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
 
         var allProductJoin = [];
@@ -98,7 +100,8 @@ class EditTypeModal extends Component {
                 console.log("delete join success");
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         this.setState({change: !this.state.change})
     }
@@ -193,7 +196,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 data: data
             });
             
-        }
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 

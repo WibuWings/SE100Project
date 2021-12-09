@@ -52,8 +52,9 @@ class FixedCalendar extends Component {
             this.props.setShiftAssign(result);
         })
         .catch(err => {
-            console.log(err);
-            alert(err)
+            console.log('bug when add shift-assign', err);
+            this.props.hideAlert();
+			this.props.showAlert("Something happened, restart and try again","warning");
         })
   }
   
@@ -115,7 +116,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
               type: "SET_SHIFT_ASSIGN",
               data: data,
           });
-      }
+      },
+      showAlert: (message, typeMessage) => {
+        dispatch({
+            type: "SHOW_ALERT",
+            message: message,
+            typeMessage: typeMessage,
+        })
+    },
+    hideAlert: () => {
+        dispatch({
+            type: "HIDE_ALERT",
+        })
+    },
   }
 }
 

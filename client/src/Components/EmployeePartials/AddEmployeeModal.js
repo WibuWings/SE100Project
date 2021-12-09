@@ -73,7 +73,8 @@ class AddEmployeeModal extends Component {
             })
             .catch(err => {
                 // console.log(err);
-                alert(err)
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         listUsers = [];
         for(var i = 0; i < result.length; i++)
@@ -281,12 +282,8 @@ class AddEmployeeModal extends Component {
                 alert("Lưu thành công")
             })
             .catch(err => {
-                alert(err);
-                if(err.response.data.message)
-                {
-                    alert(err.response.data.message);
-                }
-                console.log(err);
+                this.props.hideAlert();
+				this.props.showAlert(err.response.data.message,"warning");
                 isAddOK = false;
             })
         // Thêm vào redux
@@ -541,6 +538,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "ADD_EMPLOYEE",
                 employees: data,
             });
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
         },
     }
 }

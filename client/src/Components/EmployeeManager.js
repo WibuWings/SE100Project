@@ -134,7 +134,8 @@ class EmployeeManager extends Component {
                 result = res.data.data;
             })
             .catch(err => {
-                alert(err)
+                this.props.hideAlert();
+                this.props.showAlert("Something happened, restart and try again","warning");
             })
         listUsers = [];
         for(var i = 0; i < result.length; i++)
@@ -174,8 +175,9 @@ class EmployeeManager extends Component {
                 alert("Lưu thành công")
             })
             .catch(err => {
-                alert(err);
-                console.log(err);
+                this.props.hideAlert();
+                this.props.showAlert("Something happened, restart and try again","warning");
+                // console.log(err);
             })
     }
     // Xoá nhân viên
@@ -197,7 +199,8 @@ class EmployeeManager extends Component {
                 alert("delete employee(s) success");
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+                this.props.showAlert("Something happened, restart and try again","warning");
             })
     }
     // Sửa nhân viên
@@ -248,8 +251,9 @@ class EmployeeManager extends Component {
                 result = res.data.data;
             })
             .catch(err => {
-                console.log(err);
-                alert(err)
+                console.log('Bug when get delete employees',err);
+                this.props.hideAlert();
+                this.props.showAlert("Something happened, restart and try again","warning");
             })
         this.props.getSackedEmployee(result);
         this.setState({change: !this.state.change});
@@ -269,10 +273,12 @@ class EmployeeManager extends Component {
         }
         axios.patch(`http://localhost:5000/api/employee/delete`, data)
             .then(res => {
-                alert("back to work success");
+                this.props.hideAlert();
+                this.props.showAlert("Employee return to work success","success");
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+                this.props.showAlert("Something happened, restart and try again","warning");
             })
     }
 
@@ -292,10 +298,12 @@ class EmployeeManager extends Component {
         }
         axios.delete(`http://localhost:5000/api/employee/delete`,{data: data})
             .then(res => {
-                alert("delete permantly employee(s) success");
+                this.props.hideAlert();
+                this.props.showAlert("Delete permantly employee(s) success","success");
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+                this.props.showAlert("Something happened, restart and try again","warning");
             })
     }
 
@@ -684,6 +692,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_UPDATE_TIMEKEEPING_STATUS",
             });
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
         },
     }
 }

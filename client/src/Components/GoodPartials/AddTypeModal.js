@@ -43,7 +43,8 @@ class AddTypeModal extends Component {
                 //TODO: Cập nhật token ở đây nữa
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Add type failed","warning");
             })
         this.props.addTypeToReducer(data.productType);
         this.props.changeAddTypeStatus();
@@ -173,6 +174,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "ADD_TYPE",
                 data: data,
             });
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
         },
     }
 }

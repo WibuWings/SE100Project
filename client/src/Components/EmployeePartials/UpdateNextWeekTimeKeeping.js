@@ -134,7 +134,8 @@ class UpdateNextWeekTimeKeepingModal extends Component {
               alert("success");
           })
           .catch(err => {
-              alert(err);
+            this.props.hideAlert();
+            this.props.showAlert("Something happened, restart and try again","warning");
           })
         this.props.deleteNextWeekTimeKeeping(this.props.updateNextWeekTimeKeepingValue);
         console.log("Xoá được rồi");
@@ -175,11 +176,13 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                 console.log("nextweek", this.props.nextWeekTimeKeeping);
         })
         .catch(err => {
-            alert(err);
+            this.props.hideAlert();
+			this.props.showAlert(err.response.data.message,"warning");
             console.log(err);
             if(err.response.data.message)
             {
-                alert(err.response.data.message);
+                this.props.hideAlert();
+				this.props.showAlert(err.response.data.message,"warning");
             }
             // Nếu lỗi thì thêm lại
             this.props.addNewChange(this.props.updateNextWeekTimeKeepingValue);
@@ -195,7 +198,12 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                     // alert(err);
                     if(err.response.data.message)
                     {
-                        alert(err.response.data.message);
+                        this.props.hideAlert();
+				        this.props.showAlert(err.response.data.message,"warning");
+                    }
+                    else {
+                        this.props.hideAlert();
+				        this.props.showAlert("Something happened, restart and try again","warning");
                     }
                 });
         })
@@ -487,7 +495,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             });
             console.log("data", data)
           },
-        
+          showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 

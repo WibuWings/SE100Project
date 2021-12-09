@@ -215,10 +215,15 @@ class AddNextWeekTimeKeepingModal extends Component {
             this.props.changeAddNextWeekTimeKeepingStatus();
           })
           .catch(err => {
-                console.log("err.response.data.message", err.response.data.message);
+                // console.log("err.response.data.message", err.response.data.message);
                 if(err.response.data.message)
                 {
-                    alert(err.response.data.message);
+                    this.props.hideAlert();
+				    this.props.showAlert(err.response.data.message,"warning");
+                }
+                else {
+                    this.props.hideAlert();
+				    this.props.showAlert("Something happened, restart and try again","warning");
                 }
                 console.log(err);
           })
@@ -455,7 +460,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "ADD_NEW_NEXT_WEEK_TIMEKEEPER",
                 data: data,
             });
-        } 
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 

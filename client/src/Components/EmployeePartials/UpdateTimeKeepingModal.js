@@ -49,49 +49,6 @@ class UpdateTimeKeepingModal extends Component {
         this.loadInitialData()
     }
 
-    // Thêm nhân viên
-    async addEmployeeToDatabase()
-    {
-        const data = {
-            token: localStorage.getItem('token'),
-            employee: {
-                _id: {
-                    employeeID: document.querySelector('input[name="ID"]').value,
-                    storeID: this.props.infoUser.email,
-                },
-                managerID: this.props.infoUser.email,
-                password: document.querySelector('input[name="password"]').value,
-                firstName: document.querySelector('input[name="firstName"]').value,
-                lastName: document.querySelector('input[name="lastName"]').value,
-                phoneNumber: document.querySelector('input[name="phoneNumber"]').value,
-                dateOfBirth: document.querySelector('input[name="birthDay"]').value,
-                email: document.querySelector('input[name="email"]').value,
-                address: document.querySelector('input[name="adress"]').value,
-                cardID: document.querySelector('input[name="cardID"]').value,
-                startDate: document.querySelector('input[name="startDate"]').value,
-                // endDate: "2021-11-31T00:00:00.000Z",
-            }   
-        }
-        console.log(data);
-        await axios.post(`http://localhost:5000/api/employee`, data)
-            .then(res => {
-                console.log("Save success");
-                alert("Lưu thành công")
-            })
-            .catch(err => {
-                alert(err);
-                console.log(err);
-            })
-    }
-
-    // cancel = () => {
-    //     this.props.changeAddNextWeekTimeKeepingStatus();
-    // }
-
-    // addEmployee = () => {
-    //     this.addEmployeeToDatabase();
-    //     this.props.changeAddEmployeeStatus();
-    // }
     realDate = '';
     shiftID = '';
     dayChosed = '';
@@ -187,14 +144,6 @@ class UpdateTimeKeepingModal extends Component {
             },
             realDate: document.querySelector('input[name="realDate"]').value,
         };
-        // axios.put(`http://localhost:5000/api/????`, data)
-        //     .then(res => {
-        //         console.log("Update success");
-        //         alert('Đã update thành công sản phẩm')
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //     })
         this.props.updateTimeKeeper(data, this.findIndexCurrentKeepingInRedux(data._id));
         console.log(data);
         this.props.changeUpdateTimeKeepingStatus();

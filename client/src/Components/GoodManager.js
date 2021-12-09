@@ -42,7 +42,8 @@ class GoodManager extends Component {
             })
             .catch(err => {
                 console.log(err);
-                alert(err)
+                this.props.hideAlert();
+                this.props.showAlert("Something happened, restart and try again","warning");
             })
         // Get hết từ cái productjoinType
         var result = [];
@@ -61,7 +62,8 @@ class GoodManager extends Component {
             })
             .catch(err => {
                 console.log(err);
-                alert(err)
+                this.props.hideAlert();
+                this.props.showAlert("Something happened, restart and try again","warning");
             })
         // Lấy các cái jointype
         var joinTypeInfor = [];
@@ -124,8 +126,9 @@ class GoodManager extends Component {
                 result = res.data.data;
             })
             .catch(err => {
-                console.log(err);
-                alert(err);
+                console.log('bug when get types', err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         this.props.getProductType(result);
     }
@@ -631,8 +634,9 @@ class GoodManager extends Component {
                 console.log("Save success");
             })
             .catch(err => {
-                alert(err);
-                console.log(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
+                console.log("Bug when add dataProduct", err);
             })
 
         
@@ -649,12 +653,14 @@ class GoodManager extends Component {
                 
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
+                console.log('bug when add types',err)
             })
             // Cập nhật type vào redux
             this.props.addTypeToReducer(dataType.productType);
         }
-        alert("Save types success");
+        // alert("Save types success");
         
 
 
@@ -880,6 +886,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "CHANGE_EXCEL_INSTRUCTION_STATUS",
             });
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
         },
     }
 }

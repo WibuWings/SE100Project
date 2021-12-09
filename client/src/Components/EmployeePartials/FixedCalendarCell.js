@@ -108,8 +108,9 @@ class FixedCalendarCell extends Component {
             alert("Lưu thành công")
         })
         .catch(err => {
-            alert(err);
-            console.log(err);
+            this.props.hideAlert();
+            this.props.showAlert("Something happened, restart and try again","warning");
+            console.log('bug when add shift-assign',err);
         })
       this.handleChange();
       this.props.AddShiftAssign(data.shiftAssign);
@@ -143,7 +144,8 @@ class FixedCalendarCell extends Component {
           alert("success");
       })
       .catch(err => {
-          alert(err);
+        this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
       })
       const data = {
           _id: {
@@ -283,7 +285,7 @@ class FixedCalendarCell extends Component {
                   overflowY: 'auto',
                   width: 140,
                   backgroundColor: '#fff',
-                  
+                  width: 200
                 }}
                 id="scroll-bar"
               >
@@ -336,7 +338,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           type: "DELETE_SHIFT_ASSIGN",
           data: data,
       });
-    }
+    },
+    showAlert: (message, typeMessage) => {
+      dispatch({
+        type: "SHOW_ALERT",
+        message: message,
+        typeMessage: typeMessage,
+      })
+    },
+    hideAlert: () => {
+      dispatch({
+        type: "HIDE_ALERT",
+      })
+    },
   }
 }
 

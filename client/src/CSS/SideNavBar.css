@@ -44,7 +44,7 @@
 .navibar .navbar-heading-container .user-name {
     margin-left: 10px;
     color: #5c7999;
-    min-width: 200px;
+    max-width: 100px;
 }
 
 .nav-item {

@@ -61,7 +61,8 @@ class UnShiftEmployee extends Component {
         })
         .catch(err => {
             console.log(err);
-            alert(err)
+            this.props.hideAlert();
+				    this.props.showAlert("Something happened, restart and try again","warning");
         })
   }
 
@@ -210,7 +211,8 @@ class UnShiftEmployee extends Component {
                                                         alert("success");
                                                     })
                                                     .catch(err => {
-                                                        alert(err);
+                                                      this.props.hideAlert();
+                                                      this.props.showAlert("Something happened, restart and try again","warning");
                                                     })
                                                   this.props.deleteNextWeekTimeKeeping(item);
                                               }
@@ -278,7 +280,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "SET_NEXT_WEEK_TIMEKEEPER",
         data: data
       });
-    }
+    },
+    showAlert: (message, typeMessage) => {
+      dispatch({
+        type: "SHOW_ALERT",
+        message: message,
+        typeMessage: typeMessage,
+      })
+    },
+    hideAlert: () => {
+      dispatch({
+        type: "HIDE_ALERT",
+      })
+    },
   }
 }
 

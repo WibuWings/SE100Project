@@ -123,7 +123,8 @@ class PayEmployeeModal extends Component {
         }
         catch(e)
         {
-            alert("Đã có lỗi xảy ra");
+            this.props.hideAlert();
+			this.props.showAlert("Something happened, restart and try again","warning");
             console.log("Lỗi trả lương", e);
         }
         
@@ -470,7 +471,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "PAY_SALARY",
                 employeeID: employeeID
             });
-        }
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 
