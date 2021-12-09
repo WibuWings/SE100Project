@@ -331,18 +331,18 @@ class ProfileDetail extends Component {
                                 <Grid item md={6} xs={12}>
                                     <TextField
                                         fullWidth
-                                        label="Select district"
-                                        name="district"
-                                        defaultValue={this.props.infoUser.district}
-                                        value={this.state.nameDistrict}
-                                        onChange={(e) => this.changeDistrict(e)}
+                                        label="Select province"
+                                        name="province"
                                         required
+                                        defaultValue={this.props.infoUser.province}
+                                        value={this.state.nameProvince}
+                                        onChange={(e) => this.changeCountry(e)}
                                         select
                                         SelectProps={{ native: true }}
                                         variant="outlined"
                                     >
-                                        <option value="0">--Select district--</option>
-                                        {(this.props.district.length !== 0) ? this.props.district.map(item => {
+                                        <option value="0">--Select province--</option>
+                                        {(this.props.country.length !== 0) ? this.props.country[0].map(item => {
                                             return (
                                                 <option value={item.codename}>
                                                     {item.name}
@@ -356,18 +356,18 @@ class ProfileDetail extends Component {
                                 <Grid item md={6} xs={12}>
                                     <TextField
                                         fullWidth
-                                        label="Select province"
-                                        name="province"
+                                        label="Select district"
+                                        name="district"
+                                        defaultValue={this.props.infoUser.district}
+                                        value={this.state.nameDistrict}
+                                        onChange={(e) => this.changeDistrict(e)}
                                         required
-                                        defaultValue={this.props.infoUser.province}
-                                        value={this.state.nameProvince}
-                                        onChange={(e) => this.changeCountry(e)}
                                         select
                                         SelectProps={{ native: true }}
                                         variant="outlined"
                                     >
-                                        <option value="0">--Select province--</option>
-                                        {(this.props.country.length !== 0) ? this.props.country[0].map(item => {
+                                        <option value="0">--Select district--</option>
+                                        {(this.props.district.length !== 0) ? this.props.district.map(item => {
                                             return (
                                                 <option value={item.codename}>
                                                     {item.name}

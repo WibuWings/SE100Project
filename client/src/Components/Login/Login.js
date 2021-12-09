@@ -178,26 +178,11 @@ class Login extends Component {
     componentWillMount() {
         document.title = 'Login'
     }
+    
+   
+    
 
     render() {
-        const enterPress = this.isLoginCheck;
-        document.onkeydown = function (e) {
-            switch (e.which) {
-                case 13:
-                    try
-                    {
-                        enterPress(e);
-                    }
-                    catch(err) 
-                    {
-                        console.log("Alo lỗi mẹ rồi")
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
         return (
             <div className="Login">
                 <div className="form-login">

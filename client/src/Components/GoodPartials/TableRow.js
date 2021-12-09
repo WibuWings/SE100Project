@@ -153,7 +153,7 @@ class GoodRow extends Component{
                 <TableCell className={classes.goodTable_Cell} align="right">
                 <div style={{display: 'flex'}}>
                     {
-                        this.props.regulation == {} ?
+                        this.props.regulation == [] ?
                         <div>{row.sellPrice}</div> :
                         this.props.regulation.currency == 'vnd' ?
                         <div>{row.sellPrice}</div> :
@@ -162,7 +162,7 @@ class GoodRow extends Component{
                     
                     <div style={{marginLeft: 4}}>
                         {
-                            (this.props.regulation == {})
+                            (this.props.regulation == [])
                                 ? ' VNĐ':
                             (this.props.regulation.currency == 'vnd' ? ' VNĐ' : ' $')
                         }
@@ -215,7 +215,7 @@ class GoodRow extends Component{
                                                 <TableCell className={classes.goodTable_Cell} >
                                                     <div style={{display: 'flex'}}>
                                                     {
-                                                        this.props.regulation == {} ?
+                                                        this.props.regulation == [] ?
                                                         <div>{row.importPrice}</div> :
                                                         this.props.regulation.currency == 'vnd' ?
                                                         <div>{row.importPrice}</div> :
@@ -223,7 +223,7 @@ class GoodRow extends Component{
                                                     }
                                                         <div style={{marginLeft: 4}}>
                                                             {
-                                                                (this.props.regulation == {})
+                                                                (this.props.regulation == [])
                                                                     ? ' VNĐ':
                                                                 (this.props.regulation.currency == 'vnd' ? ' VNĐ' : ' $')
                                                             }
