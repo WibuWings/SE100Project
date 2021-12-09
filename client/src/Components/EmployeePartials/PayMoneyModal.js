@@ -301,14 +301,14 @@ class PayEmployeeModal extends Component {
                                                                 <TableCell className={classes.goodTable_Cell}>
                                                                     <div style={{display: 'flex'}}>
                                                                         {
-                                                                            this.props.regulation == {} ?
+                                                                            this.props.regulation == [] ?
                                                                             <div style={{marginRight: 4}}>{timeKeeper._id.shiftType.salary}</div> :
                                                                             this.props.regulation.currency == 'vnd' ?
                                                                             <div style={{marginRight: 4}}>{timeKeeper._id.shiftType.salary}</div> :
                                                                             <div style={{marginRight: 4}}>{(timeKeeper._id.shiftType.salary/this.props.regulation.exchangeRate).toFixed(2)}</div>
                                                                         }
                                                                         {
-                                                                            (this.props.regulation == {})
+                                                                            (this.props.regulation == [])
                                                                                 ? <div>{' VNĐ'}</div> :
                                                                             (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
                                                                         }
@@ -318,14 +318,14 @@ class PayEmployeeModal extends Component {
                                                                     {/* {this.calculateSalary(timeKeeper._id.shiftType)}\ */}
                                                                     <div style={{display: 'flex'}}>
                                                                         {
-                                                                            this.props.regulation == {} ?
+                                                                            this.props.regulation == [] ?
                                                                             <div style={{marginRight: 4}}>{this.calculateSalary(timeKeeper._id.shiftType)}</div> :
                                                                             this.props.regulation.currency == 'vnd' ?
                                                                             <div style={{marginRight: 4}}>{this.calculateSalary(timeKeeper._id.shiftType)}</div> :
                                                                             <div style={{marginRight: 4}}>{(this.calculateSalary(timeKeeper._id.shiftType)/this.props.regulation.exchangeRate).toFixed(2)}</div>
                                                                         }
                                                                         {
-                                                                            (this.props.regulation == {})
+                                                                            (this.props.regulation == [])
                                                                                 ? <div>{' VNĐ'}</div> :
                                                                             (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
                                                                         }
@@ -356,14 +356,14 @@ class PayEmployeeModal extends Component {
                                                 TotalSalary: 
                                             </lable>
                                             {
-                                                this.props.regulation == {} ?
+                                                this.props.regulation == [] ?
                                                 <div style={{marginRight: 4}}>{this.totalSalary}</div> :
                                                 this.props.regulation.currency == 'vnd' ?
                                                 <div style={{marginRight: 4}}>{this.totalSalary}</div> :
                                                 <div style={{marginRight: 4}}>{(this.totalSalary/this.props.regulation.exchangeRate).toFixed(2)}</div>
                                             }
                                             {
-                                                (this.props.regulation == {})
+                                                (this.props.regulation == [])
                                                     ? <div>{' VNĐ'}</div> :
                                                 (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
                                             }
