@@ -70,7 +70,7 @@ function ErrorReceipt(props) {
             <div className="dashboard-item-img error-receipt" style={{ marginBottom: '30px' }}>
                 <FaReceipt className="dashboard-item-icon error-receipt"></FaReceipt>
             </div>
-            <Typography style={{ marginBottom: '10px' }} variant="h4">{index}</Typography>
+            <Typography style={{ marginBottom: '10px' }} variant="h5">{index}</Typography>
             <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
                 Error receipt
             </Typography>
