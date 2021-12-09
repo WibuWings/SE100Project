@@ -80,7 +80,10 @@ class CouponTab {
     deleteCoupon = async (req, res) => {
         var reqCoupon = req.body._id;
 
-        Coupon.deleteOne(reqCoupon)
+        Coupon.deleteOne({
+            "_id.couponID": reqCoupon.couponID,
+            "_id.storeID": reqCoupon.storeID,
+        },)
             .then((data) => {
                 res.status(200).send(
                     JSON.stringify({
