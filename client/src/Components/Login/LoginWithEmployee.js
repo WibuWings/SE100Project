@@ -103,16 +103,7 @@ class LoginWithEmployee extends Component {
     }
 
     render() {
-        const enterPress = this.isLoginCheck;
-        document.onkeydown = function (e) {
-            switch (e.which) {
-                case 13:
-                    enterPress(e);
-                    break;
-                default:
-                    break;
-            }
-        }
+        
 
         return (
             <div className="Login">

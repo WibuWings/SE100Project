@@ -43,7 +43,7 @@ function ModalAddCoupon(props) {
         }
         else {
             setIsPercent(false)
-            setPercent(e.target.value)
+            setPercent(Number(e.target.value).toFixed(0))
         }
     }
 
@@ -78,7 +78,7 @@ function ModalAddCoupon(props) {
     }
 
     const addCoupon = async () => {
-        if (timeEnd - timeFrom > 0) {
+        if (timeEnd - timeFrom >= 0) {
             if (!isPercent && !isDescription && !isMinTotal && !isQuantity) {
                 const data = {
                     _id: {
@@ -124,7 +124,7 @@ function ModalAddCoupon(props) {
     }
 
     const editCoupon = async () => {
-        if (timeEnd - timeFrom > 0) {
+        if (timeEnd - timeFrom >= 0) {
             if (!isPercent && !isDescription && !isQuantity) {
                 const data = {
                     _id: {
@@ -229,7 +229,7 @@ function ModalAddCoupon(props) {
                                 helperText={isPercent ? "Enter greater than 0 and less than 100" : ""}
                                 type="number"
                                 id="outlined-error-helper-text"
-                                name="discount"
+                                name="discount (%)"
                                 variant="outlined"
                             />
                         </Grid>

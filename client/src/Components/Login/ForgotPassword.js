@@ -190,16 +190,7 @@ class ForgotPassword extends Component {
     }
 
     render() {
-        const enterPress = this.findPassword;
-        document.onkeydown = function (e) {
-            switch (e.which) {
-                case 13:
-                    enterPress(e);
-                    break;
-                default:
-                    break;
-            }
-        }
+        
         return (
             <div className="Login">
                 <div className="form-findpass">
