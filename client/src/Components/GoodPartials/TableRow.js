@@ -69,7 +69,8 @@ class GoodRow extends Component{
                 alert("delete product success");
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         
         // Get hết các cái join của sản phẩm
@@ -90,7 +91,8 @@ class GoodRow extends Component{
             })
             .catch(err => {
                 console.log(err);
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         console.log(allJoinMatch);
         // Xoá các join liên quan đến sản phẩm
@@ -116,7 +118,8 @@ class GoodRow extends Component{
                 console.log("delete join success");
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         
         console.log("this.props.data",this.props.data)
@@ -299,6 +302,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "DELETE_PRODUCT",
                 data: data,
             }); 
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
         },
     }
 }

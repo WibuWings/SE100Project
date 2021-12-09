@@ -87,7 +87,8 @@ class UpdateGoodModal extends Component {
             })
             .catch(err => {
                 console.log(err);
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         //Get data và lưu các tên Type vào bảng
         listTypeInfor=[];
@@ -122,7 +123,8 @@ class UpdateGoodModal extends Component {
             })
             .catch(err => {
                 console.log(err);
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         console.log("Các join",allJoinMatch);
         // Thêm vào trên cái bảng typeSet
@@ -314,7 +316,8 @@ class UpdateGoodModal extends Component {
             })
             .catch(err => {
                 console.log(err);
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         console.log(allJoinMatch);
         // Xoá các join liên quan đến sản phẩm
@@ -340,7 +343,8 @@ class UpdateGoodModal extends Component {
                 console.log("delete join success");
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         // Thêm các cái hiện tại
         // Giờ thêm nhiều type thì phải làm cái này nhiều lần

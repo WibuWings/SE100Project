@@ -39,7 +39,8 @@ class UpdateTypeModal extends Component {
                 result = res.data.data;
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         //Get data và lưu các tên Type vào bảng
         for(var i=0; i < result.length ; i++)
@@ -71,7 +72,8 @@ class UpdateTypeModal extends Component {
                 //TODO: Cập nhật token ở đây nữa
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         this.props.changeAddTypeStatus();
     }
@@ -171,7 +173,8 @@ class UpdateTypeModal extends Component {
             })
             .catch(err => {
                 console.log(err);
-                alert(err)
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         // Get hết từ cái productjoinType
         var result = [];
@@ -190,7 +193,8 @@ class UpdateTypeModal extends Component {
             })
             .catch(err => {
                 console.log(err);
-                alert(err)
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         // Lấy các cái jointype
         var joinTypeInfor = [];
@@ -339,6 +343,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "GET_PRODUCT_AND_TYPE",
                 data: data
             });
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
         },
     }
 }
