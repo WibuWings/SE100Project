@@ -17,26 +17,41 @@ class ExcelInstruction extends Component {
 
     render() {
         return (
-            <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
+            <form style={{ zIndex: '10', minWidth: '600px',width: '70%', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="Confirm" />
+                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , paddingLeft: '26px'}} title="Instruction" />
                     <Divider />
                     <CardContent>
                         <Grid container spacing={2}>
-                            <Grid item md={12} xs={12}>
-                                Instruction
+                            <Grid item md={12} xs={12} style={{margin: '0px 12px'}}>
+                                <label style={{fontWeight: 700, display: 'block'}}>Note:</label>
+                                - Uploaded file must have the column exactly like the template file<br/>
+                                - Product ID in the file can be changed
                             </Grid>
-                            <Grid item md={12} xs={12}>
-                                <Stack spacing={3}>
-                                   
-                                </Stack>
+                            <Grid item md={12} xs={12} style={{margin: '0px 12px'}}>
+                                <label style={{fontWeight: 700, display: 'block'}}>Step by step:</label>
+                                - Click in the upload excel button<br/>
+                                - Choose a excel file and click OK<br/>
+                                - Wait for the alert or fix excel file, upload again if your excel file was error
                             </Grid>
+                            {
+                                this.props.regulation == {} ? null :
+                                <Grid item md={12} xs={12} style={{margin: '0px 12px'}}>
+                                    <label style={{fontWeight: 700, display: 'block'}}>Regulation:</label>
+                                    - The expiration date must be at least {this.props.regulation.minExpiredProduct} day(s) older than the input date 
+                                </Grid>
+                            }
                         </Grid>
+                        <a  style={{margin: '0px 12px'}}
+                            target="_blank" rel="noopener noreferrer"
+                            href="https://docs.google.com/spreadsheets/d/1bk99RhxehlZk-1B4c93rIZ7MvUNlWO7F/edit?usp=sharing&ouid=107720637610074440067&rtpof=true&sd=true">
+                            Template link here !
+                        </a>
                     </CardContent>
                     <Divider />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2 }}>
-                        <Button style={{ backgroundColor: 'red' }} onClick={(e) => this.cancel(e)} variant="contained" startIcon={<GiCancel />}>
-                            Hủy
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={(e) => this.cancel(e)} variant="contained" startIcon={<GiCancel />}>
+                            Exit    
                         </Button>
                     </Box>
                 </Card>
@@ -50,6 +65,7 @@ const mapStateToProps = (state, ownProps) => {
         confirmStatus: state.confirmStatus,
         deleteStatus: state.deleteStatus,
         confirmCode: state.confirmCode,
+        regulation: state.regulationReducer,
     }
 }
 
