@@ -136,12 +136,12 @@ function ModalAddCoupon(props) {
                     percent: percent,
                     timeFrom: timeFrom,
                     timeEnd: timeEnd,
-                    quantity: quantity
+                    quantity: Number(quantity),
                 }
                 await axios.post(`http://localhost:5000/api/coupon/update`, {
                     token: localStorage.getItem('token'),
                     email: infoUser.email,
-                    coupon: data,
+                    coupon: {...data},
                 }).then(res => {
                     dispatch({
                         type: "EDIT_COUPON",
