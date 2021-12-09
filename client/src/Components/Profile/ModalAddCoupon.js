@@ -48,7 +48,7 @@ function ModalAddCoupon(props) {
     }
 
     const blurQuantity = (e) => {
-        if(e.target.value < 0 || e.target.value == "") {
+        if (e.target.value < 0 || e.target.value == "") {
             setIsQuantity(true)
         } else {
             setIsQuantity(false)
@@ -57,7 +57,7 @@ function ModalAddCoupon(props) {
     }
 
     const blurMinTotal = (e) => {
-        if(e.target.value < 100000 || e.target.value == "") {
+        if (e.target.value < 100000 || e.target.value == "") {
             setIsMinTotal(true)
         } else {
             setIsMinTotal(false)
@@ -81,7 +81,10 @@ function ModalAddCoupon(props) {
         if (timeEnd - timeFrom > 0) {
             if (!isPercent && !isDescription && !isMinTotal && !isQuantity) {
                 const data = {
-                    idCoupon: makeCode(6),
+                    _id: {
+                        storeID: infoUser.email,
+                        couponID: makeCode(6),
+                    },
                     name: description,
                     percent: percent,
                     minTotal: minTotal,
@@ -89,14 +92,14 @@ function ModalAddCoupon(props) {
                     timeEnd: timeEnd,
                     quantity: quantity,
                 }
-                await axios.post(`http://localhost:5000/api/profile/add-coupon`, {
+                await axios.post(`http://localhost:5000/api/coupon/create`, {
                     token: localStorage.getItem('token'),
                     email: infoUser.email,
-                    data: data,
+                    coupon: data,
                 }).then(res => {
 
                 }).catch(err => {
-                    
+
                 })
                 dispatch({
                     type: "ADD_COUPON",
@@ -122,39 +125,45 @@ function ModalAddCoupon(props) {
 
     const editCoupon = async () => {
         if (timeEnd - timeFrom > 0) {
-            if (!isPercent && !isDescription  && !isQuantity) {
+            if (!isPercent && !isDescription && !isQuantity) {
                 const data = {
-                    idCoupon: objectEditCoupon.idCoupon,
+                    _id: {
+                        couponID: objectEditCoupon._id.couponID,
+                        storeID: infoUser.email
+                    },
                     name: description,
                     minTotal: minTotal,
                     percent: percent,
                     timeFrom: timeFrom,
                     timeEnd: timeEnd,
-                    quantity: quantity
+                    quantity: Number(quantity),
                 }
-                await axios.post(`http://localhost:5000/api/profile/edit-coupon`, {
+                await axios.post(`http://localhost:5000/api/coupon/update`, {
                     token: localStorage.getItem('token'),
                     email: infoUser.email,
-                    data: data,
+                    coupon: {...data},
                 }).then(res => {
-
+                    dispatch({
+                        type: "EDIT_COUPON",
+                        data: data
+                    })
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: "Edit coupon success",
+                        typeMessage: "success",
+                    })
+                    dispatch({
+                        type: "CHANGE_ADD_COUPON_STATUS"
+                    })
+                    dispatch({
+                        type: "RESET_EDIT_COUPON_STATUS"
+                    })
                 }).catch(err => {
-                    
-                })
-                dispatch({
-                    type: "EDIT_COUPON",
-                    data: data
-                })
-                dispatch({
-                    type: "SHOW_ALERT",
-                    message: "Edit coupon success",
-                    typeMessage: "success",
-                })
-                dispatch({
-                    type: "CHANGE_ADD_COUPON_STATUS"
-                })
-                dispatch({
-                    type:"RESET_EDIT_COUPON_STATUS"
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: "Edit coupon faile",
+                        typeMessage: "warning",
+                    })
                 })
             }
         } else {
@@ -171,7 +180,7 @@ function ModalAddCoupon(props) {
             type: "CHANGE_ADD_COUPON_STATUS"
         })
         dispatch({
-            type:"RESET_EDIT_COUPON_STATUS"
+            type: "RESET_EDIT_COUPON_STATUS"
         })
     }
 
@@ -286,8 +295,6 @@ function ModalAddCoupon(props) {
                             Add
                         </Button>
                     )}
-
-
                     <Button style={{ backgroundColor: 'red' }} onClick={(e) => hanhleCancel(e)} variant="contained" startIcon={<GiCancel />}>
                         Cancel
                     </Button>
