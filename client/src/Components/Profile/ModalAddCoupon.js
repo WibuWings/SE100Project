@@ -48,7 +48,7 @@ function ModalAddCoupon(props) {
     }
 
     const blurQuantity = (e) => {
-        if(e.target.value < 0 || e.target.value == "") {
+        if (e.target.value < 0 || e.target.value == "") {
             setIsQuantity(true)
         } else {
             setIsQuantity(false)
@@ -57,7 +57,7 @@ function ModalAddCoupon(props) {
     }
 
     const blurMinTotal = (e) => {
-        if(e.target.value < 100000 || e.target.value == "") {
+        if (e.target.value < 100000 || e.target.value == "") {
             setIsMinTotal(true)
         } else {
             setIsMinTotal(false)
@@ -82,8 +82,8 @@ function ModalAddCoupon(props) {
             if (!isPercent && !isDescription && !isMinTotal && !isQuantity) {
                 const data = {
                     _id: {
-                       storeID: infoUser.email ,
-                       couponID: makeCode(6),
+                        storeID: infoUser.email,
+                        couponID: makeCode(6),
                     },
                     name: description,
                     percent: percent,
@@ -99,7 +99,7 @@ function ModalAddCoupon(props) {
                 }).then(res => {
 
                 }).catch(err => {
-                    
+
                 })
                 dispatch({
                     type: "ADD_COUPON",
@@ -125,7 +125,7 @@ function ModalAddCoupon(props) {
 
     const editCoupon = async () => {
         if (timeEnd - timeFrom > 0) {
-            if (!isPercent && !isDescription  && !isQuantity) {
+            if (!isPercent && !isDescription && !isQuantity) {
                 const data = {
                     _id: {
                         couponID: objectEditCoupon._id.couponID,
@@ -143,24 +143,27 @@ function ModalAddCoupon(props) {
                     email: infoUser.email,
                     coupon: data,
                 }).then(res => {
-
+                    dispatch({
+                        type: "EDIT_COUPON",
+                        data: data
+                    })
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: "Edit coupon success",
+                        typeMessage: "success",
+                    })
+                    dispatch({
+                        type: "CHANGE_ADD_COUPON_STATUS"
+                    })
+                    dispatch({
+                        type: "RESET_EDIT_COUPON_STATUS"
+                    })
                 }).catch(err => {
-                    
-                })
-                dispatch({
-                    type: "EDIT_COUPON",
-                    data: data
-                })
-                dispatch({
-                    type: "SHOW_ALERT",
-                    message: "Edit coupon success",
-                    typeMessage: "success",
-                })
-                dispatch({
-                    type: "CHANGE_ADD_COUPON_STATUS"
-                })
-                dispatch({
-                    type:"RESET_EDIT_COUPON_STATUS"
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: "Edit coupon faile",
+                        typeMessage: "warning",
+                    })
                 })
             }
         } else {
@@ -177,7 +180,7 @@ function ModalAddCoupon(props) {
             type: "CHANGE_ADD_COUPON_STATUS"
         })
         dispatch({
-            type:"RESET_EDIT_COUPON_STATUS"
+            type: "RESET_EDIT_COUPON_STATUS"
         })
     }
 

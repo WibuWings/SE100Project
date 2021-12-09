@@ -97,7 +97,7 @@ class Printf extends React.PureComponent {
         data: data,
       })
         .then(res => {
-          if (res.status === 200) {
+          if (res.data.status === 1) {
             localStorage.setItem('token', res.data.token)
             if (this.props.statusEditInfoBill) {
               axios.post('http://localhost:5000/api/sell-product/edit-reciept', {
@@ -114,11 +114,25 @@ class Printf extends React.PureComponent {
                   this.props.hideAlert();
                   this.props.showAlert("Login timeout, signin again", "warning");
                 })
-
             }
 
+            console.log(this.state.coupon)
             if (this.state.coupon) {
-              this.props.updateQuantityCoupon(this.state.coupon.idCoupon)
+              //Update coupon
+              const data = {
+                ...this.state.coupon,
+                quantity: this.state.coupon.quantity - 1,
+              }
+              axios.post(`http://localhost:5000/api/coupon/update`, {
+                token: localStorage.getItem('token'),
+                email: this.props.infoUser.managerID? this.props.infoUser.managerID : this.props.infoUser.email,
+                coupon: data,
+              }).then(res => {
+
+              }).catch(err => {
+
+              })
+              this.props.updateQuantityCoupon(this.state.coupon._id.couponID)
             }
 
             this.setState({
@@ -166,13 +180,8 @@ class Printf extends React.PureComponent {
               console.log(err);
             })
         }
-
-
         this.props.resetShoppingBag();
       }
-
-
-
     }
   }
 
@@ -332,7 +341,7 @@ class Printf extends React.PureComponent {
         </div>
         {/* Ẩn đi */}
         <div style={{ display: 'none' }}>
-          <ComponentToPrint regulation={this.props.regulation}  MAHD={this.state.code} percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
+          <ComponentToPrint regulation={this.props.regulation} MAHD={this.state.code} percentDiscount={this.state.percentDiscount} infoUser={this.props.infoUser} shoppingBags={this.props.shoppingBags} ref={el => (this.componentRef = el)} />
         </div>
       </div>
     );

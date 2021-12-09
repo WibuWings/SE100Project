@@ -20,7 +20,7 @@ const listCouponInitialState = [],
                 })
             case "UPDATE_QUANTITY_COUPON":
                 return state.map(value => {
-                    if (value._id.couponID === action._id.couponID) {
+                    if (value._id.couponID === action.idCoupon) {
                         value.quantity--
                     }
                     return value
