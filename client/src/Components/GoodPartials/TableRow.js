@@ -66,7 +66,8 @@ class GoodRow extends Component{
         }
         axios.delete(`http://localhost:5000/api/product`,{data: data})
             .then(res => {
-                alert("delete product success");
+                this.props.hideAlert();
+				this.props.showAlert("Delete product success","success");
             })
             .catch(err => {
                 this.props.hideAlert();

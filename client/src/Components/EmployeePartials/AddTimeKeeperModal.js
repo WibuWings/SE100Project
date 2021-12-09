@@ -69,23 +69,24 @@ class AddTimeKeepingModal extends Component {
     checkContraint() {
         if(this.state.dayChosed.length == 0)
         {
-            alert("Chưa chọn ngày nào trong tuần");
+            this.props.hideAlert();
+			this.props.showAlert("You haven't select the day of week","warning");
             return false;
         }
         if(this.state.shiftID.length == 0)
         {
-            alert("Chưa chọn ca nào");
+            this.props.hideAlert();
+			this.props.showAlert("You haven't select the shift","warning");
             return false;
         }
         console.log(this.state.timeKeepingID );
         if( this.state.timeKeepingID == undefined || this.state.timeKeepingID.length == 0)
         {
-            alert("Chưa chọn nhân viên nào để chấm công"); 
+            this.props.hideAlert();
+			this.props.showAlert("You haven't select the employee","warning"); 
             return false;
         }
         // Có CSDL thì báo xem có trùng với cái cũ ko nữa
-        
-        alert("Đã check hết constraint");
         return true;
     }
 

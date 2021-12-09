@@ -105,7 +105,8 @@ class FixedCalendarCell extends Component {
       }
       await axios.post(`http://localhost:5000/api/employee/shift-assign`, data)
         .then(res => {
-            alert("Lưu thành công")
+            this.props.hideAlert();
+            this.props.showAlert("Save shift assign success","success");
         })
         .catch(err => {
             this.props.hideAlert();
@@ -141,7 +142,8 @@ class FixedCalendarCell extends Component {
     }
       axios.delete(`http://localhost:5000/api/employee/shift-assign`,{data: data1})
       .then(res => {
-          alert("success");
+        this.props.hideAlert();
+        this.props.showAlert("Delete shift assign success","success");
       })
       .catch(err => {
         this.props.hideAlert();

@@ -100,7 +100,8 @@ class UpdateNextWeekTimeKeepingModal extends Component {
     checkContraint() {
         if(!this.isGreater(document.querySelector('input[name="realDate"]').value, this.getCurrentDateTime() ))
         {
-            alert("Ngày nhập phải nhỏ hơn ngày báo nghỉ");
+            this.props.hideAlert();
+			this.props.showAlert("The input day must be greater than today","warning"); 
             return false;
         }
         // Check thử ngày nhập nhỏ hơn ngày báo nghỉ bn ngày
@@ -110,13 +111,11 @@ class UpdateNextWeekTimeKeepingModal extends Component {
             this.props.regulation.lessChangeTimeKeepingDay)
             {
                 console.log("Tính ngày",this.calculateDay(document.querySelector('input[name="realDate"]').value, this.getCurrentDateTime()));
-                alert("Nhân viên phải bảo nghỉ trước ít nhất " + this.props.regulation.lessChangeTimeKeepingDay+" ngày.");
+                this.props.hideAlert();
+			    this.props.showAlert("The input day must be greater than today at least "+ this.props.regulation.lessChangeTimeKeepingDay+" day(s)","warning");
                 return false;
             }
         }
-
-
-        alert("Đã check hết constraint");
         return true;
     }
     async updateChange() {
@@ -131,7 +130,6 @@ class UpdateNextWeekTimeKeepingModal extends Component {
 
         await axios.delete(`http://localhost:5000/api/employee/off-day`,{data: data})
           .then(res => {
-              alert("success");
           })
           .catch(err => {
             this.props.hideAlert();
@@ -171,7 +169,8 @@ class UpdateNextWeekTimeKeepingModal extends Component {
         await axios.post(`http://localhost:5000/api/employee/off-day`, dataUpdate)
           .then(res => {
                 console.log("Save success");
-                alert("Lưu thành công"); 
+                this.props.hideAlert();
+				this.props.showAlert("Update absent day success","success");
                 this.props.addNewChange(dataUpdate.offDay);
                 console.log("nextweek", this.props.nextWeekTimeKeeping);
         })
@@ -191,11 +190,10 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                 offDay: this.props.updateNextWeekTimeKeepingValue,
             })
             .then(res => {
-                  console.log("Save success");
-                  alert("Lưu lại thành công"); 
+                    this.props.hideAlert();
+				    this.props.showAlert("Add current absent day success","success"); 
                 })
                 .catch(err => {
-                    // alert(err);
                     if(err.response.data.message)
                     {
                         this.props.hideAlert();

@@ -53,7 +53,8 @@ class EmployeeMoreMenu extends Component {
 
     axios.delete(`http://localhost:5000/api/employee`,{data: data})
         .then(res => {
-            alert("delete employee(s) success");
+            this.props.hideAlert();
+				    this.props.showAlert("Delete employee(s) success","success");
         })
         .catch(err => {
           this.props.hideAlert();
@@ -77,7 +78,6 @@ class EmployeeMoreMenu extends Component {
           console.log("data1", data1)
           axios.delete(`http://localhost:5000/api/employee/shift-assign`,{data: data1})
           .then(res => {
-              // alert("success");
               // Xoá đi trong redux
               this.props.RemoveShiftAssign(data1.shiftAssign);
           })

@@ -39,7 +39,8 @@ class AddTypeModal extends Component {
         }
         axios.post(`http://localhost:5000/api/product/type`, data)
             .then(res => {
-                alert("Save success");
+                this.props.hideAlert();
+				this.props.showAlert("Save product type success","success");
                 //TODO: Cập nhật token ở đây nữa
             })
             .catch(err => {
@@ -57,14 +58,16 @@ class AddTypeModal extends Component {
         {
             if(listTypeInfor[i].name==typeName)
             {
-                alert("Trùng tên rồi anh chai");
+                this.props.hideAlert();
+				this.props.showAlert("Duplicate type name","warning");
                 return false;
             }
         }        
         // Constraint 2: Not blank
         if(typeName.length==0)
         {
-            alert("Không nhập gì à anh chai")
+            this.props.hideAlert();
+			this.props.showAlert("Type name can't be left blanked","warning");
             return false;
         }
         return true;

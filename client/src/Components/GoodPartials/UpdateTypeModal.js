@@ -29,7 +29,6 @@ class UpdateTypeModal extends Component {
             }   
         }
         console.log(data.token);
-        // alert(data.token);
         console.log(data.filter);
         await axios.get(`http://localhost:5000/api/product/type`, 
         {
@@ -68,7 +67,8 @@ class UpdateTypeModal extends Component {
         }
         axios.post(`http://localhost:5000/api/product/type`, data)
             .then(res => {
-                alert("Save success");
+                this.props.hideAlert();
+				this.props.showAlert("Save product type success","success");
                 //TODO: Cập nhật token ở đây nữa
             })
             .catch(err => {
@@ -86,10 +86,12 @@ class UpdateTypeModal extends Component {
             {
                 if(typeName.trim()==this.props.typeProductValue.name)
                 {
-                    alert("Không đổi tên à anh zai");
+                    this.props.hideAlert();
+				    this.props.showAlert("You must change your name before saving","success");
                     return false;
                 }
-                alert("Trùng tên rồi anh chai");
+                this.props.hideAlert();
+				this.props.showAlert("Duplicate type name","success");
                 return false;
             }
             
@@ -97,7 +99,8 @@ class UpdateTypeModal extends Component {
         // Constraint 2: Not blank
         if(typeName.length==0)
         {
-            alert("Không nhập gì à anh chai")
+            this.props.hideAlert();
+			this.props.showAlert("Type name can't be left blanked","warning");
             return false;
         }
         return true;
@@ -124,16 +127,17 @@ class UpdateTypeModal extends Component {
                 name: newTypeName,
             }
         }
-        // alert(data.product.name)
         axios.put(`http://localhost:5000/api/product/type`, data)
             .then(res => {
                 // Có khi mình sẽ cập nhật type ở dây
                 console.log("Update success");
-                alert('update được rồi anh trai')
+                this.props.hideAlert();
+				this.props.showAlert("Update typename success","success");
             })
             .catch(err => {
                 console.log(err);
-                alert("Lỗi gì cmnr")
+                this.props.hideAlert();
+				this.props.showAlert("Something happended, restart and try again","warning");
             })
         this.props.changeStatusUpdateType();
         this.props.updateNameToRedux(data.productType);

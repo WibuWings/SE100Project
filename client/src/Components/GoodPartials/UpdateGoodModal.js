@@ -166,46 +166,54 @@ class UpdateGoodModal extends Component {
         var productName =  document.querySelector('input[name="goodName"]').value;
         if(productName.length == 0)
         {
-            alert("Tên sản phẩm không được trống");
+            this.props.hideAlert();
+			this.props.showAlert("Product name can't be left blanked","warning");
             return false;
         }
         // Constraint 2: Check quantity
         if(document.querySelector('input[name="goodQuantity"]').value.length == 0)
         {
-            alert("Số lượng sản phẩm không được trống");
+            this.props.hideAlert();
+			this.props.showAlert("Product quantity can't be left blanked","warning");
             return false;
         }
         else if(parseInt(document.querySelector('input[name="goodQuantity"]').value) <= 0) 
         {
-            alert('Số lượng sản phẩm phải lớn hơn 0');
+            this.props.hideAlert();
+			this.props.showAlert("Product quantity must be greater than 0","warning");
             return false;
         }
         // Constraint 3: check Unit
         if(document.querySelector('input[name="unit"]').value.length == 0)
         {
-            alert('Đơn vị của sản phẩm không được trống');
+            this.props.hideAlert();
+			this.props.showAlert("Product unit can't be left blanked","warning");
             return false;
         }
         // Constraint 4: Check import Price
         if(document.querySelector('input[name="originalPrice"]').value.length == 0)
         {
-            alert("Giá nhập không được trống");
+            this.props.hideAlert();
+			this.props.showAlert("Product import price can't be left blanked","warning");
             return false;
         }
         else if(parseFloat(document.querySelector('input[name="originalPrice"]').value) <= 0) 
         {
-            alert('Giá nhập phải lớn hơn 0');
+            this.props.hideAlert();
+			this.props.showAlert("Product import price must be greater than 0","warning");
             return false;
         }
         // Constraint 5: check sell Price
         if(document.querySelector('input[name="sellPrice"]').value.length == 0)
         {
-            alert("Giá bán không được trống");
+            this.props.hideAlert();
+			this.props.showAlert("Product sell price can't be left blanked","warning");
             return false;
         }
         else if(parseFloat(document.querySelector('input[name="sellPrice"]').value) <= 0) 
         {
-            alert('Giá bán phải lớn hơn 0');
+            this.props.hideAlert();
+			this.props.showAlert("Product sell price must be greater than 0","warning");
             return false;
         }
         // Constraint 6: Ngày nhập phải nhỏ  hơn ngày hết hạn và ngày hết hạn, ngày nhập phải khác null
@@ -217,7 +225,8 @@ class UpdateGoodModal extends Component {
             ) >= 0
         )
         {
-            alert('Không thể nhập hàng hết hạn');
+            this.props.hideAlert();
+			this.props.showAlert("Product was expired","warning");
             return false;
         }
         // Constraint 7: Check giá gốc nhỏ hơn giá bán
@@ -227,13 +236,15 @@ class UpdateGoodModal extends Component {
             parseInt(document.querySelector('input[name="originalPrice"]').value) <=0
             ) 
         {
-            alert('Giá bán phải lớn hơn giá gốc');
+            this.props.hideAlert();
+			this.props.showAlert("Product sell price must be greater than product import price","warning");
             return false;
         }
         // Constraint 8: check xem đã  up ảnh lên xong chưa
         if(this.finishUpImage == false)
         {
-            alert('Ảnh chưa được upload xong');
+            this.props.hideAlert();
+			this.props.showAlert("Image was not uploaded yet","warning");
             return false;
         }
          // Constraint 9: Ngày nhập phải nhỏ  hơn ngày hết hạn theo regulation
@@ -245,12 +256,11 @@ class UpdateGoodModal extends Component {
                  // minExpiredProduct
              {
                  this.props.hideAlert();
-                 this.props.showAlert('Ngày hết hạn với ngày nhập phải cách nhau ít nhất ' + this.props.regulation.minExpiredProduct + ' ngày'
+                 this.props.showAlert('The expired day must be at least ' + this.props.regulation.minExpiredProduct + ' older than the import day'
                  ,"warning");
                  return false;
              }
          }
-        alert('Constraint đã check đầy đủ');
         return true;
     }
 
@@ -293,7 +303,8 @@ class UpdateGoodModal extends Component {
         axios.put(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Update success");
-                alert('Đã update thành công sản phẩm')
+                this.props.hideAlert();
+				this.props.showAlert("Update product success","success");
             })
             .catch(err => {
                 console.log(err);

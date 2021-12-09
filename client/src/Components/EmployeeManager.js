@@ -171,8 +171,8 @@ class EmployeeManager extends Component {
         }
         axios.post(`http://localhost:5000/api/employee`, data)
             .then(res => {
-                console.log("Save success");
-                alert("Lưu thành công")
+                this.props.hideAlert();
+				this.props.showAlert("Save employee success!","success");
             })
             .catch(err => {
                 this.props.hideAlert();
@@ -196,7 +196,8 @@ class EmployeeManager extends Component {
         }
         axios.delete(`http://localhost:5000/api/employee`,{data: data})
             .then(res => {
-                alert("delete employee(s) success");
+                this.props.hideAlert();
+				this.props.showAlert("Sacked employee success","success");
             })
             .catch(err => {
                 this.props.hideAlert();
@@ -247,7 +248,6 @@ class EmployeeManager extends Component {
             params: {...data}
         })
             .then(res => {
-                // alert("Lấy hết đc product ròi anh chai");
                 result = res.data.data;
             })
             .catch(err => {

@@ -160,7 +160,8 @@ class AddGoodModal extends Component {
         axios.post(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Save success");
-                alert("Lưu thành công")
+                this.props.hideAlert();
+				this.props.showAlert("Save product success","success");
             })
             .catch(err => {
                 this.props.hideAlert();
@@ -241,7 +242,6 @@ class AddGoodModal extends Component {
         {
             this.props.hideAlert();
             this.props.showAlert("Số lượng sản phẩm không được trống","warning");
-            alert('Số lượng sản phẩm phải lớn hơn 0');
             return false;
         }
         // Constraint 3: check Unit
@@ -249,7 +249,6 @@ class AddGoodModal extends Component {
         {
             this.props.hideAlert();
             this.props.showAlert("Số lượng sản phẩm không được trống","warning");
-            alert('Đơn vị của sản phẩm không được trống');
             return false;
         }
         // Constraint 4: Check import Price

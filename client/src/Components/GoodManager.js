@@ -194,7 +194,8 @@ class GoodManager extends Component {
         console.log("Nội dung file", rows);
         if(rows.length  <= 2)
         {
-            alert("File không hợp lệ do chưa có thông tin về hàng header và dữ liệu ở đó")
+            this.props.hideAlert();
+			this.props.showAlert("The file is invalid because it doesn't has header and data!","warning");
             return false;
         }
         // Xử lý các thông tin ở trưởng header
@@ -204,13 +205,15 @@ class GoodManager extends Component {
         var rowSplit = rows[0].split(',');
         if(rowSample.length != rowSplit.length)
         {
-            alert("Header bị lỗi, header khác với sample hoặc có dữ liệu trồi ra bên ngoài của bảng");
+            this.props.hideAlert();
+			this.props.showAlert("The header is invalid. It is different from the template or has data out of the table!","warning");   
             return false;
         }
         for(var i = 0 ; i < rowSample.length ; i++)
         {
             if(rowSample[i] != rowSplit[i]) {
-                alert("Header bị lỗi, header khác với sample");
+                this.props.hideAlert();
+				this.props.showAlert("the header is different from the template","warning");
                 return false;
             }
         }
@@ -222,20 +225,24 @@ class GoodManager extends Component {
             var dataRows = rows[i2].split(',');
             if(dataRows.length < 9)
             {
-                alert("Hàng thứ " + (i2+1) + " trong file excel chứa sản phẩm bị thiếu dữ liệu");
+                this.props.hideAlert();
+				this.props.showAlert("The line " + (i2+1) + ' in the excel file is lack of data' ,"warning");
                 return false;
             }
 
             if(dataRows.length > 9)
             {
-                alert("Hàng thứ " + (i2+1) + " trong file excel chứa sản phẩm bị dư dữ liệu hoặc có ô dư dấu phẩy");
+                this.props.hideAlert();
+				this.props.showAlert("The line " + (i2+1) + ' in the excel file is has more data than the template or has the cell contains ","' ,"warning");
                 return false;
             }
             for(var j = 0; j < dataRows.length; j++)
             {
                 if(dataRows[j]=='')
                 {
-                    alert("Hàng thứ " + (i2+1) + " cột " + columnName[j] + " trong file excel chứa sản phẩm bị thiếu dữ liệu");
+                    this.props.hideAlert();
+				    this.props.showAlert("The line " + (i2+1) + ' with column ' + columnName[j] +' in the excel file is '+
+                    +'lack of data' ,"warning");
                     return false;
                 }
             }
@@ -347,52 +354,59 @@ class GoodManager extends Component {
         try {
             if(parseInt(newRow.quantity) <= 0 || this.checkAllNumber(newRow.quantity)==false)
             {
-                alert("Số lượng sản phẩm ở hàng "+ (index + 1) +" không hợp lệ");
+                this.props.hideAlert();
+				this.props.showAlert("The number of product in line "+ (index + 1) +" is invalid","warning");
                 return false;
             }
         }
         catch(e)
         {
-            alert("Số lượng sản phẩm ở hàng "+ (index + 1) +" không hợp lệ");
+            this.props.hideAlert();
+			this.props.showAlert("The number of product in line "+ (index + 1) +" is invalid","warning");
             return false;
         }
 
         try {
             if(parseFloat(newRow.originalPrice) <= 0 || this.checkAllDoubleNumber(newRow.originalPrice)==false)
             {
-                alert("Giá nhập hàng ở hàng "+ (index + 1) +" không hợp lệ");
-                return false;
+                this.props.hideAlert();
+			    this.props.showAlert("Import price of product in line "+ (index + 1) +" is invalid","warning");
             }
 
         }
         catch (e){
-            alert("Giá nhập hàng ở hàng "+ (index+1) +" không hợp lệ");
+            this.props.hideAlert();
+			this.props.showAlert("Import price of product in line "+ (index + 1) +" is invalid","warning");
             return false;
         }
 
         try {
             if(parseFloat(newRow.sellPrice) <= 0 || this.checkAllDoubleNumber(newRow.sellPrice)==false)
             {
-                alert("Giá bán ở hàng "+ (index + 1) +" không hợp lệ");
+                this.props.hideAlert();
+			    this.props.showAlert("Sell price of product in line "+ (index + 1) +" is invalid","warning");
                 return false;
             }
 
         }
         catch (e){
-            alert("Giá bán ở hàng "+ (index+1) +" không hợp lệ");
+            this.props.hideAlert();
+            this.props.showAlert("Sell price of product in line "+ (index + 1) +" is invalid","warning");
             return false;
         }
 
         try {
             if(this.toDateString(newRow.expiredDate)=="")
             {
-                alert("Ngày hết hạn ở hàng "+ (index+1) +" không hợp lệ");
+                this.props.hideAlert();
+                this.props.showAlert("Expired day of product in line "+ (index + 1) +" is invalid","warning");
                 return false;
             }
         }
         catch(e)
         {
-            alert("Ngày hết hạn ở hàng "+ (index+1) +" không hợp lệ");
+            this.props.hideAlert();
+            this.props.showAlert("Expired day of product in line "+ (index + 1) +" is invalid","warning");
             return false;
         }
         // Check ngày hết hạn lớn hơn ngày nhập là ngày hiện tại
@@ -400,24 +414,28 @@ class GoodManager extends Component {
             // console.log("In thử ngày hiện tại", new Date().getTime())
             if(new Date().getTime() - new Date(this.toDateString(newRow.expiredDate)).getTime() >=0)
             {
-                alert("Ngày nhập hàng ở hàng "+ (index+1) +" không thể lớn hơn hoặc bằng ngày hết hạn");
+                this.props.hideAlert();
+                this.props.showAlert("Expired day of product in line "+ (index + 1) +" must be greater than the import day","warning");
                 return false;
             }
         }
         catch(e) {
-            alert("Ngày nhập hàng ở hàng "+ (index+1) +" không thể lớn hơn hoặc bằng ngày hết hạn");
+            this.props.hideAlert();
+            this.props.showAlert("Expired day of product in line "+ (index + 1) +" must be greater than the import day","warning");
             return false;
         }
         // Check giá gốc phải nhỏ hơn giá bán
         if ( parseFloat(newRow.sellPrice) - parseFloat(newRow.originalPrice) <=0.0) 
         {
-            alert('Giá bán ở hàng ' + (index+1) +' phải lớn hơn giá gốc');
+            this.props.hideAlert();
+            this.props.showAlert("Sell price of product in line "+ (index + 1) +" must be greater than the import price","warning");
             return false;
         }
         // Check cái đơn vị tiền
         if ( newRow.currency != '$' && newRow.currency !='VNĐ') 
         {
-            alert('Đơn vị tiền tệ của hàng '  + (index+1) + ' bị sai (chỉ có thể là "$" hoặc "VNĐ")');
+            this.props.hideAlert();
+            this.props.showAlert("Currency of product in line "+ (index + 1) +" must be either '$' or 'VNĐ'","warning");
             return false;
         }
         // Check xong hết các constraint;
@@ -458,13 +476,15 @@ class GoodManager extends Component {
                 this.calculateDay(this.toDateString(newRow.expiredDate), this.getCurrentDateTimeString())
             )
             {
-                alert('Ngày nhập và ngày hết hạn ở hàng '  + (index+1) 
-                + ' phải cách nhau ít nhất ' +this.props.regulation.minExpiredProduct + ' ngày');
+                this.props.hideAlert();
+				this.props.showAlert('The expiration date in line '  + (index+1) 
+                + ' must be at least ' +this.props.regulation.minExpiredProduct + ' day(s) older than the import date',"warning");
                 return false;
             }
         }
         catch(e){
-            alert("Đã có lỗi xảy ra trong việc check quy định của ngày hết hạn và ngày nhập");
+            this.props.hideAlert();
+			this.props.showAlert("Some error happened in checking regulation of import day and expire day","warning");
             return false;
         }
         return true;
@@ -659,10 +679,7 @@ class GoodManager extends Component {
             })
             // Cập nhật type vào redux
             this.props.addTypeToReducer(dataType.productType);
-        }
-        // alert("Save types success");
-        
-
+        }      
 
         for(var m = 0 ; m < allJoins.length ; m++)
         {
@@ -686,7 +703,8 @@ class GoodManager extends Component {
         {
             this.props.addProductToRedux(allProductsforRedux[m]);
         }
-
+        this.props.hideAlert();
+		this.props.showAlert("Add products from excel file success","success");
     }
 
     render() {
