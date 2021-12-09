@@ -16,7 +16,7 @@ import {
     IoReceiptSharp,
 } from "react-icons/io5";
 import { ImCheckboxUnchecked, ImCheckboxChecked } from "react-icons/im"
-import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowBack , IoIosArrowForward} from "react-icons/io";
 import { RiProfileFill, RiProfileLine } from "react-icons/ri";
 import { FaSignOutAlt } from "react-icons/fa";
 import { GiSellCard } from 'react-icons/gi'
@@ -33,6 +33,8 @@ class SideNavBar extends Component {
             attendance: false,
         }
         this.getInitialScreen();
+        console.log("openSidebar", this.props.sidebarOpen);
+        this.loadIntialOpen();
     }
     active = ['active', '', '', '', '', ''];
 
@@ -69,6 +71,24 @@ class SideNavBar extends Component {
                 this.active[4] = 'active';
                 break;
             case "sellproduct":
+                this.active[5] = 'active';
+                break;
+            case "profile#":
+                this.active[1] = 'active';
+                break;
+            case "employeemanager#":
+                this.active[2] = 'active';
+                break;
+            case "goodmanager#":
+                this.active[3] = 'active';
+                break;
+            case "import#":
+                this.active[3] = 'active';
+                break;
+            case "receiptmanager#":
+                this.active[4] = 'active';
+                break;
+            case "sellproduct#":
                 this.active[5] = 'active';
                 break;
             default:
@@ -115,25 +135,76 @@ class SideNavBar extends Component {
         })
     }
 
-    render() {
+    hideNavbar() {
+        // console.log("Chạy được hàm ẩn rồi");
+        // // // console 
+        // const navbarContainer = document.querySelector('.navbar-container');
         const navbarContainer = document.querySelector('.navbar-container');
+        navbarContainer.classList.add('short');
+        this.props.closeSidebar();
+    }
+
+    showNavbar() {
+        // console.log("Chạy được hàm ẩn rồi");
+        // // // console 
+        const navbarContainer = document.querySelector('.navbar-container');
+        navbarContainer.classList.remove('short');
+        this.props.openSidebar();
+    }
+
+    loadIntialOpen() {
+        this.props.openSidebar();
+        // if(this.props.sidebarOpen)
+        // {
+        //     var navbarContainer2 = document.querySelector('.navbar-container');
+        //     console.log('Toang mở')
+        //     console.log("navbarContainer", navbarContainer2)
+        //     // navbarContainer2.classList.remove('short');
+        // }
+        // else 
+        // {
+        //     var navbarContainer2 = document.querySelector('.navbar-container');
+        //     console.log('Toang đóng')
+        //     console.log("navbarContainer", navbarContainer2)
+        //     // navbarContainer2.classList.add('short');
+        // }
+    }
+
+    render() {
         return (
             <div
                 class="navbar-container"
-                style={{
-                    width: 0,
-                }}
             >
                 <div style={{ backgroundColor: !this.props.statusDarkmode ? '#fafafa' : '#37474f' }} class="navibar sidebar">
                     <div className="nav-icon" >
-                        <IoIosArrowBack
-                            size={20}
-                        />
+                        {
+                            this.props.sidebarOpen ?
+                            <IoIosArrowBack
+                                size={20}
+                                onClick={(e) => this.hideNavbar()}
+                            />
+                            :
+                            <IoIosArrowForward
+                                style={{
+                                    position: 'fixed',
+                                    left: '42px',
+                                    top: '56px',
+                                }}
+                                size={20}
+                                onClick={(e) => this.showNavbar()}
+                            />
+                        }
                     </div>
                     <div class="nav-heading">
-                        <div style={{ backgroundColor: !this.props.statusDarkmode ? '#cfd8dc' : '#455a64' }} class="navbar-heading-container">
-                            <img src={this.props.infoUser.avatar ? this.props.infoUser.avatar : Avatar} style={{ width: 40, height: 40, borderRadius: '100%' }}></img>
-                            <span style={{ color: !this.props.statusDarkmode ? 'black' : 'white', fontWeight: '700' }} class="user-name">{this.props.infoUser.lastName + " " + this.props.infoUser.firstName}</span>
+                        <div style={{ 
+                                backgroundColor: !this.props.sidebarOpen? !this.props.statusDarkmode ? '#fafafa' : '#37474f': (!this.props.statusDarkmode ? '#cfd8dc' : '#455a64'),
+                                paddingTop: !this.props.sidebarOpen? 10: 8,
+
+                            }} 
+                            class="navbar-heading-container"
+                        >
+                            <img class='user-avatar'src={this.props.infoUser.avatar ? this.props.infoUser.avatar : Avatar} style={{ width: 40, height: 40, borderRadius: '100%' }}></img>
+                            <span class="user-name" style={{ color: !this.props.statusDarkmode ? 'black' : 'white', fontWeight: '700' }} >{this.props.infoUser.lastName + " " + this.props.infoUser.firstName}</span>
                         </div>
                     </div>
                     <div class="nav-container">
@@ -241,7 +312,8 @@ const mapStateToProps = (state, ownProps) => {
         isLogin: state.loginStatus,
         infoUser: state.infoUser,
         role: state.role,
-        statusDarkmode: state.statusDarkmode
+        statusDarkmode: state.statusDarkmode,
+        sidebarOpen: state.sidebarOpen,
     }
 }
 
@@ -283,7 +355,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "RESET_INFO_USER"
             })
-        }
+        },
+        closeSidebar: () => {
+            dispatch({
+                type: "CLOSE_SIDEBAR"
+            })
+        },
+        openSidebar: () => {
+            dispatch({
+                type: "OPEN_SIDEBAR"
+            })
+        },
     }
 }
 

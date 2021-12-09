@@ -201,6 +201,7 @@ class FixedCalendarCell extends Component {
     const { classes } = this.props;
     return (
         <TableCell 
+            id="scroll-bar"
             className={classes.goodTable_Cell} 
             style={{
                 position: 'relative',
@@ -282,17 +283,26 @@ class FixedCalendarCell extends Component {
                   overflowY: 'auto',
                   width: 140,
                   backgroundColor: '#fff',
+                  
                 }}
+                id="scroll-bar"
               >
+                {/* <div style={{height: 12, backgroundColor:'#333'}}></div> */}
                 {
                   this.props.listEmployee.employees.map((item) =>
                     this.findEmployeeInShift(item._id.employeeID) ? null :
-                    <ListItem disablePadding height={30} onClick={() => this.addThisShiftAssign(item._id.employeeID)}>
+                    <ListItem style={{display: 'flex', flexDirection: 'column'}} disablePadding height={30} onClick={() => this.addThisShiftAssign(item._id.employeeID)}>
                         <ListItemButton>
                             <ListItemText>
-                                {item._id.employeeID + ' - ' + item.firstName}
+                              <span style={{fontSize: 14}}>{item._id.employeeID + ' - ' + item.firstName}</span>
+                                
                             </ListItemText>
                         </ListItemButton>
+                        <div style={{
+                            height: 2,
+                            width: '100%',
+                            border: '1px solid #333'
+                        }}></div>
                     </ListItem>
                   )
                 }

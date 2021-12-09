@@ -39,13 +39,6 @@ class GoodTable extends Component {
         }
         console.log("this.props.listProduct.state", this.props.listProduct.state);
     }
-    removeProduct= (row) => {
-        // Đây là xử lý ở phía dữ liệu, có thể await gì đó.
-        // Xử lý ở phía giao diện(tạm)
-
-        // Đây là câu lệnh để update nhẹ
-        this.setState({update: this.state.update})
-    }
 
     getTypeNamebyTypeID (typeID) {
         var typeName="Null";
@@ -63,8 +56,8 @@ class GoodTable extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div style={{height: '550px', width: '100%', overflowY: 'scroll'}}>
-                <TableContainer component={Paper}>
+            <div id="scroll-bar" style={{height: '550px', width: '100%', overflowY: 'auto'}}>
+                <TableContainer id="scroll-bar" component={Paper}>
                     <Table className={classes.goodTable} aria-label="collapsible table">
                         <TableHead>
                             <TableRow>

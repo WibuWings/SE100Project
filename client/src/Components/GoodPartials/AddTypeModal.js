@@ -20,31 +20,6 @@ class AddTypeModal extends Component {
     storeID = "";
     typeList = [];
 
-    // async getAllTypeList(){
-    //     var result = [];
-    //     const data = {
-    //         token: localStorage.getItem('token'),
-    //         filter: {
-    //             "_id.storeID": this.props.infoUser.email,
-    //         }   
-    //     }
-    //     console.log(data.filter);
-    //     await axios.get(`http://localhost:5000/api/product/type`, 
-    //     {
-    //         params: {...data}
-    //     })
-    //         .then(res => {
-    //             result = res.data.data;
-    //         })
-    //         .catch(err => {
-    //             alert(err);
-    //         })
-    //     //Get data và lưu các tên Type vào bảng
-    //     for(var i=0; i < result.length ; i++)
-    //     {
-    //         listTypeInfor.push(result[i]);
-    //     }
-    // }
     addType = () => {
         if(this.checkConstraint(this.typeName)==false)  return;
         var genTypeID = 0;

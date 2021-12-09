@@ -308,6 +308,7 @@ class EmployeeManager extends Component {
         return (
             <div
                 style={{display: 'block', overflowY: 'auto', height: '100vh'}}
+                id="scroll-bar"
             >
                 <Container
                     style={{marginTop: 20, }}
@@ -336,7 +337,7 @@ class EmployeeManager extends Component {
                         filterName={filterName}
                         // onFilterName={this.handleFilterByName(event)}
                     /> */}
-                    <TableContainer style ={{maxHeight:'500px',overflowY: 'scroll'}}>
+                    <TableContainer id="scroll-bar" style ={{maxHeight:'500px',overflow: 'auto'}}>
                         <Table>
                             <EmployeeTableHeader
                                 // order={order}
@@ -438,7 +439,7 @@ class EmployeeManager extends Component {
                         filterName={filterName}
                         // onFilterName={this.handleFilterByName(event)}
                     /> */}
-                    <TableContainer style ={{maxHeight:'500px',overflowY: 'scroll'}}>
+                    <TableContainer id="scroll-bar"style ={{maxHeight:'500px',overflowY: 'scroll'}}>
                         <Table>
                             <EmployeeTableHeader
                                 // order={order}
@@ -548,6 +549,7 @@ class EmployeeManager extends Component {
                 {this.props.payEmployeeStatus ? (
                     <div 
                         className="modal-add"
+                        style={{width: '100%'}}
                     >
                         <div onClick={() => {this.props.changePayEmployeeStatus();}} className="modal-overlay"></div>
                         <PayMoneyModal

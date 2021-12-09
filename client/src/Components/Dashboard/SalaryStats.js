@@ -127,7 +127,7 @@ function SalaryStats(props) {
                 </Typography>
                 : 
                 <Typography style={{ marginBottom: '10px' }} variant="h6">
-                    {(totalSalary.toLocaleString()/regulation.exchangeRate).toFixed(2)} $ 
+                    {(totalSalary/regulation.exchangeRate).toFixed(2)} $ 
                 </Typography>
             }
            
