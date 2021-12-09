@@ -17,6 +17,7 @@ import XLSX from 'xlsx';
 import excelLogo from './GoodPartials/excelLogo.png';
 import { inputAdornmentClasses } from '@material-ui/core';
 import GoodTableDisplay from './GoodPartials/GoodTableDisplay';
+import ExcelInstruction from './GoodPartials/ExcelInstruction';
 
 class GoodManager extends Component {
     constructor(props) {
@@ -706,7 +707,9 @@ class GoodManager extends Component {
                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
                             onChange={(e) => this.uploadExcel(e)}
                         ></input>
-                        
+                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.props.changeExcelInstruction()} variant="contained">
+                            Excel Instruction
+                        </Button>
                         {/* <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirmDelete()} variant="contained">
                             Delete
                         </Button>
@@ -718,7 +721,7 @@ class GoodManager extends Component {
                         </Button> */}
 
                      </div>
-                    <GoodTableDisplay/>
+                    {/* <GoodTableDisplay/> */}
                     <GoodTable />
 
                     {/* Đây là phần modal */}
@@ -772,6 +775,12 @@ class GoodManager extends Component {
                             <UpdateTypeModal></UpdateTypeModal>
                         </div>
                     ): null}
+                    {this.props.excelInstructionStatus ? (
+                        <div className="modal-add">
+                            <div onClick={() => {this.props.changeExcelInstruction();}} className="modal-overlay"></div>
+                            <ExcelInstruction></ExcelInstruction>
+                        </div>
+                    ): null}
                 </div>
             </div>
         );
@@ -792,6 +801,7 @@ const mapStateToProps = (state, ownProps) => {
         typeProduct: state.typeProduct,
         regulation: state.regulationReducer,
         listProduct: state.listProduct,
+        excelInstructionStatus: state.excelInstructionStatus,
     }
 }
 
@@ -865,6 +875,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "ADD_PRODUCT",
                 data: data,
             }); 
+        },
+        changeExcelInstruction: () => {
+            dispatch({
+                type: "CHANGE_EXCEL_INSTRUCTION_STATUS",
+            });
         },
     }
 }

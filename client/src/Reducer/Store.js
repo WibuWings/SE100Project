@@ -61,7 +61,7 @@ import statusEditCouponReducer from './Profile/StatusEditCoupon';
 import objectEditCouponReducer from './Profile/ObjectEditCoupon';
 import regulationReducer from './Profile/RegulationReducer';
 import sidebarOpenReducer from './SidebarOpenStatus';
-
+import statusExcelInstructionReducer from './GoodManager/ExcelInstructionStatus';
 
 var redux = require('redux');
 
@@ -117,6 +117,7 @@ const allReducers = redux.combineReducers({
     chooseTypeProduct: chooseTypeProductReducer,
     statusUpdateType: statusUpdateTypeReducer,
     alert: alertReducer,
+    excelInstructionStatus: statusExcelInstructionReducer,
     //Hóa đơn
     shoppingBags: shoppingBagsReducer,
     statusShowHistoryReciept: statusShowHistoryReciept,
