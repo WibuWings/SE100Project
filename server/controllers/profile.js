@@ -201,9 +201,9 @@ class meProfile {
     deleteShift = async (req, res) => {
         const idUser = req.body.email
         const idShift = req.body.idShift
-        // console.log(idUser,idShift);
+
         ShiftType.findOneAndDelete(
-            { "_id.shiftID": idShift, "_id.storeID": idUser,  },
+            { "_id.shiftID": idShift, "_id.storeID": idUser, },
             function (err, doc) {
                 if (err) {
                     res.send(

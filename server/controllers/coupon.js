@@ -30,7 +30,7 @@ class CouponTab {
         var reqCoupon = req.body.coupon;
 
         var newCoupon = new Coupon({
-            ...reqCoupon
+            ...reqCoupon,
         });
 
         newCoupon
@@ -51,12 +51,18 @@ class CouponTab {
 
     updateCoupon = async (req, res) => {
         var reqCoupon = req.body.coupon;
-        var { _id, ...updateFields } = reqProduct;
-        _id.importDate = new Date(_id.importDate);
+        var { _id, ...updateFields } = reqCoupon;
 
-        Coupon.findOneAndUpdate({ _id }, updateFields, {
-            returnOriginal: false,
-        })
+        Coupon.findOneAndUpdate(
+            {
+                "_id.couponID": reqCoupon._id.couponID,
+                "_id.storeID": reqCoupon._id.storeID,
+            },
+            updateFields,
+            {
+                returnOriginal: false,
+            }
+        )
             .then((data) => {
                 res.status(200).send(
                     JSON.stringify({
@@ -72,7 +78,7 @@ class CouponTab {
     };
 
     deleteCoupon = async (req, res) => {
-        var reqCoupon = req.body.coupon;
+        var reqCoupon = req.body._id;
 
         Coupon.deleteOne(reqCoupon)
             .then((data) => {
