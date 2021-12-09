@@ -40,7 +40,7 @@ class GoodRow extends Component{
             update: false,
             change: false,
         }
-        
+        console.log('regulation', this.props.regulation)
     }
     isOpen = false;
     row = {};
@@ -153,7 +153,7 @@ class GoodRow extends Component{
                 <TableCell className={classes.goodTable_Cell} align="right">
                 <div style={{display: 'flex'}}>
                     {
-                        this.props.regulation == [] ?
+                        Object.keys(this.props.regulation).length == 0 ?
                         <div>{row.sellPrice}</div> :
                         this.props.regulation.currency == 'vnd' ?
                         <div>{row.sellPrice}</div> :
@@ -162,7 +162,7 @@ class GoodRow extends Component{
                     
                     <div style={{marginLeft: 4}}>
                         {
-                            (this.props.regulation == [])
+                            (Object.keys(this.props.regulation).length == 0)
                                 ? ' VNĐ':
                             (this.props.regulation.currency == 'vnd' ? ' VNĐ' : ' $')
                         }
@@ -215,7 +215,7 @@ class GoodRow extends Component{
                                                 <TableCell className={classes.goodTable_Cell} >
                                                     <div style={{display: 'flex'}}>
                                                     {
-                                                        this.props.regulation == [] ?
+                                                        Object.keys(this.props.regulation).length == 0 ?
                                                         <div>{row.importPrice}</div> :
                                                         this.props.regulation.currency == 'vnd' ?
                                                         <div>{row.importPrice}</div> :
@@ -223,7 +223,7 @@ class GoodRow extends Component{
                                                     }
                                                         <div style={{marginLeft: 4}}>
                                                             {
-                                                                (this.props.regulation == [])
+                                                                (Object.keys(this.props.regulation).length == 0)
                                                                     ? ' VNĐ':
                                                                 (this.props.regulation.currency == 'vnd' ? ' VNĐ' : ' $')
                                                             }

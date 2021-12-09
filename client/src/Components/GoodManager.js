@@ -448,7 +448,7 @@ class GoodManager extends Component {
     }
 
     checkRegulationOfExcelObject(newRow, index) {
-        if(this.props.regulation == []) return true;
+        if(Object.keys(this.props.regulation).length == 0) return true;
         try {
             if(
                 this.props.regulation.minExpiredProduct > 

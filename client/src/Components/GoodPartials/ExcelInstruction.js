@@ -35,7 +35,7 @@ class ExcelInstruction extends Component {
                                 - Wait for the alert or fix excel file, upload again if your excel file was error
                             </Grid>
                             {
-                                this.props.regulation == [] ? null :
+                                Object.keys(this.props.regulation).length == 0 ? null :
                                 <Grid item md={12} xs={12} style={{margin: '0px 12px'}}>
                                     <label style={{fontWeight: 700, display: 'block'}}>Regulation:</label>
                                     - The expiration date must be at least {this.props.regulation.minExpiredProduct} day(s) older than the input date 

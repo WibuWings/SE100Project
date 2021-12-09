@@ -48,7 +48,7 @@ class UpdateGoodModal extends Component {
             imageSelect: "null",
             type:'none',
             url: 'http://res.cloudinary.com/databaseimg/image/upload/v1634117795/ubvxisehhpvnu2lbqmeg.png',
-            exchangeRate: this.props.regulation== [] ? 1 : this.props.regulation.currency == 'vnd' ? 1 : this.props.regulation.exchangeRate,
+            exchangeRate: Object.keys(this.props.regulation).length== 0 ? 1 : this.props.regulation.currency == 'vnd' ? 1 : this.props.regulation.exchangeRate,
         }; 
         typeSet = [];
         this.loadInitialData();
@@ -663,7 +663,7 @@ class UpdateGoodModal extends Component {
                                                 VNĐ
                                             </option>
                                             {
-                                                this.props.regulation != {} ?
+                                                Object.keys(this.props.regulation).length == 0 ?
                                                 <option value="dollar">
                                                     $
                                                 </option>
