@@ -237,6 +237,12 @@ function Row(props) {
         }
     }
 
+    const editProduct = async (row) => 
+    {
+        dispatch({type: "UPDATE_GOOD_DATA", data: row});
+        dispatch({ type: "CHANGE_UPDATE_GOOD_STATUS", });
+    }
+
     const deleteProduct = async (row) => {
         // Xoá sản phẩm
         console.log("row", row)
@@ -539,7 +545,7 @@ function Row(props) {
                         <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
                             <Grid style={{ justifyContent: 'end' }} container>
                                 <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
-                                    <Button onClick={() => RestoneReciept(row.MAHD)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: '#00bfa5', color: 'white' }}>
+                                    <Button onClick={() => editProduct(row)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: '#00bfa5', color: 'white' }}>
                                         <AiOutlineEdit style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></AiOutlineEdit>
                                         Edit
                                     </Button>
