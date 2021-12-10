@@ -84,7 +84,8 @@ class SellProduct extends Component {
                 localStorage.getItem('token', res.data.token);
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         //Get data và lưu các tên Type vào bảng
         var listTypeInfor = [];
@@ -110,7 +111,8 @@ class SellProduct extends Component {
                 resultProduct = res.data.data;
             })
             .catch(err => {
-                alert(err)
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         // Get hết từ cái productjoinType
         var result = [];
@@ -128,7 +130,8 @@ class SellProduct extends Component {
                 localStorage.getItem('token', res.data.token);
             })
             .catch(err => {
-                alert(err)
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         // Lấy các cái jointype
         var joinTypeInfor = [];

@@ -123,7 +123,8 @@ class PayEmployeeModal extends Component {
         }
         catch(e)
         {
-            alert("Đã có lỗi xảy ra");
+            this.props.hideAlert();
+			this.props.showAlert("Something happened, restart and try again","warning");
             console.log("Lỗi trả lương", e);
         }
         
@@ -301,14 +302,14 @@ class PayEmployeeModal extends Component {
                                                                 <TableCell className={classes.goodTable_Cell}>
                                                                     <div style={{display: 'flex'}}>
                                                                         {
-                                                                            this.props.regulation == [] ?
+                                                                            Object.keys(this.props.regulation).length == 0 ?
                                                                             <div style={{marginRight: 4}}>{timeKeeper._id.shiftType.salary}</div> :
                                                                             this.props.regulation.currency == 'vnd' ?
                                                                             <div style={{marginRight: 4}}>{timeKeeper._id.shiftType.salary}</div> :
                                                                             <div style={{marginRight: 4}}>{(timeKeeper._id.shiftType.salary/this.props.regulation.exchangeRate).toFixed(2)}</div>
                                                                         }
                                                                         {
-                                                                            (this.props.regulation == [])
+                                                                            (Object.keys(this.props.regulation).length == 0)
                                                                                 ? <div>{' VNĐ'}</div> :
                                                                             (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
                                                                         }
@@ -318,14 +319,14 @@ class PayEmployeeModal extends Component {
                                                                     {/* {this.calculateSalary(timeKeeper._id.shiftType)}\ */}
                                                                     <div style={{display: 'flex'}}>
                                                                         {
-                                                                            this.props.regulation == [] ?
+                                                                            Object.keys(this.props.regulation).length == 0 ?
                                                                             <div style={{marginRight: 4}}>{this.calculateSalary(timeKeeper._id.shiftType)}</div> :
                                                                             this.props.regulation.currency == 'vnd' ?
                                                                             <div style={{marginRight: 4}}>{this.calculateSalary(timeKeeper._id.shiftType)}</div> :
                                                                             <div style={{marginRight: 4}}>{(this.calculateSalary(timeKeeper._id.shiftType)/this.props.regulation.exchangeRate).toFixed(2)}</div>
                                                                         }
                                                                         {
-                                                                            (this.props.regulation == [])
+                                                                            (Object.keys(this.props.regulation).length == 0)
                                                                                 ? <div>{' VNĐ'}</div> :
                                                                             (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
                                                                         }
@@ -356,14 +357,14 @@ class PayEmployeeModal extends Component {
                                                 TotalSalary: 
                                             </lable>
                                             {
-                                                this.props.regulation == [] ?
+                                                Object.keys(this.props.regulation).length == 0 ?
                                                 <div style={{marginRight: 4}}>{this.totalSalary}</div> :
                                                 this.props.regulation.currency == 'vnd' ?
                                                 <div style={{marginRight: 4}}>{this.totalSalary}</div> :
                                                 <div style={{marginRight: 4}}>{(this.totalSalary/this.props.regulation.exchangeRate).toFixed(2)}</div>
                                             }
                                             {
-                                                (this.props.regulation == [])
+                                                (Object.keys(this.props.regulation).length == 0)
                                                     ? <div>{' VNĐ'}</div> :
                                                 (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
                                             }
@@ -470,7 +471,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "PAY_SALARY",
                 employeeID: employeeID
             });
-        }
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 

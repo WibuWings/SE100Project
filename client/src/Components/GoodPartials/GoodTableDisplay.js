@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
-import { Grid, Box, Button, Checkbox, Modal } from '@mui/material';
+import { Grid, Box, Button, Checkbox, Modal, Divider } from '@mui/material';
 import { red, lightBlue } from '@mui/material/colors';
 import Typography from '@mui/material/Typography';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -21,19 +21,23 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useSelector, useDispatch } from 'react-redux'
 import { FiXSquare } from 'react-icons/fi'
 import { TiArrowBack } from 'react-icons/ti'
+import { Image } from 'cloudinary-react';
+import GoodImage from './goodExample.jpg';
+import { fontWeight } from '@material-ui/system';
+import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
 
-const styles = theme =>  ({
-    goodTable: {                                     
+const styles = theme => ({
+    goodTable: {
         borderWidth: '1px',
         borderColor: '#ccc',
         borderStyle: 'solid'
     },
-    goodTable_Cell: {                                     
+    goodTable_Cell: {
         borderWidth: '1px',
         borderColor: '#ccc',
         borderStyle: 'solid',
         height: '40px',
-    } 
+    }
 })
 
 
@@ -167,18 +171,6 @@ function Row(props) {
         setOpenModal(false)
     }
 
-    const TypeReciept = (isEdit, isDelete, oldBill) => {
-        if (isDelete) {
-            return red[400]
-        } else if (isEdit) {
-            return '#f4f492'
-        } else if (oldBill) {
-            return '#00897b'
-        } else {
-            return '#a6ffa6'
-        }
-    }
-
     const StatusTypeReciept = (isEdit, isDelete) => {
         if (isDelete) {
             return 'Đã xóa'
@@ -245,12 +237,153 @@ function Row(props) {
         }
     }
 
+    const editProduct = async (row) => 
+    {
+        dispatch({type: "UPDATE_GOOD_DATA", data: row});
+        dispatch({ type: "CHANGE_UPDATE_GOOD_STATUS", });
+    }
+
+    const deleteProduct = async (row) => {
+        // Xoá sản phẩm
+        console.log("row", row)
+        const data = {
+            token: localStorage.getItem('token'),
+            products:
+            [
+                {
+                    productID: row._id.productID,
+                    importDate: row._id.importDate,
+                    storeID: row._id.storeID,
+                }
+            ]
+            
+        }
+        axios.delete(`http://localhost:5000/api/product`,{data: data})
+            .then(res => {
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: "Delete product success",
+                    typeMessage: "success",
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: "Something happened, restart and try again",
+                    typeMessage: "warning",
+                })
+            })
+        
+        // Get hết các cái join của sản phẩm
+        var allJoinMatch = [];
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": row._id.storeID,
+                "_id.productID": row._id.productID,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, 
+        {
+            params: {...data1}
+        })
+            .then(res => {
+                allJoinMatch = res.data.data;
+            })
+            .catch(err => {
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: "Something happened, restart and try again",
+                    typeMessage: "warning",
+                })
+            })
+        console.log(allJoinMatch);
+        // Xoá các join liên quan đến sản phẩm
+        var allProductJoin = [];
+        for(var i = 0 ; i < allJoinMatch.length; i++)
+        {
+            allProductJoin.push({
+                productID: row._id.productID,
+                typeID: allJoinMatch[i]._id.typeID,
+                importDate: allJoinMatch[i]._id.importDate,
+                storeID: row._id.storeID,
+            });
+        }
+        const dataJoin = {
+            token: localStorage.getItem('token'),
+            productJoinTypes: allProductJoin,      
+        }
+
+        console.log(dataJoin);
+
+        await axios.delete(`http://localhost:5000/api/product/join`,{data: dataJoin})
+            .then(res => {
+                console.log("delete join success");
+            })
+            .catch(err => {
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: "Something happened, restart and try again",
+                    typeMessage: "warning",
+                })
+            })
+        dispatch({
+            type: "DELETE_PRODUCT",
+            data: row,
+        });
+    }
+
+    const calculateDay = (dateString1, dateString2) =>
+    {
+        console.log("dateString1", dateString1);
+        console.log("dateString2", dateString2);
+        if(dateString1.indexOf('T') != -1)
+        {
+            dateString1 = dateString1.substring(0, dateString1.indexOf('T'));
+        }
+        var time = (
+            (new Date(dateString1)).setHours(0, 0, 0) 
+                - 
+            (new Date(dateString2)).setHours(0,0,0)
+            )
+            /(1000 * 60 * 60 * 24);
+        if(time > 0) return time;
+        else return <lable style={{color: 'red'}}>'Product is expired!'</lable>;
+    }
+
+    const getCurrentDateTimeString = () => {
+        var currentDate = new Date();
+        var day = (currentDate.toString().split(' '))[2];
+        if(day.length < 2)
+        {
+            day = '0' + day;
+        }
+        var month = (new Date().getMonth() + 1).toString();
+        if(month.length<2)
+        {
+            month = '0' + month;
+        }
+        return new Date().getFullYear() + '-' + month + '-' + day;
+    }
+
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted, row.oldBill), borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
-                <TableCell>
+            <TableRow style={{ borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+                {/* <TableCell>
                     <Checkbox {...label} checked={statusSelectReplace} onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -261,204 +394,171 @@ function Row(props) {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    {row.MAHD}
+                    {row._id.productID}
                 </TableCell>
-                <TableCell align="right">{row.date}</TableCell>
+                <TableCell align="right">{row.name}</TableCell>
                 <TableCell align="right">
-                    {regulation.currency === 'vnd' ? (row.totalMoney).toLocaleString() : ((row.totalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                    {row.typeIDList.toString()}
                 </TableCell>
-                <TableCell align="right">{row.discount}</TableCell>
+                <TableCell align="right">{row.quantity + ' (' + row.unit + ')'}</TableCell>
+                <TableCell align="right">{row.remain + ' (' + row.unit + ')'}</TableCell>
                 <TableCell align="right">
-                    {regulation.currency === 'vnd' ? (row.totalFinalMoney).toLocaleString() : ((row.totalFinalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
-                    </TableCell>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        {
+                            Object.keys(regulation).length == 0 ?
+                                <div>{row.sellPrice}</div> :
+                                regulation.currency == 'vnd' ?
+                                    <div>{row.sellPrice}</div> :
+                                    <div>{(row.sellPrice / regulation.exchangeRate).toFixed(2)}</div>
+                        }
+
+                        <div style={{ marginLeft: 4 }}>
+                            {
+                                (Object.keys(regulation).length == 0)
+                                    ? ' VNĐ' :
+                                    (regulation.currency == 'vnd' ? ' VNĐ' : ' $')
+                            }
+                        </div>
+                    </div>
+                </TableCell>
             </TableRow>
             <TableRow style={{ borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae' }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box sx={{ margin: 1 }}>
-                            <Typography style={{ fontWeight: '600' }} variant="h6" gutterBottom component="div">
-                                Detail Recipet
-                            </Typography>
-                            <Grid container spacing={3}>
-                                <Grid item lg={6} md={12} sm={12} xs={12}>
-                                    <Table size="small" aria-label="purchases">
-                                        <TableHead>
-                                            <TableRow>
+                        <Divider></Divider>
+                        <label style={{ fontWeight: 700, marginTop: 20, fontSize: 16, marginLeft: 10 }}>Product detail</label>
+                        <Grid container>
+                            <Grid item md={2}>
+                                {
+                                    row.imgUrl == "none"
+                                        ? <div style={{ width: '100px', height: '100px', objectFit: 'cover', margin: 10 }}><img src={GoodImage} style={{ width: '100px', height: '100px', objectFit: 'cover' }} /></div>
 
-                                                <TableCell>#</TableCell>
-                                                <TableCell>Name</TableCell>
-                                                <TableCell>Quantity</TableCell>
-                                                <TableCell align="right">Price</TableCell>
-                                                <TableCell align="right">Total Price</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {row.listProduct.map((value, key) => (
-                                                <TableRow key={value.name}>
-                                                    <TableCell>
-                                                        {key + 1}
-                                                    </TableCell>
-                                                    <TableCell>{value.product.name}</TableCell>
-                                                    <TableCell>{value.quantity}</TableCell>
-                                                    <TableCell align="right">{regulation.currency === 'vnd' ? value.product.sellPrice.toLocaleString() : (value.product.sellPrice / regulation.exchangeRate).toFixed(2).toLocaleString()}</TableCell>
-                                                    <TableCell align="right">
-                                                        {regulation.currency === 'vnd' ? (value.quantity * value.product.sellPrice).toLocaleString() : ((value.quantity * value.product.sellPrice) / regulation.exchangeRate).toFixed(2).toLocaleString()}
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </Grid>
-                                <Grid style={{ borderLeft: '1px solid black', marginTop: '15px' }} item lg={6} md={12} sm={12} xs={12}>
-                                    <Grid container spacing={3}>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Id Receipt:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.MAHD}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Status:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{StatusTypeReciept(row.isEdit, row.deleted)}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Date:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.date}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Time:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.time}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Old bill:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.oldBill ? row.oldBill.MAHD : "Không có"}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Seller:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.name}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Total quanitty:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{countQuantity()}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Total money:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>
-                                                        {regulation.currency === 'vnd' ? row.totalMoney.toLocaleString() : (row.totalMoney / regulation.exchangeRate).toFixed(2).toLocaleString()}
-                                                    </p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Id coupon:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.coupon ? row.coupon.idCoupon : "Không áp dụng"}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Reduce money:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>
-                                                        {regulation.currency === 'vnd' ? (row.totalFinalMoney - row.totalMoney).toLocaleString() : ((row.totalFinalMoney - row.totalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
-                                                    </p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Discount (%):</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.discount}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>TOTAL:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>
-                                                        {regulation.currency === 'vnd' ? (row.totalFinalMoney).toLocaleString() : ((row.totalFinalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
-                                                    </p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
+                                        : <div style={{ width: '100px', height: '100px', objectFit: 'cover', margin: 10 }}><Image style={{ width: '100px', height: '100px', objectFit: 'cover' }} cloudName="databaseimg" publicId={row.imgUrl}>{row.imgUrl}</Image></div>
+                                }
+                            </Grid>
+                            <Grid item md={10}>
+                                <Grid container>
+                                    <Grid item md={6}>
+                                        <div style={{ display: 'flex' , marginTop: 10}}>
+                                            <div style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
+                                                {'Import price:'}
+                                            </div>
+                                            {
+                                                Object.keys(regulation).length == 0 ?
+                                                    <div>{row.importPrice}</div> :
+                                                    regulation.currency == 'vnd' ?
+                                                        <div>{row.importPrice}</div> :
+                                                        <div>{(row.importPrice / regulation.exchangeRate).toFixed(2)}</div>
+                                            }
+                                            <div style={{ marginLeft: 4 }}>
+                                                {
+                                                    (Object.keys(regulation).length == 0)
+                                                        ? ' VNĐ' :
+                                                        (regulation.currency == 'vnd' ? ' VNĐ' : ' $')
+                                                }
+                                            </div>
+                                        </div>
                                     </Grid>
-                                </Grid>
-                                <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
-                                    <Grid style={{ justifyContent: 'end' }} container>
-                                        {row.deleted ? (
-                                            <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
-                                                <Button onClick={() => RestoneReciept(row.MAHD)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: '#00bfa5', color: 'white' }}>
-                                                    <TiArrowBack style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></TiArrowBack>
-                                                    Restone
-                                                </Button>
-                                            </Grid>
-                                        ) : null}
-                                        <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
-                                            <Button onClick={() => DeleteReciept(row.MAHD, row.deleted)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: red[400], color: 'white' }}>
-                                                <FiXSquare style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></FiXSquare>
-                                                Delete
-                                            </Button>
-                                        </Grid>
+                                    <Grid item md={6}>
+                                        <div style={{dislay: 'flex', marginTop: 10}}>
+                                            <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
+                                                Expired Day: 
+                                            </lable>
+                                            <label>
+                                                {row.expires == null ? '' : row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T'))}
+                                            </label>
+                                        </div>
+                                    </Grid>
+                                    <Grid item md={6}>
+                                        <div style={{dislay: 'flex', marginTop: 10}}>
+                                            <lable style={{ fontWeight: 700, marginRight: 8 , marginLeft: 18 }}>
+                                                Sold quantity: 
+                                            </lable>
+                                            <label>
+                                                {row.quantity - row.remain}
+                                            </label>
+                                        </div>
+                                    </Grid>
+                                    <Grid item md={6}>
+                                        <div style={{dislay: 'flex', marginTop: 10}}>
+                                            <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
+                                                Day before expired: 
+                                            </lable>
+                                            <label>
+                                                {calculateDay(row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T')), getCurrentDateTimeString())}
+                                            </label>
+                                        </div>
+                                    </Grid>
+                                    <Grid item md={6}>
+                                        <div style={{dislay: 'flex', marginTop: 10}}>
+                                            <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
+                                                Profit per product: 
+                                            </lable>
+                                            <label> 
+                                                {
+                                                    Object.keys(regulation).length == 0 ?
+                                                        <div>{(row.sellPrice - row.importPrice)}</div> :
+                                                        regulation.currency == 'vnd' ?
+                                                            <div>{(row.sellPrice - row.importPrice)}</div> :
+                                                            <div>{((row.sellPrice - row.importPrice) / regulation.exchangeRate).toFixed(2)}</div>
+                                                }
+                                                
+                                            </label>
+                                            <label style={{ marginLeft: 4 }}>
+                                                {
+                                                    (Object.keys(regulation).length == 0)
+                                                        ? ' VNĐ' :
+                                                        (regulation.currency == 'vnd' ? ' VNĐ' : ' $')
+                                                }
+                                            </label>
+                                        </div>
+                                    </Grid>
+                                    <Grid item md={6}>
+                                        <div style={{dislay: 'flex', marginTop: 10}}>
+                                            <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
+                                                Real profit: 
+                                            </lable>
+                                            <label> 
+                                                {
+                                                    Object.keys(regulation).length == 0 ?
+                                                        <div>{(row.sellPrice - row.importPrice)*(row.quantity - row.remain)}</div> :
+                                                        regulation.currency == 'vnd' ?
+                                                            <div>{(row.sellPrice - row.importPrice)*(row.quantity - row.remain)}</div> :
+                                                            <div>{((row.sellPrice - row.importPrice)*(row.quantity - row.remain) / regulation.exchangeRate).toFixed(2)}</div>
+                                                }
+                                                
+                                            </label>
+                                            <label style={{ marginLeft: 4 }}>
+                                                {
+                                                    (Object.keys(regulation).length == 0)
+                                                        ? ' VNĐ' :
+                                                        (regulation.currency == 'vnd' ? ' VNĐ' : ' $')
+                                                }
+                                            </label>
+                                        </div>
                                     </Grid>
                                 </Grid>
                             </Grid>
-                        </Box>
+                        </Grid>
+
+                        {/* Khu này dành cho sửa xoá các kiểu */}
+                        <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
+                            <Grid style={{ justifyContent: 'end' }} container>
+                                <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
+                                    <Button onClick={() => editProduct(row)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: '#00bfa5', color: 'white' }}>
+                                        <AiOutlineEdit style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></AiOutlineEdit>
+                                        Edit
+                                    </Button>
+                                </Grid>
+                                <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
+                                    <Button onClick={() => deleteProduct(row)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: red[400], color: 'white' }}>
+                                        <FiXSquare style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></FiXSquare>
+                                        Delete
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
                     </Collapse>
                 </TableCell>
             </TableRow>
@@ -505,18 +605,16 @@ Row.propTypes = {
 class GoodTable extends Component {
     constructor(props) {
         super(props);
-        this.state ={
+        this.state = {
             update: false
         }
         console.log("this.props.listProduct.state", this.props.listProduct.state);
     }
 
-    getTypeNamebyTypeID (typeID) {
-        var typeName="Null";
-        for(var i = 0; i < this.props.typeProduct.length;i++)
-        {   
-            if(this.props.typeProduct[i]._id.typeID == typeID)
-            {
+    getTypeNamebyTypeID(typeID) {
+        var typeName = "Null";
+        for (var i = 0; i < this.props.typeProduct.length; i++) {
+            if (this.props.typeProduct[i]._id.typeID == typeID) {
                 typeName = this.props.typeProduct[i].name;
                 break;
             }
@@ -527,18 +625,17 @@ class GoodTable extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <TableContainer style={{ overflowX: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+            <TableContainer id='scroll-bar' style={{ maxHeight: '100vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', overflow: 'auto', overflowX: 'hidden' }} component={Paper}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow style={{ backgroundColor: 'black', color: 'white' }}>
-                            <TableCell>
-                            </TableCell>
-                            <TableCell />
-                            <TableCell >ID Receipt</TableCell>
-                            <TableCell align="right">Date</TableCell>
-                            <TableCell align="right">Total</TableCell>
-                            <TableCell align="right">Discount</TableCell>
-                            <TableCell align="right">Total final</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell >Product ID</TableCell>
+                            <TableCell align="right">Name</TableCell>
+                            <TableCell align="right">Type</TableCell>
+                            <TableCell align="right">Quantity</TableCell>
+                            <TableCell align="right">Remain</TableCell>
+                            <TableCell align="right">Sell Price</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -547,6 +644,13 @@ class GoodTable extends Component {
                                 <Row key={row.MAHD} row={row} />
                             )) : null
                         } */}
+                        {
+                            this.props.listProduct.state == undefined ? (null) :
+                                this.props.listProduct.state.map((product) => (
+                                    product == undefined ? null :
+                                        <Row key={product._id.productID} row={product} />
+                                ))
+                        }
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -567,8 +671,25 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        
+        deleteProductToRedux: (data) => {
+            dispatch({
+                type: "DELETE_PRODUCT",
+                data: data,
+            }); 
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, {withTheme: true}))(GoodTable));
+export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, { withTheme: true }))(GoodTable));

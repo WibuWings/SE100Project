@@ -61,7 +61,8 @@ class UnShiftEmployee extends Component {
         })
         .catch(err => {
             console.log(err);
-            alert(err)
+            this.props.hideAlert();
+				    this.props.showAlert("Something happened, restart and try again","warning");
         })
   }
 
@@ -119,7 +120,6 @@ class UnShiftEmployee extends Component {
   handleOpen()
   {
       this.openOption = true;
-      alert("Ấn vào mở rồi")
       this.setState({change: !this.state.change});
   }
 
@@ -207,10 +207,12 @@ class UnShiftEmployee extends Component {
                                                   console.log("data.offDay._id", data.offDay._id)
                                                   axios.delete(`http://localhost:5000/api/employee/off-day`,{data: data})
                                                     .then(res => {
-                                                        alert("success");
+                                                        this.props.hideAlert();
+				                                                this.props.showAlert("Delete absent day success","success");
                                                     })
                                                     .catch(err => {
-                                                        alert(err);
+                                                      this.props.hideAlert();
+                                                      this.props.showAlert("Something happened, restart and try again","warning");
                                                     })
                                                   this.props.deleteNextWeekTimeKeeping(item);
                                               }
@@ -278,7 +280,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "SET_NEXT_WEEK_TIMEKEEPER",
         data: data
       });
-    }
+    },
+    showAlert: (message, typeMessage) => {
+      dispatch({
+        type: "SHOW_ALERT",
+        message: message,
+        typeMessage: typeMessage,
+      })
+    },
+    hideAlert: () => {
+      dispatch({
+        type: "HIDE_ALERT",
+      })
+    },
   }
 }
 
