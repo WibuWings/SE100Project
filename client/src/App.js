@@ -143,6 +143,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "HIDE_ALERT",
       })
     },
+    showAlert: (message, typeMessage) => {
+      dispatch({
+        type: "SHOW_ALERT",
+        message: message,
+        typeMessage: typeMessage,
+      })
+    },
     getEmployee: (data) => {
       dispatch({
         type: "GET_EMPLOYEE",
