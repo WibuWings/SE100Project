@@ -18,7 +18,7 @@ import excelLogo from './GoodPartials/excelLogo.png';
 import { inputAdornmentClasses } from '@material-ui/core';
 import GoodTableDisplay from './GoodPartials/GoodTableDisplay';
 import ExcelInstruction from './GoodPartials/ExcelInstruction';
-
+import { Container, Grid } from '@mui/material';
 class GoodManager extends Component {
     constructor(props) {
         super(props);
@@ -709,13 +709,13 @@ class GoodManager extends Component {
 
     render() {
         return (
-            <div>
-                <div id="scroll-bar"style={{height: '100%', width: '100%', marginTop: '40px', marginBottom: '40px', paddingBottom: '40px' }}>
+            <div id="scroll-bar" style={{overflow: 'auto', height:'100vh'}}>
+                <div style={{ width: '100%', marginTop: '40px', marginBottom: '40px', paddingBottom: '40px' }}>
                     <div style={{display: 'flex'}}>
                         <Button variant="contained">
                             <Button style={{color: '#fff', textDecoration: 'none'}} onClick={() => this.props.changeStatusAddGood()}>Import</Button>
                         </Button>
-                        <SearchBar style={{height: '120px'}}/>
+                        {/* <SearchBar style={{height: '120px'}}/> */}
                         <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleAdd()} variant="contained">
                             add type
                         </Button>
@@ -745,9 +745,30 @@ class GoodManager extends Component {
                         </Button> */}
 
                      </div>
-                    {/* <GoodTableDisplay/> */}
-                    <GoodTable />
+                    {/* <GoodTableDisplay/>
+                    <GoodTable /> */}
 
+
+                    <Container style={{ marginBottom: '20px', marginTop: '20px' }} maxWidth="xl">
+                        <Grid className="profile-body" container spacing={2}>
+                            <Grid item  lg={3} md={12} sm={12}>
+                                {/* <Grid container spacing={2}>
+                                    <Grid item md={12} sm={12}>
+                                        <DateReciept></DateReciept>
+                                    </Grid>
+                                    <Grid item md={12} sm={12}>
+                                        <StatusReceiptType></StatusReceiptType>
+                                    </Grid>
+                                    <Grid item md={12} sm={12}>
+                                        <ControlReciept></ControlReciept>
+                                    </Grid>
+                                </Grid> */}
+                            </Grid>
+                            <Grid item  lg={9} md={12} sm={12}>
+                                <GoodTableDisplay/>
+                            </Grid>
+                        </Grid>
+                    </Container>
                     {/* Đây là phần modal */}
 
                     {this.props.addTypeStatus ? (

@@ -266,7 +266,7 @@ class SideNavBar extends Component {
                                         >
                                             <AiOutlineContainer className="nav-item-icon" />
                                             <AiFillContainer className="nav-item-icon icon-activate" />
-                                            <span className="nav-item-lable">Goods Manager</span>
+                                            <span className="nav-item-lable">Products Manager</span>
                                         </NavLink>
                                         <NavLink
                                             to="/receiptmanager"

@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
-import { Grid, Box, Button, Checkbox, Modal } from '@mui/material';
+import { Grid, Box, Button, Checkbox, Modal, Divider } from '@mui/material';
 import { red, lightBlue } from '@mui/material/colors';
 import Typography from '@mui/material/Typography';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -21,19 +21,22 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useSelector, useDispatch } from 'react-redux'
 import { FiXSquare } from 'react-icons/fi'
 import { TiArrowBack } from 'react-icons/ti'
+import { Image } from 'cloudinary-react';
+import GoodImage from './goodExample.jpg';
+import { fontWeight } from '@material-ui/system';
 
-const styles = theme =>  ({
-    goodTable: {                                     
+const styles = theme => ({
+    goodTable: {
         borderWidth: '1px',
         borderColor: '#ccc',
         borderStyle: 'solid'
     },
-    goodTable_Cell: {                                     
+    goodTable_Cell: {
         borderWidth: '1px',
         borderColor: '#ccc',
         borderStyle: 'solid',
         height: '40px',
-    } 
+    }
 })
 
 
@@ -167,18 +170,6 @@ function Row(props) {
         setOpenModal(false)
     }
 
-    const TypeReciept = (isEdit, isDelete, oldBill) => {
-        if (isDelete) {
-            return red[400]
-        } else if (isEdit) {
-            return '#f4f492'
-        } else if (oldBill) {
-            return '#00897b'
-        } else {
-            return '#a6ffa6'
-        }
-    }
-
     const StatusTypeReciept = (isEdit, isDelete) => {
         if (isDelete) {
             return 'Đã xóa'
@@ -247,10 +238,10 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow style={{ backgroundColor: TypeReciept(row.isEdit, row.deleted, row.oldBill), borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
-                <TableCell>
+            <TableRow style={{ borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
+                {/* <TableCell>
                     <Checkbox {...label} checked={statusSelectReplace} onChange={(e) => ChangeCheckbox(e, row.MAHD)} color="default" />
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -261,185 +252,127 @@ function Row(props) {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    {row.MAHD}
+                    {row._id.productID}
                 </TableCell>
-                <TableCell align="right">{row.date}</TableCell>
+                <TableCell align="right">{row.name}</TableCell>
                 <TableCell align="right">
-                    {regulation.currency === 'vnd' ? (row.totalMoney).toLocaleString() : ((row.totalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                    {row.typeIDList.toString()}
                 </TableCell>
-                <TableCell align="right">{row.discount}</TableCell>
+                <TableCell align="right">{row.quantity + ' (' + row.unit + ')'}</TableCell>
+                <TableCell align="right">{row.remain + ' (' + row.unit + ')'}</TableCell>
                 <TableCell align="right">
-                    {regulation.currency === 'vnd' ? (row.totalFinalMoney).toLocaleString() : ((row.totalFinalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
-                    </TableCell>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        {
+                            Object.keys(regulation).length == 0 ?
+                                <div>{row.sellPrice}</div> :
+                                regulation.currency == 'vnd' ?
+                                    <div>{row.sellPrice}</div> :
+                                    <div>{(row.sellPrice / regulation.exchangeRate).toFixed(2)}</div>
+                        }
+
+                        <div style={{ marginLeft: 4 }}>
+                            {
+                                (Object.keys(regulation).length == 0)
+                                    ? ' VNĐ' :
+                                    (regulation.currency == 'vnd' ? ' VNĐ' : ' $')
+                            }
+                        </div>
+                    </div>
+                </TableCell>
             </TableRow>
             <TableRow style={{ borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: 'transparent #90a4ae #90a4ae #90a4ae' }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box sx={{ margin: 1 }}>
-                            <Typography style={{ fontWeight: '600' }} variant="h6" gutterBottom component="div">
-                                Detail Recipet
-                            </Typography>
-                            <Grid container spacing={3}>
-                                <Grid item lg={6} md={12} sm={12} xs={12}>
-                                    <Table size="small" aria-label="purchases">
-                                        <TableHead>
-                                            <TableRow>
+                        <Divider></Divider>
+                        <label style={{ fontWeight: 700, marginTop: 20, fontSize: 16, marginLeft: 10 }}>Product detail</label>
+                        <Grid container>
+                            <Grid item md={2}>
+                                {
+                                    row.imgUrl == "none"
+                                        ? <div style={{ width: '100px', height: '100px', objectFit: 'cover', margin: 10 }}><img src={GoodImage} style={{ width: '100px', height: '100px', objectFit: 'cover' }} /></div>
 
-                                                <TableCell>#</TableCell>
-                                                <TableCell>Name</TableCell>
-                                                <TableCell>Quantity</TableCell>
-                                                <TableCell align="right">Price</TableCell>
-                                                <TableCell align="right">Total Price</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {row.listProduct.map((value, key) => (
-                                                <TableRow key={value.name}>
-                                                    <TableCell>
-                                                        {key + 1}
-                                                    </TableCell>
-                                                    <TableCell>{value.product.name}</TableCell>
-                                                    <TableCell>{value.quantity}</TableCell>
-                                                    <TableCell align="right">{regulation.currency === 'vnd' ? value.product.sellPrice.toLocaleString() : (value.product.sellPrice / regulation.exchangeRate).toFixed(2).toLocaleString()}</TableCell>
-                                                    <TableCell align="right">
-                                                        {regulation.currency === 'vnd' ? (value.quantity * value.product.sellPrice).toLocaleString() : ((value.quantity * value.product.sellPrice) / regulation.exchangeRate).toFixed(2).toLocaleString()}
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </Grid>
-                                <Grid style={{ borderLeft: '1px solid black', marginTop: '15px' }} item lg={6} md={12} sm={12} xs={12}>
-                                    <Grid container spacing={3}>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Id Receipt:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.MAHD}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Status:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{StatusTypeReciept(row.isEdit, row.deleted)}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Date:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.date}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Time:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.time}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Old bill:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.oldBill ? row.oldBill.MAHD : "Không có"}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Seller:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.name}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Total quanitty:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{countQuantity()}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Total money:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>
-                                                        {regulation.currency === 'vnd' ? row.totalMoney.toLocaleString() : (row.totalMoney / regulation.exchangeRate).toFixed(2).toLocaleString()}
-                                                    </p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Id coupon:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.coupon ? row.coupon.idCoupon : "Không áp dụng"}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Reduce money:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>
-                                                        {regulation.currency === 'vnd' ? (row.totalFinalMoney - row.totalMoney).toLocaleString() : ((row.totalFinalMoney - row.totalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
-                                                    </p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>Discount (%):</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.discount}</p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item md={6} xs={6}>
-                                            <Grid container>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>TOTAL:</p>
-                                                </Grid>
-                                                <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>
-                                                        {regulation.currency === 'vnd' ? (row.totalFinalMoney).toLocaleString() : ((row.totalFinalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
-                                                    </p>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
+                                        : <div style={{ width: '100px', height: '100px', objectFit: 'cover', margin: 10 }}><Image style={{ width: '100px', height: '100px', objectFit: 'cover' }} cloudName="databaseimg" publicId={row.imgUrl}>{row.imgUrl}</Image></div>
+                                }
+                            </Grid>
+                            <Grid item md={10}>
+                                <Grid container style={{ marginTop: 10 }}>
+                                    <Grid item md={6}>
+                                        <div style={{ display: 'flex' }}>
+                                            <div style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
+                                                {'Import price:'}
+                                            </div>
+                                            {
+                                                Object.keys(regulation).length == 0 ?
+                                                    <div>{row.importPrice}</div> :
+                                                    regulation.currency == 'vnd' ?
+                                                        <div>{row.importPrice}</div> :
+                                                        <div>{(row.importPrice / regulation.exchangeRate).toFixed(2)}</div>
+                                            }
+                                            <div style={{ marginLeft: 4 }}>
+                                                {
+                                                    (Object.keys(regulation).length == 0)
+                                                        ? ' VNĐ' :
+                                                        (regulation.currency == 'vnd' ? ' VNĐ' : ' $')
+                                                }
+                                            </div>
+                                        </div>
+                                    </Grid>
+                                    <Grid item md={6}>
+                                        <div style={{dislay: 'flex'}}>
+                                            <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
+                                                Expired Day: 
+                                            </lable>
+                                            <label>
+                                                {row.expires == null ? '' : row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T'))}
+                                            </label>
+                                        </div>
+                                    </Grid>
+                                    <Grid item md={6}>
+                                        <div style={{dislay: 'flex'}}>
+                                            <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
+                                                Expired Day: 
+                                            </lable>
+                                            <label>
+                                                {row.expires == null ? '' : row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T'))}
+                                            </label>
+                                        </div>
+                                    </Grid>
+                                    <Grid item md={6}>
+                                        <div style={{dislay: 'flex'}}>
+                                            <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
+                                                Expired Day: 
+                                            </lable>
+                                            <label>
+                                                {row.expires == null ? '' : row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T'))}
+                                            </label>
+                                        </div>
+                                    </Grid>
+                                    <Grid item md={6}>
+                                        <div style={{dislay: 'flex'}}>
+                                            <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
+                                                Expired Day: 
+                                            </lable>
+                                            <label>
+                                                {row.expires == null ? '' : row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T'))}
+                                            </label>
+                                        </div>
+                                    </Grid>
+                                    <Grid item md={6}>
+                                        <div style={{dislay: 'flex'}}>
+                                            <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
+                                                Expired Day: 
+                                            </lable>
+                                            <label>
+                                                {row.expires == null ? '' : row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T'))}
+                                            </label>
+                                        </div>
                                     </Grid>
                                 </Grid>
-                                <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
+                            </Grid>
+                        </Grid>
+
+                        {/* Khu này dành cho sửa xoá các kiểu */}
+                        {/* <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
                                     <Grid style={{ justifyContent: 'end' }} container>
                                         {row.deleted ? (
                                             <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
@@ -456,9 +389,8 @@ function Row(props) {
                                             </Button>
                                         </Grid>
                                     </Grid>
-                                </Grid>
-                            </Grid>
-                        </Box>
+                                        </Grid> */}
+
                     </Collapse>
                 </TableCell>
             </TableRow>
@@ -505,18 +437,16 @@ Row.propTypes = {
 class GoodTable extends Component {
     constructor(props) {
         super(props);
-        this.state ={
+        this.state = {
             update: false
         }
         console.log("this.props.listProduct.state", this.props.listProduct.state);
     }
 
-    getTypeNamebyTypeID (typeID) {
-        var typeName="Null";
-        for(var i = 0; i < this.props.typeProduct.length;i++)
-        {   
-            if(this.props.typeProduct[i]._id.typeID == typeID)
-            {
+    getTypeNamebyTypeID(typeID) {
+        var typeName = "Null";
+        for (var i = 0; i < this.props.typeProduct.length; i++) {
+            if (this.props.typeProduct[i]._id.typeID == typeID) {
                 typeName = this.props.typeProduct[i].name;
                 break;
             }
@@ -527,18 +457,17 @@ class GoodTable extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <TableContainer style={{ overflowX: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+            <TableContainer id='scroll-bar' style={{ maxHeight: '100vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', overflow: 'auto', overflowX: 'hidden' }} component={Paper}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow style={{ backgroundColor: 'black', color: 'white' }}>
-                            <TableCell>
-                            </TableCell>
-                            <TableCell />
-                            <TableCell >ID Receipt</TableCell>
-                            <TableCell align="right">Date</TableCell>
-                            <TableCell align="right">Total</TableCell>
-                            <TableCell align="right">Discount</TableCell>
-                            <TableCell align="right">Total final</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell >Product ID</TableCell>
+                            <TableCell align="right">Name</TableCell>
+                            <TableCell align="right">Type</TableCell>
+                            <TableCell align="right">Quantity</TableCell>
+                            <TableCell align="right">Remain</TableCell>
+                            <TableCell align="right">Sell Price</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -547,6 +476,13 @@ class GoodTable extends Component {
                                 <Row key={row.MAHD} row={row} />
                             )) : null
                         } */}
+                        {
+                            this.props.listProduct.state == undefined ? (null) :
+                                this.props.listProduct.state.map((product) => (
+                                    product == undefined ? null :
+                                        <Row key={product._id.productID} row={product} />
+                                ))
+                        }
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -567,8 +503,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        
+
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, {withTheme: true}))(GoodTable));
+export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, { withTheme: true }))(GoodTable));
