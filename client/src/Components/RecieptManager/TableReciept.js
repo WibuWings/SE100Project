@@ -159,11 +159,11 @@ function Row(props) {
 
     const StatusTypeReciept = (isEdit, isDelete) => {
         if (isDelete) {
-            return 'Đã xóa'
+            return 'Deleted'
         } else if (isEdit) {
-            return 'Đổi trả'
+            return 'Exchange'
         } else {
-            return 'Thành công'
+            return 'Success'
         }
     }
 
@@ -335,7 +335,7 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0' }}>Old bill:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.oldBill ? row.oldBill.MAHD : "Không có"}</p>
+                                                    <p style={{ marginBottom: '0' }}>{row.oldBill ? row.oldBill.MAHD : "None"}</p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -377,7 +377,7 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0' }}>Id coupon:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.coupon ? row.coupon.idCoupon : "Không áp dụng"}</p>
+                                                    <p style={{ marginBottom: '0' }}>{row.coupon ? row.coupon.idCoupon : "Not apply"}</p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>

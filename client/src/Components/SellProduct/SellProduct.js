@@ -160,16 +160,7 @@ class SellProduct extends Component {
     }
 
     render() {
-        const hideHistory = this.props.hideHistoryReceipt
-        document.onkeydown = function (e) {
-            switch (e.key.charCodeAt()) {
-                case 69:
-                    hideHistory()
-                    break;
-                default:
-                    break;
-            }
-        }
+        
         return (
             <div id="scroll-bar" className="sell-product" >
                 <Container style={{ marginBottom: '20px' }} maxWidth="xl">

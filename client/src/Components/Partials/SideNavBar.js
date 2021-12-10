@@ -180,11 +180,13 @@ class SideNavBar extends Component {
                         {
                             this.props.sidebarOpen ?
                             <IoIosArrowBack
+                                className='icon-open'
                                 size={20}
                                 onClick={(e) => this.hideNavbar()}
                             />
                             :
                             <IoIosArrowForward
+                                className='icon-close'
                                 style={{
                                     position: 'fixed',
                                     left: '42px',
@@ -296,7 +298,7 @@ class SideNavBar extends Component {
                             <FaSignOutAlt class="nav-item-icon" />
                             <span className="nav-item-lable">Sign out</span>
                         </a>
-                        <a href="#" className={"nav-item "} onClick={() => this.props.changeConfirmPasswordTest()} style={{ flex: 4 }}>
+                        <a target="blank" href="https://github.com/Minhthang1506/SE100Project" className={"nav-item "}  style={{ flex: 4 }}>
                             <BsInfoCircleFill class="nav-item-icon" />
                             <span className="nav-item-lable">About</span>
                         </a>

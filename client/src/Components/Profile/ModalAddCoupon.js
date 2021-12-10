@@ -43,12 +43,12 @@ function ModalAddCoupon(props) {
         }
         else {
             setIsPercent(false)
-            setPercent(e.target.value)
+            setPercent(Number(e.target.value).toFixed(0))
         }
     }
 
     const blurQuantity = (e) => {
-        if(e.target.value < 0 || e.target.value == "") {
+        if (e.target.value < 0 || e.target.value == "") {
             setIsQuantity(true)
         } else {
             setIsQuantity(false)
@@ -57,7 +57,7 @@ function ModalAddCoupon(props) {
     }
 
     const blurMinTotal = (e) => {
-        if(e.target.value < 100000 || e.target.value == "") {
+        if (e.target.value < 100000 || e.target.value == "") {
             setIsMinTotal(true)
         } else {
             setIsMinTotal(false)
@@ -78,12 +78,12 @@ function ModalAddCoupon(props) {
     }
 
     const addCoupon = async () => {
-        if (timeEnd - timeFrom > 0) {
+        if (timeEnd - timeFrom >= 0) {
             if (!isPercent && !isDescription && !isMinTotal && !isQuantity) {
                 const data = {
                     _id: {
-                       storeID: infoUser.email ,
-                       couponID: makeCode(6),
+                        storeID: infoUser.email,
+                        couponID: makeCode(6),
                     },
                     name: description,
                     percent: percent,
@@ -99,7 +99,7 @@ function ModalAddCoupon(props) {
                 }).then(res => {
 
                 }).catch(err => {
-                    
+
                 })
                 dispatch({
                     type: "ADD_COUPON",
@@ -124,8 +124,8 @@ function ModalAddCoupon(props) {
     }
 
     const editCoupon = async () => {
-        if (timeEnd - timeFrom > 0) {
-            if (!isPercent && !isDescription  && !isQuantity) {
+        if (timeEnd - timeFrom >= 0) {
+            if (!isPercent && !isDescription && !isQuantity) {
                 const data = {
                     _id: {
                         couponID: objectEditCoupon._id.couponID,
@@ -136,31 +136,34 @@ function ModalAddCoupon(props) {
                     percent: percent,
                     timeFrom: timeFrom,
                     timeEnd: timeEnd,
-                    quantity: quantity
+                    quantity: Number(quantity),
                 }
                 await axios.post(`http://localhost:5000/api/coupon/update`, {
                     token: localStorage.getItem('token'),
                     email: infoUser.email,
-                    coupon: data,
+                    coupon: {...data},
                 }).then(res => {
-
+                    dispatch({
+                        type: "EDIT_COUPON",
+                        data: data
+                    })
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: "Edit coupon success",
+                        typeMessage: "success",
+                    })
+                    dispatch({
+                        type: "CHANGE_ADD_COUPON_STATUS"
+                    })
+                    dispatch({
+                        type: "RESET_EDIT_COUPON_STATUS"
+                    })
                 }).catch(err => {
-                    
-                })
-                dispatch({
-                    type: "EDIT_COUPON",
-                    data: data
-                })
-                dispatch({
-                    type: "SHOW_ALERT",
-                    message: "Edit coupon success",
-                    typeMessage: "success",
-                })
-                dispatch({
-                    type: "CHANGE_ADD_COUPON_STATUS"
-                })
-                dispatch({
-                    type:"RESET_EDIT_COUPON_STATUS"
+                    dispatch({
+                        type: "SHOW_ALERT",
+                        message: "Edit coupon faile",
+                        typeMessage: "warning",
+                    })
                 })
             }
         } else {
@@ -177,7 +180,7 @@ function ModalAddCoupon(props) {
             type: "CHANGE_ADD_COUPON_STATUS"
         })
         dispatch({
-            type:"RESET_EDIT_COUPON_STATUS"
+            type: "RESET_EDIT_COUPON_STATUS"
         })
     }
 
@@ -226,7 +229,7 @@ function ModalAddCoupon(props) {
                                 helperText={isPercent ? "Enter greater than 0 and less than 100" : ""}
                                 type="number"
                                 id="outlined-error-helper-text"
-                                name="discount"
+                                name="discount (%)"
                                 variant="outlined"
                             />
                         </Grid>

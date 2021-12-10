@@ -178,26 +178,11 @@ class Login extends Component {
     componentWillMount() {
         document.title = 'Login'
     }
+    
+   
+    
 
     render() {
-        const enterPress = this.isLoginCheck;
-        document.onkeydown = function (e) {
-            switch (e.which) {
-                case 13:
-                    try
-                    {
-                        enterPress(e);
-                    }
-                    catch(err) 
-                    {
-                        console.log("Alo lỗi mẹ rồi")
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
         return (
             <div className="Login">
                 <div className="form-login">
@@ -229,7 +214,7 @@ class Login extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password" rules="required|min:6" id="password" placeholder="Emter password" type="password" />
+                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password" rules="required|min:6" id="password" placeholder="Enter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>

@@ -22,7 +22,7 @@ function ErrorReceipt(props) {
                 let date = value.date.replace(/\s/g, "");
                 date = date.split("/");
                 if (date[0] == nowTime.getDate() && date[1] == currentMonth && date[2] == nowTime.getFullYear()) {
-                    if (value.deleted) {
+                    if (!value.deleted && value.isEdit) {
                         errorReciept++
                     }
                 }
@@ -33,7 +33,7 @@ function ErrorReceipt(props) {
                 let date = value.date.replace(/\s/g, "");
                 date = date.split("/");
                 if (date[0] == yesterdayTime.getDate() - 1 && date[1] == yesterdayTime.getMonth() + 1 && date[2] == yesterdayTime.getFullYear()) {
-                    if (value.deleted) errorReciept++
+                    if (!value.deleted && value.isEdit) errorReciept++
                 }
             })
             setIndex(errorReciept)
@@ -42,7 +42,7 @@ function ErrorReceipt(props) {
                 let date = value.date.replace(/\s/g, "");
                 date = date.split("/");
                 if (date[1] == lastMonth.getMonth() && date[2] == lastMonth.getFullYear()) {
-                    if (value.deleted) errorReciept++
+                    if (!value.deleted && value.isEdit) errorReciept++
                 }
             })
             setIndex(errorReciept)
@@ -51,13 +51,13 @@ function ErrorReceipt(props) {
                 let date = value.date.replace(/\s/g, "");
                 date = date.split("/");
                 if (date[2] == nowTime.getFullYear()) {
-                    if (value.deleted) errorReciept++
+                    if (!value.deleted && value.isEdit) errorReciept++
                 }
             })
             setIndex(errorReciept)
         } else if (typeHeaderDashboard == 'All') {
             listReciept.map(value => {
-                if (value.deleted) {
+                if (!value.deleted && value.isEdit) {
                     errorReciept++
                 }
             })
@@ -72,7 +72,7 @@ function ErrorReceipt(props) {
             </div>
             <Typography style={{ marginBottom: '10px' }} variant="h5">{index}</Typography>
             <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-                Error receipt
+                Exchange recepit
             </Typography>
         </div>
     );

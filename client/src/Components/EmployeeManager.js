@@ -61,15 +61,15 @@ function EmployeeObj(employeeID, managerID, password, firstName, lastName,
 }
 
 const TABLE_HEAD = [
-    { id: 'ID', label: 'ID', alignRight: false },
-    { id: 'firstName', label: 'Name', alignRight: false },
-    { id: 'lastName', label: 'Last Name', alignRight: false },
-    { id: 'old', label: 'Old', alignRight: false },
-    { id: 'gender', label: 'Gender', alignRight: false },
-    { id: 'province', label: 'Province', alignRight: false },
-    { id: 'phoneNumber', label: 'Phone', alignRight: false },
-    { id: 'email', label: 'Email', alignRight: false },
-    { id: 'adress', label: 'Adress', alignRight: false },
+    { id: 'ID', label: 'ID', alignCenter: true },
+    { id: 'firstName', label: 'Name', alignCenter: true },
+    { id: 'lastName', label: 'Last Name', alignCenter: true },
+    { id: 'old', label: 'Old', alignCenter: true },
+    { id: 'gender', label: 'Gender', alignCenter: true },
+    { id: 'province', label: 'Province', alignCenter: true },
+    { id: 'phoneNumber', label: 'Phone', alignCenter: true },
+    { id: 'email', label: 'Email', alignCenter: true },
+    { id: 'adress', label: 'Adress', alignCenter: true },
     { id: '' }
 ];
 
@@ -331,13 +331,13 @@ class EmployeeManager extends Component {
                         New User
                     </Button>
 
-                    <Card>
+                    <Card style={{width: '100%', margin: 0}}>
                     {/* <EmployeeToolbar
                         numSelected={selected.length}
                         filterName={filterName}
                         // onFilterName={this.handleFilterByName(event)}
                     /> */}
-                    <TableContainer id="scroll-bar" style ={{maxHeight:'500px',overflow: 'auto'}}>
+                    <TableContainer id="scroll-bar" style ={{maxHeight:'500px' ,overflow: 'auto'}}>
                         <Table>
                             <EmployeeTableHeader
                                 // order={order}
@@ -368,26 +368,21 @@ class EmployeeManager extends Component {
                                             // onChange={(event) => handleClick(event, name)}
                                             />
                                         </TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="left">
+                                        <TableCell className = {classes.goodTable_Cell} align="center">
                                             {row._id.employeeID}
                                         </TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} component="th" scope="row" padding="none">
-                                            <Stack direction="row" alignItems="center" spacing={2}>
-                                            {/* <Avatar alt={row.firstName} src={avatarUrl} /> */}
-                                            <Typography variant="subtitle2" noWrap>
+                                        <TableCell className = {classes.goodTable_Cell} component="th" scope="row" padding="none" align="center">
                                                 {row.firstName}
-                                            </Typography>
-                                            </Stack>
                                         </TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.lastName}</TableCell>  
-                                        <TableCell className = {classes.goodTable_Cell}align="left">
+                                        <TableCell className = {classes.goodTable_Cell} align="center">{row.lastName}</TableCell>  
+                                        <TableCell className = {classes.goodTable_Cell}align="center">
                                             {row.dateOfBirth.indexOf('T') != -1 ? row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T')): row.dateOfBirth}
                                         </TableCell>
-                                        <TableCell className = {classes.goodTable_Cell}align="left">{"gender"}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell}align="left">{"province"}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell}align="left">{row.phoneNumber}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell}align="left">{row.email}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell}align="left">{row.address}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="center">{"gender"}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="center">{"province"}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="center">{row.phoneNumber}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="center">{row.email}</TableCell>
+                                        <TableCell className = {classes.goodTable_Cell}align="center">{row.address}</TableCell>
                                         <TableCell className = {classes.goodTable_Cell}align="right">
                                             <EmployeeMoreMenu
                                                 data={row._id.employeeID}    

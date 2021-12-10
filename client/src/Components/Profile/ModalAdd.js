@@ -237,7 +237,7 @@ class ModalAdd extends Component {
                                     required
                                     fullWidth
                                     onBlur={(e) => this.blurSalary(e)}
-                                    label="Salary"
+                                    label="Salary (VNĐ)"
                                     defaultValue={this.props.editShiftStatus ? this.props.objectEditShift.salary : this.salary}
                                     error={this.state.isSalary}
                                     helperText={this.state.isSalary ? "Greater than 0" : ""}
