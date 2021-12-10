@@ -24,6 +24,7 @@ import { TiArrowBack } from 'react-icons/ti'
 import { Image } from 'cloudinary-react';
 import GoodImage from './goodExample.jpg';
 import { fontWeight } from '@material-ui/system';
+import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
 
 const styles = theme => ({
     goodTable: {
@@ -236,6 +237,141 @@ function Row(props) {
         }
     }
 
+    const deleteProduct = async (row) => {
+        // Xoá sản phẩm
+        console.log("row", row)
+        const data = {
+            token: localStorage.getItem('token'),
+            products:
+            [
+                {
+                    productID: row._id.productID,
+                    importDate: row._id.importDate,
+                    storeID: row._id.storeID,
+                }
+            ]
+            
+        }
+        axios.delete(`http://localhost:5000/api/product`,{data: data})
+            .then(res => {
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: "Delete product success",
+                    typeMessage: "success",
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: "Something happened, restart and try again",
+                    typeMessage: "warning",
+                })
+            })
+        
+        // Get hết các cái join của sản phẩm
+        var allJoinMatch = [];
+        const data1 = {
+            token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": row._id.storeID,
+                "_id.productID": row._id.productID,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/product/join`, 
+        {
+            params: {...data1}
+        })
+            .then(res => {
+                allJoinMatch = res.data.data;
+            })
+            .catch(err => {
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: "Something happened, restart and try again",
+                    typeMessage: "warning",
+                })
+            })
+        console.log(allJoinMatch);
+        // Xoá các join liên quan đến sản phẩm
+        var allProductJoin = [];
+        for(var i = 0 ; i < allJoinMatch.length; i++)
+        {
+            allProductJoin.push({
+                productID: row._id.productID,
+                typeID: allJoinMatch[i]._id.typeID,
+                importDate: allJoinMatch[i]._id.importDate,
+                storeID: row._id.storeID,
+            });
+        }
+        const dataJoin = {
+            token: localStorage.getItem('token'),
+            productJoinTypes: allProductJoin,      
+        }
+
+        console.log(dataJoin);
+
+        await axios.delete(`http://localhost:5000/api/product/join`,{data: dataJoin})
+            .then(res => {
+                console.log("delete join success");
+            })
+            .catch(err => {
+                dispatch({
+                    type: "HIDE_ALERT",
+                })
+                dispatch({
+                    type: "SHOW_ALERT",
+                    message: "Something happened, restart and try again",
+                    typeMessage: "warning",
+                })
+            })
+        dispatch({
+            type: "DELETE_PRODUCT",
+            data: row,
+        });
+    }
+
+    const calculateDay = (dateString1, dateString2) =>
+    {
+        console.log("dateString1", dateString1);
+        console.log("dateString2", dateString2);
+        if(dateString1.indexOf('T') != -1)
+        {
+            dateString1 = dateString1.substring(0, dateString1.indexOf('T'));
+        }
+        var time = (
+            (new Date(dateString1)).setHours(0, 0, 0) 
+                - 
+            (new Date(dateString2)).setHours(0,0,0)
+            )
+            /(1000 * 60 * 60 * 24);
+        if(time > 0) return time;
+        else return <lable style={{color: 'red'}}>'Product is expired!'</lable>;
+    }
+
+    const getCurrentDateTimeString = () => {
+        var currentDate = new Date();
+        var day = (currentDate.toString().split(' '))[2];
+        if(day.length < 2)
+        {
+            day = '0' + day;
+        }
+        var month = (new Date().getMonth() + 1).toString();
+        if(month.length<2)
+        {
+            month = '0' + month;
+        }
+        return new Date().getFullYear() + '-' + month + '-' + day;
+    }
+
     return (
         <React.Fragment>
             <TableRow style={{ borderWidth: open ? '2px' : null, borderStyle: 'solid', borderColor: '#90a4ae #90a4ae transparent #90a4ae' }} sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -295,9 +431,9 @@ function Row(props) {
                                 }
                             </Grid>
                             <Grid item md={10}>
-                                <Grid container style={{ marginTop: 10 }}>
+                                <Grid container>
                                     <Grid item md={6}>
-                                        <div style={{ display: 'flex' }}>
+                                        <div style={{ display: 'flex' , marginTop: 10}}>
                                             <div style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
                                                 {'Import price:'}
                                             </div>
@@ -318,7 +454,7 @@ function Row(props) {
                                         </div>
                                     </Grid>
                                     <Grid item md={6}>
-                                        <div style={{dislay: 'flex'}}>
+                                        <div style={{dislay: 'flex', marginTop: 10}}>
                                             <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
                                                 Expired Day: 
                                             </lable>
@@ -328,42 +464,70 @@ function Row(props) {
                                         </div>
                                     </Grid>
                                     <Grid item md={6}>
-                                        <div style={{dislay: 'flex'}}>
-                                            <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
-                                                Expired Day: 
+                                        <div style={{dislay: 'flex', marginTop: 10}}>
+                                            <lable style={{ fontWeight: 700, marginRight: 8 , marginLeft: 18 }}>
+                                                Sold quantity: 
                                             </lable>
                                             <label>
-                                                {row.expires == null ? '' : row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T'))}
+                                                {row.quantity - row.remain}
                                             </label>
                                         </div>
                                     </Grid>
                                     <Grid item md={6}>
-                                        <div style={{dislay: 'flex'}}>
+                                        <div style={{dislay: 'flex', marginTop: 10}}>
                                             <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
-                                                Expired Day: 
+                                                Day before expired: 
                                             </lable>
                                             <label>
-                                                {row.expires == null ? '' : row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T'))}
+                                                {calculateDay(row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T')), getCurrentDateTimeString())}
                                             </label>
                                         </div>
                                     </Grid>
                                     <Grid item md={6}>
-                                        <div style={{dislay: 'flex'}}>
+                                        <div style={{dislay: 'flex', marginTop: 10}}>
                                             <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
-                                                Expired Day: 
+                                                Profit per product: 
                                             </lable>
-                                            <label>
-                                                {row.expires == null ? '' : row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T'))}
+                                            <label> 
+                                                {
+                                                    Object.keys(regulation).length == 0 ?
+                                                        <div>{(row.sellPrice - row.importPrice)}</div> :
+                                                        regulation.currency == 'vnd' ?
+                                                            <div>{(row.sellPrice - row.importPrice)}</div> :
+                                                            <div>{((row.sellPrice - row.importPrice) / regulation.exchangeRate).toFixed(2)}</div>
+                                                }
+                                                
+                                            </label>
+                                            <label style={{ marginLeft: 4 }}>
+                                                {
+                                                    (Object.keys(regulation).length == 0)
+                                                        ? ' VNĐ' :
+                                                        (regulation.currency == 'vnd' ? ' VNĐ' : ' $')
+                                                }
                                             </label>
                                         </div>
                                     </Grid>
                                     <Grid item md={6}>
-                                        <div style={{dislay: 'flex'}}>
+                                        <div style={{dislay: 'flex', marginTop: 10}}>
                                             <lable style={{ fontWeight: 700, marginRight: 8, marginLeft: 20 }}>
-                                                Expired Day: 
+                                                Real profit: 
                                             </lable>
-                                            <label>
-                                                {row.expires == null ? '' : row.expires.indexOf('T') == -1 ? row.expires : row.expires.substring(0, row.expires.indexOf('T'))}
+                                            <label> 
+                                                {
+                                                    Object.keys(regulation).length == 0 ?
+                                                        <div>{(row.sellPrice - row.importPrice)*(row.quantity - row.remain)}</div> :
+                                                        regulation.currency == 'vnd' ?
+                                                            <div>{(row.sellPrice - row.importPrice)*(row.quantity - row.remain)}</div> :
+                                                            <div>{((row.sellPrice - row.importPrice)*(row.quantity - row.remain) / regulation.exchangeRate).toFixed(2)}</div>
+                                                }
+                                                
+                                            </label>
+                                            <label style={{ marginLeft: 4 }}>
+                                                {
+                                                    (Object.keys(regulation).length == 0)
+                                                        ? ' VNĐ' :
+                                                        (regulation.currency == 'vnd' ? ' VNĐ' : ' $')
+                                                }
                                             </label>
                                         </div>
                                     </Grid>
@@ -372,24 +536,22 @@ function Row(props) {
                         </Grid>
 
                         {/* Khu này dành cho sửa xoá các kiểu */}
-                        {/* <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
-                                    <Grid style={{ justifyContent: 'end' }} container>
-                                        {row.deleted ? (
-                                            <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
-                                                <Button onClick={() => RestoneReciept(row.MAHD)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: '#00bfa5', color: 'white' }}>
-                                                    <TiArrowBack style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></TiArrowBack>
-                                                    Restone
-                                                </Button>
-                                            </Grid>
-                                        ) : null}
-                                        <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
-                                            <Button onClick={() => DeleteReciept(row.MAHD, row.deleted)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: red[400], color: 'white' }}>
-                                                <FiXSquare style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></FiXSquare>
-                                                Delete
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                        </Grid> */}
+                        <Grid style={{ marginBottom: '10px' }} item md={12} xs={12}>
+                            <Grid style={{ justifyContent: 'end' }} container>
+                                <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
+                                    <Button onClick={() => RestoneReciept(row.MAHD)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: '#00bfa5', color: 'white' }}>
+                                        <AiOutlineEdit style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></AiOutlineEdit>
+                                        Edit
+                                    </Button>
+                                </Grid>
+                                <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
+                                    <Button onClick={() => deleteProduct(row)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: red[400], color: 'white' }}>
+                                        <FiXSquare style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></FiXSquare>
+                                        Delete
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
 
                     </Collapse>
                 </TableCell>
@@ -503,7 +665,24 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-
+        deleteProductToRedux: (data) => {
+            dispatch({
+                type: "DELETE_PRODUCT",
+                data: data,
+            }); 
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 

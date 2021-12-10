@@ -26,7 +26,8 @@ class ExcelInstruction extends Component {
                             <Grid item md={12} xs={12} style={{margin: '0px 12px'}}>
                                 <label style={{fontWeight: 700, display: 'block'}}>Note:</label>
                                 - Uploaded file must have the column exactly like the template file<br/>
-                                - Product ID in the file can be changed
+                                - Product ID in the file can be changed<br/>
+                                - You can separate to add multiple types by adding ' || ' between the type
                             </Grid>
                             <Grid item md={12} xs={12} style={{margin: '0px 12px'}}>
                                 <label style={{fontWeight: 700, display: 'block'}}>Step by step:</label>
