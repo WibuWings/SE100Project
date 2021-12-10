@@ -32,6 +32,11 @@
     flex: 1
 }
 
+.excel-instruction:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
+
 .all-type-container {
     display: flex;
 }

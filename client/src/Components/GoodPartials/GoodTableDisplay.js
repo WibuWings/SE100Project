@@ -54,7 +54,7 @@ function Row(props) {
     const dispatch = useDispatch();
     const [statusSelectReplace, setStatusSelectReplace] = React.useState(false);
     const regulation = useSelector(state => state.regulationReducer)
-
+    const typeProduct = useSelector(state => state.typeProduct)
 
     const style = {
         position: 'absolute',
@@ -85,157 +85,26 @@ function Row(props) {
 
     const handleClose = () => {
         setOpen(false);
-    };
+    }
 
-    //Xoa mềm
-    const DeleteReciept = (MAHD, isDelete) => {
-        if (isDelete) {
-            setOpenModal(true)
-        } else {
-            axios.post('http://localhost:5000/api/sell-product/soft-delete', {
-                token: localStorage.getItem('token'),
-                email: infoUser.email,
-                MAHD: MAHD
-            })
-                .then(res => {
-                    if (res.data.status === 1) {
-                        localStorage.setItem('token', res.data.token)
-                        dispatch({
-                            type: "DELETE_RECIEPT",
-                            MAHD: MAHD,
-                        })
-                        dispatch({
-                            type: "HIDE_ALERT",
-                        })
-                        dispatch({
-                            type: "SHOW_ALERT",
-                            message: 'Delete success',
-                            typeMessage: 'success',
-                        })
-                    }
-                })
-                .catch(err => {
-                    dispatch({
-                        type: "CHANGE_LOGIN_STATUS",
-                    });
-                    dispatch({
-                        type: "HIDE_ALERT",
-                    })
-                    dispatch({
-                        type: "SHOW_ALERT",
-                        message: 'Login timeout, signin again',
-                        typeMessage: 'warning',
-                    })
-                })
-            setOpen(!open)
+    const handleOpen = () => {
+        setOpen(true);
+    }
+
+    const getTypeNamebyTypeID = (typeID) => {
+        var typeName="Null";
+        for(var i = 0; i < typeProduct.length;i++)
+        {   
+            if(typeProduct[i]._id.typeID == typeID)
+            {
+                typeName = typeProduct[i].name;
+                break;
+            }
         }
+        return typeName;
     }
 
-    // Xóa vĩnh viễn
-    const PermanentlyDelete = async (MAHD) => {
-        axios.post('http://localhost:5000/api/sell-product/permanently-delete', {
-            token: localStorage.getItem('token'),
-            email: infoUser.email,
-            MAHD: MAHD
-        })
-            .then(res => {
-                if (res.data.status === 1) {
-                    localStorage.setItem('token', res.data.token)
-                    dispatch({
-                        type: "DELETE_ONE_RECIEPT",
-                        MAHD: MAHD,
-                    })
-                    dispatch({
-                        type: "HIDE_ALERT",
-                    })
-                    dispatch({
-                        type: "SHOW_ALERT",
-                        message: 'Delete success',
-                        typeMessage: 'success',
-                    })
-                }
-            })
-            .catch(err => {
-                dispatch({
-                    type: "CHANGE_LOGIN_STATUS",
-                });
-                dispatch({
-                    type: "HIDE_ALERT",
-                })
-                dispatch({
-                    type: "SHOW_ALERT",
-                    message: 'Login timeout, signin again',
-                    typeMessage: 'warning',
-                })
-            })
-        setOpenModal(false)
-    }
-
-    const StatusTypeReciept = (isEdit, isDelete) => {
-        if (isDelete) {
-            return 'Đã xóa'
-        } else if (isEdit) {
-            return 'Đổi trả'
-        } else {
-            return 'Thành công'
-        }
-    }
-
-    const RestoneReciept = async (MAHD) => {
-        await axios.post('http://localhost:5000/api/sell-product/restone-receipt', {
-            token: localStorage.getItem('token'),
-            email: infoUser.email,
-            MAHD: MAHD
-        })
-            .then(res => {
-                localStorage.setItem('token', res.data.token)
-                if (res.data.status === 1) {
-                    dispatch({
-                        type: 'RESTONE_ONE_RECIEPT',
-                        MAHD: MAHD
-                    })
-                    dispatch({
-                        type: "HIDE_ALERT",
-                    })
-                    dispatch({
-                        type: "SHOW_ALERT",
-                        message: 'Restone success',
-                        typeMessage: 'success',
-                    })
-                }
-            })
-            .catch(err => {
-                dispatch({
-                    type: "CHANGE_LOGIN_STATUS",
-                });
-                dispatch({
-                    type: "HIDE_ALERT",
-                })
-                dispatch({
-                    type: "SHOW_ALERT",
-                    message: 'Login timeout, signin again',
-                    typeMessage: 'warning',
-                })
-            })
-        setOpen(false);
-    }
-
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
-    const ChangeCheckbox = (e, MAHD) => {
-        setStatusSelectReplace(!statusSelectReplace);
-        if (e.target.checked) {
-            dispatch({
-                type: "ADD_MAHD_RECIEPT",
-                MAHD: MAHD,
-            })
-        } else {
-            dispatch({
-                type: "DELETE_MAHD_RECIEPT",
-                MAHD: MAHD,
-            })
-        }
-    }
+    
 
     const editProduct = async (row) => 
     {
@@ -398,7 +267,21 @@ function Row(props) {
                 </TableCell>
                 <TableCell align="right">{row.name}</TableCell>
                 <TableCell align="right">
-                    {row.typeIDList.toString()}
+                    <div style={{display: 'flex', justifyContent:'flex-end'}}>
+                        {
+                            row.typeIDList.map((typeID) => 
+                                <label style={{
+                                        backgroundColor: '#088F8F', 
+                                        color: 'white', 
+                                        padding: '4px 8px', 
+                                        borderRadius:'4px',
+                                        marginLeft: 10
+                                    }}>
+                                    {getTypeNamebyTypeID(typeID)}
+                                </label>
+                            )
+                        }
+                    </div>
                 </TableCell>
                 <TableCell align="right">{row.quantity + ' (' + row.unit + ')'}</TableCell>
                 <TableCell align="right">{row.remain + ' (' + row.unit + ')'}</TableCell>
@@ -549,9 +432,9 @@ function Row(props) {
                                         <AiOutlineEdit style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></AiOutlineEdit>
                                         Edit
                                     </Button>
-                                </Grid>
+                                </Grid> 
                                 <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
-                                    <Button onClick={() => deleteProduct(row)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: red[400], color: 'white' }}>
+                                    <Button onClick={() => setOpenModal(true)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: red[400], color: 'white' }}>
                                         <FiXSquare style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></FiXSquare>
                                         Delete
                                     </Button>
@@ -572,7 +455,7 @@ function Row(props) {
                     <h2 style={{ textAlign: 'center' }} id="parent-modal-title">Are you sure to delete?</h2>
                     <Grid container spacing={2}>
                         <Grid style={{ justifyContent: 'center', display: 'flex' }} item md={6} sm={6}  >
-                            <Button onClick={() => PermanentlyDelete(row.MAHD)} style={{ color: 'white', backgroundColor: red[500] }}>DELETE</Button>
+                            <Button onClick={() => deleteProduct(row)} style={{ color: 'white', backgroundColor: red[500] }}>DELETE</Button>
                         </Grid>
                         <Grid style={{ justifyContent: 'center', display: 'flex' }} item md={6} sm={6}  >
                             <Button onClick={() => setOpenModal(false)} style={{ backgroundColor: lightBlue[100] }}>CANCEL</Button>

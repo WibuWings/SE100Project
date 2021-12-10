@@ -18,7 +18,12 @@ import excelLogo from './GoodPartials/excelLogo.png';
 import { inputAdornmentClasses } from '@material-ui/core';
 import GoodTableDisplay from './GoodPartials/GoodTableDisplay';
 import ExcelInstruction from './GoodPartials/ExcelInstruction';
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, Card, CardHeader, Divider, CardContent} from '@mui/material';
+import SortByTable from './GoodPartials/SortByTable';
+import TypeManager from './GoodPartials/TypeManager';
+import { BiPlusMedical, BiEdit } from 'react-icons/bi';
+import { MdOutlineIntegrationInstructions } from "react-icons/md";
+import { BsCardList } from "react-icons/bs";
 class GoodManager extends Component {
     constructor(props) {
         super(props);
@@ -711,58 +716,63 @@ class GoodManager extends Component {
         return (
             <div id="scroll-bar" style={{overflow: 'auto', height:'100vh'}}>
                 <div style={{ width: '100%', marginTop: '40px', marginBottom: '40px', paddingBottom: '40px' }}>
-                    <div style={{display: 'flex'}}>
-                        <Button variant="contained">
-                            <Button style={{color: '#fff', textDecoration: 'none'}} onClick={() => this.props.changeStatusAddGood()}>Import</Button>
-                        </Button>
-                        {/* <SearchBar style={{height: '120px'}}/> */}
-                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleAdd()} variant="contained">
-                            add type
-                        </Button>
-                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleEditType()} variant="contained">
-                            edit type
-                        </Button>
-                        <label style={{backgroundColor: '#31be7d', padding: '4px 8px',borderRadius: 4, lineHeight: 2.2, color:'#fff'}} for="upload-excel">
-                            <img src={excelLogo} width={25} height={25} style={{marginRight: 4}}></img>
-                            Load Excel
-                        </label>
-                        <input 
-                            id="upload-excel" type="file" style={{display: 'none'}} 
-                            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
-                            onChange={(e) => this.uploadExcel(e)}
-                        ></input>
-                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.props.changeExcelInstruction()} variant="contained">
-                            Excel Instruction
-                        </Button>
-                        {/* <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirmDelete()} variant="contained">
-                            Delete
-                        </Button>
-                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleConfirm()} variant="contained">
-                            Edit
-                        </Button>
-                        <Button style={{ backgroundColor: 'yellowgreen' }} onClick={() => this.handleUpdateGood()} variant="contained">
-                            Update Good
-                        </Button> */}
-
-                     </div>
-                    {/* <GoodTableDisplay/>
-                    <GoodTable /> */}
-
-
                     <Container style={{ marginBottom: '20px', marginTop: '20px' }} maxWidth="xl">
                         <Grid className="profile-body" container spacing={2}>
                             <Grid item  lg={3} md={12} sm={12}>
-                                {/* <Grid container spacing={2}>
+                                <Grid container spacing={2}>
                                     <Grid item md={12} sm={12}>
-                                        <DateReciept></DateReciept>
+                                        <SortByTable></SortByTable>
                                     </Grid>
                                     <Grid item md={12} sm={12}>
-                                        <StatusReceiptType></StatusReceiptType>
+                                        <Grid container spacing={2}>
+                                            <Grid item md={12} sm={12}  >
+                                                <Card>
+                                                    <CardHeader style={{ height: 56, color: !this.props.darkmode ? '#0091ea' :'white', backgroundColor: !this.props.darkmode ? '#efeeef' :'#455a64'}} title="Import Manager" />
+                                                    <Divider></Divider>
+                                                    <CardContent>
+                                                        <Grid container spacing={2}>
+                                                            <Grid item md={6} sm={12}>
+                                                                <Button variant="contained" style={{height: 40, width: '100%'}}>
+                                                                    <Button style={{color: '#fff', textDecoration: 'none', height: 43}} onClick={() => this.props.changeStatusAddGood()}>
+                                                                        <BiPlusMedical color={'white'} size={16} style={{marginRight: 4}}/>
+                                                                        Import
+                                                                    </Button>
+                                                                </Button>
+                                                            </Grid>
+                                                            
+                                                            <Grid item md={6} sm={12} style={{justifyContent:'space-between'}}>
+                                                                <label 
+                                                                    className='excel-instruction'
+                                                                    style={{ width:'100%' ,backgroundColor: '#31be7d', padding: '4px 8px',borderRadius: 4, lineHeight: 2.0, color:'#fff', display: 'flex', alignItems:'center', justifyContent:'center'}} 
+                                                                    for="upload-excel"
+                                                                >
+                                                                    <img src={excelLogo} width={25} height={25} style={{marginRight: 4}}></img>
+                                                                    <label for="upload-excel" className='excel-instruction'>Load Excel</label>
+                                                                </label>
+                                                                <input 
+                                                                    id="upload-excel" type="file" style={{display: 'none'}} 
+                                                                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+                                                                    onChange={(e) => this.uploadExcel(e)}
+                                                                ></input>
+                                                            </Grid>
+                                                            
+                                                            <Grid item md={12} sm={12}>
+                                                                <Button style={{ backgroundColor: 'yellowgreen', width:'100%' }}  onClick={() => this.props.changeExcelInstruction()} variant="contained">
+                                                                    <BsCardList color={'white'} size={16} style={{marginRight: 4}}></BsCardList>
+                                                                    Excel Instruction
+                                                                </Button>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </CardContent>
+                                                </Card>
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
                                     <Grid item md={12} sm={12}>
-                                        <ControlReciept></ControlReciept>
+                                        <TypeManager></TypeManager>
                                     </Grid>
-                                </Grid> */}
+                                    
+                                </Grid>
                             </Grid>
                             <Grid item  lg={9} md={12} sm={12}>
                                 <GoodTableDisplay/>
@@ -802,12 +812,12 @@ class GoodManager extends Component {
                             <EditTypeModal></EditTypeModal>
                         </div>
                     ): null}
-                    {this.props.editTypeStatus ? (
+                    {/* {this.props.editTypeStatus ? (
                         <div className="modal-add">
                             <div onClick={() => {this.props.changeEditTypeStatus();}} className="modal-overlay"></div>
                             <EditTypeModal></EditTypeModal>
                         </div>
-                    ): null}
+                    ): null} */}
                     {this.props.statusAddGood ? (
                         <div className="modal-add">
                             <div onClick={() => {this.props.changeStatusAddGood();}} className="modal-overlay"></div>
@@ -847,6 +857,7 @@ const mapStateToProps = (state, ownProps) => {
         regulation: state.regulationReducer,
         listProduct: state.listProduct,
         excelInstructionStatus: state.excelInstructionStatus,
+        darkmode: state.statusDarkmode,
     }
 }
 
