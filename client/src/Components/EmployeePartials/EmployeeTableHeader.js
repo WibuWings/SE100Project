@@ -14,25 +14,6 @@ EmployeeTableHeader.propTypes = {
   onRequestSort: PropTypes.func,
   onSelectAllClick: PropTypes.func
 };
-const styles = theme =>  ({
-  goodTable: {                                     
-      borderWidth: '1px',
-      borderColor: '#ccc',
-      borderStyle: 'solid'
-  },
-  goodTable_Cell_Header: {                                     
-      borderWidth: '1px',
-      borderColor: '#ccc',
-      borderStyle: 'solid',
-      height: '40px',
-  },
-  goodTable_Cell: {                                     
-      borderWidth: '1px',
-      borderColor: '#ccc',
-      borderStyle: 'solid',
-      height: '80px',
-  } 
-})
 
 function EmployeeTableHeader( props){
   const {
@@ -43,43 +24,17 @@ function EmployeeTableHeader( props){
     numSelected,
     onRequestSort,
     onSelectAllClick} = props;
-  // const createSortHandler = (property) => (event) => {
-  //   onRequestSort(event, property);
-  // };
-  const {classes} =  props;
-  // console.log("headLabel", headLabel);
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox" className = {classes.goodTable_Cell_Header}>
-          <Checkbox
-            // indeterminate={numSelected > 0 && numSelected < rowCount}
-            // checked={rowCount > 0 && numSelected === rowCount}
-            // onChange={onSelectAllClick}
-          />
-        </TableCell>
         {headLabel.map((headCell) => (
-          <TableCell
-            className = {classes.goodTable_Cell_Header}
-            // key={headCell.id}
-            // align={headCell.alignRight ? 'right' : 'left'}
-            // sortDirection={orderBy === headCell.id ? order : false}
-          >
+          <TableCell>
             <TableSortLabel
-              // hideSortIcon
-              // active={orderBy === headCell.id}
-              // direction={orderBy === headCell.id ? order : 'asc'}
-              // onClick={createSortHandler(headCell.id)}
               style={{
                 color: '#333'
               }}
             >
               {headCell.label}
-              {/* {orderBy === headCell.id ? (
-                <Box sx={{ ...visuallyHidden }}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null} */}
             </TableSortLabel>
           </TableCell>
         ))}
@@ -88,4 +43,4 @@ function EmployeeTableHeader( props){
   );
 }
 
-export default withStyles( styles )( EmployeeTableHeader );
+export default EmployeeTableHeader;

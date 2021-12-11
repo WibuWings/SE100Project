@@ -73,34 +73,6 @@ class UpdateEmployeeModal extends Component {
     }
 
     checkConstraint() {
-        // Constraint 1: ID trống hoặc bị trùng
-        var id  = document.querySelector('input[name="ID"]').value;
-        if( id.length == 0)
-        {
-            this.props.hideAlert();
-			this.props.showAlert("Can't let the id blanked","warning");
-            return false;
-        }
-        for(var i = 0; i < this.props.listEmployee.employees.length ; i++)
-        {
-            if(this.props.listEmployee.employees[i]._id.employeeID == id)
-            {
-                this.props.hideAlert();
-			    this.props.showAlert("ID duplicated","warning");
-                return false;
-            }
-        }
-        // Trùng ID sa thải
-        for(var i = 0; i < this.props.listSackedEmployee.employees.length ; i++)
-        {
-            if(this.props.listSackedEmployee.employees[i]._id.employeeID == id)
-            {
-                this.props.hideAlert();
-			    this.props.showAlert("ID duplicated","warning");
-                return false;
-            }
-        }
-
         //Constraint 2: Password không được có dưới 6 ký tự
         var password = document.querySelector('input[name="password"]').value.trim();
         if(password.length == 0)

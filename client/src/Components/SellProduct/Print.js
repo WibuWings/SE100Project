@@ -155,6 +155,36 @@ class Printf extends React.PureComponent {
       if (isContinue) {
         console.log("Chạy thành công rồi")
         // Update số lượng sản phẩm ở đây
+
+        // Cộng thêm sản phẩm nếu trả
+        if(this.props.statusEditInfoBill) 
+        for(var i = 0; i< this.props.InfomationBillEdit.listProduct.length ; i++)
+        {
+          var productInfo = this.props.InfomationBillEdit.listProduct[i];
+          const data = {
+            token: localStorage.getItem('token'),
+            product: {
+              _id:
+              {
+                productID: productInfo.product._id.productID,
+                importDate: productInfo.product._id.importDate,
+                storeID: productInfo.product._id.storeID,
+              },
+              remain: productInfo.product.remain + productInfo.quantity,
+            }
+          }
+          axios.put(`http://localhost:5000/api/product`, data)
+            .then(res => {
+              console.log("Update success", i);
+              // Xử lý ở redux
+              const dataRedux = data.product;
+              this.props.decreaseRemainProduct(dataRedux);
+            })
+            .catch(err => {
+              console.log(err);
+            })
+        }
+        // Trừ đi số sản phẩm đó
         console.log("this.props.shoppingBags", this.props.shoppingBags)
         for (var i = 0; i < this.props.shoppingBags.length; i++) {
           const data = {

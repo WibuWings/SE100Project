@@ -20,7 +20,11 @@ import {
     Container,
     Typography,
     TableContainer,
-    TablePagination
+    TablePagination,
+    TableHead, TableSortLabel,
+    CardContent, 
+    CardHeader,
+    Divider
 } from '@mui/material';
 import EmployeeToolbar from './EmployeePartials/EmployeeToolbar';
 import EmployeeMoreMenu from './EmployeePartials/EmployeeMoreMenu';
@@ -315,126 +319,109 @@ class EmployeeManager extends Component {
         const { classes } = this.props;
         return (
             <div
-                style={{display: 'block', overflowY: 'auto', height: '100vh'}}
+                style={{display: 'block', overflowY: 'auto', height: '100vh', width:'100%'}}
                 id="scroll-bar"
             >
-                <Container
-                    style={{marginTop: 20, }}
-                >
-                    <span
-                        style = {{
-                            color: "#fff",
-                            padding: 12,
-                            border: '1px solid cyan',
-                            backgroundColor: '#222'
-                        }}
-                    >
-                        Current Employee
-                    </span>
-                    <Button
-                        variant='contained'
-                        startIcon={<Icon icon={plusFill} />}
-                        onClick={() => this.addEmployee()}
-                    >
-                        New User
-                    </Button>
-
-                    <Card style={{width: '100%', margin: 0}}>
-                    {/* <EmployeeToolbar
-                        numSelected={selected.length}
-                        filterName={filterName}
-                        // onFilterName={this.handleFilterByName(event)}
-                    /> */}
-                    <TableContainer id="scroll-bar" style ={{maxHeight:'500px' ,overflow: 'auto'}}>
-                        <Table>
-                            <EmployeeTableHeader
-                                // order={order}
-                                // orderBy={orderBy}
-                                headLabel={TABLE_HEAD}
-                                rowCount={USERLIST.length}
-                                numSelected={selected.length}
-                                // onRequestSort={handleRequestSort}
-                                // onSelectAllClick={handleSelectAllClick}
-                            />
-                            <TableBody
-                                style={{height: '100%', width: '100%'}}
-                            >
-                            {
-                                this.props.listEmployee.employees.map((row) => {
-                                return (
-                                    <TableRow
-                                        hover
-                                        // key={id}
-                                        tabIndex={-1}
-                                        role="checkbox"
-                                        // selected={isItemSelected}
-                                        // aria-checked={isItemSelected}
-                                    >
-                                        <TableCell padding="checkbox">
-                                            <Checkbox
-                                            // checked={isItemSelected}
-                                            // onChange={(event) => handleClick(event, name)}
-                                            />
-                                        </TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="center">
-                                            {row._id.employeeID}
-                                        </TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} component="th" scope="row" padding="none" align="center">
-                                                {row.firstName}
-                                        </TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="center">{row.lastName}</TableCell>  
-                                        <TableCell className = {classes.goodTable_Cell}align="center">
-                                            {row.dateOfBirth.indexOf('T') != -1 ? row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T')): row.dateOfBirth}
-                                        </TableCell>
-                                        <TableCell className = {classes.goodTable_Cell}align="center">{"gender"}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell}align="center">{"province"}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell}align="center">{row.phoneNumber}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell}align="center">{row.email}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell}align="center">{row.address}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell}align="right">
-                                            <EmployeeMoreMenu
-                                                data={row._id.employeeID}    
-                                            >
-                                            </EmployeeMoreMenu>
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-
-                    {/* <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        component="div"
-                        count={USERLIST.length}
-                        // rowsPerPage={rowsPerPage}
-                        // page={page}
-                        // onPageChange={handleChangePage}
-                        // onRowsPerPageChange={handleChangeRowsPerPage}
-                    /> */}
-                    </Card>
-                </Container>
-                <FixedCalendar/>
-                <NoJobEmployee></NoJobEmployee>
-                <UnShiftEmployee/>
-                <TimekeepingTable></TimekeepingTable> 
+                <Card style={{margin: 16}}>
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="CurrentEmployee" />
+                        <Divider />
+                        
+                        <CardContent style={{margin: 0}}>
+                            <Button
+                                variant='contained'
+                                startIcon={<Icon icon={plusFill} />}
+                                onClick={() => this.addEmployee()}
+                                >
+                                    New User
+                                </Button>
+                            <Card style={{width: '100%', margin: 0}}>
+                                <TableContainer id="scroll-bar" style ={{maxHeight:'500px' , width: '100%',overflow: 'auto'}}>
+                                    <Table>
+                                        <TableRow>
+                                            <TableCell align="center" style={{color: '#fff', backgroundColor: '#000'}}>
+                                                ID
+                                            </TableCell>
+                                            <TableCell component="th" scope="row" padding="none" align="center" style={{color: '#fff', backgroundColor: '#000'}}> 
+                                                First Name
+                                            </TableCell>
+                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}} >Last Name</TableCell>  
+                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}}>
+                                                Date Of Birth
+                                            </TableCell>
+                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}}>Phone Number</TableCell>
+                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}}>Email</TableCell>
+                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}}>Address</TableCell>
+                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}}></TableCell>
+                                        </TableRow>
+                                        <TableBody
+                                            style={{height: '100%', width: '100%'}}
+                                        >
+                                        {
+                                            this.props.listEmployee.employees.map((row) => {
+                                            return (
+                                                <TableRow
+                                                    hover
+                                                    tabIndex={-1}
+                                                    role="checkbox"
+                                                >
+                                                    <TableCell align="center">
+                                                        {row._id.employeeID}
+                                                    </TableCell>
+                                                    <TableCell component="th" scope="row" padding="none" align="center">
+                                                            {row.firstName}
+                                                    </TableCell>
+                                                    <TableCell align="center">{row.lastName}</TableCell>  
+                                                    <TableCell align="center">
+                                                        {row.dateOfBirth.indexOf('T') != -1 ? row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T')): row.dateOfBirth}
+                                                    </TableCell>
+                                                    <TableCell align="center">{row.phoneNumber}</TableCell>
+                                                    <TableCell align="center">{row.email}</TableCell>
+                                                    <TableCell align="center">{row.address}</TableCell>
+                                                    <TableCell align="right">
+                                                        <EmployeeMoreMenu
+                                                            data={row._id.employeeID}    
+                                                        >
+                                                        </EmployeeMoreMenu>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                                
+                            </Card>
+                            
+                        </CardContent>
+                </Card>
+                <Card  style={{margin: 16}}>
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Calendar Shift" />
+                        <Divider />
+                        <CardContent>
+                            <FixedCalendar/>
+                        </CardContent>
+                </Card>
                 
+                    
+                    <NoJobEmployee></NoJobEmployee>
+                    <UnShiftEmployee/>
+                    <TimekeepingTable></TimekeepingTable> 
+                    
 
-                {/* Sacked EMployee */}
-                <Container
-                    style={{marginTop: 20, }}
-                >
-                    <span
-                        style = {{
-                            color: "#fff",
-                            padding: 12,
-                            border: '1px solid red',
-                            backgroundColor: 'red'
-                        }}
+                    {/* Sacked EMployee */}
+                    <Container
+                        style={{marginTop: 20, }}
                     >
-                        Sacked Employee
-                    </span>
+                        <span
+                            style = {{
+                                color: "#fff",
+                                padding: 12,
+                                border: '1px solid red',
+                                backgroundColor: 'red'
+                            }}
+                        >
+                            Sacked Employee
+                        </span>
 
                     <Card>
                     {/* <EmployeeToolbar
@@ -641,6 +628,7 @@ const mapStateToProps = (state, ownProps) => {
         statusUpdateNextWeekTimeKeeping: state.statusUpdateNextWeekTimeKeeping,
         statusAddTimeKeeping: state.statusAddTimeKeeping,
         statusUpdateTimeKeeping: state.statusUpdateTimeKeeping,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 

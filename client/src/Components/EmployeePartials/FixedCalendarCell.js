@@ -209,7 +209,7 @@ class FixedCalendarCell extends Component {
             className={classes.goodTable_Cell} 
             style={{
                 position: 'relative',
-                backgroundColor: !this.findShiftInShiftAssign() ?'#ff6057': '#b3cde0',
+                backgroundColor: !this.findShiftInShiftAssign() ?'#ff6057': 'yellowgreen',
                 height: '80px',
             }}
             // ref={this.myRef}    
