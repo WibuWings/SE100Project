@@ -482,9 +482,9 @@ class UpdateGoodModal extends Component {
     render() {
         
         return (
-            <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
+            <form style={{ zIndex: '10', width: '90%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="UPDATE GOOD" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="UPDATE GOOD" />
                         <div 
                         style={{ 
                             width: '100%', backgroundColor: 'rgb(221,235,255)'   
@@ -518,7 +518,7 @@ class UpdateGoodModal extends Component {
                                         <div 
                                             className="input-label"
                                             style={{
-                                                width: '116px'
+                                                width: '165px'
                                             }}
                                         >
                                             ID
@@ -548,7 +548,7 @@ class UpdateGoodModal extends Component {
                                         <StyledTextField
                                             classname='input-box'   
                                             type="date" 
-                                            style = {{width: '68%'}} 
+                                            style = {{width: '100%', paddingRight: 8}} 
                                             fullWidth
                                             name="importDate"
                                             size="small"
@@ -562,7 +562,7 @@ class UpdateGoodModal extends Component {
                                     <Grid item md={6} 
                                         className='input-item'
                                     >
-                                        <div className="input-label"style={{width: '114px'}}>Name</div>
+                                        <div className="input-label"style={{width: '165px'}}>Name</div>
                                         <StyledTextField
                                             classname='input-box'   
                                             type="text" 
@@ -582,7 +582,7 @@ class UpdateGoodModal extends Component {
                                     >
                                         <div 
                                             className="input-label" 
-                                            style={{width: '100px'}}
+                                            style={{width: '106px'}}
                                         >
                                             Quantity
                                         </div>
@@ -645,7 +645,7 @@ class UpdateGoodModal extends Component {
                                         /> */}
                                     </Grid>
                                     <Grid item md={6} className='input-item'>
-                                        <div className="input-label" style={{width: 100}}>Currency</div>
+                                        <div className="input-label" style={{width: 106, marginLeft: '-8px'}}>Currency</div>
                                         <StyledTextField
                                             // fullWidth
                                             id="currencySelector"
@@ -715,7 +715,7 @@ class UpdateGoodModal extends Component {
                                     >
                                         <div 
                                             className="input-label"
-                                            style={{width: '96px'}}
+                                            style={{width: '109px'}}
                                         >
                                             Sell Price
                                         </div>
@@ -857,6 +857,7 @@ const mapStateToProps = (state, ownProps) => {
         typeProduct: state.typeProduct,
         listProduct: state.listProduct,
         regulation: state.regulationReducer,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 
