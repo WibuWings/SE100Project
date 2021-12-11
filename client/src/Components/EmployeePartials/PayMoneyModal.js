@@ -278,12 +278,12 @@ class PayEmployeeModal extends Component {
                                             <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='240px'>Day</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='100px'>Weekday</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='240px'>Shift</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='140px'>Per Hour</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='140px'>Salary</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='120px'>Salary status</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='240px'>Day</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='100px'>Weekday</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='240px'>Shift</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='140px'>Per Hour</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='140px'>Salary</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='120px'>Salary status</TableCell>
                                                         {/* <TableCell className={classes.goodTable_Cell_Header} align="center"></TableCell> */}
                                                     </TableRow>
                                                     {
@@ -395,11 +395,11 @@ class PayEmployeeModal extends Component {
                                         <Table className={classes.goodTable} size="small" aria-label="a dense table">
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Day</TableCell>
-                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">Shift</TableCell>
-                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">Real Date</TableCell>
-                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
-                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='80px'>Day</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">Shift</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">Real Date</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">ID</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header}style={{color: '#fff', backgroundColor: '#000'}} align="center">Name</TableCell>
                                                 </TableRow>
                                                 {
                                                 this.props.nextWeekTimeKeeping.map((item) =>

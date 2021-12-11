@@ -88,24 +88,17 @@ class TimeKeepingTable extends Component {
   render() {
     const { classes } = this.props;
     return ( 
-      <div style={{marginTop: 0, padding: 24}}> 
-          <span
-              style={{
-                  color: '#fff',
-                  backgroundColor: 'blue',
-                  padding: 10,
-              }}
-          >ALL TIMEKEEPING</span>
+      <div  > 
           <TableContainer component={Paper}>
                 <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='180px'>Day</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Date Of Week</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" >Shift</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Paid</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='180px'>Day</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='80px'>Date Of Week</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" >Shift</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">ID</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">Name</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">Paid</TableCell>
                             {/* <TableCell className={classes.goodTable_Cell_Header} align="center"></TableCell> */}
                         </TableRow>
                         {

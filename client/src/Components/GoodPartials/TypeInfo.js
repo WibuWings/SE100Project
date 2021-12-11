@@ -64,6 +64,7 @@ class TypeInfo extends Component {
     async delete(type){
         console.log("type", type);
         this.handleClose();
+        this.props.changeEditTypeStatus();
         const data = {
             token: localStorage.getItem('token'),
             productTypes:
@@ -145,6 +146,7 @@ class TypeInfo extends Component {
         // this.getAllTypeList();
         console.log('this.typeProduct', this.props.typeProduct)
         this.setState({change: !this.state.change})
+        
         this.props.hideAlert();
 	    this.props.showAlert("Delete type success   ","success");
     }

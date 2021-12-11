@@ -93,7 +93,7 @@ const styles = theme =>  ({
         borderWidth: '1px',
         borderColor: '#ccc',
         borderStyle: 'solid',
-        height: '80px',
+        height: '20px',
     } 
 })
 
@@ -338,20 +338,20 @@ class EmployeeManager extends Component {
                                 <TableContainer id="scroll-bar" style ={{maxHeight:'500px' , width: '100%',overflow: 'auto'}}>
                                     <Table>
                                         <TableRow>
-                                            <TableCell align="center" style={{color: '#fff', backgroundColor: '#000'}}>
+                                            <TableCell align="center" className = {classes.goodTable_Cell}style={{color: '#fff', backgroundColor: '#000'}}>
                                                 ID
                                             </TableCell>
-                                            <TableCell component="th" scope="row" padding="none" align="center" style={{color: '#fff', backgroundColor: '#000'}}> 
+                                            <TableCell component="th" className = {classes.goodTable_Cell}scope="row" padding="none" align="center" style={{color: '#fff', backgroundColor: '#000'}}> 
                                                 First Name
                                             </TableCell>
-                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}} >Last Name</TableCell>  
-                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}}>
+                                            <TableCell align="center"  className = {classes.goodTable_Cell}style={{color: '#fff', backgroundColor: '#000'}} >Last Name</TableCell>  
+                                            <TableCell align="center"  className = {classes.goodTable_Cell}style={{color: '#fff', backgroundColor: '#000'}}>
                                                 Date Of Birth
                                             </TableCell>
-                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}}>Phone Number</TableCell>
-                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}}>Email</TableCell>
-                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}}>Address</TableCell>
-                                            <TableCell align="center"  style={{color: '#fff', backgroundColor: '#000'}}></TableCell>
+                                            <TableCell align="center"  className = {classes.goodTable_Cell}style={{color: '#fff', backgroundColor: '#000'}}>Phone Number</TableCell>
+                                            <TableCell align="center"  className = {classes.goodTable_Cell}style={{color: '#fff', backgroundColor: '#000'}}>Email</TableCell>
+                                            <TableCell align="center"  className = {classes.goodTable_Cell}style={{color: '#fff', backgroundColor: '#000'}}>Address</TableCell>
+                                            <TableCell align="center"  className = {classes.goodTable_Cell}style={{color: '#fff', backgroundColor: '#000'}}></TableCell>
                                         </TableRow>
                                         <TableBody
                                             style={{height: '100%', width: '100%'}}
@@ -401,110 +401,88 @@ class EmployeeManager extends Component {
                             <FixedCalendar/>
                         </CardContent>
                 </Card>
-                
-                    
-                    <NoJobEmployee></NoJobEmployee>
-                    <UnShiftEmployee/>
-                    <TimekeepingTable></TimekeepingTable> 
-                    
-
-                    {/* Sacked EMployee */}
-                    <Container
-                        style={{marginTop: 20, }}
-                    >
-                        <span
-                            style = {{
-                                color: "#fff",
-                                padding: 12,
-                                border: '1px solid red',
-                                backgroundColor: 'red'
-                            }}
-                        >
-                            Sacked Employee
-                        </span>
-
-                    <Card>
-                    {/* <EmployeeToolbar
-                        numSelected={selected.length}
-                        filterName={filterName}
-                        // onFilterName={this.handleFilterByName(event)}
-                    /> */}
-                    <TableContainer id="scroll-bar"style ={{maxHeight:'500px',overflowY: 'scroll'}}>
-                        <Table>
-                            <EmployeeTableHeader
-                                // order={order}
-                                // orderBy={orderBy}
-                                headLabel={TABLE_HEAD}
-                                // rowCount={USERLIST.length}
-                                // numSelected={selected.length}
-                                // onRequestSort={handleRequestSort}
-                                // onSelectAllClick={handleSelectAllClick}
-                            />
-                            <TableBody
-                                style={{height: '100%', width: '100%'}}
-                            >
-                            {
-                                this.props.listSackedEmployee.employees.map((row) => {
-                                    
-                                    // console.log("row", row);
-                                    // if(row == {} || row == null) return (<div></div>);
-                                return (
-                                    <TableRow
-                                        hover
-                                        // key={id}
-                                        tabIndex={-1}
-                                        role="checkbox"
-                                        // selected={isItemSelected}
-                                        // aria-checked={isItemSelected}
-                                    >
-                                        <TableCell className = {classes.goodTable_Cell} padding="checkbox">
-                                            <Checkbox
-                                            // checked={isItemSelected}
-                                            // onChange={(event) => handleClick(event, name)}
-                                            />
+                <Card  style={{margin: 16}}>
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="No schedule employee" />
+                        <Divider />
+                        <CardContent>
+                            <NoJobEmployee></NoJobEmployee>
+                        </CardContent>
+                </Card>
+                <Card  style={{margin: 16}}>
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Off day" />
+                        <Divider />
+                        <CardContent>
+                            <UnShiftEmployee/>
+                        </CardContent>
+                </Card>    
+                <Card  style={{margin: 16}}>
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="All timekeepings" />
+                        <Divider />
+                        <CardContent>
+                            <TimekeepingTable></TimekeepingTable>
+                        </CardContent>
+                </Card>    
+                <Card  style={{margin: 16}}>
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="All timekeepings" />
+                        <Divider />
+                        <CardContent>
+                            <TableContainer id="scroll-bar" style ={{maxHeight:'500px',overflowY: 'auto', overflowX:'hidden', boxShadow: '1px 1px #888888'}}>
+                                <Table>
+                                    <TableRow>
+                                        <TableCell align="center" className = {classes.goodTable_Cell} style={{color: '#fff', backgroundColor: '#000'}}>
+                                            ID
                                         </TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="left">
-                                            {row._id.employeeID}
+                                        <TableCell component="th" className = {classes.goodTable_Cell} scope="row" padding="none" align="center" style={{color: '#fff', backgroundColor: '#000'}}> 
+                                            First Name
                                         </TableCell>
-                                        <TableCell component="th" scope="row" padding="none">
-                                            <Stack direction="row" alignItems="center" spacing={2}>
-                                            {/* <Avatar alt={row.firstName} src={avatarUrl} /> */}
-                                            <Typography variant="subtitle2" noWrap>
-                                                {row.firstName}
-                                            </Typography>
-                                            </Stack>
+                                        <TableCell align="center" className = {classes.goodTable_Cell} style={{color: '#fff', backgroundColor: '#000'}} >Last Name</TableCell>  
+                                        <TableCell align="center" className = {classes.goodTable_Cell} style={{color: '#fff', backgroundColor: '#000'}}>
+                                            Date Of Birth
                                         </TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.lastName}</TableCell>  
-                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T'))}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="left">{"gender"}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="left">{"province"}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.phoneNumber}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.email}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="left">{row.address}</TableCell>
-                                        <TableCell className = {classes.goodTable_Cell} align="right">
-                                            <SackedEmployeeMenu
-                                                data={row._id.employeeID}    
-                                            >
-                                            </SackedEmployeeMenu>
-                                        </TableCell>
+                                        <TableCell align="center" className = {classes.goodTable_Cell} style={{color: '#fff', backgroundColor: '#000'}}>Phone Number</TableCell>
+                                        <TableCell align="center" className = {classes.goodTable_Cell} style={{color: '#fff', backgroundColor: '#000'}}>Email</TableCell>
+                                        <TableCell align="center" className = {classes.goodTable_Cell} style={{color: '#fff', backgroundColor: '#000'}}>Address</TableCell>
+                                        <TableCell align="center" className = {classes.goodTable_Cell} style={{color: '#fff', backgroundColor: '#000'}}></TableCell>
                                     </TableRow>
-                                );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                    <TableBody
+                                        style={{height: '100%', width: '100%'}}
+                                    >
+                                    {
+                                        this.props.listSackedEmployee.employees.map((row) => {
+                                        return (
+                                            <TableRow
+                                                hover
+                                                tabIndex={-1}
+                                            >
+                                                <TableCell   align="center">
+                                                    {row._id.employeeID}
+                                                </TableCell>
+                                                <TableCell component="th" scope="row" padding="none" align="center">
+                                                    {row.firstName}
+                                                </TableCell>
+                                                <TableCell align="center">{row.lastName}</TableCell>  
+                                                <TableCell align="center">{row.dateOfBirth.substring(0,row.dateOfBirth.indexOf('T'))}</TableCell>
+                                                <TableCell align="center">{row.phoneNumber}</TableCell>
+                                                <TableCell align="center">{row.email}</TableCell>
+                                                <TableCell align="center">{row.address}</TableCell>
+                                                <TableCell align="center">
+                                                    <SackedEmployeeMenu
+                                                        data={row._id.employeeID}    
+                                                    >
+                                                    </SackedEmployeeMenu>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </CardContent>
+                </Card>    
+                     
+                    
 
-                    {/* <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        component="div"
-                        count={USERLIST.length}
-                        // rowsPerPage={rowsPerPage}
-                        // page={page}
-                        // onPageChange={handleChangePage}
-                        // onRowsPerPageChange={handleChangeRowsPerPage}
-                    /> */}
-                    </Card>
-                </Container>
+                    
 
 
                 {/* Đây là phần modal */}
