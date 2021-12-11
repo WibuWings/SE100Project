@@ -266,8 +266,8 @@ class UpdateNextWeekTimeKeepingModal extends Component {
         return (
             <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} 
-                    title="Update Change TimeKeeper" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} 
+                    title="Update Offday" />
                         <div 
                         style={{ 
                             width: '100%', backgroundColor: 'rgb(221,235,255)'   
@@ -456,6 +456,7 @@ const mapStateToProps = (state, ownProps) => {
         nextWeekTimeKeeping: state.nextWeekTimeKeeping,
         updateNextWeekTimeKeepingValue: state.updateNextWeekTimeKeepingValue,
         regulation: state.regulationReducer,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 

@@ -244,7 +244,7 @@ class PayEmployeeModal extends Component {
                 autoComplete="off" noValidate id='scroll-bar'
             >
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="PAY EMPLOYEE" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="PAY EMPLOYEE" />
                         <div 
                         style={{ 
                             width: '100%', backgroundColor: 'rgb(221,235,255)'   
@@ -456,6 +456,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         employeeID: state.currentEmployeeViewValue,
         regulation: state.regulationReducer,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 

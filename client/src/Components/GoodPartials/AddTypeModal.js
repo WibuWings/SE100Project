@@ -94,7 +94,7 @@ class AddTypeModal extends Component {
             <form style={{ zIndex: '11', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader 
-                        style={{ color: 'blue', backgroundColor: '#efeeef', textAlign: 'center' }} 
+                        style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} 
                         title={"Add Type"}
                         />
                     <Divider />
@@ -159,6 +159,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         typeProductValue: state.typeProductValue,
         typeProduct: state.typeProduct,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 

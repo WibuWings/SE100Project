@@ -19,7 +19,7 @@ class ExcelInstruction extends Component {
         return (
             <form style={{ zIndex: '10', minWidth: '600px',width: '70%', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , paddingLeft: '26px'}} title="Instruction" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Instruction" />
                     <Divider />
                     <CardContent>
                         <Grid container spacing={2}>
@@ -67,6 +67,7 @@ const mapStateToProps = (state, ownProps) => {
         deleteStatus: state.deleteStatus,
         confirmCode: state.confirmCode,
         regulation: state.regulationReducer,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 

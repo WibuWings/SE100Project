@@ -28,7 +28,7 @@ class EditTypeModal extends Component {
         return (
             <form style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="All Good Type" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="All Good Type" />
                     <Divider />
                     <CardContent>
                         <Grid container spacing={2}>
@@ -64,6 +64,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         typeProductValue: state.typeProductValue,
         typeProduct: state.typeProduct,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 
