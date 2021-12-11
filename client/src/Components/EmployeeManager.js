@@ -323,7 +323,7 @@ class EmployeeManager extends Component {
                 id="scroll-bar"
             >
                 <Card style={{margin: 16}}>
-                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="CurrentEmployee" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Current employee(s)" />
                         <Divider />
                         
                         <CardContent style={{margin: 0}}>
@@ -395,14 +395,14 @@ class EmployeeManager extends Component {
                         </CardContent>
                 </Card>
                 <Card  style={{margin: 16}}>
-                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Calendar Shift" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Calendar shift" />
                         <Divider />
                         <CardContent>
                             <FixedCalendar/>
                         </CardContent>
                 </Card>
                 <Card  style={{margin: 16}}>
-                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="No schedule employee" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="No schedule employee(s)" />
                         <Divider />
                         <CardContent>
                             <NoJobEmployee></NoJobEmployee>
@@ -416,14 +416,14 @@ class EmployeeManager extends Component {
                         </CardContent>
                 </Card>    
                 <Card  style={{margin: 16}}>
-                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="All timekeepings" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="All timekeeping(s)" />
                         <Divider />
                         <CardContent>
                             <TimekeepingTable></TimekeepingTable>
                         </CardContent>
                 </Card>    
                 <Card  style={{margin: 16}}>
-                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="All timekeepings" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="Sacked employee(s)" />
                         <Divider />
                         <CardContent>
                             <TableContainer id="scroll-bar" style ={{maxHeight:'500px',overflowY: 'auto', overflowX:'hidden', boxShadow: '1px 1px #888888'}}>
