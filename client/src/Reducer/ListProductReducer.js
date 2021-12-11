@@ -80,6 +80,22 @@ const listProductInitialState = [
                     state: newState
                 }
             }
+            case "DELETE_TYPE_PRODUCT": 
+            {
+                console.log("remove tất cả các type bị xoá",action.typeID )
+                var newState = [];
+                for(var i = 0 ; i < state.state.length; i++)
+                {
+                    state.state[i].typeIDList = state.state[i].typeIDList.filter(function(item) {
+                        return item !== action.typeID;
+                    })
+                    console.log('list type',state.state[i].typeIDList);
+                    newState.push(state.state[i]);
+                }
+                return {
+                    state: newState
+                }
+            }
             default:
                 return state
         }

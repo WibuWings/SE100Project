@@ -41,7 +41,7 @@ function TypeManager(props) {
                         <Grid container spacing={2}>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <Grid item md={6} sm={12}>
-                                    <Button style={{ backgroundColor: 'yellowgreen', width:'100%' }} onClick={() => handleAdd()} variant="contained">
+                                    <Button style={{ backgroundColor: '#0d6efd', width:'100%' }} onClick={() => handleAdd()} variant="contained">
                                         <BiPlusMedical color={'white'} size={16} style={{marginRight: 4}}/>
                                         add type
                                     </Button>

@@ -720,9 +720,9 @@ class GoodManager extends Component {
                         <Grid className="profile-body" container spacing={2}>
                             <Grid item  lg={3} md={12} sm={12}>
                                 <Grid container spacing={2}>
-                                    <Grid item md={12} sm={12}>
+                                    {/* <Grid item md={12} sm={12}>
                                         <SortByTable></SortByTable>
-                                    </Grid>
+                                    </Grid> */}
                                     <Grid item md={12} sm={12}>
                                         <Grid container spacing={2}>
                                             <Grid item md={12} sm={12}  >
@@ -746,8 +746,8 @@ class GoodManager extends Component {
                                                                     style={{ width:'100%' ,backgroundColor: '#31be7d', padding: '4px 8px',borderRadius: 4, lineHeight: 2.0, color:'#fff', display: 'flex', alignItems:'center', justifyContent:'center'}} 
                                                                     for="upload-excel"
                                                                 >
-                                                                    <img src={excelLogo} width={25} height={25} style={{marginRight: 4}}></img>
-                                                                    <label for="upload-excel" className='excel-instruction'>Load Excel</label>
+                                                                    <img src={excelLogo} width={18} height={18} style={{marginRight: 2}}></img>
+                                                                    <label for="upload-excel" className='excel-instruction' style={{fontSize: 15, display: 'block'}}>Load Excel</label>
                                                                 </label>
                                                                 <input 
                                                                     id="upload-excel" type="file" style={{display: 'none'}} 

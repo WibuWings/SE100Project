@@ -8,6 +8,8 @@ import axios from 'axios';
 
 var listTypeInfor = [];
 
+
+
 class AddTypeModal extends Component {
     constructor(props) {
         super(props);

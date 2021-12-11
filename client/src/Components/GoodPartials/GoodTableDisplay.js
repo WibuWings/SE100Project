@@ -216,8 +216,8 @@ function Row(props) {
 
     const calculateDay = (dateString1, dateString2) =>
     {
-        console.log("dateString1", dateString1);
-        console.log("dateString2", dateString2);
+        // console.log("dateString1", dateString1);
+        // console.log("dateString2", dateString2);
         if(dateString1.indexOf('T') != -1)
         {
             dateString1 = dateString1.substring(0, dateString1.indexOf('T'));

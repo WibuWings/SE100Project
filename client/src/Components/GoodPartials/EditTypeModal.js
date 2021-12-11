@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button } from '@mui/material';
+import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button, Modal } from '@mui/material';
 import { connect } from 'react-redux'
 import { BiPlusMedical, BiEdit} from 'react-icons/bi';
 import { TiDelete } from "react-icons/ti";
 import Stack from '@mui/material/Stack';
 import { GiCancel } from 'react-icons/gi'
 import axios from 'axios';
-
+import TypeInfo from './TypeInfo';
 class EditTypeModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            change: false
+            change: false,
         }
     }
     confirm = () => {
@@ -22,89 +22,7 @@ class EditTypeModal extends Component {
         // this.props.changeConfirmStatus();
         this.props.changeEditTypeStatus();
     }
-    edit = (type) => {
-        // this.props.setEditTypeStatus();
-        this.props.typeToUpdate(type);
-        // this.props.changeEditTypeStatus();
-        this.props.changeStatusUpdateType();
-    }
-    async delete(type){
-        const data = {
-            token: localStorage.getItem('token'),
-            productTypes:
-            [
-                {
-                    typeID: type._id.typeID,
-                    storeID: type._id.storeID
-                }
-            ]
-                
-        }
-        await axios.delete(`http://localhost:5000/api/product/type`,{data: data})
-            .then(res => {
-                console.log("delete success");
-            })
-            .catch(err => {
-                this.props.hideAlert();
-				this.props.showAlert("Something happened, restart and try again","warning");
-                console.log('bug when delete type',err);
-            })
-        this.props.deleteTypeFromRedux(data.productTypes[0]);
-
-        // Ở đây mình phải cập nhật join nữa
-        // Phải get tất cả cái join mà có cái type là type hiện tại
-
-
-        var allJoinMatch = [];
-        const data1 = {
-            token: localStorage.getItem('token'),
-            filter: {
-                "_id.storeID": this.props.infoUser.email,
-                "_id.typeID": type._id.typeID,
-            }   
-        }
-        await axios.get(`http://localhost:5000/api/product/join`, 
-        {
-            params: {...data1}
-        })
-            .then(res => {
-                allJoinMatch = res.data.data;
-            })
-            .catch(err => {
-                console.log('Bug when get join', err);
-                this.props.hideAlert();
-				this.props.showAlert("Something happened, restart and try again","warning");
-            })
-
-        var allProductJoin = [];
-        for(var i = 0 ; i < allJoinMatch.length; i++)
-        {
-            allProductJoin.push({
-                productID: allJoinMatch[i]._id.productID,
-                typeID: type._id.typeID,
-                importDate: allJoinMatch[i]._id.importDate,
-                storeID: this.props.infoUser.email,
-                
-            });
-        }
-        
-        const dataJoin = {
-            token: localStorage.getItem('token'),
-            productJoinTypes: allProductJoin,      
-        }
-
-        console.log(dataJoin);
-
-        await axios.delete(`http://localhost:5000/api/product/join`,{data: dataJoin})
-            .then(res => {
-                console.log("delete join success");
-            })
-            .catch(err => {
-                this.props.hideAlert();
-				this.props.showAlert("Something happened, restart and try again","warning");
-            })
-        this.setState({change: !this.state.change})
-    }
+    
 
     render() {
         return (
@@ -116,11 +34,7 @@ class EditTypeModal extends Component {
                         <Grid container spacing={2}>
                             <Grid container item md={12} xs={12} spacing={0}>
                                 { this.props.typeProduct.map((type) => (
-                                    <Grid item md={3} style={{border:'1px solid #333', padding: 4}}>
-                                        <span>{type.name}</span>
-                                        <BiEdit onClick={() => this.edit(type)}/>
-                                        <TiDelete onClick={() => this.delete(type)}/>
-                                    </Grid>
+                                    <TypeInfo type={type}></TypeInfo>
                                 ))}
                             </Grid>
                             <Grid item md={12} xs={12}>
