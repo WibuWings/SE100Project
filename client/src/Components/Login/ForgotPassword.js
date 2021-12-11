@@ -25,21 +25,18 @@ class ForgotPassword extends Component {
     // Send code tới người dùng
     sendCode = (a = this.makeCode(6)) => {
         this.setState({
-            code: "123456"
+            code: a,
         })
-        // this.setState({
-        //     code: a,
-        // })
-        // emailjs.init("user_K1g5N5hUDI0rjsa1uRoI4");
-        // emailjs.send("gmail_main", "template_plasdgf", {
-        //     To_mail: `${document.querySelector('#email').value}`,
-        //     code: `${a}`,
-        // })
-        //     .then((response) => {
-        //         console.log('SUCCESS!', response.status, response.text);
-        //     }, (err) => {
-        //         console.log('FAILED...', err);
-        //     });
+        emailjs.init("user_K1g5N5hUDI0rjsa1uRoI4");
+        emailjs.send("gmail_main", "template_plasdgf", {
+            To_mail: `${document.querySelector('#email').value}`,
+            code: `${a}`,
+        })
+            .then((response) => {
+                console.log('SUCCESS!', response.status, response.text);
+            }, (err) => {
+                console.log('FAILED...', err);
+            });
     }
 
     // Tạo code để xác nhận
@@ -193,16 +190,7 @@ class ForgotPassword extends Component {
     }
 
     render() {
-        const enterPress = this.findPassword;
-        document.onkeydown = function (e) {
-            switch (e.which) {
-                case 13:
-                    enterPress(e);
-                    break;
-                default:
-                    break;
-            }
-        }
+        
         return (
             <div className="Login">
                 <div className="form-findpass">
@@ -244,7 +232,7 @@ class ForgotPassword extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurPassword()} name="password" rules="required|min:6" id="password" placeholder="Emter password" type="password" />
+                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurPassword()} name="password" rules="required|min:6" id="password" placeholder="Enter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -254,7 +242,7 @@ class ForgotPassword extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurRePassword()} name="password" rules="required|min:6" id="re-password" placeholder="Emter password" type="password" />
+                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurRePassword()} name="password" rules="required|min:6" id="re-password" placeholder="Enter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>

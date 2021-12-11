@@ -8,6 +8,8 @@ import axios from 'axios';
 
 var listTypeInfor = [];
 
+
+
 class AddTypeModal extends Component {
     constructor(props) {
         super(props);
@@ -20,31 +22,6 @@ class AddTypeModal extends Component {
     storeID = "";
     typeList = [];
 
-    // async getAllTypeList(){
-    //     var result = [];
-    //     const data = {
-    //         token: localStorage.getItem('token'),
-    //         filter: {
-    //             "_id.storeID": this.props.infoUser.email,
-    //         }   
-    //     }
-    //     console.log(data.filter);
-    //     await axios.get(`http://localhost:5000/api/product/type`, 
-    //     {
-    //         params: {...data}
-    //     })
-    //         .then(res => {
-    //             result = res.data.data;
-    //         })
-    //         .catch(err => {
-    //             alert(err);
-    //         })
-    //     //Get data và lưu các tên Type vào bảng
-    //     for(var i=0; i < result.length ; i++)
-    //     {
-    //         listTypeInfor.push(result[i]);
-    //     }
-    // }
     addType = () => {
         if(this.checkConstraint(this.typeName)==false)  return;
         var genTypeID = 0;
@@ -64,11 +41,13 @@ class AddTypeModal extends Component {
         }
         axios.post(`http://localhost:5000/api/product/type`, data)
             .then(res => {
-                alert("Save success");
+                this.props.hideAlert();
+				this.props.showAlert("Save product type success","success");
                 //TODO: Cập nhật token ở đây nữa
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Add type failed","warning");
             })
         this.props.addTypeToReducer(data.productType);
         this.props.changeAddTypeStatus();
@@ -81,14 +60,16 @@ class AddTypeModal extends Component {
         {
             if(listTypeInfor[i].name==typeName)
             {
-                alert("Trùng tên rồi anh chai");
+                this.props.hideAlert();
+				this.props.showAlert("Duplicate type name","warning");
                 return false;
             }
         }        
         // Constraint 2: Not blank
         if(typeName.length==0)
         {
-            alert("Không nhập gì à anh chai")
+            this.props.hideAlert();
+			this.props.showAlert("Type name can't be left blanked","warning");
             return false;
         }
         return true;
@@ -113,7 +94,7 @@ class AddTypeModal extends Component {
             <form style={{ zIndex: '11', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
                 <Card>
                     <CardHeader 
-                        style={{ color: 'blue', backgroundColor: '#efeeef', textAlign: 'center' }} 
+                        style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} 
                         title={"Add Type"}
                         />
                     <Divider />
@@ -178,6 +159,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         typeProductValue: state.typeProductValue,
         typeProduct: state.typeProduct,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 
@@ -198,6 +180,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "ADD_TYPE",
                 data: data,
             });
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
         },
     }
 }

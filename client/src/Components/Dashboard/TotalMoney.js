@@ -82,8 +82,9 @@ function TotalMoney(props) {
                 <RiMoneyDollarCircleFill className="dashboard-item-icon"></RiMoneyDollarCircleFill>
             </div>
             {
-                regulation.currency == 'vnd' ?
-                <Typography style={{ marginBottom: '10px' }} variant="h6">{totalMoney.toLocaleString()} VNĐ 
+                ( Object.keys(regulation).length == 0 || regulation.currency == 'vnd' )?
+                <Typography style={{ marginBottom: '10px' }} variant="h6">
+                    {totalMoney.toLocaleString()} VNĐ 
                 </Typography>
                 :
                 <Typography style={{ marginBottom: '10px' }} variant="h6">

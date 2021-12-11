@@ -93,28 +93,33 @@ class AddNextWeekTimeKeepingModal extends Component {
     checkContraint() {
         if(this.state.dayChosed.length == 0)
         {
-            alert("Chưa chọn ngày nào trong tuần");
+            this.props.hideAlert();
+			this.props.showAlert("You haven't select the day of week","warning");
             return false;
         }
         if(this.state.shiftID.length == 0)
         {
-            alert("Chưa chọn ca nào");
+            this.props.hideAlert();
+			this.props.showAlert("You haven't select the shift","warning");
             return false;
         }
         console.log(this.state.withdrawID );
         if( this.state.withdrawID == undefined || this.state.withdrawID.length == 0)
         {
-            alert("Chưa chọn nhân viên nào nghỉ"); 
+            this.props.hideAlert();
+			this.props.showAlert("You haven't select the absent employee","warning"); 
             return false;
         }
         if(this.state.alterID== undefined || this.state.alterID.length == 0)
         {
-            alert("Chưa chọn nhân viên nào thay thế");
+            this.props.hideAlert();
+			this.props.showAlert("You haven't select the ablternative employee","warning"); 
             return false;
         }
         if(!this.isGreater(document.querySelector('input[name="realDate"]').value, this.getCurrentDateTime() ))
         {
-            alert("Ngày nhập phải nhỏ hơn ngày báo nghỉ");
+            this.props.hideAlert();
+			this.props.showAlert("The input day must be greater than today","warning"); 
             return false;
         }
         // Check thử ngày nhập nhỏ hơn ngày báo nghỉ bn ngày
@@ -124,13 +129,11 @@ class AddNextWeekTimeKeepingModal extends Component {
             this.props.regulation.lessChangeTimeKeepingDay)
             {
                 console.log("Tính ngày",this.calculateDay(document.querySelector('input[name="realDate"]').value, this.getCurrentDateTime()));
-                alert("Nhân viên phải bảo nghỉ trước ít nhất " + this.props.regulation.lessChangeTimeKeepingDay+" ngày.");
+                this.props.hideAlert();
+			    this.props.showAlert("The input day must be greater than today at least "+ this.props.regulation.lessChangeTimeKeepingDay+" day(s)","warning");
                 return false;
             }
         }
-
-
-        alert("Đã check hết constraint");
         return true;
     }
     getDayInWeek(date) {
@@ -182,7 +185,8 @@ class AddNextWeekTimeKeepingModal extends Component {
         await axios.post(`http://localhost:5000/api/employee/off-day`, data1)
           .then(res => {
               console.log("Save success");
-              alert("Lưu thành công")
+                this.props.hideAlert();
+                this.props.showAlert("Save absent day success","success");
               const data = {
                 _id: {
                     dateInWeek: this.state.dayChosed,
@@ -215,10 +219,15 @@ class AddNextWeekTimeKeepingModal extends Component {
             this.props.changeAddNextWeekTimeKeepingStatus();
           })
           .catch(err => {
-                console.log("err.response.data.message", err.response.data.message);
+                // console.log("err.response.data.message", err.response.data.message);
                 if(err.response.data.message)
                 {
-                    alert(err.response.data.message);
+                    this.props.hideAlert();
+				    this.props.showAlert(err.response.data.message,"warning");
+                }
+                else {
+                    this.props.hideAlert();
+				    this.props.showAlert("Something happened, restart and try again","warning");
                 }
                 console.log(err);
           })
@@ -231,8 +240,8 @@ class AddNextWeekTimeKeepingModal extends Component {
         return (
             <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} 
-                    title="Change NextWEEK TimeKeeper" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} 
+                    title="Change Offday" />
                         <div 
                         style={{ 
                             width: '100%', backgroundColor: 'rgb(221,235,255)'   
@@ -434,6 +443,7 @@ const mapStateToProps = (state, ownProps) => {
         listEmployee: state.listEmployee,
         nextWeekTimeKeeping: state.nextWeekTimeKeeping,
         regulation: state.regulationReducer,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 
@@ -455,7 +465,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "ADD_NEW_NEXT_WEEK_TIMEKEEPER",
                 data: data,
             });
-        } 
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 

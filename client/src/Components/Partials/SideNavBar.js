@@ -180,11 +180,13 @@ class SideNavBar extends Component {
                         {
                             this.props.sidebarOpen ?
                             <IoIosArrowBack
+                                className='icon-open'
                                 size={20}
                                 onClick={(e) => this.hideNavbar()}
                             />
                             :
                             <IoIosArrowForward
+                                className='icon-close'
                                 style={{
                                     position: 'fixed',
                                     left: '42px',
@@ -196,15 +198,18 @@ class SideNavBar extends Component {
                         }
                     </div>
                     <div class="nav-heading">
-                        <div style={{ 
+                        <div 
+                            style={{ 
                                 backgroundColor: !this.props.sidebarOpen? !this.props.statusDarkmode ? '#fafafa' : '#37474f': (!this.props.statusDarkmode ? '#cfd8dc' : '#455a64'),
                                 paddingTop: !this.props.sidebarOpen? 10: 8,
-
+                                display: 'flex'
                             }} 
                             class="navbar-heading-container"
                         >
-                            <img class='user-avatar'src={this.props.infoUser.avatar ? this.props.infoUser.avatar : Avatar} style={{ width: 40, height: 40, borderRadius: '100%' }}></img>
-                            <span class="user-name" style={{ color: !this.props.statusDarkmode ? 'black' : 'white', fontWeight: '700' }} >{this.props.infoUser.lastName + " " + this.props.infoUser.firstName}</span>
+                            <img class='user-avatar'src={this.props.infoUser.avatar ? this.props.infoUser.avatar : Avatar} style={{ width: 40, height: 40, borderRadius: '100%', flex: 1 }}></img>
+                            <span class="user-name" style={{ color: !this.props.statusDarkmode ? 'black' : 'white', fontWeight: '700', maxWidth: '100px' }} >
+                                {this.props.infoUser.lastName + " " + this.props.infoUser.firstName}
+                            </span>
                         </div>
                     </div>
                     <div class="nav-container">
@@ -261,7 +266,7 @@ class SideNavBar extends Component {
                                         >
                                             <AiOutlineContainer className="nav-item-icon" />
                                             <AiFillContainer className="nav-item-icon icon-activate" />
-                                            <span className="nav-item-lable">Goods Manager</span>
+                                            <span className="nav-item-lable">Products Manager</span>
                                         </NavLink>
                                         <NavLink
                                             to="/receiptmanager"
@@ -296,7 +301,7 @@ class SideNavBar extends Component {
                             <FaSignOutAlt class="nav-item-icon" />
                             <span className="nav-item-lable">Sign out</span>
                         </a>
-                        <a href="#" className={"nav-item "} onClick={() => this.props.changeConfirmPasswordTest()} style={{ flex: 4 }}>
+                        <a target="blank" href="https://github.com/Minhthang1506/SE100Project" className={"nav-item "}  style={{ flex: 4 }}>
                             <BsInfoCircleFill class="nav-item-icon" />
                             <span className="nav-item-lable">About</span>
                         </a>

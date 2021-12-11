@@ -24,13 +24,11 @@ const styles = theme =>  ({
         borderWidth: '1px',
         borderColor: '#ccc',
         borderStyle: 'solid',
-        height: '20px',
     },
     goodTable_Cell: {                                     
         borderWidth: '1px',
         borderColor: '#ccc',
         borderStyle: 'solid',
-        height: '80px',
     } 
 })
 
@@ -72,18 +70,14 @@ class NoJobEmployee extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div style={{padding: 24}}>
-                <span style={{backgroundColor: 'blue', color: '#fff', padding: 10}}>
-                    NOJOB EMPLOYEE
-                </span>
-               
+            <div>
                 <TableContainer component={Paper} style={{width: 400}} >
                     <Table>
                         <TableHead>
-                                <TableRow>
-                                    <TableCell className={classes.goodTable_Cell_Header} align="center" style={{height: 30}}>ID</TableCell>
-                                    <TableCell className={classes.goodTable_Cell_Header} align="center">Employee</TableCell>
-                                </TableRow>
+                            <TableRow style={{height: 20}}>
+                                <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}} align="center" >      ID</TableCell>
+                                <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}} align="center">Employee</TableCell>
+                            </TableRow>
                         </TableHead>
                         {
 

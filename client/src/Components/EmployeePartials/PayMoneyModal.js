@@ -123,7 +123,8 @@ class PayEmployeeModal extends Component {
         }
         catch(e)
         {
-            alert("Đã có lỗi xảy ra");
+            this.props.hideAlert();
+			this.props.showAlert("Something happened, restart and try again","warning");
             console.log("Lỗi trả lương", e);
         }
         
@@ -243,7 +244,7 @@ class PayEmployeeModal extends Component {
                 autoComplete="off" noValidate id='scroll-bar'
             >
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="PAY EMPLOYEE" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="PAY EMPLOYEE" />
                         <div 
                         style={{ 
                             width: '100%', backgroundColor: 'rgb(221,235,255)'   
@@ -277,12 +278,12 @@ class PayEmployeeModal extends Component {
                                             <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='240px'>Day</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='100px'>Weekday</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='240px'>Shift</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='140px'>Per Hour</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='140px'>Salary</TableCell>
-                                                        <TableCell className={classes.goodTable_Cell_Header} align="center" width='120px'>Salary status</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='240px'>Day</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='100px'>Weekday</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='240px'>Shift</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='140px'>Per Hour</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='140px'>Salary</TableCell>
+                                                        <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='120px'>Salary status</TableCell>
                                                         {/* <TableCell className={classes.goodTable_Cell_Header} align="center"></TableCell> */}
                                                     </TableRow>
                                                     {
@@ -301,14 +302,14 @@ class PayEmployeeModal extends Component {
                                                                 <TableCell className={classes.goodTable_Cell}>
                                                                     <div style={{display: 'flex'}}>
                                                                         {
-                                                                            this.props.regulation == {} ?
+                                                                            Object.keys(this.props.regulation).length == 0 ?
                                                                             <div style={{marginRight: 4}}>{timeKeeper._id.shiftType.salary}</div> :
                                                                             this.props.regulation.currency == 'vnd' ?
                                                                             <div style={{marginRight: 4}}>{timeKeeper._id.shiftType.salary}</div> :
                                                                             <div style={{marginRight: 4}}>{(timeKeeper._id.shiftType.salary/this.props.regulation.exchangeRate).toFixed(2)}</div>
                                                                         }
                                                                         {
-                                                                            (this.props.regulation == {})
+                                                                            (Object.keys(this.props.regulation).length == 0)
                                                                                 ? <div>{' VNĐ'}</div> :
                                                                             (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
                                                                         }
@@ -318,14 +319,14 @@ class PayEmployeeModal extends Component {
                                                                     {/* {this.calculateSalary(timeKeeper._id.shiftType)}\ */}
                                                                     <div style={{display: 'flex'}}>
                                                                         {
-                                                                            this.props.regulation == {} ?
+                                                                            Object.keys(this.props.regulation).length == 0 ?
                                                                             <div style={{marginRight: 4}}>{this.calculateSalary(timeKeeper._id.shiftType)}</div> :
                                                                             this.props.regulation.currency == 'vnd' ?
                                                                             <div style={{marginRight: 4}}>{this.calculateSalary(timeKeeper._id.shiftType)}</div> :
                                                                             <div style={{marginRight: 4}}>{(this.calculateSalary(timeKeeper._id.shiftType)/this.props.regulation.exchangeRate).toFixed(2)}</div>
                                                                         }
                                                                         {
-                                                                            (this.props.regulation == {})
+                                                                            (Object.keys(this.props.regulation).length == 0)
                                                                                 ? <div>{' VNĐ'}</div> :
                                                                             (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
                                                                         }
@@ -356,14 +357,14 @@ class PayEmployeeModal extends Component {
                                                 TotalSalary: 
                                             </lable>
                                             {
-                                                this.props.regulation == {} ?
+                                                Object.keys(this.props.regulation).length == 0 ?
                                                 <div style={{marginRight: 4}}>{this.totalSalary}</div> :
                                                 this.props.regulation.currency == 'vnd' ?
                                                 <div style={{marginRight: 4}}>{this.totalSalary}</div> :
                                                 <div style={{marginRight: 4}}>{(this.totalSalary/this.props.regulation.exchangeRate).toFixed(2)}</div>
                                             }
                                             {
-                                                (this.props.regulation == {})
+                                                (Object.keys(this.props.regulation).length == 0)
                                                     ? <div>{' VNĐ'}</div> :
                                                 (this.props.regulation.currency == 'vnd' ? <div>{' VNĐ'}</div> : <div>{' $'}</div> )
                                             }
@@ -394,11 +395,11 @@ class PayEmployeeModal extends Component {
                                         <Table className={classes.goodTable} size="small" aria-label="a dense table">
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Day</TableCell>
-                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">Shift</TableCell>
-                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">Real Date</TableCell>
-                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
-                                                    <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='80px'>Day</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">Shift</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">Real Date</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">ID</TableCell>
+                                                    <TableCell className={classes.goodTable_Cell_Header}style={{color: '#fff', backgroundColor: '#000'}} align="center">Name</TableCell>
                                                 </TableRow>
                                                 {
                                                 this.props.nextWeekTimeKeeping.map((item) =>
@@ -455,6 +456,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         employeeID: state.currentEmployeeViewValue,
         regulation: state.regulationReducer,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 
@@ -470,7 +472,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "PAY_SALARY",
                 employeeID: employeeID
             });
-        }
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 

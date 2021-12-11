@@ -25,9 +25,10 @@ function Row(props) {
     const dispatch = useDispatch();
     const listReciept = useSelector(state => state.listReciept)
     const infoUser = useSelector(state => state.infoUser)
+    const regulation = useSelector(state => state.regulationReducer)
     const statusEditInfoBill = useSelector(state => state.statusEditInfoBill)
     const editReciept = (MAHD, coupon) => {
-        if(coupon) {
+        if (coupon) {
             dispatch({
                 type: "HIDE_ALERT",
             })
@@ -85,11 +86,11 @@ function Row(props) {
 
     const StatusTypeReciept = (isEdit, isDelete) => {
         if (isDelete) {
-            return 'Đã xóa'
+            return 'Deleted'
         } else if (isEdit) {
-            return 'Đổi trả'
+            return 'Exchange'
         } else {
-            return 'Thành công'
+            return 'Success'
         }
     }
 
@@ -123,9 +124,13 @@ function Row(props) {
                     {row.MAHD}
                 </TableCell>
                 <TableCell align="right">{row.date}</TableCell>
-                <TableCell align="right">{row.totalMoney}</TableCell>
+                <TableCell align="right">
+                    {regulation.currency === 'vnd' ? (row.totalMoney).toLocaleString() : ((row.totalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                </TableCell>
                 <TableCell align="right">{row.discount}</TableCell>
-                <TableCell align="right">{row.totalFinalMoney}</TableCell>
+                <TableCell align="right">
+                    {regulation.currency === 'vnd' ? (row.totalFinalMoney).toLocaleString() : ((row.totalFinalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                </TableCell>
                 <TableCell>
                     {!showEdit(row.isEdit, row.deleted) ? (
                         <IconButton onClick={() => editReciept(row.MAHD, row.coupon)} color="secondary" aria-label="fingerprint">
@@ -161,9 +166,11 @@ function Row(props) {
                                                     </TableCell>
                                                     <TableCell>{value.product.name}</TableCell>
                                                     <TableCell>{value.quantity}</TableCell>
-                                                    <TableCell align="right">{value.product.sellPrice.toLocaleString()}</TableCell>
                                                     <TableCell align="right">
-                                                        {(value.quantity * value.product.sellPrice).toLocaleString()}
+                                                        {regulation.currency === 'vnd' ? (value.product.sellPrice).toLocaleString() : ((value.product.sellPrice) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                        {regulation.currency === 'vnd' ? (value.quantity * value.product.sellPrice).toLocaleString() : ((value.quantity * value.product.sellPrice) / regulation.exchangeRate).toFixed(2).toLocaleString()}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -218,7 +225,7 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0' }}>Old bill:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.oldBill ? row.oldBill.MAHD : "Không có"}</p>
+                                                    <p style={{ marginBottom: '0' }}>{row.oldBill ? row.oldBill.MAHD : "None"}</p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -248,7 +255,9 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0' }}>Total money:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.totalMoney.toLocaleString()}</p>
+                                                    <p style={{ marginBottom: '0' }}>
+                                                        {regulation.currency === 'vnd' ? (row.totalMoney).toLocaleString() : ((row.totalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                    </p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -258,7 +267,7 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0' }}>Coupon:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{row.coupon? row.coupon.idCoupon : "Không áp dụng"}</p>
+                                                    <p style={{ marginBottom: '0' }}>{row.coupon ? row.coupon.idCoupon : "Not apply"}</p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -268,7 +277,9 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0' }}>Reduce money:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0' }}>{(row.totalFinalMoney - row.totalMoney).toLocaleString()}</p>
+                                                    <p style={{ marginBottom: '0' }}>
+                                                        {regulation.currency === 'vnd' ? (row.totalFinalMoney - row.totalMoney).toLocaleString() : ((row.totalFinalMoney - row.totalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                    </p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -288,7 +299,9 @@ function Row(props) {
                                                     <p style={{ marginBottom: '0', fontWeight: '600' }}>TOTAL:</p>
                                                 </Grid>
                                                 <Grid item md={6} xs={6}>
-                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>{row.totalFinalMoney.toLocaleString()}</p>
+                                                    <p style={{ marginBottom: '0', fontWeight: '600' }}>
+                                                        {regulation.currency === 'vnd' ? (row.totalFinalMoney).toLocaleString() : ((row.totalFinalMoney) / regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                    </p>
                                                 </Grid>
                                             </Grid>
                                         </Grid>

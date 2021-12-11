@@ -160,11 +160,13 @@ class AddGoodModal extends Component {
         axios.post(`http://localhost:5000/api/product`, data)
             .then(res => {
                 console.log("Save success");
-                alert("Lưu thành công")
+                this.props.hideAlert();
+				this.props.showAlert("Save product success","success");
             })
             .catch(err => {
-                alert(err);
-                console.log(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
+                console.log('Bug when add product', err);
             })
 
         //Thêm vào bảng joinType nữa
@@ -226,55 +228,53 @@ class AddGoodModal extends Component {
         if(productName.length == 0)
         {
             this.props.hideAlert();
-            this.props.showAlert("Tên sản phẩm không được trống","warning");
+			this.props.showAlert("Product name can't be left blanked","warning");
             return false;
         }
         // Constraint 2: Check quantity
         if(document.querySelector('input[name="goodQuantity"]').value.length == 0)
         {
             this.props.hideAlert();
-            this.props.showAlert("Số lượng sản phẩm không được trống","warning");
+			this.props.showAlert("Product quantity can't be left blanked","warning");
             return false;
         }
         else if(parseInt(document.querySelector('input[name="goodQuantity"]').value) <= 0) 
         {
             this.props.hideAlert();
-            this.props.showAlert("Số lượng sản phẩm không được trống","warning");
-            alert('Số lượng sản phẩm phải lớn hơn 0');
+			this.props.showAlert("Product quantity must be greater than 0","warning");
             return false;
         }
         // Constraint 3: check Unit
         if(document.querySelector('input[name="unit"]').value.length == 0)
         {
             this.props.hideAlert();
-            this.props.showAlert("Số lượng sản phẩm không được trống","warning");
-            alert('Đơn vị của sản phẩm không được trống');
+			this.props.showAlert("Product unit can't be left blanked","warning");
             return false;
         }
         // Constraint 4: Check import Price
         if(document.querySelector('input[name="originalPrice"]').value.length == 0)
         {
             this.props.hideAlert();
-            this.props.showAlert("Giá nhập không được trống","warning");
+			this.props.showAlert("Product import price can't be left blanked","warning");
             return false;
         }
         else if(parseFloat(document.querySelector('input[name="originalPrice"]').value) <= 0.0) 
         {
             this.props.hideAlert();
-            this.props.showAlert('Giá nhập phải lớn hơn 0',"warning");
+			this.props.showAlert("Product import price must be greater than 0","warning");
             return false;
         }
         // Constraint 5: check sell Price
         if(document.querySelector('input[name="sellPrice"]').value.length == 0)
         {
             this.props.hideAlert();
-            this.props.showAlert("Giá bán không được trống","warning");
+			this.props.showAlert("Product sell price can't be left blanked","warning");
             return false;
         }
         else if(parseFloat(document.querySelector('input[name="sellPrice"]').value) <= 0.0) 
         {
             this.props.hideAlert();
-            this.props.showAlert('Giá bán phải lớn hơn 0',"warning");
+			this.props.showAlert("Product sell price must be greater than 0","warning");
             return false;
         }
         // Constraint 6: Ngày nhập phải nhỏ  hơn ngày hết hạn
@@ -297,14 +297,14 @@ class AddGoodModal extends Component {
             ) 
         {
             this.props.hideAlert();
-            this.props.showAlert('Giá bán phải lớn hơn giá gốc',"warning");
+			this.props.showAlert("Product was expired","warning");
             return false;
         }
         // Constraint 8: check xem đã  up ảnh lên xong chưa
         if(this.finishUpImage == false)
         {
             this.props.hideAlert();
-            this.props.showAlert('Ảnh chưa được upload xong',"warning");
+			this.props.showAlert("Image was not uploaded yet","warning");
             return false;
         }
         // Constraint 9: Ngày nhập phải nhỏ  hơn ngày hết hạn theo regulation
@@ -316,8 +316,8 @@ class AddGoodModal extends Component {
                 // minExpiredProduct
             {
                 this.props.hideAlert();
-                this.props.showAlert('Ngày hết hạn với ngày nhập phải cách nhau ít nhất ' + this.props.regulation.minExpiredProduct + ' ngày'
-                ,"warning");
+                 this.props.showAlert('The expired day must be at least ' + this.props.regulation.minExpiredProduct + ' older than the import day'
+                 ,"warning");
                 return false;
             }
         }
@@ -352,11 +352,11 @@ class AddGoodModal extends Component {
         return(
             <form style={{ zIndex: '10', minWidth: '500px', width: '90%', justifyContent: 'center', marginTop: '10%' }}>   
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' }} title="ADD GOOD" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="ADD GOOD" />
                     <Divider />
                     <CardContent>
                         <Grid className="import-container" container spacing={2}>
-                        <Grid item md={3}  
+                        <Grid item md={2}  
                             style={{
                                 display: 'flex', 
                                 justifyContent:'center', 
@@ -366,12 +366,12 @@ class AddGoodModal extends Component {
                             }}
                         >   
                             <label className="profile-header__avatar" for="profile-header-update-avatar" style={{ overflow: 'hidden', marginTop: '15px ' }}>
-                                <Image style={{width: '240px',height: '240px', padding: '10px' }} cloudName="databaseimg" publicId={this.imgUrl=='none' ? 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png' : this.imgUrl}></Image>
+                                <Image style={{width: '180px',height: '180px', padding: '10px' }} cloudName="databaseimg" publicId={this.imgUrl=='none' ? 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png' : this.imgUrl}></Image>
                             </label>
                             {/* Ẩn đi */}
                             <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input>
                         </Grid>
-                        <Grid item md={9}>
+                        <Grid item md={10}>
                                     <Grid container md={12}>
                                         <Grid item md={6} 
                                             className='input-item'
@@ -379,7 +379,7 @@ class AddGoodModal extends Component {
                                             <div 
                                                 className="input-label"
                                                 style={{
-                                                    width: '130px'
+                                                    width: '176px'
                                                 }}
                                             >
                                                 ID
@@ -388,7 +388,7 @@ class AddGoodModal extends Component {
                                                 classname='input-box' 
                                                 type="text" 
                                                 // class="input-val" 
-                                                style = {{width: '60%'}} 
+                                                style = {{width: '100%'}} 
                                                 fullWidth 
                                                 size="small" 
                                                 name="goodID" 
@@ -405,11 +405,11 @@ class AddGoodModal extends Component {
                                                 paddingLeft: 0,
                                             }}
                                         >
-                                            <div className="input-label" style={{width: 110}}>Import Date</div>
+                                            <div className="input-label" style={{width: 138}}>Import Date</div>
                                             <StyledTextField
                                                 classname='input-box'   
                                                 type="date" 
-                                                style = {{width: '68%'}} 
+                                                style = {{width: '100%'}} 
                                                 fullWidth
                                                 name="importDate"
                                                 size="small"
@@ -421,12 +421,12 @@ class AddGoodModal extends Component {
                                         <Grid item md={6} 
                                             className='input-item'
                                         >
-                                            <div className="input-label"style={{width: '130px'}}>Name</div>
+                                            <div className="input-label"style={{width: '176px'}}>Name</div>
                                             <StyledTextField
                                                 classname='input-box'   
                                                 type="text" 
                                                 // class="input-val" 
-                                                style = {{width: '60%'}} 
+                                                style = {{width: '100%'}} 
                                                 fullWidth
                                                 size="small"
                                                 name="goodName" 
@@ -435,11 +435,11 @@ class AddGoodModal extends Component {
                                         </Grid>
                                         <Grid item md={4}
                                             className='input-item'
-                                            style={{padding: '0px', marginLeft: '0px'}}
+                                            style={{padding: '0px', marginLeft: '0px', marginRight: 0}}
                                         >
                                             <div 
                                                 className="input-label" 
-                                                style={{width: '120px'}}
+                                                style={{width: '110px'}}
                                             >
                                                 Quantity
                                             </div>
@@ -454,14 +454,14 @@ class AddGoodModal extends Component {
                                         <Grid item md={2}
                                             className='input-item'
                                             style={{
-                                                paddingRight: 12
+                                                paddingRight: 5
                                             }}
                                         >
                                             <div 
                                                 className="input-label"
                                                 style={{
                                                     marginLeft: 0,
-                                                    paddingLeft: 4,
+                                                    paddingLeft: 0,
                                                     width: 40
                                                 }}
                                             >
@@ -479,11 +479,11 @@ class AddGoodModal extends Component {
                                         <Grid item md={6} 
                                             className='input-item'
                                         >
-                                            <div className="input-label" style={{width: 132}}>Expired Date</div>
+                                            <div className="input-label" style={{width: 176}}>Expired Date</div>
                                             <StyledTextField
                                                 classname='input-box'   
                                                 type="date" 
-                                                style = {{width: '70%'}} 
+                                                style = {{width: '100%'}} 
                                                 fullWidth
                                                 size="small"
                                                 name="expiredDate" 
@@ -491,14 +491,14 @@ class AddGoodModal extends Component {
                                                 defaultValue={this.currentDateTime}
                                             />
                                         </Grid>
-                                        <Grid item md={6} className='input-item'>
-                                            <div className="input-label" style={{width: 100}}>Currency</div>
+                                        <Grid item md={6} className='input-item' style={{marginLeft: -8}}>
+                                            <div className="input-label" style={{width: 138}}>Currency</div>
                                             <StyledTextField
                                                 // fullWidth
                                                 id="currencySelector"
                                                 name="currency"
                                                 variant="outlined"
-                                                style = {{width: '70%'}} 
+                                                style = {{width: '100%'}} 
                                                 select
 
                                                 SelectProps={{ native: true }}
@@ -523,16 +523,19 @@ class AddGoodModal extends Component {
                                         <Grid item md={6}
                                             className='input-item'
                                         >
-                                            <div className="input-label" style={{width: 128}}>Original Price</div>
+                                            <div className="input-label" style={{width: 189}}>Original Price</div>
                                             <StyledTextField
                                                 classname='input-box'
-                                                style = {{width: '60%', marginLeft: '4px', marginRight:'8px'}} 
+                                                style = {{width: '100%', marginRight: 8}} 
                                                 fullWidth
                                                 name="originalPrice" 
                                                 variant="outlined"
                                                 type="number" 
                                             />
-                                            { this.curCurrencySelect == 'vnd' ? <div>VNĐ</div> : <div>$</div>}
+                                            <div style={{width: 30}}>
+                                                { this.curCurrencySelect == 'vnd' ? <div>VNĐ</div> : <div>$</div>}
+                                            </div>
+                                            
                                         </Grid>
                                         <Grid item md={6}
                                             className='input-item'
@@ -540,13 +543,13 @@ class AddGoodModal extends Component {
                                         >
                                             <div 
                                                 className="input-label"
-                                                style={{width: '130px'}}
+                                                style={{width: '150px'}}
                                             >
                                                 Sell Price
                                             </div>
                                             <StyledTextField
                                                 classname='input-box'
-                                                style = {{width: '80%', marginLeft: '4px',marginRight:'8px'}} 
+                                                style = {{width: '100%', marginLeft: '4px',marginRight:'8px'}} 
                                                 fullWidth
                                                 name="sellPrice" 
                                                 variant="outlined"
@@ -560,7 +563,7 @@ class AddGoodModal extends Component {
                                         >
                                             <div 
                                                 className="input-label"
-                                                style={{width:132}}
+                                                style={{width:129}}
                                             >
                                                 Product Type
                                             </div>
@@ -673,6 +676,7 @@ const mapStateToProps = (state, ownProps) => {
         typeProduct: state.typeProduct,
         listProduct: state.listProduct,
         regulation: state.regulationReducer,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 

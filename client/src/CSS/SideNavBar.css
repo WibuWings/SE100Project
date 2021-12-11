@@ -44,7 +44,7 @@
 .navibar .navbar-heading-container .user-name {
     margin-left: 10px;
     color: #5c7999;
-    min-width: 200px;
+    max-width: 100px;
 }
 
 .nav-item {
@@ -154,6 +154,16 @@
     color: #72808d; 
 }
 
+.nav-icon .icon-open:hover {
+    cursor: pointer;
+    color: #0d6efd;
+}   
+
+.nav-icon .icon-close:hover {
+    cursor: pointer;
+    color: #0d6efd;
+}
+
 .nav-item .nav-item-lable {
     /* display: none; */
 }
@@ -204,4 +214,8 @@
 
 .navbar-container.short .navibar.sidebar .nav-footer .nav-item{    
     padding-bottom: 0;
+}
+
+.navbar-container.short .navibar.sidebar .nav-footer .nav-item:hover{    
+    cursor: pointer
 }

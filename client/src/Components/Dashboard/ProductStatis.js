@@ -172,7 +172,7 @@ function ProductStatis(props) {
                 <MdImportExport className="dashboard-item-icon imported-good"></MdImportExport>
             </div>
             <Typography style={{ marginBottom: '10px' }} variant="h6">
-                {totalImport.toLocaleString() + '/' + totalExport.toLocaleString()}
+                {totalImport.toLocaleString() + ' / ' + totalExport.toLocaleString()}
             </Typography>
             <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
                 Import Product / Sell Product

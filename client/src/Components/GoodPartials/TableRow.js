@@ -40,7 +40,7 @@ class GoodRow extends Component{
             update: false,
             change: false,
         }
-        
+        console.log('regulation', this.props.regulation)
     }
     isOpen = false;
     row = {};
@@ -66,10 +66,12 @@ class GoodRow extends Component{
         }
         axios.delete(`http://localhost:5000/api/product`,{data: data})
             .then(res => {
-                alert("delete product success");
+                this.props.hideAlert();
+				this.props.showAlert("Delete product success","success");
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         
         // Get hết các cái join của sản phẩm
@@ -90,7 +92,8 @@ class GoodRow extends Component{
             })
             .catch(err => {
                 console.log(err);
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         console.log(allJoinMatch);
         // Xoá các join liên quan đến sản phẩm
@@ -116,7 +119,8 @@ class GoodRow extends Component{
                 console.log("delete join success");
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         
         console.log("this.props.data",this.props.data)
@@ -153,7 +157,7 @@ class GoodRow extends Component{
                 <TableCell className={classes.goodTable_Cell} align="right">
                 <div style={{display: 'flex'}}>
                     {
-                        this.props.regulation == {} ?
+                        Object.keys(this.props.regulation).length == 0 ?
                         <div>{row.sellPrice}</div> :
                         this.props.regulation.currency == 'vnd' ?
                         <div>{row.sellPrice}</div> :
@@ -162,7 +166,7 @@ class GoodRow extends Component{
                     
                     <div style={{marginLeft: 4}}>
                         {
-                            (this.props.regulation == {})
+                            (Object.keys(this.props.regulation).length == 0)
                                 ? ' VNĐ':
                             (this.props.regulation.currency == 'vnd' ? ' VNĐ' : ' $')
                         }
@@ -215,7 +219,7 @@ class GoodRow extends Component{
                                                 <TableCell className={classes.goodTable_Cell} >
                                                     <div style={{display: 'flex'}}>
                                                     {
-                                                        this.props.regulation == {} ?
+                                                        Object.keys(this.props.regulation).length == 0 ?
                                                         <div>{row.importPrice}</div> :
                                                         this.props.regulation.currency == 'vnd' ?
                                                         <div>{row.importPrice}</div> :
@@ -223,7 +227,7 @@ class GoodRow extends Component{
                                                     }
                                                         <div style={{marginLeft: 4}}>
                                                             {
-                                                                (this.props.regulation == {})
+                                                                (Object.keys(this.props.regulation).length == 0)
                                                                     ? ' VNĐ':
                                                                 (this.props.regulation.currency == 'vnd' ? ' VNĐ' : ' $')
                                                             }
@@ -299,6 +303,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "DELETE_PRODUCT",
                 data: data,
             }); 
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
         },
     }
 }

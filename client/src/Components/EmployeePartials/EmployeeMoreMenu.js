@@ -53,10 +53,12 @@ class EmployeeMoreMenu extends Component {
 
     axios.delete(`http://localhost:5000/api/employee`,{data: data})
         .then(res => {
-            alert("delete employee(s) success");
+            this.props.hideAlert();
+				    this.props.showAlert("Delete employee(s) success","success");
         })
         .catch(err => {
-            alert(err);
+          this.props.hideAlert();
+          this.props.showAlert("Something happened, restart and try again","warning");
         })
     
     //Move to sacked
@@ -76,12 +78,12 @@ class EmployeeMoreMenu extends Component {
           console.log("data1", data1)
           axios.delete(`http://localhost:5000/api/employee/shift-assign`,{data: data1})
           .then(res => {
-              // alert("success");
               // Xoá đi trong redux
               this.props.RemoveShiftAssign(data1.shiftAssign);
           })
           .catch(err => {
-              alert(err);
+            this.props.hideAlert();
+            this.props.showAlert("Something happened, restart and try again","warning");
           })
         }
         
@@ -215,7 +217,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             type: "DELETE_SHIFT_ASSIGN",
             data: data,
         });
-      }
+      },
+      showAlert: (message, typeMessage) => {
+        dispatch({
+          type: "SHOW_ALERT",
+          message: message,
+          typeMessage: typeMessage,
+        })
+      },
+      hideAlert: () => {
+        dispatch({
+          type: "HIDE_ALERT",
+        })
+      },
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeMoreMenu);

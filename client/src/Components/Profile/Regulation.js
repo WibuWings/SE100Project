@@ -25,22 +25,26 @@ class Regulation extends Component {
     checkConstraint(data) {
         if(data.regulation.exchangeRate <= 0)
         {
-            alert("Tỉ giá không thể nhỏ hơn 0");
+            this.props.hideAlert();
+			this.props.showAlert("Exchange rate must be greater than 0","warning");    
             return false;
         }
         else if(data.regulation.miniumEmployeeAge <= 0)
         {
-            alert("Tuổi tối thiểu của nhân viên không được nhỏ hơn 0");
+            this.props.hideAlert();
+			this.props.showAlert("Minium old of employee must be greater than 0","warning"); 
             return false;
         }
         else if(data.regulation.lessChangeTimeKeepingDay <= 0)
         {
-            alert("Ngày báo trước nghỉ không được nhỏ hơn 0");
+            this.props.hideAlert();
+			this.props.showAlert("Day before absent must be greater than 0","warning"); 
             return false;
         }
         else if(data.regulation.minExpiredProduct <= 0)
         {
-            alert("Hiệu ngày hết hạn và ngày nhập không được nhỏ hơn 0");
+            this.props.hideAlert();
+			this.props.showAlert("The different of expired day and import day must be greater than 0","warning"); 
             return false;
         }
         return true;
@@ -53,7 +57,7 @@ class Regulation extends Component {
     minExpiredProduct = 0;
     loadInitialData()
     {
-        if(this.props.regulation != {})
+        if(this.props.regulation != [])
         {
             this.currency = this.props.regulation.currency;
             this.exchangeRate = this.props.regulation.exchangeRate;

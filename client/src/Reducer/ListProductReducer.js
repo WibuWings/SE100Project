@@ -80,6 +80,20 @@ const listProductInitialState = [
                     state: newState
                 }
             }
+            case "DELETE_TYPE_PRODUCT": 
+            {
+                var newState = [];
+                for(var i = 0 ; i < state.state.length; i++)
+                {
+                    state.state[i].typeIDList = state.state[i].typeIDList.filter(function(item) {
+                        return item !== action.typeID;
+                    })
+                    newState.push(state.state[i]);
+                }
+                return {
+                    state: newState
+                }
+            }
             default:
                 return state
         }

@@ -54,10 +54,12 @@ class EmployeeMoreMenu extends Component {
         }
         axios.patch(`http://localhost:5000/api/employee/delete`, data)
             .then(res => {
-                alert("back to work success");
+                this.props.hideAlert();
+                this.props.showAlert("Employee has returned to work","success");
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+                this.props.showAlert("Something happened, restart and try again","warning");
             })
 
         // Xoá khỏi redux sacked
@@ -82,10 +84,12 @@ class EmployeeMoreMenu extends Component {
 
         axios.delete(`http://localhost:5000/api/employee/delete`,{data: data})
             .then(res => {
-                alert("delete permantly employee(s) success");
+                this.props.hideAlert();
+                this.props.showAlert("Delete permantly employee(s) success","success");
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
 
         // To redux
@@ -168,7 +172,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "DELETE_PERMANTLY_EMPLOYEE",
                 employeeID: employeeID,
             });
-        }
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 

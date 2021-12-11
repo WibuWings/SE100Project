@@ -53,7 +53,8 @@ class TimeKeepingTable extends Component {
             })
             .catch(err => {
                 console.log(err);
-                alert(err)
+                this.props.hideAlert();
+				        this.props.showAlert("Something happened, restart and try again","warning");
             })
         // To redux
         this.props.getTimeKeeping(result);
@@ -87,24 +88,17 @@ class TimeKeepingTable extends Component {
   render() {
     const { classes } = this.props;
     return ( 
-      <div style={{marginTop: 0, padding: 24}}> 
-          <span
-              style={{
-                  color: '#fff',
-                  backgroundColor: 'blue',
-                  padding: 10,
-              }}
-          >ALL TIMEKEEPING</span>
+      <div  > 
           <TableContainer component={Paper}>
                 <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='180px'>Day</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px'>Date Of Week</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" >Shift</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Paid</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='180px'>Day</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='80px'>Date Of Week</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" >Shift</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">ID</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">Name</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">Paid</TableCell>
                             {/* <TableCell className={classes.goodTable_Cell_Header} align="center"></TableCell> */}
                         </TableRow>
                         {
@@ -126,37 +120,6 @@ class TimeKeepingTable extends Component {
                                     <TableCell className={classes.goodTable_Cell}>
                                         {timeKeeper.isPaidSalary.toString()}
                                     </TableCell>
-                                    {/* <TableCell className={classes.goodTable_Cell}>
-                                      <div style={{display: 'flex'}}>
-                                        <AiOutlineEdit size={20} 
-                                            onClick={() =>
-                                              {
-                                                this.props.changeUpdateTimeKeepingStatus();
-                                                this.props.changeUpdateTimeKeepingValue(timeKeeper);
-                                              }
-                                            }
-                                          />
-                                          <AiFillDelete size={20} 
-                                            onClick={() => 
-                                                {
-                                                    // axios.delete(`http://localhost:5000/api/????`,{data: data})
-                                                    //   .then(res => {
-                                                    //       alert("success");
-                                                    //   })
-                                                    //   .catch(err => {
-                                                    //       alert(err);
-                                                    //   })
-                                                    this.props.deleteTimeKeeping(timeKeeper);
-                                                    console.log(this.props.listTimeKeeper);
-                                                }
-                                                
-                                              // this.props.changeUpdateNextWeekTimeKeepingStatus();
-                                              
-                                              // this.props.changeUpdateNextWeekTimeKeepingValue(item);
-                                            }
-                                        />
-                                      </div>
-                                    </TableCell> */}
                                 </TableRow>
                                 )
                             )
@@ -214,6 +177,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "GET_TIMEKEEPER",
         data: data
       });  
+    },
+    showAlert: (message, typeMessage) => {
+      dispatch({
+        type: "SHOW_ALERT",
+        message: message,
+        typeMessage: typeMessage,
+      })
+    },
+    hideAlert: () => {
+      dispatch({
+        type: "HIDE_ALERT",
+      })
     },
   }
 }

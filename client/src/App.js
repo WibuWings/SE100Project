@@ -17,24 +17,23 @@ class App extends Component {
   loadAllGood(dataProduct, dataJoin) {
     var resultProduct = dataProduct;
     var joinTypeInfor = dataJoin;
- 
+
     var listProductInfor = [];
     for (let i = 0; i < resultProduct.length; i++) {
-        var typeIDList = [];
-        var joinType = '';
-        for (var j = 0; j < joinTypeInfor.length; j++) {
-            if (resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID &&
-                resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) 
-            {
-                typeIDList.push(joinTypeInfor[j]._id.typeID);
-            }
+      var typeIDList = [];
+      var joinType = '';
+      for (var j = 0; j < joinTypeInfor.length; j++) {
+        if (resultProduct[i]._id.productID && joinTypeInfor[j]._id.productID &&
+          resultProduct[i]._id.productID === joinTypeInfor[j]._id.productID) {
+          typeIDList.push(joinTypeInfor[j]._id.typeID);
         }
+      }
 
-        listProductInfor.push(
-            {
-                ...resultProduct[i],
-                typeIDList: typeIDList,
-            });
+      listProductInfor.push(
+        {
+          ...resultProduct[i],
+          typeIDList: typeIDList,
+        });
     }
     this.props.getProductToReducer(listProductInfor);
   }
@@ -52,13 +51,14 @@ class App extends Component {
               this.props.updateProfile(res.data.data);
               this.props.updateRecieptUser(res.data.data.receipts)
               this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+              this.props.updateCouponUser(res.data.data.coupons)
               this.props.updateShiftTypes(res.data.data.shiftTypes)
               this.props.changeLoginStatus();
               this.props.getEmployee(res.data.data.employees);
               // Phi
               this.props.getTimeKeeping(res.data.data.timeKeeping);
               this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
-              if(res.data.data.regulation.length > 0)
+              if (res.data.data.regulation.length > 0)
                 this.props.setRegulation(res.data.data.regulation[0]);
               else this.props.setRegulation({});
               console.log("res.data", res.data)
@@ -68,10 +68,10 @@ class App extends Component {
               this.props.updateProfileEployee(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);
               this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
               this.props.updateRecieptUser(res.data.data.receipts);
+              this.props.updateCouponUser(res.data.data.coupons)
               this.props.changeLoginStatus();
               this.props.showAlert(res.data.message, "success");
             }
-
           }
         })
         .catch(err => {
@@ -143,6 +143,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "HIDE_ALERT",
       })
     },
+    showAlert: (message, typeMessage) => {
+      dispatch({
+        type: "SHOW_ALERT",
+        message: message,
+        typeMessage: typeMessage,
+      })
+    },
     getEmployee: (data) => {
       dispatch({
         type: "GET_EMPLOYEE",
@@ -171,20 +178,26 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "GET_TIMEKEEPER",
         data: data
-      });  
+      });
     },
     getProductToReducer: (data) => {
       dispatch({
-          type: "GET_PRODUCT_AND_TYPE",
-          data: data
+        type: "GET_PRODUCT_AND_TYPE",
+        data: data
       });
     },
     setRegulation: (data) => {
       dispatch({
-          type: "SET_REGULATION",
-          data: data,
+        type: "SET_REGULATION",
+        data: data,
       });
     },
+    updateCouponUser: (coupons) => {
+      dispatch({
+        type: "UPDATE_COUPON_USER",
+        coupons: coupons
+      })
+    }
   }
 }
 

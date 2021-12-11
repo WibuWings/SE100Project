@@ -11,6 +11,7 @@ import { Paper, TableContainer, Table,
   Menu, MenuItem, Grid
 } from '@mui/material';
 import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
+import plusFill from '@iconify/icons-eva/plus-fill';
 // ----------------------------------------------------------------------
 const styles = theme =>  ({
     goodTable: {                                     
@@ -61,7 +62,8 @@ class UnShiftEmployee extends Component {
         })
         .catch(err => {
             console.log(err);
-            alert(err)
+            this.props.hideAlert();
+				    this.props.showAlert("Something happened, restart and try again","warning");
         })
   }
 
@@ -119,7 +121,6 @@ class UnShiftEmployee extends Component {
   handleOpen()
   {
       this.openOption = true;
-      alert("Ấn vào mở rồi")
       this.setState({change: !this.state.change});
   }
 
@@ -139,29 +140,31 @@ class UnShiftEmployee extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <div style={{marginTop: 0, padding: 24}}>
-          <span
-              style={{
-                  color: '#fff',
-                  backgroundColor: 'blue',
-                  padding: 10,
-              }}
-          >CHANGE TIMEKEEPING</span> 
+      <div>
+          <Button 
+              variant="contained"
+              onClick={() => this.props.changeAddNextWeekTimeKeepingStatus()}
+              startIcon={<Icon icon={plusFill} />}
+            >
+              
+            Add
+          </Button>
           <TableContainer component={Paper} >
                 <Table className={classes.goodTable} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='80px' rowSpan={2}>Day</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" rowSpan={2}>Shift</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" rowSpan={2}>Real Date</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" colSpan={2}>Withdraw</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" colSpan={2}>Change</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" width='80px' rowSpan={2}>Day</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" rowSpan={2}>Shift</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" rowSpan={2}>Real Date</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" colSpan={2}>Withdraw</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center" colSpan={2}>Change</TableCell>
+                            <TableCell rowSpan={2} style={{color: '#fff', backgroundColor: '#000'}}/>
                         </TableRow>
                         <TableRow>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">ID</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center">Name</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">ID</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">Name</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">ID</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}}align="center">Name</TableCell>
                         </TableRow>
                         {
                           this.props.nextWeekTimeKeeping.map((item) =>
@@ -207,10 +210,12 @@ class UnShiftEmployee extends Component {
                                                   console.log("data.offDay._id", data.offDay._id)
                                                   axios.delete(`http://localhost:5000/api/employee/off-day`,{data: data})
                                                     .then(res => {
-                                                        alert("success");
+                                                        this.props.hideAlert();
+				                                                this.props.showAlert("Delete absent day success","success");
                                                     })
                                                     .catch(err => {
-                                                        alert(err);
+                                                      this.props.hideAlert();
+                                                      this.props.showAlert("Something happened, restart and try again","warning");
                                                     })
                                                   this.props.deleteNextWeekTimeKeeping(item);
                                               }
@@ -229,11 +234,7 @@ class UnShiftEmployee extends Component {
                 </Table>
             </TableContainer>
               
-            <Button 
-              variant="contained"
-              onClick={() => this.props.changeAddNextWeekTimeKeepingStatus()}
-            >
-              Add</Button>
+            
       </div>
     );
   }
@@ -278,7 +279,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "SET_NEXT_WEEK_TIMEKEEPER",
         data: data
       });
-    }
+    },
+    showAlert: (message, typeMessage) => {
+      dispatch({
+        type: "SHOW_ALERT",
+        message: message,
+        typeMessage: typeMessage,
+      })
+    },
+    hideAlert: () => {
+      dispatch({
+        type: "HIDE_ALERT",
+      })
+    },
   }
 }
 

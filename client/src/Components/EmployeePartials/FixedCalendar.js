@@ -52,8 +52,9 @@ class FixedCalendar extends Component {
             this.props.setShiftAssign(result);
         })
         .catch(err => {
-            console.log(err);
-            alert(err)
+            console.log('bug when add shift-assign', err);
+            this.props.hideAlert();
+			this.props.showAlert("Something happened, restart and try again","warning");
         })
   }
   
@@ -61,21 +62,21 @@ class FixedCalendar extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <div style={{marginTop: 10, padding: 24, maxHeight: 600}}> 
-          <TableContainer id="scroll-bar" component={Paper}>
+      <div style={{marginTop: 10, maxHeight: 600}}> 
+          <TableContainer id="scroll-bar" style={{overflowX: 'hidden'}} component={Paper}>
               <Table className={classes.goodTable} sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                   <TableHead>
                       <TableRow>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}} align="center" width='12%'>
                                 Shift
                             </TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Mon</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Tue</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Wed</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Thu</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Fri</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Sat</TableCell>
-                            <TableCell className={classes.goodTable_Cell_Header} align="center" width='12%'>Sun</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}} align="center" width='12%'>Mon</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}} align="center" width='12%'>Tue</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}} align="center" width='12%'>Wed</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}} align="center" width='12%'>Thu</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}} align="center" width='12%'>Fri</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}} align="center" width='12%'>Sat</TableCell>
+                            <TableCell className={classes.goodTable_Cell_Header} style={{color: '#fff', backgroundColor: '#000'}} align="center" width='12%'>Sun</TableCell>
                       </TableRow>
                   </TableHead>
                       {
@@ -115,7 +116,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
               type: "SET_SHIFT_ASSIGN",
               data: data,
           });
-      }
+      },
+      showAlert: (message, typeMessage) => {
+        dispatch({
+            type: "SHOW_ALERT",
+            message: message,
+            typeMessage: typeMessage,
+        })
+    },
+    hideAlert: () => {
+        dispatch({
+            type: "HIDE_ALERT",
+        })
+    },
   }
 }
 

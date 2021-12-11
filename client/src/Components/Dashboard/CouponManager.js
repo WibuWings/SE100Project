@@ -49,6 +49,8 @@ function CouponManager(props) {
     const listReceipt = useSelector(state => state.listReciept)
     const [listReceiptHaveCoupon, setListReceiptHaveCoupon] = React.useState([]);
     const [totalDiscount, setTotalDiscount] = React.useState(0);
+    const regulation = useSelector(state => state.regulationReducer)
+
     const selectType = (e) => {
         setTypeCheck(e.target.value);
     }
@@ -100,7 +102,7 @@ function CouponManager(props) {
 
     return (
         <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', marginBottom: '30px' }}>
-            <Card style={{ position: "relative", marginTop: '15px' }}>
+            <Card style={{ position: "relative" }}>
                 <CardHeader style={{ color: !statusDarkmode ? '#0091ea' : 'white', backgroundColor: !statusDarkmode ? '#efeeef' : '#455a64' }} title="Coupon Manager" />
                 <Divider />
                 <CardContent>
@@ -175,7 +177,7 @@ function CouponManager(props) {
                                                             <StyledTableCell align="center">{item.MAHD}</StyledTableCell>
                                                             <StyledTableCell align="center">{item.date}</StyledTableCell>
                                                             <StyledTableCell align="center">{item.coupon.percent}</StyledTableCell>
-                                                            <StyledTableCell align="center">{(item.totalFinalMoney - item.totalMoney).toLocaleString()}</StyledTableCell>
+                                                            <StyledTableCell align="center">{regulation.currency === 'vnd' ? (item.totalFinalMoney - item.totalMoney).toLocaleString(): ((item.totalFinalMoney - item.totalMoney)/regulation.exchangeRate).toFixed(2).toLocaleString()}</StyledTableCell>
                                                         </StyledTableRow>
                                                     </TableBody>
                                                 )
@@ -185,7 +187,7 @@ function CouponManager(props) {
                                 </Grid>
                                 <Grid item md={12} sm={12}  >
                                     <h5 style={{ textAlign: 'end', paddingRight: '20px', borderTop: '2px solid black' }}>Discount:
-                                        <span style={{ color: 'red' }}>     {totalDiscount} VNĐ</span>
+                                        <span style={{ color: 'red' }}>   {regulation.currency === 'vnd' ? totalDiscount.toLocaleString() : ((totalDiscount/regulation.exchangeRate).toFixed(2)).toLocaleString()}  {(regulation.currency == 'vnd') ? 'VNĐ' : '$'}</span>
                                     </h5>
                                 </Grid>
                             </Grid>

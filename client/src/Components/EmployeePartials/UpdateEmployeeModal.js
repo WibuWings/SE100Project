@@ -77,84 +77,97 @@ class UpdateEmployeeModal extends Component {
         var password = document.querySelector('input[name="password"]').value.trim();
         if(password.length == 0)
         {
-            alert("Password không được rỗng");
+            this.props.hideAlert();
+			this.props.showAlert("Password can't be left blanked","warning");
             return false;
         }
         if(password.length < 6)
         {
-            alert("Password không được có dưới 6 ký tự");
+            this.props.hideAlert();
+			this.props.showAlert("Password can't be less than 6 character","warning");
             return false;
         }
         // Constraint 3: FirstName không được trống
         var firstName =  document.querySelector('input[name="firstName"]').value.trim();
         if(firstName.length == 0)
         {
-            alert('Tên riêng không được rỗng');
+            this.props.hideAlert();
+			this.props.showAlert("The firstname can't be left blanked","warning");
             return false;
         }
         // Constraint 4: lastName không được trống
         var lastName =  document.querySelector('input[name="lastName"]').value.trim();
         if(lastName.length == 0)
         {
-            alert('Họ không được trống');
+            this.props.hideAlert();
+			this.props.showAlert("The lastname can't be left blanked","warning");
             return false;
         }
         // Constraint 5: Số ID card không được để trống
         var cardID= document.querySelector('input[name="cardID"]').value.trim();
         if(cardID.length == 0)
         {
-            alert("Số id card không được để trống");
+            this.props.hideAlert();
+			this.props.showAlert("ID card can't be left blanked","warning");
             return false;
         }
         // Constrain 6:Số điện thoại không được để trống và phải lớn hơn 6 ký tự
         var phoneNumber= document.querySelector('input[name="phoneNumber"]').value;
         if(phoneNumber.length == 0)
         {
-            alert("Số điện thoại không được để trống");
+            this.props.hideAlert();
+			this.props.showAlert("Phonenumber can't be left blanked","warning");
             return false;
         }
         if(phoneNumber.length < 6)
         {
-            alert("Số điện thoại không được dưới 6 ký tự");
+            this.props.hideAlert();
+			this.props.showAlert("Phonenumber can't be less than 6 character","warning");
             return false;
         }
         // Constrain 7:Địa chỉ không được để trống
         var address = document.querySelector('input[name="adress"]').value;
         if(address.length==0)
         {
-            alert("Địa chỉ không được để trống");
+            this.props.hideAlert();
+			this.props.showAlert("Address can't be left blanked","warning");
             return false;
         }
         // Constraint 8: Ngày sinh không được để trống
         var birthDay = document.querySelector('input[name="birthDay"]').value;
         if(birthDay.length == 0)
         {
-            alert("Ngày sinh không được để trống");
+            this.props.hideAlert();
+			this.props.showAlert("Birthday can't be left blanked","warning");
             return false;
         }
         // Constraint 9: Email không được để trống
         var email = document.querySelector('input[name="email"]').value.trim();
         if(email.length == 0)
         {
-            alert("Email không dược để trống");
+            this.props.hideAlert();
+			this.props.showAlert("Email can't be left blanked","warning");
             return false;
         }
         if(email.indexOf('@')==-1 || email.indexOf('@')==email.length-1)
         {
-            alert("Email không hợp lệ");
+            this.props.hideAlert();
+			this.props.showAlert("Email is invalid","warning");
             return false;
         }
         // Constraint 10: Ngày sinh không thể lớn hơn ngày bất đầu làm
         var startDate = document.querySelector('input[name="startDate"]').value;
         if(!this.isGreater(startDate, birthDay))
         {
-            alert("Ngày sinh không thể lớn hơn ngày bất đầu làm");
+            this.props.hideAlert();
+			this.props.showAlert("Birthday can't be greater than the startday","warning");
             return false;
         }
         // Constraint 11: Check đã up ảnh xong chưa
         if(this.finishUpImage == false)
         {
-            alert("Ảnh chưa được upload xong");
+            this.props.hideAlert();
+			this.props.showAlert("The picture is not uploaded yet","warning");
             return false;
         }
         // Constraint 12: Check tuổi với cái regulation:
@@ -163,11 +176,11 @@ class UpdateEmployeeModal extends Component {
             if(this.calculateOld(startDate, birthDay) < this.props.regulation.miniumEmployeeAge)
             {
                 console.log("Tính tuổi",this.calculateOld(startDate, birthDay));
-                alert("Nhân viên chưa đạt đủ độ tuổi cho phép (" + this.props.regulation.miniumEmployeeAge+")");
+                this.props.hideAlert();
+			    this.props.showAlert("Employee is not old enough ("+ this.props.regulation.miniumEmployeeAge+")","warning");
                 return false;
             }
         }
-        alert("Đã check hết các constraint")
         return true;
     }
 
@@ -260,7 +273,7 @@ class UpdateEmployeeModal extends Component {
         return (
             <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
                 <Card>
-                    <CardHeader style={{ color: 'blue', backgroundColor: '#efeeef' , textAlign: 'center'}} title="UPDATE EMPLOYEE" />
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="UPDATE EMPLOYEE" />
                         <div 
                         style={{ 
                             width: '100%', backgroundColor: 'rgb(221,235,255)'   
@@ -479,6 +492,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         listEmployee: state.listEmployee,
         regulation: state.regulationReducer,
+        statusDarkmode: state.statusDarkmode,
     }
 }
 
@@ -500,7 +514,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 data: data,
                 index: index,
             });
-        }
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
     }
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardHeader, Divider, TableHead, TableRow, Paper, Box, Button, CardContent, Table, TableBody, TableCell, TableContainer } from '@mui/material';
+import { Modal ,Grid,Card, CardHeader, Divider, TableHead, TableRow, Paper, Box, Button, CardContent, Table, TableBody, TableCell, TableContainer } from '@mui/material';
 import { BiPlusMedical } from 'react-icons/bi';
 import { IconButton } from '@mui/material'
 import { styled } from '@mui/material/styles';
@@ -7,6 +7,11 @@ import { FiEdit, FiTrash2 } from 'react-icons/fi'
 import { tableCellClasses } from '@mui/material/TableCell';
 import { connect } from 'react-redux'
 import axios from 'axios';
+import { red, blue, lightBlue } from '@mui/material/colors';
+import { CgDanger } from 'react-icons/cg'
+import { useSelector, useDispatch } from 'react-redux'
+import {TiArrowBack} from 'react-icons/ti'
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -29,10 +34,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '1px solid #000',
+    borderRadius: '5px',
+    boxShadow: 24,
+    pt: 2,
+    px: 4,
+    pb: 3,
+};
 
 
 class ListShift extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+        }
+    }
+
+    deleteShiftId = ''
 
     handleEdit = (e, id, description, from, to, salary) => {
         const data = {
@@ -47,6 +73,13 @@ class ListShift extends Component {
             this.props.changeEditShiftStatus();
             this.props.changeAddStatus();
         }
+    }
+
+    showModal = (id) => {
+        this.setState({
+            open: true
+        })
+        this.deleteShiftId = id;
     }
 
     handleAdd = () => {
@@ -66,9 +99,15 @@ class ListShift extends Component {
                         this.props.deleteShift(idShift);
                         this.props.hideAlert();
                         this.props.showAlert("Delete shift success", "success");
+                        this.setState({
+                            open: false 
+                        })
                     }
                 })
                 .catch(err => {
+                    this.setState({
+                        open: false 
+                    })
                     this.props.changeLoginStatus();
                     this.props.hideAlert();
                     this.props.showAlert("Login timeout, signin again", "warning");
@@ -80,7 +119,7 @@ class ListShift extends Component {
     render() {
         return (
             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
-                <Card style={{ position: "relative", marginTop: '15px'}}>
+                <Card style={{ position: "relative", marginTop: '15px' }}>
                     <CardHeader style={{ color: !this.props.statusDarkmode ? '#0091ea' : 'white', backgroundColor: !this.props.statusDarkmode ? '#efeeef' : '#455a64' }} title="List Shift" />
                     <Divider />
                     <CardContent>
@@ -101,7 +140,9 @@ class ListShift extends Component {
                                         <TableBody>
                                             <StyledTableRow key="abc">
                                                 <StyledTableCell component="th" scope="row">{item.name}</StyledTableCell>
-                                                <StyledTableCell align="center">{item.salary}</StyledTableCell>
+                                                <StyledTableCell align="center">
+                                                    {this.props.regulation.currency === 'vnd' ? (item.salary).toLocaleString() : ((item.salary) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                </StyledTableCell>
                                                 <StyledTableCell align="center">{item.timeFrom}</StyledTableCell>
                                                 <StyledTableCell align="center">{item.timeEnd}</StyledTableCell>
                                                 <StyledTableCell align="center">
@@ -110,7 +151,7 @@ class ListShift extends Component {
                                                     </IconButton>
                                                 </StyledTableCell>
                                                 <StyledTableCell align="center">
-                                                    <IconButton name={item._id.shiftID} onClick={(e) => this.handleDelete(item._id.shiftID)} style={{ color: 'red' }} aria-label="fingerprint">
+                                                    <IconButton name={item._id.shiftID} onClick={(e) => this.showModal(item._id.shiftID)} style={{ color: 'red' }} aria-label="fingerprint">
                                                         <FiTrash2 />
                                                     </IconButton>
                                                 </StyledTableCell>
@@ -128,6 +169,25 @@ class ListShift extends Component {
                         </Button>
                     </Box>
                 </Card>
+                <Modal
+                    open={this.state.open}
+                    onClose={() => this.setState({open: false})}
+                    aria-labelledby="parent-modal-title"
+                    aria-describedby="parent-modal-description"
+                >
+                    <Box sx={{ ...style, width: 400 }}>
+                        <h2 style={{ textAlign: 'center', fontSize: '1.4rem', marginBottom: '15px' }} >Are you sure delete this shift ?</h2>
+                        <Divider />
+                        <Grid style={{ marginTop: '5px' }} container spacing={2}>
+                            <Grid style={{ justifyContent: 'center', display: 'flex' }} item md={6} sm={6}  >
+                                <Button onClick={(e) => this.handleDelete(this.deleteShiftId)} style={{ color: 'white', backgroundColor: red[500] }}>DELETE</Button>
+                            </Grid>
+                            <Grid style={{ justifyContent: 'center', display: 'flex' }} item md={6} sm={6}  >
+                                <Button onClick={() => this.setState({open: false})} style={{ backgroundColor: lightBlue[100] }}>CANCEL</Button>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Modal>
             </div>
         );
     }
@@ -138,7 +198,8 @@ const mapStateToProps = (state, ownProps) => {
         addStatus: state.addStatus,
         listShift: state.listShift,
         infoUser: state.infoUser,
-        statusDarkmode: state.statusDarkmode
+        statusDarkmode: state.statusDarkmode,
+        regulation: state.regulationReducer
     }
 }
 

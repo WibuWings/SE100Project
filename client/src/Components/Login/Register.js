@@ -28,21 +28,18 @@ class Register extends Component {
     // Send code tới người dùng
     sendCode = (a = this.makeCode(6)) => {
         this.setState({
-            code: "123456"
+            code: a,
         })
-        // this.setState({
-        //     code: a,
-        // })
-        // emailjs.init("user_K1g5N5hUDI0rjsa1uRoI4");
-        // emailjs.send("gmail_main", "template_plasdgf", {
-        //     To_mail: `${document.getElementById('email').value}`,
-        //     code: `${a}`,
-        // })
-        //     .then((response) => {
-        //         console.log('SUCCESS!', response.status, response.text);
-        //     }, (err) => {
-        //         console.log('FAILED...', err);
-        //     });
+        emailjs.init("user_K1g5N5hUDI0rjsa1uRoI4");
+        emailjs.send("gmail_main", "template_plasdgf", {
+            To_mail: `${document.getElementById('email').value}`,
+            code: `${a}`,
+        })
+            .then((response) => {
+                console.log('SUCCESS!', response.status, response.text);
+            }, (err) => {
+                console.log('FAILED...', err);
+            });
     }
 
     // status SignUp 
@@ -62,7 +59,6 @@ class Register extends Component {
                             this.props.changeLoginStatus();
                             this.props.hideAlert();
                             this.props.showAlert(res.data.message, "success");
-
                             break;
                         case -1:
                             this.props.hideAlert();
@@ -222,17 +218,6 @@ class Register extends Component {
     }
 
     render() {
-        const enterPress = this.SignUp;
-        document.onkeydown = function (e) {
-            switch (e.which) {
-                case 13:
-                    enterPress(e);
-                    break;
-                default:
-                    break;
-            }
-        }
-
         return (
             <div className="Login">
                 <div className="form-register">
@@ -270,7 +255,7 @@ class Register extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurPassword()} name="password" rules="required|min:6" id="password" placeholder="Emter password" type="password" />
+                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurPassword()} name="password" rules="required|min:6" id="password" placeholder="Enter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -279,7 +264,7 @@ class Register extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurRePassword()} name="re-password" id="re-password" placeholder="Emter re-password" type="password" />
+                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurRePassword()} name="re-password" id="re-password" placeholder="Enter re-password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>

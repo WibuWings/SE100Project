@@ -43,9 +43,10 @@ const typeProductInitialState = [
                     }
                     else 
                     {
-                        console.log("Xoá được ")
+                        console.log("Xoá được ở vị trí thứ" ,i);
                     }
                 }
+                console.log("newState", newState)
                 return newState;
             }
 

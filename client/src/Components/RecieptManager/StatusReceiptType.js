@@ -72,7 +72,7 @@ function StatusReceiptType(props) {
                         <Grid container spacing={2}>
                             <Grid item md={12} sm={12}  >
                                 <FormControlLabel
-                                    value="Deleted"
+                                    value="delete"
                                     onChange={(e) => changeCheckbox(e)}
                                     control={<Checkbox
                                         sx={{
@@ -81,7 +81,7 @@ function StatusReceiptType(props) {
                                                 color: red[600],
                                             },
                                         }} />}
-                                    label="Đã xóa"
+                                    label="Deleted"
                                     labelPlacement="end"
                                 />
                             </Grid>

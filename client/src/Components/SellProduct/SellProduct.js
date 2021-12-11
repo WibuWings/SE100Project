@@ -84,7 +84,8 @@ class SellProduct extends Component {
                 localStorage.getItem('token', res.data.token);
             })
             .catch(err => {
-                alert(err);
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         //Get data và lưu các tên Type vào bảng
         var listTypeInfor = [];
@@ -110,7 +111,8 @@ class SellProduct extends Component {
                 resultProduct = res.data.data;
             })
             .catch(err => {
-                alert(err)
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         // Get hết từ cái productjoinType
         var result = [];
@@ -128,7 +130,8 @@ class SellProduct extends Component {
                 localStorage.getItem('token', res.data.token);
             })
             .catch(err => {
-                alert(err)
+                this.props.hideAlert();
+				this.props.showAlert("Something happened, restart and try again","warning");
             })
         // Lấy các cái jointype
         var joinTypeInfor = [];
@@ -160,16 +163,7 @@ class SellProduct extends Component {
     }
 
     render() {
-        const hideHistory = this.props.hideHistoryReceipt
-        document.onkeydown = function (e) {
-            switch (e.key.charCodeAt()) {
-                case 69:
-                    hideHistory()
-                    break;
-                default:
-                    break;
-            }
-        }
+        
         return (
             <div id="scroll-bar" className="sell-product" >
                 <Container style={{ marginBottom: '20px' }} maxWidth="xl">
@@ -220,6 +214,7 @@ class SellProduct extends Component {
 
                                                             <CardContent style={{ padding: '5px' }}>
                                                                 <Typography style={{ textAlign: 'center' }} gutterBottom variant="h6" component="div">
+
                                                                     {value.name}
                                                                 </Typography>
                                                             </CardContent>
@@ -231,7 +226,7 @@ class SellProduct extends Component {
                                                         </CardActionArea>
                                                         <CardActions style={{ justifyContent: 'center' }}>
                                                             <Button style={{ color: 'green', fontWeight: '700' }} endIcon={<BiPlusMedical></BiPlusMedical>} size="medium" color="primary">
-                                                                {value.sellPrice}
+                                                                {this.props.regulation.currency === 'vnd' ? (value.sellPrice).toLocaleString() : ((value.sellPrice) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
                                                             </Button>
                                                         </CardActions>
                                                     </Card>
@@ -292,6 +287,7 @@ const mapStateToProps = (state, ownProps) => {
         infoUser: state.infoUser,
         shoppingBags: state.shoppingBags,
         statusShowHistoryReciept: state.statusShowHistoryReciept,
+        regulation: state.regulationReducer
     }
 }
 
@@ -338,7 +334,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "HIDE_ALERT",
             })
         },
-        hideHistoryReceipt:() => {
+        hideHistoryReceipt: () => {
             dispatch({
                 type: "CHANGE_HISTORY_RECIEPT_STATUS"
             })

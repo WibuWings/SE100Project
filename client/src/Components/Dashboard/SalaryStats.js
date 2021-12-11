@@ -122,7 +122,7 @@ function SalaryStats(props) {
                 <IoCashSharp className="dashboard-item-icon sold-good"></IoCashSharp>
             </div>
             {
-                regulation.currency == 'vnd' ?
+                (Object.keys(regulation).length == 0 || regulation.currency == 'vnd' )?
                 <Typography style={{ marginBottom: '10px' }} variant="h6">{totalSalary.toLocaleString()} VNĐ  
                 </Typography>
                 : 

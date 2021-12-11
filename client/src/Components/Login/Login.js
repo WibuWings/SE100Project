@@ -60,6 +60,7 @@ class Login extends Component {
                         this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                         this.props.updateShiftTypes(res.data.data.shiftTypes);
                         this.props.updateRecieptUser(res.data.data.receipts);
+                        this.props.updateCouponUser(res.data.data.coupons)
                         this.props.changeLoginStatus();
                         this.props.getTimeKeeping(res.data.data.timeKeeping);
                         this.loadAllGood(res.data.data.products, res.data.data.productJoinTypes);
@@ -99,6 +100,7 @@ class Login extends Component {
                             this.props.updateProfile(res.data.data);
                             this.props.updateAvatar(res.data.data.manager.imgUrl ? res.data.data.manager.imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                             this.props.updateShiftTypes(res.data.data.shiftTypes);
+                            this.props.updateCouponUser(res.data.data.coupons)
                             this.props.updateRecieptUser(res.data.data.receipts);
                             this.props.changeLoginStatus();
                             this.props.getEmployee(res.data.data.employees);
@@ -176,26 +178,11 @@ class Login extends Component {
     componentWillMount() {
         document.title = 'Login'
     }
+    
+   
+    
 
     render() {
-        const enterPress = this.isLoginCheck;
-        document.onkeydown = function (e) {
-            switch (e.which) {
-                case 13:
-                    try
-                    {
-                        enterPress(e);
-                    }
-                    catch(err) 
-                    {
-                        console.log("Alo lỗi mẹ rồi")
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
         return (
             <div className="Login">
                 <div className="form-login">
@@ -227,7 +214,7 @@ class Login extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password" rules="required|min:6" id="password" placeholder="Emter password" type="password" />
+                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password" rules="required|min:6" id="password" placeholder="Enter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -350,6 +337,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 data: data,
             });
         },
+        updateCouponUser: (coupons) => {
+            dispatch({
+                type: "UPDATE_COUPON_USER",
+                coupons: coupons
+            })
+        }
     }
 }
 
