@@ -26,13 +26,13 @@ const StyledTextField = withStyles((theme) => ({
   }))(TextField);
 
 var listDayInWeek = [
-    {ID:'Monday',name:'Thứ hai'}, 
-    {ID:'Tuesday',name:'Thứ ba'}, 
-    {ID:'Wednesday',name:'Thứ tư'}, 
-    {ID:'Thursday',name:'Thứ năm'}, 
-    {ID:'Friday',name:'Thứ sáu'}, 
-    {ID:'Saturday',name:'Thứ bảy'}, 
-    {ID:'Sunday',name:'Chủ nhật'}
+    {ID:'Monday',name:'Monday'}, 
+    {ID:'Tuesday',name:'Tuesday'}, 
+    {ID:'Wednesday',name:'Wednesday'}, 
+    {ID:'Thursday',name:'Thursday'}, 
+    {ID:'Friday',name:'Friday'}, 
+    {ID:'Saturday',name:'Saturday'}, 
+    {ID:'Sunday',name:'Sunday'}
 ];
 class AddNextWeekTimeKeepingModal extends Component {
 

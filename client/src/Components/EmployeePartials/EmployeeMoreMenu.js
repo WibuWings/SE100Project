@@ -6,11 +6,25 @@ import {GiPayMoney} from "react-icons/gi";
 import {connect} from 'react-redux';
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button, Modal} from '@mui/material';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 
 // ----------------------------------------------------------------------
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '1px solid #000',
+  borderRadius: '5px',
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
 class EmployeeMoreMenu extends Component {
   currentEmployee = {};
 
@@ -18,7 +32,8 @@ class EmployeeMoreMenu extends Component {
   constructor(props) {
     super(props);
     this.state= {
-      change: 'false'
+      change: false,
+      openModal: false,
     }
     this.myRef = React.createRef();
     this.getEmployeeByID(this.props.data);
@@ -39,6 +54,7 @@ class EmployeeMoreMenu extends Component {
 
   delete() {
     this.setIsOpen(false);
+    this.handleClose();
     const data = {
       token: localStorage.getItem('token'),
       employee:
@@ -113,6 +129,14 @@ class EmployeeMoreMenu extends Component {
   }
 
   isOpen=false;
+
+  handleClose() {
+      this.setState({openModal: false});
+  }
+
+  openModal() {
+      this.setState({openModal: true});
+  }
   render() {
     return (
       <>
@@ -136,7 +160,7 @@ class EmployeeMoreMenu extends Component {
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
           <MenuItem sx={{ color: 'text.secondary' }}
-            onClick={() => this.delete()}
+            onClick={() => this.openModal()}
           >
             <ListItemIcon>
               <Icon icon={trash2Outline} width={24} height={24} />
@@ -161,6 +185,24 @@ class EmployeeMoreMenu extends Component {
             <ListItemText primary="Pay money" primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
         </Menu>
+        <Modal
+            open={this.state.openModal}
+            onClose={() => this.handleClose()}
+            aria-labelledby="parent-modal-title"
+            aria-describedby="parent-modal-description"
+        >
+            <Box sx={{ ...style, width: 400 }}>
+                <h2 style={{ textAlign: 'center' , fontSize: 20}} id="parent-modal-title">Are you sure to delete?</h2>
+                <Grid container spacing={2}>
+                    <Grid style={{ justifyContent: 'center', display: 'flex' }} item md={6} sm={6}  >
+                        <Button onClick={() => this.delete()} style={{ color: 'white', backgroundColor: '#f44336' }}>DELETE</Button>
+                    </Grid>
+                    <Grid style={{ justifyContent: 'center', display: 'flex' }} item md={6} sm={6}  >
+                        <Button onClick={() => this.handleClose()} style={{ backgroundColor: '#ADD8E6' }}>CANCEL</Button>
+                    </Grid>
+                </Grid>
+            </Box>
+        </Modal>
       </>
     );
   }

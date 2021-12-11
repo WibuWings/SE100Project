@@ -55,9 +55,10 @@ class Regulation extends Component {
     miniumEmployeeAge = 0;
     lessChangeTimeKeepingDay = 0;
     minExpiredProduct = 0;
+
     loadInitialData()
     {
-        if(this.props.regulation != [])
+        if(this.props.regulation != {})
         {
             this.currency = this.props.regulation.currency;
             this.exchangeRate = this.props.regulation.exchangeRate;
