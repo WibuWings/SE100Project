@@ -218,8 +218,6 @@ class Register extends Component {
     }
 
     render() {
-        
-
         return (
             <div className="Login">
                 <div className="form-register">
