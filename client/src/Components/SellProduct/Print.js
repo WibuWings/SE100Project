@@ -285,15 +285,15 @@ class Printf extends React.PureComponent {
 
   render() {
     const PrintBill = this.addReciept
-    document.onkeydown = function (e) {
-      switch (e.key.charCodeAt()) {
-        case 70:
-          PrintBill()
-          break;
-        default:
-          break;
-      }
-    }
+    // document.onkeydown = function (e) {
+    //   switch (e.key.charCodeAt()) {
+    //     case 70:
+    //       PrintBill()
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // }
     return (
       <div>
         <div style={{ margin: '0px' }} className="row">
