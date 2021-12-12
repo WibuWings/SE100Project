@@ -34,10 +34,14 @@ class LoginWithEmployee extends Component {
             })
                 .then(res => {
                     if (res.status === 200) {
+                        console.log("res.data.data.regulation", res.data.data.regulation);
                         localStorage.setItem('token', res.data.token);
                         this.props.updateProfile(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);
                         this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                         this.props.updateRecieptUser(res.data.data.receipts);
+                        if(res.data.data.regulation.length > 0)
+                            this.props.setRegulation(res.data.data.regulation[0]);
+                        else this.props.setRegulation({});
                         this.props.changeLoginStatus();
                         this.props.hideAlert();
                         this.props.showAlert("Login successfully", "success");
@@ -207,6 +211,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 type: "UPDATE_RECIEPT_USER",
                 listReciept: data,
             })
+        },
+        setRegulation: (data) => {
+            dispatch({
+                type: "SET_REGULATION",
+                data: data,
+            });
         },
     }
 }

@@ -419,12 +419,12 @@ class UpdateEmployeeModal extends Component {
                                     <Grid item md={6} 
                                         className='input-item'
                                     >
-                                        <div className="input-label"style={{width: '114px'}}>StartDate</div>
+                                        <div className="input-label"style={{width: '114px'}}>Start Date</div>
                                         <StyledTextField
                                             classname='input-box'   
                                             type="date"
                                             name="startDate"
-                                            style = {{width: '100%'}} 
+                                            style = {{width: '70%'}} 
                                             fullWidth
                                             size="small"
                                             variant="outlined"

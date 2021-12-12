@@ -462,7 +462,7 @@ class AddEmployeeModal extends Component {
                                     <Grid item md={6} 
                                         className='input-item'
                                     >
-                                        <div className="input-label"style={{width: '114px'}}>StartDate</div>
+                                        <div className="input-label"style={{width: '114px'}}>Start Date</div>
                                         <StyledTextField
                                             classname='input-box'   
                                             type="date"
