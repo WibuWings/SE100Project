@@ -424,10 +424,17 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                             </Select> 
                                         </FormControl>
                                     </Grid>
-                                    <Grid item md={9}></Grid>
-                                    <Grid item md={3}
+                                    <Grid item md={12}>
+                                        <Divider></Divider>
+                                    </Grid>
+                                    
+                                    <Grid item md={12}
                                         className='input-item'
+                                        style={{display: 'flex', justifyContent: 'space-evenly'}}
                                     >
+                                        <Button variant="contained" style={{backgroundColor: 'red'}} onClick={() => this.props.changeUpdateNextWeekTimeKeepingStatus()}>
+                                            Cancel
+                                        </Button>
                                         <Button variant="contained" onClick={() => this.updateChange()}>
                                             Add Change
                                         </Button>

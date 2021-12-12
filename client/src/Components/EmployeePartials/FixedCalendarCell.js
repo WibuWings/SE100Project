@@ -9,6 +9,9 @@ import '../../css/EmployeeManager.css';
 //icon
 import { IoIosAdd,} from "react-icons/io";
 import {  AiFillCloseCircle} from "react-icons/ai";
+
+
+import AddEmployeeToShift from './AddEmployeeToShift';
 // ----------------------------------------------------------------------
 const styles = theme =>  ({
     goodTable_Cell: {                                     
@@ -235,7 +238,7 @@ class FixedCalendarCell extends Component {
                         top: -3,
                     }}
                     color='#0096FF'
-                    onClick={() => this.handleChange()}
+                    onClick={() => { console.log('fuck man'); this.props.changeAddEmployeeToShiftStatus()}}
                 >    
                 </IoIosAdd>
                 
@@ -249,7 +252,7 @@ class FixedCalendarCell extends Component {
                   ? <div style={{
                             backgroundColor: "#fff", 
                             padding: 10, 
-                            maxWidth: 100,
+                            width: '100%',
                             position: 'relative',
                             marginBottom: 4
                             }}
@@ -274,57 +277,76 @@ class FixedCalendarCell extends Component {
               )
             }
             {
-              this.isOpen 
-              ? 
-              // Đây là cái bảng chọn nhân viên
-              <List 
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  top: 20,
-                  zIndex: 10,
-                  maxHeight: 100,
-                  overflowY: 'auto',
-                  width: 140,
-                  backgroundColor: '#fff',
-                  width: 200
-                }}
-                id="scroll-bar"
-              >
-                {/* <div style={{height: 12, backgroundColor:'#333'}}></div> */}
-                {
-                  this.props.listEmployee.employees.map((item) =>
-                    this.findEmployeeInShift(item._id.employeeID) ? null :
-                    <ListItem style={{display: 'flex', flexDirection: 'column'}} disablePadding height={30} onClick={() => this.addThisShiftAssign(item._id.employeeID)}>
-                        <ListItemButton>
-                            <ListItemText>
-                              <span style={{fontSize: 14}}>{item._id.employeeID + ' - ' + item.firstName}</span>
+              // this.isOpen 
+              // ? 
+              // // Đây là cái bảng chọn nhân viên
+              // <List 
+              //   style={{
+              //     position: 'absolute',
+              //     right: 0,
+              //     top: 20,
+              //     zIndex: 10,
+              //     maxHeight: 100,
+              //     overflowY: 'auto',
+              //     width: 140,
+              //     backgroundColor: '#fff',
+              //     width: 200
+              //   }}
+              //   id="scroll-bar"
+              // >
+              //   {/* <div style={{height: 12, backgroundColor:'#333'}}></div> */}
+              //   {
+              //     this.props.listEmployee.employees.map((item) =>
+              //       this.findEmployeeInShift(item._id.employeeID) ? null :
+              //       <ListItem style={{display: 'flex', flexDirection: 'column'}} disablePadding height={30} onClick={() => this.addThisShiftAssign(item._id.employeeID)}>
+              //           <ListItemButton>
+              //               <ListItemText>
+              //                 <span style={{fontSize: 14}}>{item._id.employeeID + ' - ' + item.firstName}</span>
                                 
-                            </ListItemText>
-                        </ListItemButton>
-                        <div style={{
-                            height: 2,
-                            width: '100%',
-                            border: '1px solid #333'
-                        }}></div>
-                    </ListItem>
-                  )
-                }
-              </List>
-              : null
+              //               </ListItemText>
+              //           </ListItemButton>
+              //           <div style={{
+              //               height: 2,
+              //               width: '100%',
+              //               border: '1px solid #333'
+              //           }}></div>
+              //       </ListItem>
+              //     )
+              //   }
+              // </List>
+              // : null
             }
-
+            {/* {this.props.statusAddEmployeeToShift
+            ? 
+                <div 
+                    className="modal-add"
+                >
+                    <div onClick={() => {
+                          console.log("Đã được đóng")
+                          this.props.changeAddEmployeeToShiftStatus();
+                      }} className="modal-overlay"></div>
+                    <AddEmployeeToShift
+                        style={{
+                            marginTop: 0
+                        }}
+                    >
+                    </AddEmployeeToShift>
+                </div>
+            : null
+            } */}
         </TableCell>
+        
     );
   }
   
 }
 const mapStateToProps = (state, ownProps) => {
-  return {
-      listEmployee: state.listEmployee,
-      listShiftAssign: state.listShiftAssign,
-      infoUser: state.infoUser,
-  }
+    return {
+        listEmployee: state.listEmployee,
+        listShiftAssign: state.listShiftAssign,
+        infoUser: state.infoUser,
+        statusAddEmployeeToShift: state.statusAddEmployeeToShift,
+    }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -353,6 +375,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "HIDE_ALERT",
       })
     },
+    changeAddEmployeeToShiftStatus: () => {
+      dispatch({
+          type: "CHANGE_ADD_EMPLOYEE_TO_SHIFT_STATUS",
+      });
+  },
   }
 }
 

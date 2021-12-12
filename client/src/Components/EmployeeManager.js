@@ -43,39 +43,8 @@ import { withStyles } from '@material-ui/styles';
 import TimekeepingTable from './EmployeePartials/TimekeepingTable';
 import AddTimeKeepingModal from './EmployeePartials/AddTimeKeeperModal';
 import UpdateTimeKeepingModal from './EmployeePartials/UpdateTimeKeepingModal';
-
+import AddEmployeeToShift from './EmployeePartials/AddEmployeeToShift';
 import axios from 'axios';
-
-function EmployeeObj(employeeID, managerID, password, firstName, lastName, 
-    phoneNumber, dateOfBirth, email, address, cardID, startDate, endDate) {
-    return {
-        employeeID: employeeID,
-        managerID: managerID,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-        phoneNumber: phoneNumber,
-        dateOfBirth: dateOfBirth,
-        email: email,
-        address: address,
-        cardID: cardID,
-        startDate: startDate,
-        endDate: endDate,
-    };
-}
-
-const TABLE_HEAD = [
-    { id: 'ID', label: 'ID', alignCenter: true },
-    { id: 'firstName', label: 'Name', alignCenter: true },
-    { id: 'lastName', label: 'Last Name', alignCenter: true },
-    { id: 'old', label: 'Old', alignCenter: true },
-    { id: 'gender', label: 'Gender', alignCenter: true },
-    { id: 'province', label: 'Province', alignCenter: true },
-    { id: 'phoneNumber', label: 'Phone', alignCenter: true },
-    { id: 'email', label: 'Email', alignCenter: true },
-    { id: 'adress', label: 'Adress', alignCenter: true },
-    { id: '' }
-];
 
 const styles = theme =>  ({
     goodTable: {                                     
@@ -101,8 +70,6 @@ var selected = [];
 var filterName = "";
 var filteredUsers = [];
 var listUsers = [];
-var page = 5;
-var rowsPerPage = 5;
 class EmployeeManager extends Component {
 
     constructor(props) {
@@ -588,6 +555,23 @@ class EmployeeManager extends Component {
                     </div>
                 : null
                 }
+                {this.props.statusAddEmployeeToShift
+                    ? 
+                        <div 
+                            className="modal-add"
+                        >
+                            <div onClick={() => {
+                                this.props.changeAddEmployeeToShiftStatus();
+                            }} className="modal-overlay"></div>
+                            <AddEmployeeToShift
+                                style={{
+                                    marginTop: 0
+                                }}
+                            >
+                            </AddEmployeeToShift>
+                        </div>
+                    : null
+                    }
             </div>
             
         );
@@ -607,6 +591,7 @@ const mapStateToProps = (state, ownProps) => {
         statusAddTimeKeeping: state.statusAddTimeKeeping,
         statusUpdateTimeKeeping: state.statusUpdateTimeKeeping,
         statusDarkmode: state.statusDarkmode,
+        statusAddEmployeeToShift: state.statusAddEmployeeToShift,
     }
 }
 
@@ -670,6 +655,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({
                 type: "HIDE_ALERT",
             })
+        },
+        changeAddEmployeeToShiftStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_EMPLOYEE_TO_SHIFT_STATUS",
+            });
         },
     }
 }
