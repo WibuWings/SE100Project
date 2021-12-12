@@ -297,9 +297,9 @@ class UpdateEmployeeModal extends Component {
                         </Grid>
                         <Grid item md={12}>
 
-                            <Card>
+                            <Card >
                                 
-                               <Grid container md={12}>
+                               <Grid container md={12} style={{marginRight: 4}}>
                                     <Grid item md={6} 
                                         className='input-item'
                                     >
@@ -462,15 +462,15 @@ class UpdateEmployeeModal extends Component {
                                             defaultValue={this.birthDay}
                                         />
                                     </Grid>
-                                    <Grid item md={9}></Grid>
-                                    <Grid item md={3}
-                                        className='input-item'
-                                    >
-                                        <Button variant="contained" onClick={() => this.updateEmployee()}>
+                                </Grid>
+                                <Grid item sm={12} md={12} >
+                                    <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                        <Button style={{margin: 12}} variant="contained" onClick={() => this.updateEmployee()}>
                                             UPDATE
                                         </Button>
-                                    </Grid>
+                                    </div>
                                 </Grid>
+                                
                             </Card>
                         </Grid>
                         <Grid item sm={12} md={12} >

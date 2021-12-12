@@ -503,13 +503,12 @@ class AddEmployeeModal extends Component {
                                             variant="outlined"
                                         />
                                     </Grid>
-                                    <Grid item md={9}></Grid>
-                                    <Grid item md={3}
-                                        className='input-item'
-                                    >
-                                        <Button variant="contained" onClick={() => this.addEmployee()}>
-                                            Add
-                                        </Button>
+                                    <Grid item sm={12} md={12} >
+                                        <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                            <Button variant="contained" style={{margin: 12}} onClick={() => this.addEmployee()}>
+                                                Add
+                                            </Button>
+                                        </div>
                                     </Grid>
                                 </Grid>
                             </Card>

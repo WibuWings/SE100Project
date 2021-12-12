@@ -642,7 +642,7 @@ class AddGoodModal extends Component {
                             paddingBottom: 10,
                         }}
                     >
-                        <Button className="btn btn-primary" variant="contained" onClick={(e) => this.props.changeStatusAddGood()}>
+                        <Button className="btn btn-primary" style={{backgroundColor: 'red'}} variant="contained" onClick={(e) => this.props.changeStatusAddGood()}>
                             Cancel
                         </Button>
                         <Button className="btn btn-primary" variant="contained" onClick={(e) => this.importGood(e)}>
