@@ -30,9 +30,6 @@ const listShiftAssignReducer = (state = listShiftAssignInitialState, action) => 
                 return action.data;
             case "ADD_NEW_SHIFT_ASSIGN":
                 return [...state, action.data]
-            // case "UPDATE_NEXT_WEEK_TIMEKEEPER":
-            //     state[action.index] = action.data;
-            //     return state;
             case "DELETE_SHIFT_ASSIGN":
                 {
                     console.log("Đã vô được delete");

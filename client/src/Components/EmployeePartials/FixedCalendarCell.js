@@ -120,6 +120,22 @@ class FixedCalendarCell extends Component {
       this.props.AddShiftAssign(data.shiftAssign);
   }
 
+  sendShiftInfoToRedux(){
+     var shiftAssign = {
+        _id: {
+          dateInWeek: this.props.dayIndex,
+          storeID: this.props.infoUser.email,
+          shiftType: {
+              _id: {
+                  shiftID: this.props.shiftID,
+                  storeID: this.props.infoUser.email,
+              },
+          },
+        }
+     }
+     this.props.changeCurrentShiftValue(shiftAssign);
+  }
+
   removeShift(employeeID)
   {
     const data1 = {
@@ -238,7 +254,11 @@ class FixedCalendarCell extends Component {
                         top: -3,
                     }}
                     color='#0096FF'
-                    onClick={() => { console.log('fuck man'); this.props.changeAddEmployeeToShiftStatus()}}
+                    onClick={() => { 
+                        this.sendShiftInfoToRedux(); 
+                        this.props.changeAddEmployeeToShiftStatus()
+                      }
+                    }
                 >    
                 </IoIosAdd>
                 
@@ -379,7 +399,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
           type: "CHANGE_ADD_EMPLOYEE_TO_SHIFT_STATUS",
       });
-  },
+    },
+    changeCurrentShiftValue: (data) => {
+      dispatch({
+        type: "SET_CURRENT_SHIFT_VALUE",
+        data: data
+      });
+    }
   }
 }
 

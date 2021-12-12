@@ -63,6 +63,8 @@ import regulationReducer from './Profile/RegulationReducer';
 import sidebarOpenReducer from './SidebarOpenStatus';
 import statusExcelInstructionReducer from './GoodManager/ExcelInstructionStatus';
 import statusAddEmployeeToShiftReducer from './Employee/addEmployeeToShiftStatus';
+import currentShiftValueReducer from './Employee/currentShiftInfoReducer';
+
 var redux = require('redux');
 
 const allReducers = redux.combineReducers({
@@ -94,6 +96,7 @@ const allReducers = redux.combineReducers({
     listShiftAssign: listShiftAssignReducer,
     listTimeKeeping: listTimeKeepingReducer,
     statusAddEmployeeToShift: statusAddEmployeeToShiftReducer,
+    currentShiftValue: currentShiftValueReducer,
     // Chấm công các kiểu
     nextWeekTimeKeeping: nextWeekTimeKeepingReducer,
     statusAddNextWeekTimeKeeping: statusAddNextWeekTimeKeepingReducer,

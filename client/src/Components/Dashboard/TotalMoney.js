@@ -14,7 +14,7 @@ function TotalMoney(props) {
     // console.log("ListReceipt", listReciept);
     let nowTime = new Date();
 
-    console.log("nowTime.getMonth",moment().subtract(24, 'days').format('l'));
+    // console.log("nowTime.getMonth",moment().subtract(24, 'days').format('l'));
 
     React.useEffect(() => {
         let money = 0;
