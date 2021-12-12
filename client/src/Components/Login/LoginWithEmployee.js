@@ -130,7 +130,7 @@ class LoginWithEmployee extends Component {
                                     <label htmlFor="email" className="form-label">Username</label>
                                     <div className="input-custom">
                                         <span><BsFillEnvelopeFill className="input-custom-icon" /></span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="username" id="username" placeholder="VD: phuoc123" type="text" />
+                                        <input maxLength={30} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="username" id="username" placeholder="VD: phuoc123" type="text" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -140,7 +140,7 @@ class LoginWithEmployee extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password" id="password" placeholder="Enter password" type="password" />
+                                        <input maxLength={30} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password" id="password" placeholder="Enter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>

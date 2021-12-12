@@ -26,7 +26,6 @@ class Login extends Component {
     loadAllGood(dataProduct, dataJoin) {
         var resultProduct = dataProduct;
         var joinTypeInfor = dataJoin;
-     
         var listProductInfor = [];
         for (let i = 0; i < resultProduct.length; i++) {
             var typeIDList = [];
@@ -179,8 +178,6 @@ class Login extends Component {
         document.title = 'Login'
     }
     
-   
-    
 
     render() {
         return (
@@ -204,7 +201,7 @@ class Login extends Component {
                                     <label htmlFor="email" className="form-label">Email</label>
                                     <div className="input-custom">
                                         <span><BsFillEnvelopeFill className="input-custom-icon" /></span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
+                                        <input maxLength={30} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -214,7 +211,7 @@ class Login extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password" rules="required|min:6" id="password" placeholder="Enter password" type="password" />
+                                        <input maxLength={30} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={(e) => this.blurPassword(e)} name="password" rules="required|min:6" id="password" placeholder="Enter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>

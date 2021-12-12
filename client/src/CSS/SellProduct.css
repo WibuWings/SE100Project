@@ -93,3 +93,11 @@ input::-webkit-inner-spin-button {
 .css-1azl6jz-MuiTableCell-root{
     color: white !important;
 }
+
+.btn-pay:hover{
+    color: white;
+}
+
+.receipt-history:hover{
+    color: rgba(0, 0, 0, 0.616);
+}

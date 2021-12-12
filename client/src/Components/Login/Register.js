@@ -238,7 +238,7 @@ class Register extends Component {
                                 <div className="form-group">
                                     <div className="input-custom">
                                         <span><BsFillEnvelopeFill className="input-custom-icon" /></span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
+                                        <input maxLength={30} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="email" rules="required|email" id="email" placeholder="VD: abc@gmail.com" type="text" />
                                         <button type="button" disabled={this.state.statusSendCode} onClick={() => this.sendCode()} class="btn btn-primary disabel send-code">SEND CODE</button>
                                     </div>
                                     <span className="form-message" />
@@ -246,7 +246,7 @@ class Register extends Component {
                                 <div className="form-group">
                                     <div className="input-custom">
                                         <span><BsCodeSlash className="input-custom-icon" /></span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurCode()} name="code" rules="required|email" id="code" placeholder="Ex: ABC321" type="text" />
+                                        <input maxLength={6} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurCode()} name="code" rules="required|email" id="code" placeholder="Ex: ABC321" type="text" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -255,7 +255,7 @@ class Register extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurPassword()} name="password" rules="required|min:6" id="password" placeholder="Enter password" type="password" />
+                                        <input maxLength={30} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurPassword()} name="password" rules="required|min:6" id="password" placeholder="Enter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -264,7 +264,7 @@ class Register extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurRePassword()} name="re-password" id="re-password" placeholder="Enter re-password" type="password" />
+                                        <input maxLength={30} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurRePassword()} name="re-password" id="re-password" placeholder="Enter re-password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -273,8 +273,7 @@ class Register extends Component {
                                         <span>
                                             <FaPhoneSquare className="input-custom-icon" ></FaPhoneSquare>
                                         </span>
-                                        <input className="form-control" onBlur={(e) => this.blurTel(e)} onChange={(e) => this.changeInput(e)} name="tel" rules="required" id="tel" placeholder="Ex: 0303030303" type="tel" />
-
+                                        <input maxLength={30} className="form-control" onBlur={(e) => this.blurTel(e)} onChange={(e) => this.changeInput(e)} name="tel" rules="required" id="tel" placeholder="Ex: 0303030303" type="tel" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
