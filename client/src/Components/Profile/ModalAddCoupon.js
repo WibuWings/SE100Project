@@ -141,7 +141,7 @@ function ModalAddCoupon(props) {
                 await axios.post(`http://localhost:5000/api/coupon/update`, {
                     token: localStorage.getItem('token'),
                     email: infoUser.email,
-                    coupon: {...data},
+                    coupon: { ...data },
                 }).then(res => {
                     dispatch({
                         type: "EDIT_COUPON",
@@ -195,6 +195,12 @@ function ModalAddCoupon(props) {
         return result;
     }
 
+    const limitText = (limitField, limitNum) => {
+        if (limitField.target.value.length > limitNum) {
+            limitField.target.value = limitField.target.value.substring(0, limitNum);
+        }
+    }
+
     return (
         <form className="modal-add-shift" style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
             <Card>
@@ -207,6 +213,8 @@ function ModalAddCoupon(props) {
                                 id="outlined-basic"
                                 variant="outlined"
                                 fullWidth
+                                onKeyDown={(e) => limitText(e, 30)}
+                                onKeyUp={(e) => limitText(e, 30)}
                                 id="outlined-error-helper-text"
                                 onBlur={(e) => blurDiscription(e)}
                                 label="Coupon description"
@@ -225,6 +233,8 @@ function ModalAddCoupon(props) {
                                 onBlur={(e) => blurDiscount(e)}
                                 label="Discount"
                                 defaultValue={percent}
+                                onKeyDown={(e) => limitText(e, 10)}
+                                onKeyUp={(e) => limitText(e, 10)}
                                 error={isPercent}
                                 helperText={isPercent ? "Enter greater than 0 and less than 100" : ""}
                                 type="number"
@@ -240,6 +250,8 @@ function ModalAddCoupon(props) {
                                 onBlur={(e) => blurQuantity(e)}
                                 label="Quantity"
                                 defaultValue={quantity}
+                                onKeyDown={(e) => limitText(e, 10)}
+                                onKeyUp={(e) => limitText(e, 10)}
                                 error={isQuantity}
                                 helperText={isQuantity ? "Enter greater than 0" : ""}
                                 type="number"
@@ -255,6 +267,8 @@ function ModalAddCoupon(props) {
                                 onBlur={(e) => blurMinTotal(e)}
                                 label="Minimum Total Amount"
                                 defaultValue={minTotal}
+                                onKeyDown={(e) => limitText(e, 30)}
+                                onKeyUp={(e) => limitText(e, 30)}
                                 error={isMinTotal}
                                 helperText={isMinTotal ? "Enter greater than 100.000" : ""}
                                 type="number"

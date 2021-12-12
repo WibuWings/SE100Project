@@ -210,6 +210,12 @@ class ModalAdd extends Component {
         }
     }
 
+    limitText = (limitField, limitNum) => {
+        if (limitField.target.value.length > limitNum) {
+            limitField.target.value = limitField.target.value.substring(0, limitNum);
+        }
+    }
+
     render() {
         return (
             <form className="modal-add-shift" style={{ zIndex: '10', minWidth: '500px', width: '600px', justifyContent: 'center', marginTop: '10%' }} autoComplete="off" noValidate>
@@ -223,6 +229,8 @@ class ModalAdd extends Component {
                                     id="outlined-basic"
                                     variant="outlined"
                                     fullWidth
+                                    onKeyDown={(e) => this.limitText(e, 30)}
+                                    onKeyUp={(e) => this.limitText(e, 30)}
                                     defaultValue={(this.props.editShiftStatus ? this.props.objectEditShift.description : this.descriptionShift)}
                                     onBlur={(e) => this.blurDiscription(e)}
                                     label="Shift description"
@@ -242,6 +250,8 @@ class ModalAdd extends Component {
                                     error={this.state.isSalary}
                                     helperText={this.state.isSalary ? "Greater than 0" : ""}
                                     type="number"
+                                    onKeyDown={(e) => this.limitText(e, 30)}
+                                    onKeyUp={(e) => this.limitText(e, 30)}
                                     id="outlined-error-helper-text"
                                     name="salary"
                                     variant="outlined"

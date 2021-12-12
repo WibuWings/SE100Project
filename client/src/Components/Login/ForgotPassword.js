@@ -212,7 +212,7 @@ class ForgotPassword extends Component {
                                     <label htmlFor="email" className="form-label">Email</label>
                                     <div className="input-custom">
                                         <span><BsFillEnvelopeFill className="input-custom-icon" /></span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="email" rules="required|email" id="email" placeholder="Ex: abc@gmail.com" type="text" />
+                                        <input maxLength={30} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurEmail()} name="email" rules="required|email" id="email" placeholder="Ex: abc@gmail.com" type="text" />
                                         <button type="button" disabled={this.state.statusSendCode} onClick={() => this.sendCode()} class="btn btn-primary disabel send-code">SEND</button>
                                     </div>
                                     <span className="form-message" />
@@ -221,7 +221,7 @@ class ForgotPassword extends Component {
                                     <label htmlFor="code" className="form-label">Code</label>
                                     <div className="input-custom">
                                         <span><BsCodeSlash className="input-custom-icon" /></span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurCode()} name="code" rules="required|email" id="code" placeholder="Ex: ABC321" type="text" />
+                                        <input maxLength={6} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurCode()} name="code" rules="required|email" id="code" placeholder="Ex: ABC321" type="text" />
 
                                     </div>
                                     <span className="form-message" />
@@ -232,7 +232,7 @@ class ForgotPassword extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurPassword()} name="password" rules="required|min:6" id="password" placeholder="Enter password" type="password" />
+                                        <input maxLength={30} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurPassword()} name="password" rules="required|min:6" id="password" placeholder="Enter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>
@@ -242,7 +242,7 @@ class ForgotPassword extends Component {
                                         <span>
                                             <BsLockFill className="input-custom-icon" ></BsLockFill>
                                         </span>
-                                        <input className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurRePassword()} name="password" rules="required|min:6" id="re-password" placeholder="Enter password" type="password" />
+                                        <input maxLength={30} className="form-control" onChange={(e) => this.changeInput(e)} onBlur={() => this.blurRePassword()} name="password" rules="required|min:6" id="re-password" placeholder="Enter password" type="password" />
                                     </div>
                                     <span className="form-message" />
                                 </div>

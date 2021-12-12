@@ -170,6 +170,12 @@ class ChangePassword extends Component {
         }
     }
 
+    limitText = (limitField, limitNum) => {
+        if (limitField.target.value.length > limitNum) {
+            limitField.target.value = limitField.target.value.substring(0, limitNum);
+        }
+    }
+
     render() {
         return (
             <form id="form-change-password" style={{marginBottom: '15px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} autoComplete="off" noValidate>
@@ -184,6 +190,8 @@ class ChangePassword extends Component {
                                     fullWidth
                                     name="cur-password"
                                     label="Current password"
+                                    onKeyDown={(e) => this.limitText(e, 30)}
+                                    onKeyUp={(e) => this.limitText(e, 30)}
                                     onBlur={(e) => this.blurCurPassword(e)}
                                     error={this.state.isCurPass}
                                     helperText={this.messCurPass}
@@ -197,6 +205,8 @@ class ChangePassword extends Component {
                                     label="New password"
                                     name="new-password"
                                     required
+                                    onKeyDown={(e) => this.limitText(e, 30)}
+                                    onKeyUp={(e) => this.limitText(e, 30)}
                                     onBlur={(e) => this.blurNewPassword(e)}
                                     error={this.state.isNewPass}
                                     helperText={this.messNewPass}
@@ -211,6 +221,8 @@ class ChangePassword extends Component {
                                     onBlur={(e) => this.blurRePassword(e)}
                                     error={this.state.isRePass}
                                     helperText={this.messRePass}
+                                    onKeyDown={(e) => this.limitText(e, 30)}
+                                    onKeyUp={(e) => this.limitText(e, 30)}
                                     name="re-password"
                                     required
                                     type="password"
