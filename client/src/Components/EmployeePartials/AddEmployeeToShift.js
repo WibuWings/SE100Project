@@ -44,7 +44,7 @@ class AddEmployeeToShiftModal extends Component {
     {
         var listShiftAssign = this.props.listShiftAssign;
         // Lỗi ở chỗ thêm shift assign
-        console.log("listShiftAssign", listShiftAssign);
+        // console.log("listShiftAssign", listShiftAssign);
         for(var i = 0 ; i < listShiftAssign.length; i++)
         {
             if(this.props.currentShiftValue._id.shiftType._id.shiftID == listShiftAssign[i]._id.shiftType._id.shiftID 
@@ -55,6 +55,28 @@ class AddEmployeeToShiftModal extends Component {
         return false;
     }
 
+    async getAllShiftAssign()
+    {
+        var result = [];
+        const data = {
+        token: localStorage.getItem('token'),
+            filter: {
+                "_id.storeID": this.props.infoUser.email,
+            }   
+        }
+        await axios.get(`http://localhost:5000/api/employee/shift-assign`, {
+            params: {...data}
+        })
+            .then(res => {
+                result = res.data.data;
+                this.props.setShiftAssign(result);
+            })
+            .catch(err => {
+                console.log('bug when get shift-assign', err);
+                this.props.hideAlert();
+                this.props.showAlert("Something happened, restart and try again","warning");
+            })
+    }
     async addEmployeeToShift(employeeID) {
         console.log("employeeID", employeeID)
         var currentShift = this.props.currentShiftValue;
@@ -75,6 +97,7 @@ class AddEmployeeToShiftModal extends Component {
             this.props.hideAlert();
             this.props.showAlert("Save shift assign success","success");
             this.props.AddShiftAssign(data.shiftAssign);
+            this.getAllShiftAssign();
         })
         .catch(err => {
             this.props.hideAlert();
@@ -156,6 +179,12 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
+        setShiftAssign: (data) => {
+            dispatch({
+                type: "SET_SHIFT_ASSIGN",
+                data: data,
+            });
+        },
         AddShiftAssign: (data) => {
             dispatch({
                 type: "ADD_NEW_SHIFT_ASSIGN",

@@ -57,12 +57,16 @@ export default function AppWebsiteVisits() {
       y: {
         formatter: (y) => {
           if (typeof y !== 'undefined') {
+            if(regulation == {})
+            {
+              return `${y.toFixed(0)} VNĐ`;
+            }
             if (regulation.currency == 'vnd')
               return `${y.toFixed(0)} VNĐ`;
             else
-              return `${(y).toFixed(2)} $`
+              return `${(y).toFixed(2)} $`;
           }
-          return y;
+          return y.toFixed(2);
         }
       }
     }

@@ -1,35 +1,25 @@
-const listShiftAssignInitialState =
-    
-[
-    {
-        _id: {
-            dateInWeek: String,
-            storeID: String,
-            shiftType: {
-                _id: {
-                    shiftID: String,
-                    storeID: String,
-                },
-            },
-            employee: {
-                _id: {
-                    employeeID: String,
-                    storeID: String,
-                },
-            },
-        },
-        realDate: Date,
-        isPaidSalary: Boolean,
-    }
-    
-];
+const listShiftAssignInitialState =[];
 
 const listShiftAssignReducer = (state = listShiftAssignInitialState, action) => {
         switch (action.type) {
             case "SET_SHIFT_ASSIGN":
+            {
                 return action.data;
+            }
+                
             case "ADD_NEW_SHIFT_ASSIGN":
-                return [...state, action.data]
+                {
+                    console.log("action.data", action.data);
+                    console.log("current State", state);
+                    var newState = [];
+                    for(var i =0 ; i< state.length; i++)
+                    {
+                        newState.push(state[i]);
+                    }
+                    newState.push(action.data);
+                    console.log("newState", newState);
+                    return newState;  
+                }
             case "DELETE_SHIFT_ASSIGN":
                 {
                     console.log("Đã vô được delete");
