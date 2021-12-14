@@ -190,6 +190,12 @@ class UpdateGoodModal extends Component {
 			this.props.showAlert("Product quantity must be greater than 0","warning");
             return false;
         }
+        else if(parseInt(document.querySelector('input[name="goodQuantity"]').value ) - this.soldProduct < 0) 
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Product quantity must be greater than sold quantity","warning");
+            return false;
+        }
         // Constraint 3: check Unit
         if(document.querySelector('input[name="unit"]').value.length == 0)
         {
