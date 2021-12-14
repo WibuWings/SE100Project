@@ -64,6 +64,7 @@ import sidebarOpenReducer from './SidebarOpenStatus';
 import statusExcelInstructionReducer from './GoodManager/ExcelInstructionStatus';
 import statusAddEmployeeToShiftReducer from './Employee/addEmployeeToShiftStatus';
 import currentShiftValueReducer from './Employee/currentShiftInfoReducer';
+import backupBillEditReducer from './SellProduct/backupBillEditReducer';
 
 var redux = require('redux');
 
@@ -133,6 +134,7 @@ const allReducers = redux.combineReducers({
     statusSelectAll: statusSelectAllReducer,
     listRecieptDelete: listRecieptDeleteReducer,
     search: searchReducer,
+    backupBillEdit: backupBillEditReducer,
     //Dashboard
     typeTimeDashboard: typeTimeDashboard,
     typeHeaderDashboard: typeHeaderDashboard,

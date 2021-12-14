@@ -273,7 +273,9 @@ async addReceipt () {
   }
 
   async editReceipt() {
-      console.log("this.props.statusEditInfoBill", this.props.statusEditInfoBill)
+      console.log("this.props.statusEditInfoBill", this.props.statusEditInfoBill);
+      console.log("this.props.InfomationBillEdit", this.props.InfomationBillEdit);
+      console.log("this.props.backupBillEdit",this.props.backupBillEdit);
   }
 
 
@@ -326,7 +328,7 @@ async addReceipt () {
             this.props.statusEditInfoBill ? (
               <div className="col-12">
                 <div className="row">
-                  <div onClick={() => this.editReciept()} style={{ cursor: 'pointer' }} className="col-8">
+                  <div onClick={() => this.editReceipt()} style={{ cursor: 'pointer' }} className="col-8">
                     <ReactToPrint
                       trigger={() => {
                         return <div className='btn-pay' style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
@@ -379,6 +381,7 @@ const mapStateToProps = (state, ownProps) => {
     InfomationBillEdit: state.InfomationBillEdit,
     regulation: state.regulationReducer,
     role: state.role,
+    backupBillEdit: state.backupBillEdit,
   }
 }
 

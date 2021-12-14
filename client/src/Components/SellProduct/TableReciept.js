@@ -27,7 +27,10 @@ function Row(props) {
     const infoUser = useSelector(state => state.infoUser)
     const regulation = useSelector(state => state.regulationReducer)
     const statusEditInfoBill = useSelector(state => state.statusEditInfoBill)
-    const editReciept = (MAHD, coupon) => {
+
+
+    const editReciept = (rowReceipt, coupon) => {
+        console.log("rowReceipt", rowReceipt);
         if (coupon) {
             dispatch({
                 type: "HIDE_ALERT",
@@ -38,29 +41,76 @@ function Row(props) {
                 typeMessage: "warning"
             })
         } else {
-            let objectInfoBill = [];
-            listReciept.map(value => {
-                if (value.MAHD === MAHD) {
-                    objectInfoBill = value
-                }
-                return value;
-            })
+            // Tạo 1 list product mới
+            var newListProduct = [];
+            for(var i = 0 ; i < rowReceipt.listProduct.length ; i++)
+            {
+                newListProduct.push(
+                    {
+                        product: Object.assign({}, rowReceipt.listProduct[i].product),
+                        quantity: rowReceipt.listProduct[i].quantity,
+                    }
+                )
+            }
+
+            // Phát hiện xem người dùng có đang kiểu như edit một cái khác không 
             if (!statusEditInfoBill) {
                 dispatch({
                     type: "INFO_SHOPPING_BAGS_EDIT",
-                    listProduct: objectInfoBill.listProduct,
+                    listProduct: [...rowReceipt.listProduct],
                 })
+
                 dispatch({
                     type: "ADD_INFO_BILL_EDIT",
-                    InfoBill: objectInfoBill,
+                    InfoBill: {
+                        MAHD: rowReceipt.MAHD,
+                        coupon: rowReceipt.coupon,
+                        date: rowReceipt.date,
+                        deleted: rowReceipt.deleted,
+                        discount: rowReceipt.discount,
+                        idUser: rowReceipt.idUser,
+                        isEdit: rowReceipt.isEdit,
+                        listProduct: newListProduct,
+                        name: rowReceipt.name,
+                        oldBill: rowReceipt.oldBill,
+                        time: rowReceipt.time,
+                        totalFinalMoney: rowReceipt.totalFinalMoney,
+                        totalMoney: rowReceipt.totalMoney,
+                    },
                 })
+
+                dispatch({
+                    type: "BACKUP_BILL_EDIT",
+                    InfoBill: {
+                        MAHD: rowReceipt.MAHD,
+                        coupon: rowReceipt.coupon,
+                        date: rowReceipt.date,
+                        deleted: rowReceipt.deleted,
+                        discount: rowReceipt.discount,
+                        idUser: rowReceipt.idUser,
+                        isEdit: rowReceipt.isEdit,
+                        listProduct: newListProduct,
+                        name: rowReceipt.name,
+                        oldBill: rowReceipt.oldBill,
+                        time: rowReceipt.time,
+                        totalFinalMoney: rowReceipt.totalFinalMoney,
+                        totalMoney: rowReceipt.totalMoney,
+                    },
+                })
+
+                // Thay đổi cái tình trạng edit để mà có gì còn edit
                 dispatch({
                     type: "CHANGE_EDIT_INFOMATION_STATUS",
                 })
+
+                // Ẩn cái bảng history đi
                 dispatch({
                     type: "CHANGE_HISTORY_RECIEPT_STATUS"
                 })
-            } else {
+            } 
+            // Phát hiện xem người dùng có đang kiểu như edit một cái khác không 
+            else {
+
                 dispatch({
                     type: "HIDE_ALERT",
                 })
@@ -133,7 +183,7 @@ function Row(props) {
                 </TableCell>
                 <TableCell>
                     {!showEdit(row.isEdit, row.deleted) ? (
-                        <IconButton onClick={() => editReciept(row.MAHD, row.coupon)} color="secondary" aria-label="fingerprint">
+                        <IconButton onClick={() => editReciept(Object.assign({}, row), row.coupon)} color="secondary" aria-label="fingerprint">
                             <FiEdit />
                         </IconButton>
                     ) : null}
