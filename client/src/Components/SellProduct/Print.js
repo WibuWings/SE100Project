@@ -89,7 +89,7 @@ class Printf extends React.PureComponent {
 
   oldBill;
 
-async addReciept () {
+async addReceipt () {
     if (this.props.shoppingBags.length === 0) 
     {
         this.props.hideAlert();
@@ -124,27 +124,28 @@ async addReciept () {
           if (res.data.status === 1) {
               localStorage.setItem('token', res.data.token);
               console.log(this.state.coupon);
-              if(!this.state.coupon) return;
-              // Data will be posted
-              const data = {
-                  token: localStorage.getItem('token'),
-                  email: this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email,
-                  coupon: {
-                      ...this.state.coupon,
-                      quantity: this.state.coupon.quantity - 1,
-                  }
+              if(this.state.coupon) {
+                // Data will be posted
+                  const data = {
+                    token: localStorage.getItem('token'),
+                    email: this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email,
+                    coupon: {
+                        ...this.state.coupon,
+                        quantity: this.state.coupon.quantity - 1,
+                    }
+                }
+                    
+                // Sửa số lượng coupon ỏ đây
+                axios.post(`http://localhost:5000/api/coupon/update`, {...data})
+                .then(res => {
+
+                })
+                .catch(err => {
+
+                })
+                this.props.updateQuantityCoupon(this.state.coupon._id.couponID) 
               }
-                  
-              // Sửa số lượng coupon ỏ đây
-              axios.post(`http://localhost:5000/api/coupon/update`, {...data})
-              .then(res => {
-
-              })
-              .catch(err => {
-
-              })
-              // xử lý vụ coupon ở cái redux
-              this.props.updateQuantityCoupon(this.state.coupon._id.couponID) 
+              
               // Xử lý vụ trừ sản phẩm
               // Trừ đi số sản phẩm đó
               console.log("this.props.shoppingBags", this.props.shoppingBags)
@@ -191,56 +192,8 @@ async addReciept () {
           
         })
       
-    }
-    // async addReciept() 
-    // {
-    //     
-    //     // Make cái code cho sản phẩm ở đây
-    //     
-    //     
-    //     
-    //     
-    //             // Nếu thêm được hoá đơn hiện tại vào thì xoá cái coupon đi
-    //             
-    //             }
-    //             
-    //         }
-    //       })
-    //       .catch(err => {
-    //         this.props.changeLoginStatus();
-    //         this.props.hideAlert();
-    //         this.props.showAlert("Login timeout, signin again", "warning");
-    //         isContinue = false;
-    //       })
-    //       // Trừ đi số sản phẩm đó
-    //       console.log("this.props.shoppingBags", this.props.shoppingBags)
-    //       for (var i = 0; i < this.props.shoppingBags.length; i++) {
-    //         const data = {
-    //           token: localStorage.getItem('token'),
-    //           product: {
-    //             _id:
-    //             {
-    //               productID: this.props.shoppingBags[i].product._id.productID,
-    //               importDate: this.props.shoppingBags[i].product._id.importDate,
-    //               storeID: this.props.shoppingBags[i].product._id.storeID,
-    //             },
-    //             remain: this.props.shoppingBags[i].product.remain - this.props.shoppingBags[i].quantity,
-    //           }
-    //         }
-    //         axios.put(`http://localhost:5000/api/product`, data)
-    //           .then(res => {
-    //             console.log("Update success", i);
-    //             // Xử lý ở redux
-    //             const dataRedux = data.product;
-    //             this.props.decreaseRemainProduct(dataRedux);
-    //           })
-    //           .catch(err => {
-    //             console.log(err);
-    //           })
-    //       }
-    //       this.props.resetShoppingBag();
-    //     }
-    // }
+}
+
 
     CancelEditReiept = () => {
       this.props.changeStatusEditRecipt()
@@ -319,6 +272,9 @@ async addReciept () {
     })
   }
 
+  async editReceipt() {
+      console.log("this.props.statusEditInfoBill", this.props.statusEditInfoBill)
+  }
 
 
   render() {
@@ -370,7 +326,7 @@ async addReciept () {
             this.props.statusEditInfoBill ? (
               <div className="col-12">
                 <div className="row">
-                  <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-8">
+                  <div onClick={() => this.editReciept()} style={{ cursor: 'pointer' }} className="col-8">
                     <ReactToPrint
                       trigger={() => {
                         return <div className='btn-pay' style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
@@ -388,7 +344,7 @@ async addReciept () {
                 </div>
               </div>
             ) : (
-              <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-12">
+              <div onClick={() => this.addReceipt()} style={{ cursor: 'pointer' }} className="col-12">
                 <ReactToPrint
                   trigger={() => {
                     return <div className='btn-pay' style={{ marginTop: '10px', backgroundColor: '#37c737', borderRadius: '4px', fontWeight: '600', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
