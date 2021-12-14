@@ -173,7 +173,7 @@ class Printf extends React.PureComponent {
       if (isContinue) {
         console.log("Chạy thành công rồi")
         // Update số lượng sản phẩm ở đây
-
+        console.log("bill cũ", this.props.InfomationBillEdit.listProduct)
         // Cộng thêm sản phẩm nếu trả
         if (this.props.statusEditInfoBill)
           for (var i = 0; i < this.props.InfomationBillEdit.listProduct.length; i++) {
@@ -187,7 +187,7 @@ class Printf extends React.PureComponent {
                   importDate: productInfo.product._id.importDate,
                   storeID: productInfo.product._id.storeID,
                 },
-                remain: productInfo.product.remain + productInfo.quantity,
+                remain: (productInfo.product.remain + productInfo.quantity) < 0 ? 0 : (productInfo.product.remain + productInfo.quantity),
               }
             }
             axios.put(`http://localhost:5000/api/product`, data)
@@ -195,6 +195,7 @@ class Printf extends React.PureComponent {
                 console.log("Update success", i);
                 // Xử lý ở redux
                 const dataRedux = data.product;
+                console.log("Xử lý lúc cộng sản phẩm", dataRedux)
                 this.props.decreaseRemainProduct(dataRedux);
               })
               .catch(err => {

@@ -54,7 +54,7 @@ class UpdateGoodModal extends Component {
         this.loadInitialData();
         this.loadAllType();
         this.loadCurrentTypes();
-        
+        console.log("ListProduct", this.props.listProduct)
     }
     imgUrl='none';
     goodID='';
@@ -68,6 +68,8 @@ class UpdateGoodModal extends Component {
     sellPrice = "";
     expire ="";
     finishUpImage = true;
+    soldProduct =0;
+
 
     async loadAllType() {
         var result = [];
@@ -292,7 +294,7 @@ class UpdateGoodModal extends Component {
                 },
                 name: this.name,
                 quantity: this.quantity,
-                // remain: document.querySelector('input[name="goodQuantity"]').value,
+                remain: this.quantity - this.soldProduct,
                 importPrice: (currentCurrency == 'vnd') ?
                     document.querySelector('input[name="originalPrice"]').value :
                     document.querySelector('input[name="originalPrice"]').value* this.props.regulation.exchangeRate,
@@ -395,7 +397,7 @@ class UpdateGoodModal extends Component {
             },
             name: this.name,
             quantity: this.quantity,
-            remain: this.remain,
+            remain: this.quantity - this.soldProduct,
             importPrice: (currentCurrency == 'vnd') ?
                 document.querySelector('input[name="originalPrice"]').value :
                 document.querySelector('input[name="originalPrice"]').value* this.props.regulation.exchangeRate,
@@ -421,20 +423,21 @@ class UpdateGoodModal extends Component {
         // Load các dữ liệu ban đầu của form ở đây để mà update nhưng mà bị lỗi 401 mẹ
         //Xử lý sampleData
         var productInfo = this.props.infoUpdate;
-        console.log(this.props.infoUpdate);
+        console.log("expires", this.props.infoUpdate.expires);
 
         this.goodID = (productInfo._id.productID == null) ? '' : productInfo._id.productID;
         this.importDate = productInfo._id.importDate;
-        this.importDate = this.importDate == null ? '' :this.importDate.substring(0, this.importDate.indexOf('T'));
+        this.importDate = this.importDate == null ? '': this.importDate.indexOf('T')==-1? this.importDate :this.importDate.substring(0, this.importDate.indexOf('T'));
         this.name = productInfo.name == null ? '' : productInfo.name;
         this.imgUrl = productInfo.imgUrl == null ? '' : productInfo.imgUrl;
         this.quantity = productInfo.quantity == null ? '' : productInfo.quantity;
         this.remain = productInfo.remain;
+        this.soldProduct = productInfo.quantity - productInfo.remain;
         this.unit = productInfo.unit == null ? '' : productInfo.unit;
         this.importPrice = productInfo.importPrice == null ? '' : productInfo.importPrice;
         this.sellPrice = productInfo.sellPrice == null ? '' : productInfo.sellPrice;
         this.expire = productInfo.expires; //substring(0,productInfo.expire.indexOf('T'));
-        this.expire = this.expire == null ? '' :this.expire.substring(0, this.expire.indexOf('T'));
+        this.expire = (this.expire == null) ? '' : this.expire.indexOf('T') == -1 ? this.expire : this.expire.substring(0, this.expire.indexOf('T'));
         console.log("this.expire",this.expire );
         this.setState({change: !this.state.change});
     }

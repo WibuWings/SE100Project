@@ -76,6 +76,7 @@ const listProductInitialState = [
                         newState.push(decreaseVal);
                     }
                 }
+                console.log("newState", newState)
                 return {
                     state: newState
                 }

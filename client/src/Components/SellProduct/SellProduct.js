@@ -38,7 +38,7 @@ class SellProduct extends Component {
     );
 
     AddProduct = (value) => {
-        if (value.remain === 0) {
+        if (value.remain <= 0) {
             this.props.showAlert('Shout out !', 'warning')
         } else {
             var isCheck = false;
@@ -188,19 +188,19 @@ class SellProduct extends Component {
                                                     <Card onClick={() => this.AddProduct(value)}>
                                                         <CardActionArea>
                                                             <CardMedia
-                                                                style={{ display: (value.remain === 0) ? 'block' : 'none' }}
+                                                                style={{ display: (value.remain <= 0) ? 'block' : 'none' }}
                                                                 component="img"
                                                                 height="140"
                                                                 image='https://res.cloudinary.com/databaseimg/image/upload/v1637083732/aqd37xtgxukcq3x9eb4q.png'
                                                                 alt="green iguana"
                                                             />
-                                                            <div style={{ display: (value.remain !== 0) ? 'block' : 'none' }}>
+                                                            <div style={{ display: (value.remain > 0) ? 'block' : 'none' }}>
                                                                 {
                                                                     value.imgUrl === "none"
                                                                         ? <CardMedia
                                                                             component="img"
                                                                             height="140"
-                                                                            image={exampleImg}
+                                                                            image={'https://res.cloudinary.com/databaseimg/image/upload/v1639499294/cxhk98s9yflooysp4lyy.webp'}
                                                                             alt="green iguana"
                                                                         />
                                                                         : <CardMedia
@@ -220,7 +220,7 @@ class SellProduct extends Component {
                                                             </CardContent>
                                                             <CardContent style={{ textAlign: 'center', margin: '0', padding: '0' }}>
                                                                 <Typography style={{ textAlign: 'center', margin: '0', padding: '0', fontSize: '0.7rem', fontWeight: '700', color: '#00000080' }} gutterBottom variant="h6" component="div">
-                                                                    Quantity: {value.remain}
+                                                                    Quantity: {value.remain < 0 ? 0 : value.remain}
                                                                 </Typography>
                                                             </CardContent>
                                                         </CardActionArea>
