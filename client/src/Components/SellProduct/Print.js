@@ -274,10 +274,164 @@ async addReceipt () {
 
   async editReceipt() {
       console.log("this.props.statusEditInfoBill", this.props.statusEditInfoBill);
-      console.log("this.props.InfomationBillEdit", this.props.InfomationBillEdit);
       console.log("this.props.backupBillEdit",this.props.backupBillEdit);
+      // Check xem cart có trống hay không
+      if (this.props.shoppingBags.length === 0) {
+        this.props.hideAlert()
+        this.props.showAlert("Cart empty", "warning")
+      }
+      // Thêm cái hiện tại vào trong cái csdl
+      let code = this.makeCode(8);
+      this.setState({
+        code: code
+      })
+      const data = {
+        MAHD: code,
+        idUser: this.props.infoUser.employeeID ? this.props.infoUser.employeeID : this.props.infoUser._id,
+        name: this.props.infoUser.lastName + " " + this.props.infoUser.firstName,
+        date: this.dateFunction(),
+        discount: this.state.percentDiscount,
+        totalMoney: this.totalMoney(),
+        totalFinalMoney: this.totalFinalMoney(),
+        listProduct: this.props.shoppingBags,
+        time: this.state.date.getHours() + ":" + this.state.date.getMinutes(),
+        isEdit: false,
+        oldBill: this.props.InfomationBillEdit,
+        coupon: this.state.coupon
+      }
+      await axios.post('http://localhost:5000/api/sell-product/add-reciept', {
+        email: this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email,
+        token: localStorage.getItem('token'),
+        data: data,
+      })
+      .then(res => {
+        if (res.data.status === 1) {
+            localStorage.setItem('token', res.data.token);
+            console.log(this.state.coupon);
+            if(this.state.coupon) {
+              // Data will be posted
+                const data = {
+                  token: localStorage.getItem('token'),
+                  email: this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email,
+                  coupon: {
+                      ...this.state.coupon,
+                      quantity: this.state.coupon.quantity - 1,
+                  }
+              }
+                  
+              // Sửa số lượng coupon ỏ đây
+              axios.post(`http://localhost:5000/api/coupon/update`, {...data})
+              .then(res => {
+
+              })
+              .catch(err => {
+
+              })
+              this.props.updateQuantityCoupon(this.state.coupon._id.couponID) 
+            }
+            
+            // Edit cái bill cũ tại đây
+            axios.post('http://localhost:5000/api/sell-product/edit-reciept', {
+                MAHD: this.props.InfomationBillEdit.MAHD,
+                token: localStorage.getItem('token'),
+                email: this.props.infoUser.email,
+              })
+                .then(res => {
+                  this.props.changeStatusEditRecipt()
+                  this.props.editShoppingBar(this.props.InfomationBillEdit.MAHD)
+                })
+                .catch(err => {
+                  this.props.changeLoginStatus();
+                  this.props.hideAlert();
+                  this.props.showAlert("Login timeout, signin again", "warning");
+                })
+            // this.props.changeStatusEditRecipt()
+            
+          }
+            this.setState({
+              infoReciept: this.props.shoppingBags,
+            })
+            this.props.hideAlert()
+            this.props.showAlert("Print bill success", "success")
+            this.props.addRecieptToHistory(data);
+            this.setState({
+              coupon: null,
+            })
+      })
+      .catch(err => {
+        this.props.changeLoginStatus();
+        this.props.hideAlert();
+        this.props.showAlert("Login timeout, signin again", "warning");
+        
+      })
+      // Cộng thêm số sản phẩm đã trả
+      for (var i = 0; i < this.props.InfomationBillEdit.listProduct.length; i++) {
+        var productInfo = this.props.InfomationBillEdit.listProduct[i];
+        const data = {
+          token: localStorage.getItem('token'),
+          product: {
+            _id:
+            {
+              productID: productInfo.product._id.productID,
+              importDate: productInfo.product._id.importDate,
+              storeID: productInfo.product._id.storeID,
+            },
+            remain: productInfo.quantity + this.getCurrentRemain(productInfo.product._id.productID),
+          }
+        }
+        await axios.put(`http://localhost:5000/api/product`, data)
+          .then(res => {
+            console.log("Update success", i);
+            // Xử lý ở redux
+            const dataRedux = data.product;
+            console.log("Xử lý lúc cộng sản phẩm", dataRedux)
+            this.props.decreaseRemainProduct(dataRedux);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      }
+      // Xử lý vụ trừ sản phẩm
+            // Trừ đi số sản phẩm đó
+            console.log("this.props.shoppingBags", this.props.shoppingBags)
+            for (var i = 0; i < this.props.shoppingBags.length; i++) {
+              const data = {
+                token: localStorage.getItem('token'),
+                product: {
+                  _id:
+                  {
+                    productID: this.props.shoppingBags[i].product._id.productID,
+                    importDate: this.props.shoppingBags[i].product._id.importDate,
+                    storeID: this.props.shoppingBags[i].product._id.storeID,
+                  },
+                  remain: this.getCurrentRemain(this.props.shoppingBags[i].product._id.productID) - this.props.shoppingBags[i].quantity,
+                }
+              }
+              await axios.put(`http://localhost:5000/api/product`, data)
+                .then(res => {
+                  console.log("Update success", i);
+                  // Xử lý ở redux
+                  const dataRedux = data.product;
+                  this.props.decreaseRemainProduct(dataRedux);
+                })
+                .catch(err => {
+                  console.log(err);
+                })
+            }
+            this.props.resetShoppingBag();
   }
 
+  getCurrentRemain(productID)
+  {
+      for(var i = 0 ; i< this.props.listProduct.state.length ; i++)
+      {
+          if(this.props.listProduct.state[i]._id.productID == productID)
+          {
+              return this.props.listProduct.state[i].remain;
+          }
+      }
+      return 0;
+  }
 
   render() {
 
@@ -382,6 +536,7 @@ const mapStateToProps = (state, ownProps) => {
     regulation: state.regulationReducer,
     role: state.role,
     backupBillEdit: state.backupBillEdit,
+    listProduct: state.listProduct,
   }
 }
 
