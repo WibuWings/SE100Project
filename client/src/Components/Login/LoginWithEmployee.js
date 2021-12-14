@@ -17,12 +17,8 @@ class LoginWithEmployee extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
         }
     }
-
-
-
 
     // Check để thay đổi trạng thái đã login hay chưa
     isLoginCheck = async (e) => {
@@ -37,11 +33,12 @@ class LoginWithEmployee extends Component {
                         console.log("res.data.data.regulation", res.data.data.regulation);
                         localStorage.setItem('token', res.data.token);
                         this.props.updateProfile(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);
-                        this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+                        //this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                         this.props.updateRecieptUser(res.data.data.receipts);
                         if(res.data.data.regulation.length > 0)
                             this.props.setRegulation(res.data.data.regulation[0]);
                         else this.props.setRegulation({});
+                        this.props.updateCouponUser(res.data.data.coupons)
                         this.props.changeLoginStatus();
                         this.props.hideAlert();
                         this.props.showAlert("Login successfully", "success");
@@ -54,7 +51,6 @@ class LoginWithEmployee extends Component {
                     return;
                 })
             // Get các thông tin để thêm vào redux
-            
         }
     }
 
@@ -75,7 +71,6 @@ class LoginWithEmployee extends Component {
             return true;
         }
     }
-
 
     blurPassword = () => {
         const e = document.getElementById('password');
@@ -107,8 +102,6 @@ class LoginWithEmployee extends Component {
     }
 
     render() {
-        
-
         return (
             <div className="Login">
                 <div className="form-login">
@@ -218,6 +211,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 data: data,
             });
         },
+        updateCouponUser: (coupons) => {
+            dispatch({
+                type: "UPDATE_COUPON_USER",
+                coupons: coupons
+            })
+        }
     }
 }
 

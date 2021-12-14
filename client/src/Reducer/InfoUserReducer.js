@@ -67,7 +67,7 @@ const infoUserInitialState = {
             case "UPDATE_AVATAR":
                 return {
                     ...state,
-                    avatar: action.avatar
+                    avatar: action.avatar? action.avatar : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg",
                 }
             case "SET_DATA_USER":
                 console.log("action.data", action.data);

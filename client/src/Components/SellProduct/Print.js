@@ -329,7 +329,7 @@ class Printf extends React.PureComponent {
                   <ReactToPrint
                     trigger={() => {
                       return <div className='btn-pay' style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
-                        SAVE (F9)
+                        SAVE
                       </div>;
                     }}
                     content={this.props.shoppingBags.length !== 0 ? () => this.componentRef : null}
@@ -347,7 +347,7 @@ class Printf extends React.PureComponent {
               <ReactToPrint
                 trigger={() => {
                   return <div className='btn-pay' style={{ marginTop: '10px', backgroundColor: '#37c737', borderRadius: '4px', fontWeight: '600', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
-                    PAY (F9)
+                    PAY
                   </div>;
                 }}
                 content={this.props.shoppingBags.length !== 0 ? () => this.componentRef : null}

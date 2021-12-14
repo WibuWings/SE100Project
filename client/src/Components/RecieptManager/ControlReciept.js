@@ -184,7 +184,6 @@ function ControlReciept(props) {
                         typeMessage: 'warning',
                     })
                 })
-            
         }
         dispatch({
             type: 'CHANGE_SELECT_ALL_STATUS'
@@ -208,6 +207,7 @@ function ControlReciept(props) {
         } else {
             setTypeDelete("DELETE_MAHD_SELECTED_RECIEPT")
             setMessage("Are you sure to delete the selected?")
+            setTypeRestone(false);
             handleOpen();
         }
 
@@ -216,19 +216,21 @@ function ControlReciept(props) {
     const RestoneAll = () => {
         setTypeDelete("RESTONE_ALL_RECIEPT")
         setMessage("Are you want to restone all receipt?")
-        handleOpen();
         setTypeRestone(true);
+        handleOpen();
     }
 
     const DeleteInvoice = () => {
         setTypeDelete("DELETE_MAHD_INVOICE_RECIEPT")
         setMessage("Are you sure to delete invoice?")
+        setTypeRestone(false);
         handleOpen();
     }
 
     const DeleteAll = () => {
         setTypeDelete("DELETE_ALL_RECIEPT")
         setMessage("Are you sure to delete ALL?")
+        setTypeRestone(false);
         handleOpen();
     }
 
