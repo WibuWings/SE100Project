@@ -40,12 +40,14 @@ class App extends Component {
 
   async componentWillMount() {
     if (localStorage.getItem('token') && localStorage.getItem('token') !== "") {
-      axios.post(`http://localhost:5000/refresh`, {
+      await axios.post(`http://localhost:5000/refresh`, {
         token: localStorage.getItem('token'),
       })
         .then(res => {
-          if (res.status === 200) {
-            if (res.data.data.isEmployee === false) {
+          console.log(res.data.status)
+          console.log(res.data.data.isEmployee)
+          if (res.data.status === 1) {
+            if (!res.data.data.isEmployee) {
               this.props.setRole()
               localStorage.setItem('token', res.data.token);
               this.props.updateProfile(res.data.data);
@@ -66,12 +68,13 @@ class App extends Component {
               this.props.setRoleEmployee()
               localStorage.setItem('token', res.data.token);
               this.props.updateProfileEployee(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);
-              this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+              //this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
               this.props.updateRecieptUser(res.data.data.receipts);
               this.props.updateCouponUser(res.data.data.coupons)
+             
               this.props.changeLoginStatus();
-              this.props.showAlert(res.data.message, "success");
             }
+            this.props.showAlert(res.data.message, "success");
           }
         })
         .catch(err => {

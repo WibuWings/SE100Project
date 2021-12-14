@@ -65,7 +65,7 @@ function CouponManager(props) {
 
     React.useEffect(() => {
         let list = listReceipt.filter(item => {
-            if (item.coupon) {
+            if (item.coupon && !item.deleted && !item.isEdit) {
                 return item
             }
         })
