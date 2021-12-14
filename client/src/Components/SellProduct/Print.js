@@ -68,6 +68,29 @@ class Printf extends React.PureComponent {
   }
 
   addReciept = async () => {
+    // Gọi API thử trong ca trực hay không 
+    var time = new Date();
+    var isContinue = true;
+    let a = ((time.getHours() > 12) ? time.getHours() - 12 : time.getHours()) + ":" + time.getMinutes() +" "+ ((time.getHours() > 12) ? "PM" : "AM");
+    await axios.post('http://localhost:5000/api/employee/time-keeping',{
+        token: localStorage.getItem('token'),
+        data: {
+            email: this.props.infoUser.employeeID,
+            time: a,
+        }
+    }).then(res => {
+        console.log(res)
+        localStorage.setItem('token', res.data.token)
+        // this.props.showAlert(res.data.message, 'success')
+        // this.setState({
+        //     attendance: true
+        // })
+    }).catch(err => {
+        this.props.showAlert(err.response.data.message, 'error');
+        isContinue = false;
+    })
+    if(!isContinue) return;
+
     if (this.props.shoppingBags.length === 0) {
       this.props.hideAlert()
       this.props.showAlert("Cart empty ", "warning")

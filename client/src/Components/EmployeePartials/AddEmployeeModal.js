@@ -325,6 +325,12 @@ class AddEmployeeModal extends Component {
         
     }
 
+    limitText = (limitField, limitNum) => {
+        if (limitField.target.value.length > limitNum) {
+            limitField.target.value = limitField.target.value.substring(0, limitNum);
+        }
+    }
+
     cancel = () => {
         this.props.changeAddEmployeeStatus();
     }
@@ -379,6 +385,8 @@ class AddEmployeeModal extends Component {
                                             classname='input-box' 
                                             type="text" 
                                             // class="input-val" 
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
                                             name='ID'
                                             style = {{width: '70%'}} 
                                             fullWidth 
@@ -398,6 +406,8 @@ class AddEmployeeModal extends Component {
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -412,6 +422,9 @@ class AddEmployeeModal extends Component {
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            
+                                            onKeyDown={(e) => this.limitText(e, 20)}
+                                            onKeyUp={(e) => this.limitText(e, 20)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -426,6 +439,9 @@ class AddEmployeeModal extends Component {
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            
+                                            onKeyDown={(e) => this.limitText(e, 20)}
+                                            onKeyUp={(e) => this.limitText(e, 20)}
                                         />
                                     </Grid>
                                     
@@ -441,6 +457,9 @@ class AddEmployeeModal extends Component {
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            
+                                            onKeyDown={(e) => this.limitText(e, 12)}
+                                            onKeyUp={(e) => this.limitText(e, 12)}
                                         />
                                     </Grid>
                                     
@@ -456,6 +475,8 @@ class AddEmployeeModal extends Component {
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -470,6 +491,8 @@ class AddEmployeeModal extends Component {
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            onKeyDown={(e) => this.limitText(e, 20)}
+                                            onKeyUp={(e) => this.limitText(e, 20)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -499,6 +522,8 @@ class AddEmployeeModal extends Component {
                                             fullWidth
                                             size="small"
                                             variant="outlined"
+                                            onKeyDown={(e) => this.limitText(e, 30)}
+                                            onKeyUp={(e) => this.limitText(e, 30)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
