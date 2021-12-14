@@ -175,7 +175,7 @@ class Login extends Component {
     }
 
     componentWillMount() {
-        document.title = 'Login'
+        document.title = 'Sign In'
     }
     
 
@@ -191,7 +191,7 @@ class Login extends Component {
                         </Avatar>
                         <div className="auth-form__container">
                             <div className="auth-form__header">
-                                <div className="auth-form__heading">Login</div>
+                                <div className="auth-form__heading">Sign In</div>
                                 <NavLink to="/register" className="auth-form__switch-btn">Register <FiChevronRight className="auth-form__arrow-return"></FiChevronRight></NavLink>
                             </div>
                         </div>

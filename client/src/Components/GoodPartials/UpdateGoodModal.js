@@ -157,6 +157,11 @@ class UpdateGoodModal extends Component {
             /(1000 * 60 * 60 * 24);
     }
 
+    limitText = (limitField, limitNum) => {
+        if (limitField.target.value.length > limitNum) {
+            limitField.target.value = limitField.target.value.substring(0, limitNum);
+        }
+    }
 
     curCurrencySelect = 'vnd';
 
@@ -574,6 +579,8 @@ class UpdateGoodModal extends Component {
                                             variant="outlined"
                                             defaultValue={this.name}
                                             onChange={(e) => this.changeName(e)} 
+                                            onKeyDown={(e) => this.limitText(e, 20)}
+                                            onKeyUp={(e) => this.limitText(e, 20)}
                                         />
                                     </Grid>
                                     <Grid item md={3}
@@ -594,6 +601,8 @@ class UpdateGoodModal extends Component {
                                             type="number" 
                                             defaultValue={this.quantity}
                                             onChange={(e) => this.changeValue(e, 'quantity')}
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
                                         />
                                     </Grid>
                                     <Grid item md={3}
@@ -619,6 +628,8 @@ class UpdateGoodModal extends Component {
                                             type="text" 
                                             name="unit" 
                                             defaultValue={this.unit}
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -705,6 +716,9 @@ class UpdateGoodModal extends Component {
                                                     change: !this.state.change,
                                                 });
                                             }}
+                                            
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
                                             value={this.importPrice}
                                         />
                                         { this.curCurrencySelect == 'vnd' ? <div>VNĐ</div> : <div>$</div>}
@@ -733,6 +747,9 @@ class UpdateGoodModal extends Component {
                                                 });
                                             }}
                                             value={this.sellPrice}
+                                            
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
                                         />
                                         { this.curCurrencySelect == 'vnd' ? <div>VNĐ</div> : <div>$</div>}
                                     </Grid>

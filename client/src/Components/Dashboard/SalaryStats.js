@@ -39,80 +39,106 @@ function SalaryStats(props) {
     const typeHeaderDashboard = useSelector(state => state.typeHeaderDashboard);
     const listReciept = useSelector(state => state.listReciept)
     const listTimeKeeping = useSelector(state => state.listTimeKeeping)
-    const [totalSalary, setTotalSalary] = React.useState('')
-    const [totalMoney, setTotalMoney] = React.useState('')
+    const [totalPayedSalary, setTotalPayedSalary] = React.useState('')
+    const [totalNotPayedSalary, setTotalNotPayedSalary] = React.useState('')
     const regulation = useSelector(state => state.regulationReducer)
     let nowTime = new Date();
+    console.log("listTimeKeeping",listTimeKeeping);
 
     React.useEffect(() => {
         
         let money = 0;
         let currentMonth = nowTime.getMonth() + 1;
 
-        console.log("listTimeKeeping",listTimeKeeping )
+        // console.log("listTimeKeeping",listTimeKeeping )
         // if(listTimeKeeping.length>0)
         //     console.log(calculateSalary(listTimeKeeping[0]));
 
         if (typeHeaderDashboard == 'Today') {
-            let salary = 0;
+            let payedSalary = 0, notPaySalary = 0;
             for(var i = 0 ; i < listTimeKeeping.length; i++)
             {
                 var realDate = listTimeKeeping[i]._id.realDate.substring(0,listTimeKeeping[i]._id.realDate.indexOf('T'));
                 var date = realDate.split('-');
-                console.log(date);
-                console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
+                // console.log(date);
+                // console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
                 if (date[2] == nowTime.getDate() - 1 && date[1] == currentMonth && date[0] == nowTime.getFullYear()) {
-                    salary += calculateSalary(listTimeKeeping[i])
+                    if(listTimeKeeping[i].isPaidSalary == true)
+                    {
+                        payedSalary += calculateSalary(listTimeKeeping[i]);
+                    }
+                    else notPaySalary += calculateSalary(listTimeKeeping[i]);
                 }
             }
-            setTotalSalary(salary);
+            setTotalPayedSalary(payedSalary);
+            setTotalNotPayedSalary(notPaySalary);
         } else if (typeHeaderDashboard == 'Yesterday') {
-            let salary = 0;
+            let payedSalary = 0, notPaySalary = 0;
             for(var i = 0 ; i < listTimeKeeping.length; i++)
             {
                 var realDate = listTimeKeeping[i]._id.realDate.substring(0,listTimeKeeping[i]._id.realDate.indexOf('T'));
                 var date = realDate.split('-');
-                console.log(date);
-                console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
+                // console.log(date);
+                // console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
                 if (date[2] == nowTime.getDate() - 2 && date[1] == currentMonth && date[0] == nowTime.getFullYear()) {
-                    salary += calculateSalary(listTimeKeeping[i])
+                    if(listTimeKeeping[i].isPaidSalary == true)
+                    {
+                        payedSalary += calculateSalary(listTimeKeeping[i]);
+                    }
+                    else notPaySalary += calculateSalary(listTimeKeeping[i]);
                 }
             }
-            setTotalSalary(salary);
+            setTotalPayedSalary(payedSalary);
+            setTotalNotPayedSalary(notPaySalary);
 
         } else if (typeHeaderDashboard == 'Month') {
-            let salary = 0;
+            let payedSalary = 0, notPaySalary = 0;
             for(var i = 0 ; i < listTimeKeeping.length; i++)
             {
                 var realDate = listTimeKeeping[i]._id.realDate.substring(0,listTimeKeeping[i]._id.realDate.indexOf('T'));
                 var date = realDate.split('-');
-                console.log(date);
-                console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
+                // console.log(date);
+                // console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
                 if (date[1] == currentMonth && date[0] == nowTime.getFullYear()) {
-                    salary += calculateSalary(listTimeKeeping[i])
+                    if(listTimeKeeping[i].isPaidSalary == true)
+                    {
+                        payedSalary += calculateSalary(listTimeKeeping[i]);
+                    }
+                    else notPaySalary += calculateSalary(listTimeKeeping[i]);
                 }
             }
-            setTotalSalary(salary);
+            setTotalPayedSalary(payedSalary);
+            setTotalNotPayedSalary(notPaySalary);
         } else if (typeHeaderDashboard == 'Year') {
-            let salary = 0;
+            let payedSalary = 0, notPaySalary = 0;
             for(var i = 0 ; i < listTimeKeeping.length; i++)
             {
                 var realDate = listTimeKeeping[i]._id.realDate.substring(0,listTimeKeeping[i]._id.realDate.indexOf('T'));
                 var date = realDate.split('-');
-                console.log(date);
-                console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
+                // console.log(date);
+                // console.log(nowTime.getDate() - 1,currentMonth,nowTime.getFullYear())
                 if (date[0] == nowTime.getFullYear()) {
-                    salary += calculateSalary(listTimeKeeping[i])
+                    if(listTimeKeeping[i].isPaidSalary == true)
+                    {
+                        payedSalary += calculateSalary(listTimeKeeping[i]);
+                    }
+                    else notPaySalary += calculateSalary(listTimeKeeping[i]);
                 }
             }
-            setTotalSalary(salary);
+            setTotalPayedSalary(payedSalary);
+            setTotalNotPayedSalary(notPaySalary);
         } else if (typeHeaderDashboard == 'All') {
-            let salary = 0;
+            let payedSalary = 0, notPaySalary = 0;
             for(var i = 0 ; i < listTimeKeeping.length; i++)
             {
-                salary += calculateSalary(listTimeKeeping[i])
+                if(listTimeKeeping[i].isPaidSalary == true)
+                {
+                    payedSalary += calculateSalary(listTimeKeeping[i]);
+                }
+                else notPaySalary += calculateSalary(listTimeKeeping[i]);
             }
-            setTotalSalary(salary);
+            setTotalPayedSalary(payedSalary);
+            setTotalNotPayedSalary(notPaySalary);
         }
     }, [typeHeaderDashboard])
 
@@ -123,16 +149,16 @@ function SalaryStats(props) {
             </div>
             {
                 (Object.keys(regulation).length == 0 || regulation.currency == 'vnd' )?
-                <Typography style={{ marginBottom: '10px' }} variant="h6">{totalSalary.toLocaleString()} VNĐ  
+                <Typography style={{ marginBottom: '10px' }} variant="h6">
+                    {totalPayedSalary} / {totalNotPayedSalary} VNĐ
                 </Typography>
                 : 
                 <Typography style={{ marginBottom: '10px' }} variant="h6">
-                    {(totalSalary/regulation.exchangeRate).toFixed(2)} $ 
+                    {(totalPayedSalary/regulation.exchangeRate).toFixed(2)} / {(totalNotPayedSalary/regulation.exchangeRate).toFixed(2)} $
                 </Typography>
             }
-           
             <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-                Total salary
+                Paid Salary / Unpaid Salary
             </Typography>
         </div>
     );

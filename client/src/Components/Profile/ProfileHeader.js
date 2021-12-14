@@ -17,6 +17,7 @@ class ProfileHeader extends Component {
 
 
     profileImageChange = (fileChangeEvent) => {
+        if(!this.props.role) return;
         this.setState({
             imageSelect: fileChangeEvent.target.files[0],
         })
@@ -56,11 +57,11 @@ class ProfileHeader extends Component {
     render() {
         return (
             <div className="profile-header" style={{ width: '100%', height: '350px' }}>
-                <label className="profile-header__avatar" for="profile-header-update-avatar" style={{ borderRadius: '100%', overflow: 'hidden', marginTop: '15px ' }}>
+                <label className="profile-header__avatar" for={this.props.role ? "profile-header-update-avatar" : ''} style={{ borderRadius: '100%', overflow: 'hidden', marginTop: '15px ' }}>
                     <Image style={{ width: '100px', height: '100px' }} cloudName="databaseimg" publicId={this.props.infoUser.avatar ? this.props.infoUser.avatar : avatarImg}></Image>
                 </label>
                 {/* Ẩn đi */}
-                <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input>
+                <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => {if(!this.props.role) return; this.profileImageChange(e)}  }></input>
                 <div className="profile-header-des">
                     <h2 className="profile-header__name">
                         {this.props.infoUser.lastName + " " + this.props.infoUser.firstName}
@@ -79,6 +80,7 @@ class ProfileHeader extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         infoUser: state.infoUser,
+        role: state.role,
     }
 }
 

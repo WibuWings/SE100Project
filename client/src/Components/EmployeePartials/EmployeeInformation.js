@@ -70,7 +70,7 @@ class EmployeeInformation extends Component {
                     <Grid container style={{marginTop: 14}}>
                         <Grid item xs={6} class="property-display">
                             <lable class="property-name">
-                                ID:
+                                Username:
                             </lable>
                             <div class="property-val">
                                 {this.currentEmployee._id.employeeID}

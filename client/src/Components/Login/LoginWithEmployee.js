@@ -33,7 +33,7 @@ class LoginWithEmployee extends Component {
                         console.log("res.data.data.regulation", res.data.data.regulation);
                         localStorage.setItem('token', res.data.token);
                         this.props.updateProfile(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);
-                        //this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+                        this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
                         this.props.updateRecieptUser(res.data.data.receipts);
                         if(res.data.data.regulation.length > 0)
                             this.props.setRegulation(res.data.data.regulation[0]);
@@ -114,7 +114,7 @@ class LoginWithEmployee extends Component {
                         <div className="auth-form__container">
                             <div className="auth-form__header">
                                 <div className="auth-form__heading">Employee</div>
-                                <NavLink to="/login" className="auth-form__switch-btn"> <FiChevronLeft className="auth-form__arrow-return"></FiChevronLeft>Login</NavLink>
+                                <NavLink to="/login" className="auth-form__switch-btn"> <FiChevronLeft className="auth-form__arrow-return"></FiChevronLeft>Manager Sign In</NavLink>
                             </div>
                         </div>
                         <div className="auth-form__body">

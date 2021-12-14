@@ -111,6 +111,12 @@ class UpdateEmployeeModal extends Component {
 			this.props.showAlert("ID card can't be left blanked","warning");
             return false;
         }
+        if(cardID.length != 9 && cardID.length != 12)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("ID card must has 9 or 12 digits","warning");
+            return false;
+        }
         // Constrain 6:Số điện thoại không được để trống và phải lớn hơn 6 ký tự
         var phoneNumber= document.querySelector('input[name="phoneNumber"]').value;
         if(phoneNumber.length == 0)
@@ -119,10 +125,16 @@ class UpdateEmployeeModal extends Component {
 			this.props.showAlert("Phonenumber can't be left blanked","warning");
             return false;
         }
-        if(phoneNumber.length < 6)
+        if(phoneNumber.length != 10)
         {
             this.props.hideAlert();
-			this.props.showAlert("Phonenumber can't be less than 6 character","warning");
+			this.props.showAlert("Phonenumber must has 10 digits","warning");
+            return false;
+        }
+        if(phoneNumber[0] != '0')
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Phonenumber must begin with 0","warning");
             return false;
         }
         // Constrain 7:Địa chỉ không được để trống
@@ -243,6 +255,11 @@ class UpdateEmployeeModal extends Component {
     startDate = "";
     birthDay = "";
 
+    limitText = (limitField, limitNum) => {
+        if (limitField.target.value.length > limitNum) {
+            limitField.target.value = limitField.target.value.substring(0, limitNum);
+        }
+    }
 
     loadInitialData() {
         var currentEmployee = this.props.currentEditEmployee.state;
@@ -309,7 +326,7 @@ class UpdateEmployeeModal extends Component {
                                                 width: '116px'
                                             }}
                                         >
-                                            ID
+                                            Username
                                         </div>
                                         <StyledTextField
                                             classname='input-box' 
@@ -322,6 +339,8 @@ class UpdateEmployeeModal extends Component {
                                             value={this.id}
                                             readOnly={true}
                                             disabled={true}
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -337,6 +356,8 @@ class UpdateEmployeeModal extends Component {
                                             size="small"
                                             variant="outlined"
                                             defaultValue={this.password}
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -352,6 +373,8 @@ class UpdateEmployeeModal extends Component {
                                             size="small"
                                             variant="outlined"
                                             defaultValue={this.firstName}
+                                            onKeyDown={(e) => this.limitText(e, 20)}
+                                            onKeyUp={(e) => this.limitText(e, 20)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -367,6 +390,8 @@ class UpdateEmployeeModal extends Component {
                                             size="small"
                                             variant="outlined"
                                             defaultValue={this.lastName}
+                                            onKeyDown={(e) => this.limitText(e, 20)}
+                                            onKeyUp={(e) => this.limitText(e, 20)}
                                         />
                                     </Grid>
                                     
@@ -383,6 +408,8 @@ class UpdateEmployeeModal extends Component {
                                             size="small"
                                             variant="outlined"
                                             defaultValue={this.cardID}
+                                            onKeyDown={(e) => this.limitText(e, 12)}
+                                            onKeyUp={(e) => this.limitText(e, 12)}
                                         />
                                     </Grid>
                                     
@@ -399,6 +426,9 @@ class UpdateEmployeeModal extends Component {
                                             size="small"
                                             variant="outlined"
                                             defaultValue={this.phoneNumber}
+                                            
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -414,6 +444,9 @@ class UpdateEmployeeModal extends Component {
                                             size="small"
                                             variant="outlined"
                                             defaultValue={this.address}
+                                            
+                                            onKeyDown={(e) => this.limitText(e, 30)}
+                                            onKeyUp={(e) => this.limitText(e, 30)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
@@ -444,6 +477,9 @@ class UpdateEmployeeModal extends Component {
                                             size="small"
                                             variant="outlined"
                                             defaultValue={this.email}
+                                            
+                                            onKeyDown={(e) => this.limitText(e, 20)}
+                                            onKeyUp={(e) => this.limitText(e, 20)}
                                         />
                                     </Grid>
                                     <Grid item md={6} 
