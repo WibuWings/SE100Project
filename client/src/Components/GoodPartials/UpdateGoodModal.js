@@ -812,10 +812,18 @@ class UpdateGoodModal extends Component {
                                     >
 
                                     </Grid> */}
-                                    <Grid item md={2}
+                                    <Grid item md={12}>
+                                        <Divider/>
+                                    </Grid>
+                                
+                                    <Grid item md={12}
                                         className='input-item'
+                                        style={{display: 'flex', justifyContent: 'space-evenly'}}
                                     >
-                                        <Button variant="contained" onClick={() => this.updateGood()}>
+                                        <Button variant="contained"  style={{marginLeft: 10, backgroundColor: 'red'}} onClick={() => this.props.changeUpdateGoodStatus()}>
+                                            Cancel
+                                        </Button>
+                                        <Button variant="contained" style={{marginLeft: 10}} onClick={() => this.updateGood()}>
                                             UPDATE
                                         </Button>
                                     </Grid>
