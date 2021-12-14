@@ -89,17 +89,18 @@ class Printf extends React.PureComponent {
 
   oldBill;
 
-  addReciept = async () => {
-    if (this.props.shoppingBags.length === 0) {
-      this.props.hideAlert()
-      this.props.showAlert("Cart empty ", "warning")
-    } else {
-      let code = this.makeCode(8);
-      var isContinue = true;
-      this.setState({
-        code: code
-      })
-      const data = {
+async addReciept () {
+    if (this.props.shoppingBags.length === 0) 
+    {
+        this.props.hideAlert();
+        this.props.showAlert("Cart empty ", "warning");
+        return;
+    }
+    let code = this.makeCode(8);
+    this.setState({
+      code: code
+    })
+    const data = {
         MAHD: code,
         idUser: this.props.infoUser.employeeID ? this.props.infoUser.employeeID : this.props.infoUser._id,
         name: this.props.infoUser.lastName + " " + this.props.infoUser.firstName,
@@ -110,175 +111,179 @@ class Printf extends React.PureComponent {
         listProduct: this.props.shoppingBags,
         time: this.state.date.getHours() + ":" + this.state.date.getMinutes(),
         isEdit: false,
-        oldBill: this.props.statusEditInfoBill ? this.props.InfomationBillEdit : null,
+        oldBill: null,
         coupon: this.state.coupon
-      }
+    }
+    // Thêm cái receipt hiện tại vào
       await axios.post('http://localhost:5000/api/sell-product/add-reciept', {
-        email: this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email,
-        token: localStorage.getItem('token'),
-        data: data,
+          email: this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email,
+          token: localStorage.getItem('token'),
+          data: data,
       })
-        .then(res => {
+      .then(res => {
           if (res.data.status === 1) {
-            localStorage.setItem('token', res.data.token)
-            if (this.props.statusEditInfoBill) {
-              axios.post('http://localhost:5000/api/sell-product/edit-reciept', {
-                MAHD: this.props.InfomationBillEdit.MAHD,
-                token: localStorage.getItem('token'),
-                email: this.props.infoUser.email,
-              })
-                .then(res => {
-                  this.props.changeStatusEditRecipt()
-                  this.props.editShoppingBar(this.props.InfomationBillEdit.MAHD)
-                })
-                .catch(err => {
-                  this.props.changeLoginStatus();
-                  this.props.hideAlert();
-                  this.props.showAlert("Login timeout, signin again", "warning");
-                })
-            }
-
-            console.log(this.state.coupon)
-            if (this.state.coupon) {
-              //Update coupon
+              localStorage.setItem('token', res.data.token);
+              console.log(this.state.coupon);
+              if(!this.state.coupon) return;
+              // Data will be posted
               const data = {
-                ...this.state.coupon,
-                quantity: this.state.coupon.quantity - 1,
+                  token: localStorage.getItem('token'),
+                  email: this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email,
+                  coupon: {
+                      ...this.state.coupon,
+                      quantity: this.state.coupon.quantity - 1,
+                  }
               }
-              axios.post(`http://localhost:5000/api/coupon/update`, {
-                token: localStorage.getItem('token'),
-                email: this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email,
-                coupon: data,
-              }).then(res => {
-
-              }).catch(err => {
+                  
+              // Sửa số lượng coupon ỏ đây
+              axios.post(`http://localhost:5000/api/coupon/update`, {...data})
+              .then(res => {
 
               })
-              this.props.updateQuantityCoupon(this.state.coupon._id.couponID)
-            }
+              .catch(err => {
 
-            this.setState({
-              infoReciept: this.props.shoppingBags,
-            })
-            this.props.hideAlert()
-            this.props.showAlert("Print bill success", "success")
-            this.props.addRecieptToHistory(data);
-            this.setState({
-              coupon: null,
-            })
-          }
+              })
+              // xử lý vụ coupon ở cái redux
+              this.props.updateQuantityCoupon(this.state.coupon._id.couponID) 
+              // Xử lý vụ trừ sản phẩm
+              // Trừ đi số sản phẩm đó
+              console.log("this.props.shoppingBags", this.props.shoppingBags)
+              for (var i = 0; i < this.props.shoppingBags.length; i++) {
+                const data = {
+                  token: localStorage.getItem('token'),
+                  product: {
+                    _id:
+                    {
+                      productID: this.props.shoppingBags[i].product._id.productID,
+                      importDate: this.props.shoppingBags[i].product._id.importDate,
+                      storeID: this.props.shoppingBags[i].product._id.storeID,
+                    },
+                    remain: this.props.shoppingBags[i].product.remain - this.props.shoppingBags[i].quantity,
+                  }
+                }
+                axios.put(`http://localhost:5000/api/product`, data)
+                  .then(res => {
+                    console.log("Update success", i);
+                    // Xử lý ở redux
+                    const dataRedux = data.product;
+                    this.props.decreaseRemainProduct(dataRedux);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  })
+              }
+              this.props.resetShoppingBag();
+            }
+              this.setState({
+                infoReciept: this.props.shoppingBags,
+              })
+              this.props.hideAlert()
+              this.props.showAlert("Print bill success", "success")
+              this.props.addRecieptToHistory(data);
+              this.setState({
+                coupon: null,
+              })
         })
         .catch(err => {
           this.props.changeLoginStatus();
           this.props.hideAlert();
           this.props.showAlert("Login timeout, signin again", "warning");
-          isContinue = false;
+          
         })
-      if (isContinue) {
-        console.log("Chạy thành công rồi")
-        // Update số lượng sản phẩm ở đây
-        console.log("bill cũ", this.props.InfomationBillEdit.listProduct)
-        // Cộng thêm sản phẩm nếu trả
-        if (this.props.statusEditInfoBill)
-          for (var i = 0; i < this.props.InfomationBillEdit.listProduct.length; i++) {
-            var productInfo = this.props.InfomationBillEdit.listProduct[i];
-            const data = {
-              token: localStorage.getItem('token'),
-              product: {
-                _id:
-                {
-                  productID: productInfo.product._id.productID,
-                  importDate: productInfo.product._id.importDate,
-                  storeID: productInfo.product._id.storeID,
-                },
-                remain: (productInfo.product.remain + productInfo.quantity) < 0 ? 0 : (productInfo.product.remain + productInfo.quantity),
+      
+    }
+    // async addReciept() 
+    // {
+    //     
+    //     // Make cái code cho sản phẩm ở đây
+    //     
+    //     
+    //     
+    //     
+    //             // Nếu thêm được hoá đơn hiện tại vào thì xoá cái coupon đi
+    //             
+    //             }
+    //             
+    //         }
+    //       })
+    //       .catch(err => {
+    //         this.props.changeLoginStatus();
+    //         this.props.hideAlert();
+    //         this.props.showAlert("Login timeout, signin again", "warning");
+    //         isContinue = false;
+    //       })
+    //       // Trừ đi số sản phẩm đó
+    //       console.log("this.props.shoppingBags", this.props.shoppingBags)
+    //       for (var i = 0; i < this.props.shoppingBags.length; i++) {
+    //         const data = {
+    //           token: localStorage.getItem('token'),
+    //           product: {
+    //             _id:
+    //             {
+    //               productID: this.props.shoppingBags[i].product._id.productID,
+    //               importDate: this.props.shoppingBags[i].product._id.importDate,
+    //               storeID: this.props.shoppingBags[i].product._id.storeID,
+    //             },
+    //             remain: this.props.shoppingBags[i].product.remain - this.props.shoppingBags[i].quantity,
+    //           }
+    //         }
+    //         axios.put(`http://localhost:5000/api/product`, data)
+    //           .then(res => {
+    //             console.log("Update success", i);
+    //             // Xử lý ở redux
+    //             const dataRedux = data.product;
+    //             this.props.decreaseRemainProduct(dataRedux);
+    //           })
+    //           .catch(err => {
+    //             console.log(err);
+    //           })
+    //       }
+    //       this.props.resetShoppingBag();
+    //     }
+    // }
+
+    CancelEditReiept = () => {
+      this.props.changeStatusEditRecipt()
+      this.props.resetShoppingBag()
+    }
+
+    dateFunction = () => {
+      let month = this.state.date.getMonth() + 1;
+      return "  " + this.state.date.getDate() + " / " + month + " / " + this.state.date.getFullYear();
+    }
+
+    componentWillReceiveProps(nextProps) {
+      let now = new Date()
+      let money = this.totalMoney();
+      let percent = 0;
+      let reduceMoney = 0;
+      this.props.listCoupon.map(value => {
+        let start = new Date(value.timeFrom)
+        let end = new Date(value.timeEnd)
+        start.setHours(0,0);
+        end.setHours(23,59);
+        if (value.quantity > 0) {
+          if (now - start >= 0 && end - now >= 0) {
+            if (money >= Number(value.minTotal)) {
+              let index = money * Number(value.percent) / 100;
+              if (index >= reduceMoney) {
+                percent = Number(value.percent);
+                reduceMoney = index;
+                this.setState({
+                  coupon: value,
+                })
               }
             }
-            axios.put(`http://localhost:5000/api/product`, data)
-              .then(res => {
-                console.log("Update success", i);
-                // Xử lý ở redux
-                const dataRedux = data.product;
-                console.log("Xử lý lúc cộng sản phẩm", dataRedux)
-                this.props.decreaseRemainProduct(dataRedux);
-              })
-              .catch(err => {
-                console.log(err);
-              })
           }
-        // Trừ đi số sản phẩm đó
-        console.log("this.props.shoppingBags", this.props.shoppingBags)
-        for (var i = 0; i < this.props.shoppingBags.length; i++) {
-          const data = {
-            token: localStorage.getItem('token'),
-            product: {
-              _id:
-              {
-                productID: this.props.shoppingBags[i].product._id.productID,
-                importDate: this.props.shoppingBags[i].product._id.importDate,
-                storeID: this.props.shoppingBags[i].product._id.storeID,
-              },
-              remain: this.props.shoppingBags[i].product.remain - this.props.shoppingBags[i].quantity,
-            }
-          }
-          axios.put(`http://localhost:5000/api/product`, data)
-            .then(res => {
-              console.log("Update success", i);
-              // Xử lý ở redux
-              const dataRedux = data.product;
-              this.props.decreaseRemainProduct(dataRedux);
-            })
-            .catch(err => {
-              console.log(err);
-            })
         }
-        this.props.resetShoppingBag();
-      }
+      })
+      this.setState({
+        percentDiscount: Number(percent)
+      })
     }
-  }
-
-  CancelEditReiept = () => {
-    this.props.changeStatusEditRecipt()
-    this.props.resetShoppingBag()
-  }
-
-  dateFunction = () => {
-    let month = this.state.date.getMonth() + 1;
-    return "  " + this.state.date.getDate() + " / " + month + " / " + this.state.date.getFullYear()
-  }
-
-  componentWillReceiveProps(nextProps) {
-    let now = new Date()
-    let money = this.totalMoney();
-    let percent = 0;
-    let reduceMoney = 0;
-    this.props.listCoupon.map(value => {
-      let start = new Date(value.timeFrom)
-      let end = new Date(value.timeEnd)
-      start.setHours(0,0);
-      end.setHours(23,59);
-      if (value.quantity > 0) {
-        if (now - start >= 0 && end - now >= 0) {
-          if (money >= Number(value.minTotal)) {
-            let index = money * Number(value.percent) / 100;
-            if (index >= reduceMoney) {
-              percent = Number(value.percent);
-              reduceMoney = index;
-              this.setState({
-                coupon: value,
-              })
-            }
-          }
-        }
-      }
-    })
-    this.setState({
-      percentDiscount: Number(percent)
-    })
-  }
 
 
-  async componentWillMount() {
+    componentWillMount() {
     //Gọi API
 
 
