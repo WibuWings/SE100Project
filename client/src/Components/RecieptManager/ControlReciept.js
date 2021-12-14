@@ -256,7 +256,7 @@ function ControlReciept(props) {
                             <Grid item md={12} sm={12}  >
                                 <Button onClick={() => RestoneAll()} style={{ width: '100%', backgroundColor: '#00bfa5', color: 'white' }} size='medium'>
                                     <TiArrowBack style={{ fontSize: '1.6rem', paddingRight: '5px' }}></TiArrowBack>
-                                    Restone All
+                                    Restore All
                                 </Button>
                             </Grid>
                             <Grid item md={12} sm={12}  >

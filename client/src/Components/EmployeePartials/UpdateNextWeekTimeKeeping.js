@@ -18,7 +18,7 @@ const StyledTextField = withStyles((theme) => ({
       "& .MuiInputBase-root": {
         height: 36,
         "& input": {
-          textAlign: "right",
+          textAlign: "center",
           marginLeft: '4px',
         }
       }
@@ -310,11 +310,11 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                         className='input-item'
                                     >
                                         <div className="input-label" style={{width: '220px'}}>
-                                            Choose Day in week
+                                            Day in week
                                         </div>
-                                        <FormControl sx={{ minWidth: 120 }}>
+                                        <FormControl>
                                             {/* <InputLabel id="select-filled-label">Type</InputLabel> */}
-                                            <Select
+                                            <StyledTextField
                                                 value={this.currentdayChosed}
                                                 onChange={(event) => {
                                                     this.currentdayChosed = event.target.value;
@@ -323,16 +323,19 @@ class UpdateNextWeekTimeKeepingModal extends Component {
                                                 readOnly = {true}
                                                 style={{
                                                     height: 36,
+                                                    marginRight: 10,
+                                                    width: 120,
+                                                    textAlign: 'center'
                                                 }}
                                             >
-                                                {
+                                                {/* {
                                                     listDayInWeek.map((item) =>
                                                         <MenuItem value={item.ID}>
                                                             {item.name}
                                                         </MenuItem>
                                                     )
-                                                }   
-                                            </Select> 
+                                                }    */}
+                                            </StyledTextField> 
                                         </FormControl>
                                     </Grid>
 

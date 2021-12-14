@@ -141,7 +141,7 @@ class ListShift extends Component {
                                             <StyledTableRow key="abc">
                                                 <StyledTableCell component="th" scope="row">{item.name}</StyledTableCell>
                                                 <StyledTableCell align="center">
-                                                    {this.props.regulation.currency === 'vnd' ? (item.salary).toLocaleString() : ((item.salary) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
+                                                    {this.props.regulation == {} ? (item.salary).toLocaleString() : this.props.regulation.currency === 'vnd' ? (item.salary).toLocaleString() : ((item.salary) / this.props.regulation.exchangeRate).toFixed(2).toLocaleString()}
                                                 </StyledTableCell>
                                                 <StyledTableCell align="center">{item.timeFrom}</StyledTableCell>
                                                 <StyledTableCell align="center">{item.timeEnd}</StyledTableCell>

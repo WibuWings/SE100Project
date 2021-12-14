@@ -67,11 +67,11 @@ class Profile extends Component {
                                 <ProfileCoupon></ProfileCoupon>
                             </Grid>
                         )}
-                        {!this.props.role ? null : (
-                            <Grid item sm={12} md={12} >
-                                <Button onClick={() => this.deleteDataAccout()} style={{ backgroundColor: 'red', width: '100%', color: 'white' }}>Delete Data Account</Button>
-                            </Grid>
-                        )}
+                            {/* {!this.props.role ? null : (
+                                <Grid item sm={12} md={12} >
+                                    <Button onClick={() => this.deleteDataAccout()} style={{ backgroundColor: 'red', width: '100%', color: 'white' }}>Delete Data Account</Button>
+                                </Grid>
+                            )} */}
 
                     </Grid>
                 </Container>

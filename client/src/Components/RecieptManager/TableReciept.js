@@ -423,7 +423,7 @@ function Row(props) {
                                             <Grid style={{ justifyContent: 'end' }} item md={2} xs={2}>
                                                 <Button onClick={() => RestoneReciept(row.MAHD)} style={{ fontWeight: '700', fontSize: '0.6rem', backgroundColor: '#00bfa5', color: 'white' }}>
                                                     <TiArrowBack style={{ marginRight: '5px', fontSize: '1rem', transform: 'translateY(-5%)' }}></TiArrowBack>
-                                                    Restone
+                                                    Restore
                                                 </Button>
                                             </Grid>
                                         ) : null}

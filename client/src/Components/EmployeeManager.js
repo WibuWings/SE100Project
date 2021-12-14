@@ -299,7 +299,7 @@ class EmployeeManager extends Component {
                                 startIcon={<Icon icon={plusFill} />}
                                 onClick={() => this.addEmployee()}
                                 >
-                                    New User
+                                    New Employee
                                 </Button>
                             <Card style={{width: '100%', margin: 0}}>
                                 <TableContainer id="scroll-bar" style ={{maxHeight:'500px' , width: '100%',overflow: 'auto'}}>
