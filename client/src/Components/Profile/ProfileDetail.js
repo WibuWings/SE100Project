@@ -165,6 +165,12 @@ class ProfileDetail extends Component {
         }
     }
 
+    limitText = (limitField, limitNum) => {
+        if (limitField.target.value.length > limitNum) {
+            limitField.target.value = limitField.target.value.substring(0, limitNum);
+        }
+    }
+
 
     componentWillMount() {
         axios.get(`https://provinces.open-api.vn/api/?depth=2`)
@@ -192,8 +198,10 @@ class ProfileDetail extends Component {
                     <CardContent>
                         <Grid container spacing={3}>
                             <Grid item md={6} xs={12}>
-                                <Box >
+                                <Box>
                                     <TextField
+                                        onKeyDown={(e) => this.limitText(e, 20)}
+                                        onKeyUp={(e) => this.limitText(e, 20)}
                                         id="outlined-basic"
                                         variant="outlined"
                                         fullWidth
@@ -208,6 +216,8 @@ class ProfileDetail extends Component {
                             <Grid item md={6} xs={12}>
                                 <TextField
                                     fullWidth
+                                    onKeyDown={(e) => this.limitText(e, 20)}
+                                    onKeyUp={(e) => this.limitText(e, 20)}
                                     onBlur={(e) => this.blurAll(e)}
                                     label="Last name"
                                     name="lastName"
@@ -269,6 +279,8 @@ class ProfileDetail extends Component {
                                         fullWidth
                                         label="Old"
                                         name="old"
+                                        onKeyDown={(e) => this.limitText(e, 3)}
+                                        onKeyUp={(e) => this.limitText(e, 3)}
                                         defaultValue={this.props.infoUser.old}
                                         required
                                         error={!this.state.isOld}
@@ -306,6 +318,8 @@ class ProfileDetail extends Component {
                                 <TextField
                                     fullWidth
                                     label="Store Name"
+                                    onKeyDown={(e) => this.limitText(e, 30)}
+                                    onKeyUp={(e) => this.limitText(e, 30)}
                                     disabled={this.props.role ? false : true}
                                     onBlur={(e) => this.blurAll(e)}
                                     defaultValue={this.props.infoUser.storeName}
@@ -319,6 +333,8 @@ class ProfileDetail extends Component {
                                     required
                                     fullWidth
                                     label="Tel"
+                                    onKeyDown={(e) => this.limitText(e, 15)}
+                                    onKeyUp={(e) => this.limitText(e, 15)}
                                     defaultValue={this.props.infoUser.tel}
                                     disabled={this.props.role ? false : true}
                                     error={!this.state.isTel}
@@ -384,6 +400,8 @@ class ProfileDetail extends Component {
                                     defaultValue={this.props.role ? this.props.infoUser.address : this.props.infoUser.address1}
                                     name="address"
                                     required
+                                    onKeyDown={(e) => this.limitText(e, 100)}
+                                    onKeyUp={(e) => this.limitText(e, 100)}
                                     disabled={this.props.role ? false : true}
                                     variant="outlined"
                                     onBlur={(e) => this.blurAll(e)}

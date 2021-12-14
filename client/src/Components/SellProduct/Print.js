@@ -284,16 +284,7 @@ class Printf extends React.PureComponent {
   }
 
   render() {
-    const PrintBill = this.addReciept
-    // document.onkeydown = function (e) {
-    //   switch (e.key.charCodeAt()) {
-    //     case 70:
-    //       PrintBill()
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // }
+    
     return (
       <div>
         <div style={{ margin: '0px' }} className="row">
@@ -337,8 +328,7 @@ class Printf extends React.PureComponent {
                 <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-8">
                   <ReactToPrint
                     trigger={() => {
-
-                      return <div style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
+                      return <div className='btn-pay' style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
                         SAVE (F9)
                       </div>;
                     }}
@@ -353,11 +343,10 @@ class Printf extends React.PureComponent {
               </div>
             </div>
           ) : (
-            <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-12">
+            <div  onClick={() => this.addReciept()} style={{ cursor: 'pointer'  }} className="col-12">
               <ReactToPrint
                 trigger={() => {
-
-                  return <div style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
+                  return <div className='btn-pay' style={{ marginTop: '10px', backgroundColor: '#37c737', borderRadius: '4px', fontWeight: '600', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
                     PAY (F9)
                   </div>;
                 }}
@@ -366,7 +355,7 @@ class Printf extends React.PureComponent {
             </div>
           )}
           <div className="col-12">
-            <p onClick={() => this.props.changeStatusHistoryReciept()} style={{ cursor: 'pointer' }}>(*) Receipt history</p>
+            <p className='receipt-history' onClick={() => this.props.changeStatusHistoryReciept()} style={{ cursor: 'pointer' }}>(*) Receipt history</p>
           </div>
         </div>
         {/* Ẩn đi */}
