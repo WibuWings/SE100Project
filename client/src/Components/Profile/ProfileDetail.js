@@ -103,7 +103,6 @@ class ProfileDetail extends Component {
 
     blurTel = (e) => {
         const regex = /^\d+$/;
-        document.querySelector('select[name="province"]').defaultValue = this.props.infoUser.province;
         if (e.target.value === '' || regex.test(e.target.value)) {
             this.setState({
                 isTel: true,
