@@ -360,7 +360,7 @@ class AddEmployeeModal extends Component {
                                                 width: '116px'
                                             }}
                                         >
-                                            ID
+                                            Username
                                         </div>
                                         <StyledTextField
                                             classname='input-box' 

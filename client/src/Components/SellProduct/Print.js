@@ -233,6 +233,8 @@ class Printf extends React.PureComponent {
     this.props.listCoupon.map(value => {
       let start = new Date(value.timeFrom)
       let end = new Date(value.timeEnd)
+      start.setHours(0,0);
+      end.setHours(23,59);
       if (value.quantity > 0) {
         if (now - start >= 0 && end - now >= 0) {
           if (money >= Number(value.minTotal)) {
@@ -255,7 +257,7 @@ class Printf extends React.PureComponent {
 
 
   componentWillMount() {
-    console.log(this.props.listCoupon)
+    console.log("listCoupon", this.props.listCoupon)
     let now = new Date()
     let money = this.totalMoney();
     let percent = 0;
@@ -263,6 +265,8 @@ class Printf extends React.PureComponent {
     this.props.listCoupon.map(value => {
       let start = new Date(value.timeFrom)
       let end = new Date(value.timeEnd)
+      start.setHours(0,0);
+      end.setHours(23,59);
       if (value.quantity > 0) {
         if (now - start >= 0 && end - now >= 0) {
           if (money >= Number(value.minTotal)) {

@@ -65,13 +65,18 @@ class App extends Component {
               else this.props.setRegulation({});
               console.log("res.data", res.data)
             } else {
+              console.log("res.data.data", res.data.data)
               this.props.setRoleEmployee()
               localStorage.setItem('token', res.data.token);
               this.props.updateProfileEployee(res.data.data.employee[0], res.data.data.manager[0], res.data.data.store[0].storeName);
-              //this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
+              this.props.updateAvatar(res.data.data.employee[0].imgUrl ? res.data.data.employee[0].imgUrl : "https://res.cloudinary.com/databaseimg/image/upload/v1634091995/sample.jpg");
               this.props.updateRecieptUser(res.data.data.receipts);
               this.props.updateCouponUser(res.data.data.coupons)
-             
+
+              if (res.data.data.regulation.length > 0)
+                this.props.setRegulation(res.data.data.regulation[0]);
+              else this.props.setRegulation({});
+
               this.props.changeLoginStatus();
             }
             this.props.showAlert(res.data.message, "success");

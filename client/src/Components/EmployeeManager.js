@@ -306,7 +306,7 @@ class EmployeeManager extends Component {
                                     <Table>
                                         <TableRow>
                                             <TableCell align="center" className = {classes.goodTable_Cell}style={{color: '#fff', backgroundColor: '#000'}}>
-                                                ID
+                                                Username
                                             </TableCell>
                                             <TableCell component="th" className = {classes.goodTable_Cell}scope="row" padding="none" align="center" style={{color: '#fff', backgroundColor: '#000'}}> 
                                                 First Name
@@ -397,7 +397,7 @@ class EmployeeManager extends Component {
                                 <Table>
                                     <TableRow>
                                         <TableCell align="center" className = {classes.goodTable_Cell} style={{color: '#fff', backgroundColor: '#000'}}>
-                                            ID
+                                            Username
                                         </TableCell>
                                         <TableCell component="th" className = {classes.goodTable_Cell} scope="row" padding="none" align="center" style={{color: '#fff', backgroundColor: '#000'}}> 
                                             First Name

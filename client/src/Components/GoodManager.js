@@ -731,23 +731,23 @@ class GoodManager extends Component {
                                                     <Divider></Divider>
                                                     <CardContent>
                                                         <Grid container spacing={2}>
-                                                            <Grid item md={6} sm={12}>
+                                                            <Grid item md={12} sm={12}>
                                                                 <Button variant="contained" style={{height: 40, width: '100%'}}>
                                                                     <Button style={{color: '#fff', textDecoration: 'none', height: 43}} onClick={() => this.props.changeStatusAddGood()}>
                                                                         <BiPlusMedical color={'white'} size={16} style={{marginRight: 4}}/>
-                                                                        Import
+                                                                        Add product
                                                                     </Button>
                                                                 </Button>
                                                             </Grid>
                                                             
-                                                            <Grid item md={6} sm={12} style={{justifyContent:'space-between'}}>
+                                                            <Grid item md={12} sm={12} style={{justifyContent:'space-between'}}>
                                                                 <label 
                                                                     className='excel-instruction'
                                                                     style={{ width:'100%' ,backgroundColor: '#31be7d', padding: '4px 8px',borderRadius: 4, lineHeight: 2.0, color:'#fff', display: 'flex', alignItems:'center', justifyContent:'center'}} 
                                                                     for="upload-excel"
                                                                 >
                                                                     <img src={excelLogo} width={18} height={18} style={{marginRight: 2}}></img>
-                                                                    <label for="upload-excel" className='excel-instruction' style={{fontSize: 15, display: 'block'}}>Load Excel</label>
+                                                                    <label for="upload-excel" className='excel-instruction' style={{fontSize: 15, display: 'block'}}>IMPORT EXCEL</label>
                                                                 </label>
                                                                 <input 
                                                                     id="upload-excel" type="file" style={{display: 'none'}} 

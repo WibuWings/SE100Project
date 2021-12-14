@@ -36,6 +36,8 @@ class ProfileDetail extends Component {
             })
             .catch(err => {
             })
+        // Chưa load redux ở đây
+
     }
 
     SaveDetails = async () => {
@@ -208,6 +210,7 @@ class ProfileDetail extends Component {
                                         onBlur={(e) => this.blurAll(e)}
                                         label="First name"
                                         required
+                                        disabled= {!this.props.role ? true : false}
                                         name="firstName"
                                         defaultValue={this.props.infoUser.firstName}
                                     />
@@ -221,6 +224,7 @@ class ProfileDetail extends Component {
                                     onBlur={(e) => this.blurAll(e)}
                                     label="Last name"
                                     name="lastName"
+                                    disabled= {!this.props.role ? true : false}
                                     defaultValue={this.props.infoUser.lastName}
                                     required
                                     variant="outlined"
@@ -414,7 +418,7 @@ class ProfileDetail extends Component {
                         {this.props.role ? (
                             <Button onClick={() => this.SaveDetails()} disabled={!this.state.isSave} color="primary" variant="contained">Save details</Button>)
                             :
-                            (<Button onClick={() => this.SaveDetailsEmployee()} disabled={!this.state.isSave} color="primary" variant="contained">Save details</Button>)
+                            (null)
                         }
                     </Box>
                 </Card>
