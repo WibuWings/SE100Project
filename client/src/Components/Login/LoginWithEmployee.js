@@ -114,7 +114,7 @@ class LoginWithEmployee extends Component {
                         <div className="auth-form__container">
                             <div className="auth-form__header">
                                 <div className="auth-form__heading">Employee</div>
-                                <NavLink to="/login" className="auth-form__switch-btn"> <FiChevronLeft className="auth-form__arrow-return"></FiChevronLeft>Login</NavLink>
+                                <NavLink to="/login" className="auth-form__switch-btn"> <FiChevronLeft className="auth-form__arrow-return"></FiChevronLeft>Manager Sign In</NavLink>
                             </div>
                         </div>
                         <div className="auth-form__body">

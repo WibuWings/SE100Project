@@ -41,6 +41,7 @@ class ProfileDetail extends Component {
     }
 
     SaveDetails = async () => {
+        // document.querySelector('input[name="tel"]').value;
         if (this.state.isTel && this.state.isOld) {
             const data = {
                 token: localStorage.getItem('token'),
@@ -106,7 +107,31 @@ class ProfileDetail extends Component {
     blurTel = (e) => {
         const regex = /^\d+$/;
         document.querySelector('select[name="province"]').defaultValue = this.props.infoUser.province;
-        if (e.target.value === '' || regex.test(e.target.value)) {
+        
+        if (!regex.test(e.target.value) ) {
+            this.setState({
+                isTel: false,
+                isSave: false,
+            })
+            return false;
+        } else if(e.target.value.length !== 10) {
+            this.setState({
+                isTel: false,
+                isSave: false,
+            })
+            this.props.hideAlert();
+            this.props.showAlert("Phone number must has 10 digits", "warning");
+            return false;
+        } 
+        else if (e.target.value[0] !== '0'){
+            this.setState({
+                isSave: false,
+                isTel: false,
+            })
+            this.props.hideAlert();
+			this.props.showAlert("Phonenumber must begin with 0","warning");
+            return false;
+        }else if (e.target.value === '' || regex.test(e.target.value) ) {
             this.setState({
                 isTel: true,
             })
@@ -116,18 +141,6 @@ class ProfileDetail extends Component {
                 })
             }
             return true;
-        } else if (!regex.test(e.target.value)) {
-            this.setState({
-                isTel: false,
-                isSave: false,
-            })
-            return false;
-        } else {
-            this.setState({
-                isSave: false,
-                isTel: false,
-            })
-            return false;
         }
     }
 
@@ -337,8 +350,8 @@ class ProfileDetail extends Component {
                                     required
                                     fullWidth
                                     label="Tel"
-                                    onKeyDown={(e) => this.limitText(e, 15)}
-                                    onKeyUp={(e) => this.limitText(e, 15)}
+                                    onKeyDown={(e) => this.limitText(e, 10)}
+                                    onKeyUp={(e) => this.limitText(e, 10)}
                                     defaultValue={this.props.infoUser.tel}
                                     disabled={this.props.role ? false : true}
                                     error={!this.state.isTel}

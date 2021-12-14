@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    Route,
+    Route, Redirect
 } from "react-router-dom";
 import GoodManager from '../Components/GoodManager';
 import EmployeeManager from '../Components/EmployeeManager';
@@ -20,7 +20,13 @@ class DashboardURL extends Component {
                  {this.props.role? (  <Route exact path="/receiptmanager" component={ReceiptManager}></Route>  ): null}   
                 <Route exact path="/profile" component={Profile}></Route>
                 <Route exact path="/sellproduct" component={SellProduct}></Route>
-                {this.props.role? (<Route path="/" component={DashBoard}></Route> ): (<Route path="/" component={SellProduct}></Route> )}   
+                {this.props.role? 
+                    (<Route path="/">
+                        <Redirect to="/dashboard" />
+                    </Route> ): 
+                    (<Route path="/">
+                        <Redirect to="/sellproduct" />
+                    </Route> )}   
             </div>
         );
     }

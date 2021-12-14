@@ -241,7 +241,9 @@ class SideNavBar extends Component {
                         >
                             <RiProfileLine class="nav-item-icon" />
                             <RiProfileFill class="nav-item-icon icon-activate" />
-                            <span className="nav-item-lable">Profile</span>
+                            <span className="nav-item-lable">
+                                {this.props.role == true ? 'Store' : 'Profile'} 
+                            </span>
                         </NavLink>
 
                         {

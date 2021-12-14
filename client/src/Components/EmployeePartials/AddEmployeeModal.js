@@ -193,6 +193,13 @@ class AddEmployeeModal extends Component {
 			this.props.showAlert("ID card can't be left blanked","warning");
             return false;
         }
+        // Constraint X: Số ID phải có 9 hoặc 12 ký tự
+        if(cardID.length != 9 && cardID.length != 12)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("ID card must has 9 or 12 digits","warning");
+            return false;
+        }
         // Constrain 6:Số điện thoại không được để trống và phải lớn hơn 6 ký tự
         var phoneNumber= document.querySelector('input[name="phoneNumber"]').value;
         if(phoneNumber.length == 0)
@@ -201,10 +208,16 @@ class AddEmployeeModal extends Component {
 			this.props.showAlert("Phonenumber can't be left blanked","warning");
             return false;
         }
-        if(phoneNumber.length < 6)
+        if(phoneNumber.length != 10)
         {
             this.props.hideAlert();
-			this.props.showAlert("Phonenumber can't be less than 6 character","warning");
+			this.props.showAlert("Phonenumber must has 10 digits","warning");
+            return false;
+        }
+        if(phoneNumber[0] != '0')
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Phonenumber must begin with 0","warning");
             return false;
         }
         // Constrain 7:Địa chỉ không được để trống

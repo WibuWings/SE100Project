@@ -200,6 +200,14 @@ class Register extends Component {
             formGroup.className = 'invalid form-group'
             formGroup.querySelector('.form-message').innerText = "Phone is not in the correct format";
             return false;
+        } else if (elementValue.length !=10){
+            formGroup.className = 'invalid form-group'
+            formGroup.querySelector('.form-message').innerText = "Phone number must has 10 digits";
+            return false;
+        } else if (elementValue[0] !='0'){
+            formGroup.className = 'invalid form-group'
+            formGroup.querySelector('.form-message').innerText = "Phonenumber must begin with 0";
+            return false;
         } else {
             formGroup.classList.remove('invalid');
             formGroup.querySelector('.form-message').innerText = "";
@@ -230,7 +238,7 @@ class Register extends Component {
                         <div className="auth-form__container">
                             <div className="auth-form__header">
                                 <div className="auth-form__heading">Register</div>
-                                <NavLink to="/login" className="auth-form__switch-btn"> <FiChevronLeft className="auth-form__arrow-return"></FiChevronLeft>Login</NavLink>
+                                <NavLink to="/login" className="auth-form__switch-btn"> <FiChevronLeft className="auth-form__arrow-return"></FiChevronLeft>Sign In</NavLink>
                             </div>
                         </div>
                         <div className="auth-form__body">
@@ -276,12 +284,6 @@ class Register extends Component {
                                         <input maxLength={30} className="form-control" onBlur={(e) => this.blurTel(e)} onChange={(e) => this.changeInput(e)} name="tel" rules="required" id="tel" placeholder="Ex: 0303030303" type="tel" />
                                     </div>
                                     <span className="form-message" />
-                                </div>
-                                <div className="register-description">Bằng cách ấn vào nút
-                                    <span className="register-description__keyword">“ĐĂNG KÝ”</span>
-                                    , tôi đồng ý với
-                                    <span className="register-description__keyword">Điều Khoản Sử Dụng</span> và
-                                    <div className="register-description__keyword"> Chính Sách Bảo Mật</div>
                                 </div>
                                 <div className="auth-form__btn">
                                     <div onClick={(e) => this.SignUp(e)} className="auth-form__btn-log-in auth-form__switch-btn">Sign Up</div>
