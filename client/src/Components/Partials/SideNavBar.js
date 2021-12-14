@@ -206,7 +206,7 @@ class SideNavBar extends Component {
                             }} 
                             class="navbar-heading-container"
                         >
-                            <img class='user-avatar'src={this.props.infoUser.avatar ? this.props.infoUser.avatar : Avatar} style={{ width: 40, height: 40, borderRadius: '100%', flex: 1 }}></img>
+                            <img class='user-avatar'src={this.props.infoUser.avatar != 'none' ? this.props.infoUser.avatar : Avatar} style={{ width: 40, height: 40, borderRadius: '100%', flex: 1 }}></img>
                             <span class="user-name" style={{ color: !this.props.statusDarkmode ? 'black' : 'white', fontWeight: '700', maxWidth: '100px' }} >
                                 {this.props.infoUser.lastName + " " + this.props.infoUser.firstName}
                             </span>
@@ -221,7 +221,7 @@ class SideNavBar extends Component {
                                             : (<ImCheckboxChecked style={{ marginRight: '10px', color: '#1b5e20' }}></ImCheckboxChecked>)
                                         }
 
-                                        {this.state.attendance ? 'attendanced' : 'attendance'}
+                                        {!this.props.sidebarOpen ? (null) : this.state.attendance ? 'attendanced' : 'attendance'}
                                     </Button>
                                 </div>
                                 )
