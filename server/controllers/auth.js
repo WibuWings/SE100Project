@@ -387,17 +387,19 @@ async function getAllData(email) {
         const employees = await Employee.findOne({
             "_id.employeeID": username,
         });
-        const [employee, receipts, products, store, manager] =
+        const [employee, receipts, products, store, manager,regulation, coupons] =
             await Promise.all([
                 Employee.find({ "_id.employeeID": username }).exec(),
                 Receipt.findWithDeleted({
-                    "EmployeeID._id.employeeID": username,
+                    "_id.storeID": employees._id.storeID
                 }).exec(),
                 Product.find({ "_id.storeID": employees._id.storeID }).exec(),
                 Store.find({ _id: employees._id.storeID }).exec(),
                 Manager.find({ _id: employees.managerID }).exec(),
+                Regulation.find({ "_id": employees._id.storeID }).exec(),
+                Coupon.find({ "_id.storeID": employees._id.storeID }).exec(),
             ]);
-        return { employee, receipts, products, store, manager ,isEmployee: true};
+        return { employee, receipts, products, store, manager, regulation,  coupons ,isEmployee: true,};
     }
 }
 
@@ -407,7 +409,7 @@ async function getAllDataEmployee(username) {
     const [employee, receipts, products, store, manager, regulation, coupons] = await Promise.all([
         Employee.find({ "_id.employeeID": username }).exec(),
         Receipt.findWithDeleted({
-            "EmployeeID._id.employeeID": username,
+            "_id.storeID": employees._id.storeID
         }).exec(),
         Product.find({ "_id.storeID": employees._id.storeID }).exec(),
         Store.find({ _id: employees._id.storeID }).exec(),
