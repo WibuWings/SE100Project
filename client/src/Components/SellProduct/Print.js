@@ -16,6 +16,24 @@ class Printf extends React.PureComponent {
       MAHD: "HD" + this.makeCode(6),
       moneyReduce: 0,
       coupon: null,
+      isCheckCaLam: true,
+    }
+    let time = new Date();
+    let a = ((time.getHours() > 12) ? time.getHours() - 12 : time.getHours()) + ":" + time.getMinutes() + " " + ((time.getHours() > 12) ? "PM" : "AM");
+    if (!this.props.role) {
+      axios.post('http://localhost:5000/api/employee/time-keeping', {
+        token: localStorage.getItem('token'),
+        data: {
+          email: this.props.infoUser.employeeID,
+          time: a,
+        }
+      }).then(res => {
+
+      }).catch(err => {
+        this.setState({
+          isCheckCaLam: false,
+        })
+      })
     }
   }
 
@@ -68,29 +86,6 @@ class Printf extends React.PureComponent {
   }
 
   addReciept = async () => {
-    // Gọi API thử trong ca trực hay không 
-    var time = new Date();
-    var isContinue = true;
-    let a = ((time.getHours() > 12) ? time.getHours() - 12 : time.getHours()) + ":" + time.getMinutes() +" "+ ((time.getHours() > 12) ? "PM" : "AM");
-    await axios.post('http://localhost:5000/api/employee/time-keeping',{
-        token: localStorage.getItem('token'),
-        data: {
-            email: this.props.infoUser.employeeID,
-            time: a,
-        }
-    }).then(res => {
-        console.log(res)
-        localStorage.setItem('token', res.data.token)
-        // this.props.showAlert(res.data.message, 'success')
-        // this.setState({
-        //     attendance: true
-        // })
-    }).catch(err => {
-        this.props.showAlert(err.response.data.message, 'error');
-        isContinue = false;
-    })
-    if(!isContinue) return;
-
     if (this.props.shoppingBags.length === 0) {
       this.props.hideAlert()
       this.props.showAlert("Cart empty ", "warning")
@@ -148,7 +143,7 @@ class Printf extends React.PureComponent {
               }
               axios.post(`http://localhost:5000/api/coupon/update`, {
                 token: localStorage.getItem('token'),
-                email: this.props.infoUser.managerID? this.props.infoUser.managerID : this.props.infoUser.email,
+                email: this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email,
                 coupon: data,
               }).then(res => {
 
@@ -180,33 +175,32 @@ class Printf extends React.PureComponent {
         // Update số lượng sản phẩm ở đây
 
         // Cộng thêm sản phẩm nếu trả
-        if(this.props.statusEditInfoBill) 
-        for(var i = 0; i< this.props.InfomationBillEdit.listProduct.length ; i++)
-        {
-          var productInfo = this.props.InfomationBillEdit.listProduct[i];
-          const data = {
-            token: localStorage.getItem('token'),
-            product: {
-              _id:
-              {
-                productID: productInfo.product._id.productID,
-                importDate: productInfo.product._id.importDate,
-                storeID: productInfo.product._id.storeID,
-              },
-              remain: productInfo.product.remain + productInfo.quantity,
+        if (this.props.statusEditInfoBill)
+          for (var i = 0; i < this.props.InfomationBillEdit.listProduct.length; i++) {
+            var productInfo = this.props.InfomationBillEdit.listProduct[i];
+            const data = {
+              token: localStorage.getItem('token'),
+              product: {
+                _id:
+                {
+                  productID: productInfo.product._id.productID,
+                  importDate: productInfo.product._id.importDate,
+                  storeID: productInfo.product._id.storeID,
+                },
+                remain: productInfo.product.remain + productInfo.quantity,
+              }
             }
+            axios.put(`http://localhost:5000/api/product`, data)
+              .then(res => {
+                console.log("Update success", i);
+                // Xử lý ở redux
+                const dataRedux = data.product;
+                this.props.decreaseRemainProduct(dataRedux);
+              })
+              .catch(err => {
+                console.log(err);
+              })
           }
-          axios.put(`http://localhost:5000/api/product`, data)
-            .then(res => {
-              console.log("Update success", i);
-              // Xử lý ở redux
-              const dataRedux = data.product;
-              this.props.decreaseRemainProduct(dataRedux);
-            })
-            .catch(err => {
-              console.log(err);
-            })
-        }
         // Trừ đi số sản phẩm đó
         console.log("this.props.shoppingBags", this.props.shoppingBags)
         for (var i = 0; i < this.props.shoppingBags.length; i++) {
@@ -279,8 +273,13 @@ class Printf extends React.PureComponent {
   }
 
 
-  componentWillMount() {
-    console.log("listCoupon", this.props.listCoupon)
+  async componentWillMount() {
+    //Gọi API
+
+
+
+    //
+    console.log(this.props.listCoupon)
     let now = new Date()
     let money = this.totalMoney();
     let percent = 0;
@@ -310,8 +309,10 @@ class Printf extends React.PureComponent {
     })
   }
 
+
+
   render() {
-    
+
     return (
       <div>
         <div style={{ margin: '0px' }} className="row">
@@ -349,38 +350,46 @@ class Printf extends React.PureComponent {
               </div>
             </div>
           </div>
-          {this.props.statusEditInfoBill ? (
-            <div className="col-12">
-              <div className="row">
-                <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-8">
-                  <ReactToPrint
-                    trigger={() => {
-                      return <div className='btn-pay' style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
-                        SAVE
-                      </div>;
-                    }}
-                    content={this.props.shoppingBags.length !== 0 ? () => this.componentRef : null}
-                  />
-                </div>
-                <div className="col-4">
-                  <div onClick={() => this.CancelEditReiept()} style={{ width: '100%', marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#757575', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem', cursor: 'pointer' }} className="col-4">
-                    CANCEL
+          {!this.state.isCheckCaLam ? (
+            <div onClick={() => this.props.showAlert("You is absence in this shift!", 'warning')} style={{ cursor: 'pointer' }} className="col-12">
+              <div className='btn-pay' style={{ marginTop: '10px', backgroundColor: '#37c737', borderRadius: '4px', fontWeight: '600', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
+                PAY
+              </div>
+            </div>
+          ) :
+            this.props.statusEditInfoBill ? (
+              <div className="col-12">
+                <div className="row">
+                  <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-8">
+                    <ReactToPrint
+                      trigger={() => {
+                        return <div className='btn-pay' style={{ marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#37c737', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
+                          SAVE
+                        </div>;
+                      }}
+                      content={this.props.shoppingBags.length !== 0 ? () => this.componentRef : null}
+                    />
+                  </div>
+                  <div className="col-4">
+                    <div onClick={() => this.CancelEditReiept()} style={{ width: '100%', marginTop: '10px', borderRadius: '4px', fontWeight: '600', backgroundColor: '#757575', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem', cursor: 'pointer' }} className="col-4">
+                      CANCEL
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            <div  onClick={() => this.addReciept()} style={{ cursor: 'pointer'  }} className="col-12">
-              <ReactToPrint
-                trigger={() => {
-                  return <div className='btn-pay' style={{ marginTop: '10px', backgroundColor: '#37c737', borderRadius: '4px', fontWeight: '600', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
-                    PAY
-                  </div>;
-                }}
-                content={this.props.shoppingBags.length !== 0 ? () => this.componentRef : null}
-              />
-            </div>
-          )}
+            ) : (
+              <div onClick={() => this.addReciept()} style={{ cursor: 'pointer' }} className="col-12">
+                <ReactToPrint
+                  trigger={() => {
+                    return <div className='btn-pay' style={{ marginTop: '10px', backgroundColor: '#37c737', borderRadius: '4px', fontWeight: '600', textAlign: 'center', alignContent: 'center', padding: '15px 0', fontSize: '1.4rem' }}>
+                      PAY
+                    </div>;
+                  }}
+                  content={this.props.shoppingBags.length !== 0 ? () => this.componentRef : null}
+                />
+              </div>
+            )
+          }
           <div className="col-12">
             <p className='receipt-history' onClick={() => this.props.changeStatusHistoryReciept()} style={{ cursor: 'pointer' }}>(*) Receipt history</p>
           </div>
@@ -402,7 +411,8 @@ const mapStateToProps = (state, ownProps) => {
     InfomationBillEdit: state.InfomationBillEdit,
     listCoupon: state.listCoupon,
     InfomationBillEdit: state.InfomationBillEdit,
-    regulation: state.regulationReducer
+    regulation: state.regulationReducer,
+    role: state.role,
   }
 }
 

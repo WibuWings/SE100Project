@@ -113,6 +113,12 @@ class AddGoodModal extends Component {
         this.finishUpImage = true;
     }
 
+    limitText = (limitField, limitNum) => {
+        if (limitField.target.value.length > limitNum) {
+            limitField.target.value = limitField.target.value.substring(0, limitNum);
+        }
+    }
+
     calculateDay(dateString1, dateString2)
     {
         return (
@@ -286,7 +292,7 @@ class AddGoodModal extends Component {
             ) >= 0)
         {
             this.props.hideAlert();
-            this.props.showAlert('Không thể nhập hàng hết hạn',"warning");
+            this.props.showAlert('Product was expired',"warning");
             return false;
         }
         // Constraint 7: Check giá gốc nhỏ hơn giá bán
@@ -297,7 +303,7 @@ class AddGoodModal extends Component {
             ) 
         {
             this.props.hideAlert();
-			this.props.showAlert("Product was expired","warning");
+			this.props.showAlert("Sell price must greater than original price","warning");
             return false;
         }
         // Constraint 8: check xem đã  up ảnh lên xong chưa
@@ -431,6 +437,9 @@ class AddGoodModal extends Component {
                                                 size="small"
                                                 name="goodName" 
                                                 variant="outlined" 
+                                                
+                                                onKeyDown={(e) => this.limitText(e, 20)}
+                                                onKeyUp={(e) => this.limitText(e, 20)}
                                             />
                                         </Grid>
                                         <Grid item md={4}
@@ -449,6 +458,9 @@ class AddGoodModal extends Component {
                                                 name="goodQuantity" 
                                                 variant="outlined"
                                                 type="number"
+                                                
+                                                onKeyDown={(e) => this.limitText(e, 10)}
+                                                onKeyUp={(e) => this.limitText(e, 10)}
                                             />
                                         </Grid>
                                         <Grid item md={2}
@@ -474,6 +486,9 @@ class AddGoodModal extends Component {
                                                 variant="outlined"
                                                 type="text" 
                                                 name="unit" 
+                                                
+                                                onKeyDown={(e) => this.limitText(e, 10)}
+                                                onKeyUp={(e) => this.limitText(e, 10)}
                                             />
                                         </Grid>
                                         <Grid item md={6} 
@@ -531,6 +546,8 @@ class AddGoodModal extends Component {
                                                 name="originalPrice" 
                                                 variant="outlined"
                                                 type="number" 
+                                                onKeyDown={(e) => this.limitText(e, 10)}
+                                                onKeyUp={(e) => this.limitText(e, 10)}
                                             />
                                             <div style={{width: 30}}>
                                                 { this.curCurrencySelect == 'vnd' ? <div>VNĐ</div> : <div>$</div>}
@@ -554,6 +571,8 @@ class AddGoodModal extends Component {
                                                 name="sellPrice" 
                                                 variant="outlined"
                                                 type="number" 
+                                                onKeyDown={(e) => this.limitText(e, 10)}
+                                                onKeyUp={(e) => this.limitText(e, 10)}
                                             />
                                             { this.curCurrencySelect == 'vnd' ? <div>VNĐ</div> : <div>$</div>}
                                         </Grid>
