@@ -25,7 +25,7 @@ function DaiLyMoneyTracking(props) {
                 if (!value.deleted) {
                     money += value.totalFinalMoney
                 } else {
-                    money -= value.totalFinalMoney
+                    // money -= value.totalFinalMoney
                 }
             }
         })
@@ -46,7 +46,7 @@ function DaiLyMoneyTracking(props) {
         if (item.deleted && item.isEdit) {
             return 0
         } else if (item.deleted) {
-            return "-" + money
+            return money
         } else if (item.isEdit) {
             return 0
         } else {
