@@ -35,6 +35,8 @@ class Printf extends React.PureComponent {
         })
       })
     }
+    this.oldBill = this.props.InfomationBillEdit;
+    console.log("this.oldBill", this.props.InfomationBillEdit)
   }
 
 
@@ -84,6 +86,8 @@ class Printf extends React.PureComponent {
   getProductByID() {
 
   }
+
+  oldBill;
 
   addReciept = async () => {
     if (this.props.shoppingBags.length === 0) {

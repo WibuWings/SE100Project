@@ -166,7 +166,7 @@ class TypeInfo extends Component {
             <Grid md={12}>
                 <Grid container>
                     <Grid item md={10} style={{padding: 4, paddingLeft: 20}}>
-                        <span>{this.type._id.typeID + ' '+ this.type.name}</span>
+                        <span>{this.type.name}</span>
                     </Grid>
                     <Grid item md={2}>
                         <BiEdit  size={20} color={'yellowgreen'}onClick={() => this.edit(this.type)}/>
