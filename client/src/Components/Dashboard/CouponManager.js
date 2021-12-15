@@ -52,10 +52,12 @@ function CouponManager(props) {
     const regulation = useSelector(state => state.regulationReducer)
 
     const selectType = (e) => {
+        console.log(e.target.value);
         setTypeCheck(e.target.value);
     }
 
     const changeType = (e) => {
+        console.log(e.target.value)
         setValue1(e.target.value)
     }
 
@@ -74,7 +76,7 @@ function CouponManager(props) {
                 setListReceiptHaveCoupon(list)
             } else {
                 list = list.filter(item=> {
-                    if(value1 == item.coupon.idCoupon){
+                    if(value1 == item.coupon._id.couponID){
                         return item
                     }
                 })
@@ -130,7 +132,7 @@ function CouponManager(props) {
                                                                 >
                                                                     <MenuItem value='all'>All</MenuItem>
                                                                     {listCoupon.map(value => (
-                                                                        <MenuItem value={value.idCoupon}>{value.name}</MenuItem>
+                                                                        <MenuItem value={value._id.couponID}>{value.name}</MenuItem>
                                                                     ))}
                                                                 </Select>
                                                             </FormControl>
