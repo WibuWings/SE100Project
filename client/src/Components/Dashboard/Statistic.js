@@ -51,6 +51,9 @@ export default function AppWebsiteVisits() {
     xaxis: {
       categories: typeDate,
     },
+    yaxis: {
+      decimalsInFloat: 2
+    },
     tooltip: {
       shared: true,
       intersect: false,
