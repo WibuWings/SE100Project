@@ -53,48 +53,48 @@ class SideNavBar extends Component {
         for (var i = 0; i < this.active.length; i++) {
             this.active[i] = '';
         }
-
-        switch (link) {
-            case "profile":
-                this.active[1] = 'active';
-                break;
-            case "employeemanager":
-                this.active[2] = 'active';
-                break;
-            case "goodmanager":
-                this.active[3] = 'active';
-                break;
-            case "import":
-                this.active[3] = 'active';
-                break;
-            case "receiptmanager":
-                this.active[4] = 'active';
-                break;
-            case "sellproduct":
-                this.active[5] = 'active';
-                break;
-            case "profile#":
-                this.active[1] = 'active';
-                break;
-            case "employeemanager#":
-                this.active[2] = 'active';
-                break;
-            case "goodmanager#":
-                this.active[3] = 'active';
-                break;
-            case "import#":
-                this.active[3] = 'active';
-                break;
-            case "receiptmanager#":
-                this.active[4] = 'active';
-                break;
-            case "sellproduct#":
-                this.active[5] = 'active';
-                break;
-            default:
-                this.active[0] = 'active';
-                break;
-        }
+        this.active[0] = 'active';
+        // switch (link) {
+        //     case "profile":
+        //         this.active[1] = 'active';
+        //         break;
+        //     case "employeemanager":
+        //         this.active[2] = 'active';
+        //         break;
+        //     case "goodmanager":
+        //         this.active[3] = 'active';
+        //         break;
+        //     case "import":
+        //         this.active[3] = 'active';
+        //         break;
+        //     case "receiptmanager":
+        //         this.active[4] = 'active';
+        //         break;
+        //     case "sellproduct":
+        //         this.active[5] = 'active';
+        //         break;
+        //     case "profile#":
+        //         this.active[1] = 'active';
+        //         break;
+        //     case "employeemanager#":
+        //         this.active[2] = 'active';
+        //         break;
+        //     case "goodmanager#":
+        //         this.active[3] = 'active';
+        //         break;
+        //     case "import#":
+        //         this.active[3] = 'active';
+        //         break;
+        //     case "receiptmanager#":
+        //         this.active[4] = 'active';
+        //         break;
+        //     case "sellproduct#":
+        //         this.active[5] = 'active';
+        //         break;
+        //     default:
+        //         this.active[0] = 'active';
+        //         break;
+        // }
         this.setState({ change: !this.state.change });
     }
 
