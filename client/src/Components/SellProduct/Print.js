@@ -338,7 +338,7 @@ async addReceipt () {
               })
                 .then(res => {
                   this.props.changeStatusEditRecipt()
-                  this.props.editShoppingBar(this.props.InfomationBillEdit.MAHD)
+                  this.props.editShoppingBar(this.props.InfomationBillEdit)
                 })
                 .catch(err => {
                   this.props.changeLoginStatus();
@@ -580,10 +580,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "CHANGE_LOGIN_STATUS",
       });
     },
-    editShoppingBar: (MAHD) => {
+    editShoppingBar: (olbBill) => {
       dispatch({
         type: "EDIT_SHOPPING_BAGS",
-        MAHD: MAHD,
+        olbBill: olbBill,
       })
     },
     updateQuantityCoupon: (idCoupon) => {
