@@ -273,8 +273,8 @@ async addReceipt () {
   }
 
   async editReceipt() {
-      console.log("this.props.statusEditInfoBill", this.props.statusEditInfoBill);
-      console.log("this.props.backupBillEdit",this.props.backupBillEdit);
+      // console.log("this.props.statusEditInfoBill", this.props.statusEditInfoBill);
+      // console.log("this.props.backupBillEdit",this.props.backupBillEdit);
       // Check xem cart có trống hay không
       if (this.props.shoppingBags.length === 0) {
         this.props.hideAlert()
@@ -338,12 +338,15 @@ async addReceipt () {
               })
                 .then(res => {
                   this.props.changeStatusEditRecipt()
-                  this.props.editShoppingBar(this.props.InfomationBillEdit)
+                  // console.log("billEdit",this.props.InfomationBillEdit)
+                  this.props.editShoppingBar(this.props.InfomationBillEdit);
                 })
                 .catch(err => {
-                  this.props.changeLoginStatus();
+                  // console.log("Lỗi khúc mà edit cái bill cũ")
+
+                  // this.props.changeLoginStatus();
                   this.props.hideAlert();
-                  this.props.showAlert("Login timeout, signin again", "warning");
+                  this.props.showAlert("Something happen", "warning");
                 })
             // this.props.changeStatusEditRecipt()
             
@@ -381,10 +384,10 @@ async addReceipt () {
         }
         await axios.put(`http://localhost:5000/api/product`, data)
           .then(res => {
-            console.log("Update success", i);
+            // console.log("Update success", i);
             // Xử lý ở redux
             const dataRedux = data.product;
-            console.log("Xử lý lúc cộng sản phẩm", dataRedux)
+            // console.log("Xử lý lúc cộng sản phẩm", dataRedux)
             this.props.decreaseRemainProduct(dataRedux);
           })
           .catch(err => {
@@ -393,7 +396,7 @@ async addReceipt () {
       }
       // Xử lý vụ trừ sản phẩm
             // Trừ đi số sản phẩm đó
-            console.log("this.props.shoppingBags", this.props.shoppingBags)
+            // console.log("this.props.shoppingBags", this.props.shoppingBags)
             for (var i = 0; i < this.props.shoppingBags.length; i++) {
               const data = {
                 token: localStorage.getItem('token'),
@@ -582,10 +585,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: "CHANGE_LOGIN_STATUS",
       });
     },
-    editShoppingBar: (olbBill) => {
+    editShoppingBar: (oldBill) => {
       dispatch({
         type: "EDIT_SHOPPING_BAGS",
-        olbBill: olbBill,
+        oldBill: oldBill,
       })
     },
     updateQuantityCoupon: (idCoupon) => {
