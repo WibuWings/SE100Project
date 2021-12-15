@@ -6,26 +6,24 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import exampleImg from '../../img/good-example.jpg'
 import { BiPlusMedical } from 'react-icons/bi';
 import { connect } from 'react-redux'
 import axios from 'axios';
 import ShoppingBags from './ShoppingBags';
 import Printf from './Print'
+import { BiSearchAlt } from 'react-icons/bi'
 import HistoryReciept from './HistoryReciept';
-
 class SellProduct extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
             change: false,
             test1: true,
+            search: '',
         }
         this.storeID = this.props.infoUser.managerID ? this.props.infoUser.managerID : this.props.infoUser.email;
         this.loadAllType();
         this.loadAllGood();
-
     }
     storeID = "";
     bull = (
@@ -58,7 +56,7 @@ class SellProduct extends Component {
                 }
             } else {
                 const newProduct = {
-                    product: Object.assign({},{...value}),
+                    product: Object.assign({}, { ...value }),
                     quantity: 1,
                 }
                 this.props.addNewProductToShoppingBags(newProduct);
@@ -85,7 +83,7 @@ class SellProduct extends Component {
             })
             .catch(err => {
                 this.props.hideAlert();
-				this.props.showAlert("Something happened, restart and try again","warning");
+                this.props.showAlert("Something happened, restart and try again", "warning");
             })
         //Get data và lưu các tên Type vào bảng
         var listTypeInfor = [];
@@ -112,7 +110,7 @@ class SellProduct extends Component {
             })
             .catch(err => {
                 this.props.hideAlert();
-				this.props.showAlert("Something happened, restart and try again","warning");
+                this.props.showAlert("Something happened, restart and try again", "warning");
             })
         // Get hết từ cái productjoinType
         var result = [];
@@ -131,7 +129,7 @@ class SellProduct extends Component {
             })
             .catch(err => {
                 this.props.hideAlert();
-				this.props.showAlert("Something happened, restart and try again","warning");
+                this.props.showAlert("Something happened, restart and try again", "warning");
             })
         // Lấy các cái jointype
         var joinTypeInfor = [];
@@ -162,14 +160,49 @@ class SellProduct extends Component {
         document.title = 'SellProduct'
     }
 
+    removeAccents = (str) => {
+        var AccentsMap = [
+          "aàảãáạăằẳẵắặâầẩẫấậ",
+          "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+          "dđ", "DĐ",
+          "eèẻẽéẹêềểễếệ",
+          "EÈẺẼÉẸÊỀỂỄẾỆ",
+          "iìỉĩíị",
+          "IÌỈĨÍỊ",
+          "oòỏõóọôồổỗốộơờởỡớợ",
+          "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+          "uùủũúụưừửữứự",
+          "UÙỦŨÚỤƯỪỬỮỨỰ",
+          "yỳỷỹýỵ",
+          "YỲỶỸÝỴ"    
+        ];
+        for (var i=0; i<AccentsMap.length; i++) {
+          var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+          var char = AccentsMap[i][0];
+          str = str.replace(re, char);
+        }
+        return str;
+      }
+
+    search = (e) => {
+        let a = e.target.value.toLowerCase();
+        a = this.removeAccents(a);
+        this.setState({
+            search: a
+        })
+    }
+
     render() {
-        
         return (
             <div id="scroll-bar" className="sell-product" >
                 <Container style={{ marginBottom: '20px' }} maxWidth="xl">
                     <Grid container spacing={2}>
                         <Grid item lg={8} md={12} sm={12}>
                             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '8px', marginTop: '20px', backgroundColor: '#ffffff', height: 'calc(100vh - 40px)', overflow: 'hidden' }}>
+                                <div style={{ borderRadius: '6px', backgroundColor: 'white', justifyContent: 'center', display: 'flex', marginBottom: '10px', padding: '10px' }}>
+                                    <BiSearchAlt style={{ fontSize: '1.6rem', marginRight: '10px', marginLeft: '10px' }}></BiSearchAlt>
+                                    <input onChange={(e) =>  this.search(e)} type="text" style={{ width: '100%', outline: 'none', border: 'none' }} placeholder="Enter name product"></input>
+                                </div>
                                 <div style={{ overflow: 'hidden', marginBottom: '5px' }}>
                                     <Tabs></Tabs>
                                 </div>
@@ -177,11 +210,26 @@ class SellProduct extends Component {
                                     <Grid container spacing={2}>
                                         {(this.props.listProduct.state !== undefined && this.props.listProduct.state.length !== 0)
                                             ? this.props.listProduct.state.filter(value => {
+                                                let str = value.name.toLowerCase()
+                                                str = this.removeAccents(str)
                                                 if (this.props.chooseTypeProductID === 'all') {
-                                                    return value;
+                                                    value.name.toLowerCase()
+                                                    if(this.state.search === '') {
+                                                        return value;
+                                                    } else {
+                                                        if(str.includes(this.state.search)){
+                                                            return value
+                                                        }
+                                                    }
                                                 }
                                                 if (value.typeIDList.includes(this.props.chooseTypeProductID)) {
-                                                    return value;
+                                                    if(this.state.search === '') {
+                                                        return value;
+                                                    } else {
+                                                        if(str.includes(this.state.search)){
+                                                            return value
+                                                        }
+                                                    }
                                                 }
                                             }).map(value => (
                                                 <Grid item lg={3} md={4} sm={4} xs={4} style={{ display: (value.remain <= 0) ? 'none' : 'block' }}>
