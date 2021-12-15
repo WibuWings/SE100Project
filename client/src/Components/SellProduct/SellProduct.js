@@ -58,7 +58,7 @@ class SellProduct extends Component {
                 }
             } else {
                 const newProduct = {
-                    product: value,
+                    product: Object.assign({},{...value}),
                     quantity: 1,
                 }
                 this.props.addNewProductToShoppingBags(newProduct);

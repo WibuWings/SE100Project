@@ -24,8 +24,10 @@ const listRecieptInitialState = [],
             case "ADD_RECIEPT":
                 return [...state, action.newReciept]
             case "EDIT_SHOPPING_BAGS":
+
                 return state.filter((value) => {
-                    if (value.MAHD === action.MAHD) {
+                    if (value.MAHD === action.oblBill.MAHD) {
+                        value = {...action.oldBill};
                         value.isEdit = true
                     }
                     return value;
