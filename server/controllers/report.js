@@ -207,10 +207,10 @@ class meProfile {
                 .string(element.createAt)
                 .style(style);
             ws.cell(currentRow + topMargin, 6 + leftMargin)
-                .bool(element.isEdit)
+                .string(element.isEdit ? 'Yes' : 'No')
                 .style(style);
             ws.cell(currentRow + topMargin, 7 + leftMargin)
-                .bool(element.deleted)
+                .string(element.deleted ? 'Yes' : 'No')
                 .style(style);
         });
 
