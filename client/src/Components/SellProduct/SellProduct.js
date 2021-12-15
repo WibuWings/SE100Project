@@ -184,7 +184,7 @@ class SellProduct extends Component {
                                                     return value;
                                                 }
                                             }).map(value => (
-                                                <Grid item lg={3} md={4} sm={4} xs={4}>
+                                                <Grid item lg={3} md={4} sm={4} xs={4} style={{ display: (value.remain <= 0) ? 'none' : 'block' }}>
                                                     <Card onClick={() => this.AddProduct(value)}>
                                                         <CardActionArea>
                                                             <CardMedia

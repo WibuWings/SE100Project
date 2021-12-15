@@ -243,16 +243,16 @@ class UpdateGoodModal extends Component {
             return false;
         }
         // Constraint 7: Check giá gốc nhỏ hơn giá bán
-        if(
-            parseInt(document.querySelector('input[name="sellPrice"]').value) 
-            - 
-            parseInt(document.querySelector('input[name="originalPrice"]').value) <=0
-            ) 
-        {
-            this.props.hideAlert();
-			this.props.showAlert("Product sell price must be greater than product import price","warning");
-            return false;
-        }
+        // if(
+        //     parseInt(document.querySelector('input[name="sellPrice"]').value) 
+        //     - 
+        //     parseInt(document.querySelector('input[name="originalPrice"]').value) <=0
+        //     ) 
+        // {
+        //     this.props.hideAlert();
+		// 	this.props.showAlert("Product sell price must be greater than product import price","warning");
+        //     return false;
+        // }//
         // Constraint 8: check xem đã  up ảnh lên xong chưa
         if(this.finishUpImage == false)
         {

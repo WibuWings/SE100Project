@@ -296,16 +296,16 @@ class AddGoodModal extends Component {
             return false;
         }
         // Constraint 7: Check giá gốc nhỏ hơn giá bán
-        if(
-            parseFloat(document.querySelector('input[name="sellPrice"]').value) 
-            - 
-            parseFloat(document.querySelector('input[name="originalPrice"]').value) <=0.0
-            ) 
-        {
-            this.props.hideAlert();
-			this.props.showAlert("Sell price must greater than original price","warning");
-            return false;
-        }
+        // if(
+        //     parseFloat(document.querySelector('input[name="sellPrice"]').value) 
+        //     - 
+        //     parseFloat(document.querySelector('input[name="originalPrice"]').value) <=0.0
+        //     ) 
+        // {
+        //     this.props.hideAlert();
+		// 	this.props.showAlert("Sell price must greater than original price","warning");
+        //     return false;
+        // }
         // Constraint 8: check xem đã  up ảnh lên xong chưa
         if(this.finishUpImage == false)
         {
