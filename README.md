@@ -1,7 +1,7 @@
 ## 🛍️ Quản Lí Của Hàng Tiện Lơi
 
 - 🖥  Javascript,Css
-- 💼  NodeJs, ExpressJS ,ReactDOM, React Redux
+- 💼  NodeJs, ExpressJS ,Reactjs, React Redux
 - 💾  Mongoose
 - 🌐  Restful Api
 
