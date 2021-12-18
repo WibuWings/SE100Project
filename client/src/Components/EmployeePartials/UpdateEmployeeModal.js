@@ -1,0 +1,571 @@
+import React, { Component } from 'react';
+import { Card, CardHeader, Divider, Grid, TextField, Box, CardContent, Button, InputLabel } from '@mui/material';
+import { connect } from 'react-redux'
+import { Image } from 'cloudinary-react';
+import axios from 'axios';
+import '../../css/GoodManager.css';
+import { withStyles } from '@material-ui/styles';
+
+const StyledTextField = withStyles((theme) => ({
+    root: {
+      "& .MuiInputBase-root": {
+        height: 36,
+        "& input": {
+          textAlign: "right",
+          marginLeft: '4px',
+        }
+      }
+    }
+  }))(TextField);
+
+class UpdateEmployeeModal extends Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            change: false,
+        }; 
+        this.loadInitialData();
+    }
+    imgUrl = 'none';
+    finishUpImage = true;
+    
+    async profileImageChange(fileChangeEvent) {
+        this.setState({
+            imageSelect: fileChangeEvent.target.files[0],
+        })
+        this.finishUpImage = false;
+        const file = fileChangeEvent.target.files[0];
+        const { type } = file;
+        if (!(type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg') || type.endsWith('gif'))) {
+        } else {
+            const formData = new FormData();
+            formData.append("file", fileChangeEvent.target.files[0])
+            formData.append("upload_preset", "qqqhcaa3");
+            await axios.post(`https://api.cloudinary.com/v1_1/databaseimg/image/upload`, formData)
+                .then(res => {
+                    this.imgUrl=res.data.url;
+                    this.setState({
+                        change: 'true'
+                    });
+                })
+                .catch(err => {
+                    console.log("Thất bại");
+                })
+        }
+        this.finishUpImage = true;
+    }
+
+
+    cancel = () => {
+        
+    }
+
+    findIndexInListEmployee(employeeID) {
+        for(var i = 0; i < this.props.listEmployee.employees.length ; i++)
+        {
+            if(this.props.listEmployee.employees[i]._id.employeeID == employeeID)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    checkConstraint() {
+        //Constraint 2: Password không được có dưới 6 ký tự
+        var password = document.querySelector('input[name="password"]').value.trim();
+        if(password.length == 0)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Password can't be left blanked","warning");
+            return false;
+        }
+        if(password.length < 6)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Password can't be less than 6 character","warning");
+            return false;
+        }
+        // Constraint 3: FirstName không được trống
+        var firstName =  document.querySelector('input[name="firstName"]').value.trim();
+        if(firstName.length == 0)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("The firstname can't be left blanked","warning");
+            return false;
+        }
+        // Constraint 4: lastName không được trống
+        var lastName =  document.querySelector('input[name="lastName"]').value.trim();
+        if(lastName.length == 0)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("The lastname can't be left blanked","warning");
+            return false;
+        }
+        // Constraint 5: Số ID card không được để trống
+        var cardID= document.querySelector('input[name="cardID"]').value.trim();
+        if(cardID.length == 0)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("ID card can't be left blanked","warning");
+            return false;
+        }
+        if(cardID.length != 9 && cardID.length != 12)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("ID card must has 9 or 12 digits","warning");
+            return false;
+        }
+        // Constrain 6:Số điện thoại không được để trống và phải lớn hơn 6 ký tự
+        var phoneNumber= document.querySelector('input[name="phoneNumber"]').value;
+        if(phoneNumber.length == 0)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Phonenumber can't be left blanked","warning");
+            return false;
+        }
+        if(phoneNumber.length != 10)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Phonenumber must has 10 digits","warning");
+            return false;
+        }
+        if(phoneNumber[0] != '0')
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Phonenumber must begin with 0","warning");
+            return false;
+        }
+        // Constrain 7:Địa chỉ không được để trống
+        var address = document.querySelector('input[name="adress"]').value;
+        if(address.length==0)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Address can't be left blanked","warning");
+            return false;
+        }
+        // Constraint 8: Ngày sinh không được để trống
+        var birthDay = document.querySelector('input[name="birthDay"]').value;
+        if(birthDay.length == 0)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Birthday can't be left blanked","warning");
+            return false;
+        }
+        // Constraint 9: Email không được để trống
+        var email = document.querySelector('input[name="email"]').value.trim();
+        if(email.length == 0)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Email can't be left blanked","warning");
+            return false;
+        }
+        if(email.indexOf('@')==-1 || email.indexOf('@')==email.length-1)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Email is invalid","warning");
+            return false;
+        }
+        // Constraint 10: Ngày sinh không thể lớn hơn ngày bất đầu làm
+        var startDate = document.querySelector('input[name="startDate"]').value;
+        if(!this.isGreater(startDate, birthDay))
+        {
+            this.props.hideAlert();
+			this.props.showAlert("Birthday can't be greater than the startday","warning");
+            return false;
+        }
+        // Constraint 11: Check đã up ảnh xong chưa
+        if(this.finishUpImage == false)
+        {
+            this.props.hideAlert();
+			this.props.showAlert("The picture is not uploaded yet","warning");
+            return false;
+        }
+        // Constraint 12: Check tuổi với cái regulation:
+        if(this.props.regulation != {})
+        {
+            if(this.calculateOld(startDate, birthDay) < this.props.regulation.miniumEmployeeAge)
+            {
+                console.log("Tính tuổi",this.calculateOld(startDate, birthDay));
+                this.props.hideAlert();
+			    this.props.showAlert("Employee is not old enough ("+ this.props.regulation.miniumEmployeeAge+")","warning");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    isGreater(dateString1, dateString2){
+        return (new Date(dateString1).getTime() - new Date(dateString2).getTime()) > 0;
+    }
+
+    calculateOld(dateString1, dateString2)
+    {
+        return (new Date(dateString1).getYear() - new Date(dateString2).getYear());
+    }
+
+    async updateEmployee(){
+        if(this.checkConstraint() == false) return;
+        const data = {
+            token: localStorage.getItem('token'),
+            employee: {
+                _id: {
+                    employeeID: this.id,
+                    storeID: this.props.infoUser.email,
+                },
+                managerID: this.props.infoUser.email,
+                password: document.querySelector('input[name="password"]').value,
+                firstName: document.querySelector('input[name="firstName"]').value,
+                lastName: document.querySelector('input[name="lastName"]').value,
+                phoneNumber: document.querySelector('input[name="phoneNumber"]').value,
+                dateOfBirth: document.querySelector('input[name="birthDay"]').value,
+                email: document.querySelector('input[name="email"]').value,
+                address: document.querySelector('input[name="adress"]').value,
+                cardID: document.querySelector('input[name="cardID"]').value,
+                startDate: document.querySelector('input[name="startDate"]').value,
+                imgUrl: this.imgUrl,
+            }   
+        }
+        // console.log("index", this.findIndexInListEmployee(this.id));
+        console.log("updateEmployee", data);
+        await axios.put(`http://localhost:5000/api/employee`, data)
+            .then(res => {
+                console.log("Update success");
+                
+            })
+            .catch(err => {
+                console.log(err);
+                this.props.changeLoginStatus();
+                this.props.hideAlert();
+                this.props.showAlert("Login timeout, signin again", "warning");
+            })
+        this.props.updateEmployeeRedux(data.employee, this.findIndexInListEmployee(this.id))
+        this.props.changeUpdateEmployeeStatus();
+    }
+
+    id = "";
+    password = "";
+    firstName = "";
+    lastName = "";
+    cardID = "";
+    phoneNumber = "";
+    address = "";
+    email = "";
+    startDate = "";
+    birthDay = "";
+
+    limitText = (limitField, limitNum) => {
+        if (limitField.target.value.length > limitNum) {
+            limitField.target.value = limitField.target.value.substring(0, limitNum);
+        }
+    }
+
+    loadInitialData() {
+        var currentEmployee = this.props.currentEditEmployee.state;
+        // console.log("currentEmployee", currentEmployee);
+        this.id = currentEmployee._id.employeeID;
+        this.password = currentEmployee.password;
+        this.firstName = currentEmployee.firstName;
+        this.lastName = currentEmployee.lastName;
+        this.cardID = currentEmployee.cardID;
+        this.phoneNumber = currentEmployee.phoneNumber;
+        this.address = currentEmployee.address;
+        this.email = currentEmployee.email;
+        this.startDate = currentEmployee.startDate;
+        this.imgUrl = currentEmployee.imgUrl;
+        if(this.startDate!=null && this.startDate.indexOf('T')!=-1)
+        {
+            this.startDate = this.startDate.substring(0, this.startDate.indexOf('T'));
+        }
+        this.birthDay = currentEmployee.dateOfBirth;
+        if(this.birthDay!=null && this.birthDay.indexOf('T')!=-1)
+        {
+            this.birthDay = this.birthDay.substring(0, this.birthDay.indexOf('T'));
+        }
+        this.setState({change: !this.state.change})
+    }
+
+    render() {
+        return (
+            <form style={{ zIndex: '10', width: '60%', justifyContent: 'center', marginTop: '80px'}} autoComplete="off" noValidate>
+                <Card>
+                    <CardHeader style={{ color: !this.props.statusDarkmode? '#0091ea' :'white', backgroundColor: !this.props.statusDarkmode? '#efeeef' :'#455a64'}} title="UPDATE EMPLOYEE" />
+                        <div 
+                        style={{ 
+                            width: '100%', backgroundColor: 'rgb(221,235,255)'   
+                        }}
+                    >   
+                    <Grid className="import-container" container >
+                        <Grid item md={12}  
+                            style={{
+                                display: 'flex', 
+                                justifyContent:'center', 
+                                flexDirection:'column',
+                                alignItems:'center',
+                                marginTop: '0px'
+                            }}
+                        >   
+                            <label className="profile-header__avatar" for="profile-header-update-avatar" style={{ overflow: 'hidden' }}>
+                                <Image style={{width: '150px',height: '150px' }} cloudName="databaseimg" publicId={this.imgUrl=='none' ? 'http://res.cloudinary.com/databaseimg/image/upload/v1634358564/b9wj5lcklxitjglymxqh.png' : this.imgUrl}></Image>
+                            </label>
+                            {/* Ẩn đi */}
+                            <input id="profile-header-update-avatar" type="file" style={{ display: 'none' }} accept="image/png, image/jpeg" onChange={(e) => this.profileImageChange(e)}></input>
+                        </Grid>
+                        <Grid item md={12}>
+
+                            <Card >
+                                
+                               <Grid container md={12} style={{marginRight: 4}}>
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div 
+                                            className="input-label"
+                                            style={{
+                                                width: '116px'
+                                            }}
+                                        >
+                                            Username
+                                        </div>
+                                        <StyledTextField
+                                            classname='input-box' 
+                                            type="text" 
+                                            // class="input-val" 
+                                            style = {{width: '70%'}} 
+                                            fullWidth 
+                                            size="small" 
+                                            variant="outlined"
+                                            value={this.id}
+                                            readOnly={true}
+                                            disabled={true}
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label" style={{width: '114px'}}>Password</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="text" 
+                                            name="password" 
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.password}
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label"style={{width: '114px'}}>First Name</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="text" 
+                                            name="firstName"
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.firstName}
+                                            onKeyDown={(e) => this.limitText(e, 20)}
+                                            onKeyUp={(e) => this.limitText(e, 20)}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label"style={{width: '114px'}}>Last Name</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="text" 
+                                            name="lastName"
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.lastName}
+                                            onKeyDown={(e) => this.limitText(e, 20)}
+                                            onKeyUp={(e) => this.limitText(e, 20)}
+                                        />
+                                    </Grid>
+                                    
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label"style={{width: '114px'}}>ID CARD</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="number" 
+                                            name="cardID" 
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.cardID}
+                                            onKeyDown={(e) => this.limitText(e, 12)}
+                                            onKeyUp={(e) => this.limitText(e, 12)}
+                                        />
+                                    </Grid>
+                                    
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label"style={{width: '114px'}}>PhoneNumber</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="number" 
+                                            name="phoneNumber"
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.phoneNumber}
+                                            
+                                            onKeyDown={(e) => this.limitText(e, 10)}
+                                            onKeyUp={(e) => this.limitText(e, 10)}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label"style={{width: '114px'}}>Adress</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="text" 
+                                            name="adress" 
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.address}
+                                            
+                                            onKeyDown={(e) => this.limitText(e, 30)}
+                                            onKeyUp={(e) => this.limitText(e, 30)}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label"style={{width: '114px'}}>Start Date</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="date"
+                                            name="startDate"
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.startDate}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label"style={{width: '114px'}}>Email</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="text" 
+                                            name="email"
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.email}
+                                            
+                                            onKeyDown={(e) => this.limitText(e, 20)}
+                                            onKeyUp={(e) => this.limitText(e, 20)}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} 
+                                        className='input-item'
+                                    >
+                                        <div className="input-label"style={{width: '114px'}}>BirthDay</div>
+                                        <StyledTextField
+                                            classname='input-box'   
+                                            type="date" 
+                                            // class="input-val"
+                                            name="birthDay"
+                                            style = {{width: '70%'}} 
+                                            fullWidth
+                                            size="small"
+                                            variant="outlined"
+                                            defaultValue={this.birthDay}
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Grid item sm={12} md={12} >
+                                    <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                        <Button style={{margin: 12}} variant="contained" onClick={() => this.updateEmployee()}>
+                                            UPDATE
+                                        </Button>
+                                    </div>
+                                </Grid>
+                                
+                            </Card>
+                        </Grid>
+                        <Grid item sm={12} md={12} >
+                            
+                        </Grid>
+                    </Grid> 
+                </div>
+                </Card>
+            </form>
+        )
+    }
+}
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        addEmployeeStatus: state.addEmployeeStatus,
+        confirmStatus: state.confirmStatus,
+        currentEditEmployee: state.currentEditEmployee,
+        infoUser: state.infoUser,
+        listEmployee: state.listEmployee,
+        regulation: state.regulationReducer,
+        statusDarkmode: state.statusDarkmode,
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        changeAddEmployeeStatus: () => {
+            dispatch({
+                type: "CHANGE_ADD_EMPLOYEE_STATUS",
+            });
+        },
+        changeUpdateEmployeeStatus: () => {
+            dispatch({
+                type: "CHANGE_UPDATE_EMPLOYEE_STATUS",
+            });
+        },
+        updateEmployeeRedux: (data, index) => {
+            dispatch({
+                type: "UPDATE_EMPLOYEE",
+                data: data,
+                index: index,
+            });
+        },
+        showAlert: (message, typeMessage) => {
+            dispatch({
+                type: "SHOW_ALERT",
+                message: message,
+                typeMessage: typeMessage,
+            })
+        },
+        hideAlert: () => {
+            dispatch({
+                type: "HIDE_ALERT",
+            })
+        },
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateEmployeeModal);
+
+               

@@ -1,0 +1,150 @@
+
+.profile{
+    position: relative;
+    background-color: transparent;
+    /* background-color: rgb(223, 232, 245); */
+    background-clip: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.profile-header{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0, 0, 0, 0.4)),url(../img/profile-header.jpg);
+    background-repeat: no-repeat;
+    background-position:center center;
+    background-size:cover;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-header__name{
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+}
+.profile-header-des{
+    margin-top: 10px;
+    color: white;
+    display: flex;
+    font-size: 1rem;
+    line-height: 1.2rem;
+}
+
+.profile-header__icon{
+    transform: translateY(25%);
+    margin-left: 8px;
+    font-size: 1.2rem;
+}
+
+.profile-header__icon:hover{
+    opacity: .6;
+    cursor: pointer;
+}
+
+.profile-header__avt{
+    transition: all ease-in-out 0.2s;
+}
+
+
+.profile-header__avt:hover{
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.profile-header__divider{
+    margin-top: 20px !important;
+    background-color: white;
+    width: 80%;
+}
+
+hr:not([size]).profile-header__divider {
+    height: 2px !important;
+}
+
+.profile-header__icon-tel{
+    margin-right: 8px;
+    transform: translateY(25%);
+}
+
+/* Profile Details */
+
+.profile-detail{
+    background-color: white;
+    border-radius: 8px;
+}
+
+.profile-detail__header-name .css-1qvr50w-MuiTypography-root{
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #335acb;
+}
+
+.profile-detail__header-name.css-185gdzj-MuiCardHeader-root{
+    padding: 5px 10px !important;
+}
+
+.add-shift{
+    position: absolute;
+    top: 0;
+    right: 0;
+    justify-content: space-evenly;
+}
+
+.modal-add{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    z-index: 10;
+    justify-content: center;
+    align-content: center;
+    align-self: center;
+    justify-self: center;
+}
+
+.modal-overlay{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+
+.profile-header__avatar{
+    border: 4px solid #8591b4;
+    opacity: 1;
+    transition: opacity ease-in-out 0.2s;
+}
+.profile-header__avatar:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.css-1kty9di-MuiFormLabel-root-MuiInputLabel-root{
+    background-color: white;
+    top: -5px !important;
+}
+
+.modal-add-shift{
+    animation: animationModalShift ease-in-out 0.3s;
+}
+
+@keyframes animationModalShift {
+    from {
+        transform: scale(0) translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}

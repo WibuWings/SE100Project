@@ -3,15 +3,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Store = new Schema ({
-    _id: mongoose.ObjectId,
-    name: String,
+    _id: String,
+    storeName: String,
     address: String,
-    products: [
-        {
-            type: Schema.Types.ObjectId, 
-            ref: "Product",
-        }
-    ],
+    imgUrl: String,
 });
 
 module.exports = mongoose.model('Store',Store);
