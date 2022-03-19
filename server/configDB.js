@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const USER_NAME = "admin";
-const PASSWORD = "pfui43F8DGepLJ2V";
-const URI = `mongodb+srv://admin:${PASSWORD}@cluster0.mtjy2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const PASSWORD = "T1VD3neuDLW97eB0";
+const URI = `mongodb+srv://admin:T1VD3neuDLW97eB0@cluster0.zsuvd.mongodb.net/test`;
 
 module.exports = connectDB = async() => {
     try {

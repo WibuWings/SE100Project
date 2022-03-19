@@ -1,0 +1,13 @@
+version: '3'
+services:
+  groceryshop-back:
+    build: ./server
+    container_name: groceryshop-back-container
+    ports:
+        - "5000:5000"
+
+  groceryshop-front:
+    build: ./client
+    container_name: groceryshop-front-container
+    ports:
+        - "3000:3000"
