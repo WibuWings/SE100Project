@@ -29,10 +29,10 @@ class Regulation extends Component {
 			this.props.showAlert("Exchange rate must be greater than 0","warning");    
             return false;
         }
-        else if(data.regulation.miniumEmployeeAge <= 0)
+        else if(data.regulation.miniumEmployeeAge <= 15)
         {
             this.props.hideAlert();
-			this.props.showAlert("Minium old of employee must be greater than 0","warning"); 
+			this.props.showAlert("Minium old of employee must be greater than 16","warning"); 
             return false;
         }
         else if(data.regulation.lessChangeTimeKeepingDay <= 0)
